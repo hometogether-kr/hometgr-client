@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="streamline:magnifying-glass" clip-path="url(#clip0_0_99)">
+<path id="Vector" d="M26.9961 27L19.9961 20M11.9961 23C14.9135 23 17.7114 21.8411 19.7743 19.7782C21.8372 17.7153 22.9961 14.9174 22.9961 12C22.9961 9.08262 21.8372 6.28473 19.7743 4.22182C17.7114 2.15892 14.9135 0.999999 11.9961 0.999999C9.07871 0.999999 6.28082 2.15892 4.21792 4.22182C2.15502 6.28473 0.996094 9.08262 0.996094 12C0.996094 14.9174 2.15502 17.7153 4.21792 19.7782C6.28082 21.8411 9.07871 23 11.9961 23Z" stroke="#485361" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_0_99">
+<rect width="28" height="28" fill="white"/>
+</clipPath>
+</defs>
+</svg>

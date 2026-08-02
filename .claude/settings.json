@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path' | { read -r f; case \"$f\" in *.ts|*.tsx) node_modules/.bin/eslint --fix \"$f\" && node_modules/.bin/tsc --noEmit ;; esac; }",
+            "timeout": 60,
+            "statusMessage": "Linting and type-checking..."
+          }
+        ]
+      }
+    ]
+  }
+}
