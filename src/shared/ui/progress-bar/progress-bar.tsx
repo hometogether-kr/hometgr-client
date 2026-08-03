@@ -1,3 +1,5 @@
+import { cn } from "@/shared/lib/cn";
+
 export interface ProgressBarProps {
   /** 현재 단계 (1부터) */
   value: number;
@@ -19,9 +21,7 @@ export function ProgressBar({ value, max, className }: ProgressBarProps) {
       aria-valuenow={value}
       aria-valuemin={0}
       aria-valuemax={max}
-      className={["h-[5px] w-full overflow-hidden rounded bg-grayscale-100", className]
-        .filter(Boolean)
-        .join(" ")}
+      className={cn("h-[5px] w-full overflow-hidden rounded bg-grayscale-100", className)}
     >
       <div className="h-full rounded bg-primary-500 transition-[width]" style={{ width: `${percent}%` }} />
     </div>

@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { cn } from "@/shared/lib/cn";
 
 export type BtnTextSize = "14" | "16" | "20";
 
@@ -39,7 +40,7 @@ export function BtnText({
   children,
   ...rest
 }: BtnTextProps) {
-  const classes = [
+  const classes = cn(
     "inline-flex items-center justify-center gap-1 whitespace-nowrap leading-5",
     sizeClasses[size],
     iconSize[size],
@@ -47,9 +48,7 @@ export function BtnText({
       ? "font-bold text-primary-500"
       : "font-medium text-grayscale-700 hover:font-semibold hover:text-grayscale-800",
     className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  );
 
   return (
     <button type="button" aria-pressed={selected} className={classes} {...rest}>

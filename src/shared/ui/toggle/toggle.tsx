@@ -1,4 +1,5 @@
 import type { HTMLAttributes } from "react";
+import { cn } from "@/shared/lib/cn";
 
 export type ToggleMode = "web" | "mobile";
 
@@ -47,13 +48,11 @@ export function Toggle<T extends string>({
   return (
     <div
       role="tablist"
-      className={[
+      className={cn(
         "inline-flex items-center rounded-full bg-grayscale-100",
         trackClasses[mode],
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
       {...rest}
     >
       {options.map((option) => {
@@ -65,13 +64,13 @@ export function Toggle<T extends string>({
             role="tab"
             aria-selected={selected}
             onClick={() => onChange?.(option.value)}
-            className={[
+            className={cn(
               "flex flex-1 items-center justify-center whitespace-nowrap rounded-full leading-[1.4] transition-colors",
               segmentClasses[mode],
               selected
                 ? "border-solid border-primary-500 bg-primary-100 text-primary-500"
                 : "border-transparent text-grayscale-500",
-            ].join(" ")}
+            )}
           >
             {option.label}
           </button>

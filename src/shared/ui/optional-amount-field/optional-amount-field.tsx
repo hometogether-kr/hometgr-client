@@ -2,6 +2,7 @@
 
 import { Radio } from "../radio";
 import { TextField } from "../text-field";
+import { cn } from "@/shared/lib/cn";
 
 export interface OptionalAmountFieldProps {
   label: string;
@@ -34,7 +35,7 @@ export function OptionalAmountField({
   className,
 }: OptionalAmountFieldProps) {
   return (
-    <div className={["flex w-full flex-col gap-3", className].filter(Boolean).join(" ")}>
+    <div className={cn("flex w-full flex-col gap-3", className)}>
       <p className="w-full text-sm font-medium leading-[1.4] text-grayscale-600">{label}</p>
       <div className="flex flex-col gap-3">
         <label className="flex cursor-pointer items-center gap-3">

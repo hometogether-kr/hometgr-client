@@ -1,6 +1,7 @@
 "use client";
 
 import { ROUTES } from "@/shared/config";
+import { cn } from "@/shared/lib/cn";
 import { BtnUnderline } from "@/shared/ui/btn-underline";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Divider } from "@/shared/ui/divider";
@@ -23,12 +24,10 @@ export function TermsAgreementList({ agreement, className }: TermsAgreementListP
 
   return (
     <div
-      className={[
+      className={cn(
         "flex w-full flex-col gap-5 rounded-xl border border-grayscale-200 bg-white p-4 md:gap-5 md:rounded-none md:border-0 md:p-0",
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
     >
       <label className="flex cursor-pointer items-center gap-3">
         <Checkbox

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "@/shared/lib/cn";
 import { Footer } from "@/widgets/footer";
 import { ResponsiveHeader } from "@/widgets/responsive-header";
 
@@ -29,10 +30,10 @@ export function SiteLayout({
 }: SiteLayoutProps) {
   return (
     <div
-      className={[
+      className={cn(
         "flex min-h-screen flex-col",
         background === "gray" ? "bg-grayscale-50" : "bg-white",
-      ].join(" ")}
+      )}
     >
       <ResponsiveHeader mobile={{ variant: "logo" }} />
       <main className="flex flex-1 flex-col">{children}</main>

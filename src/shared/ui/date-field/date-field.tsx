@@ -2,6 +2,7 @@
 
 import { useId } from "react";
 import type { InputHTMLAttributes } from "react";
+import { cn } from "@/shared/lib/cn";
 
 export interface DateFieldProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {
@@ -20,7 +21,7 @@ export function DateField({ label, error, className, id, ...rest }: DateFieldPro
   const inputId = id ?? autoId;
 
   return (
-    <div className={["flex flex-col items-start gap-2", className].filter(Boolean).join(" ")}>
+    <div className={cn("flex flex-col items-start gap-2", className)}>
       {label && (
         <label
           htmlFor={inputId}
@@ -30,12 +31,12 @@ export function DateField({ label, error, className, id, ...rest }: DateFieldPro
         </label>
       )}
       <div
-        className={[
+        className={cn(
           "flex w-full items-center gap-2.5 rounded-lg border border-solid bg-white px-3 py-2.5 transition-colors",
           error
             ? "border-system-error"
             : "border-grayscale-300 focus-within:border-primary-500",
-        ].join(" ")}
+        )}
       >
         <input
           id={inputId}

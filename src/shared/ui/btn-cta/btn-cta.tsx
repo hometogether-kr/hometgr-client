@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+import { cn } from "@/shared/lib/cn";
 
 export type BtnCtaVariant = "default" | "emphasize" | "sub" | "stroke" | "kakao";
 export type BtnCtaSize = "xs" | "s" | "m" | "l" | "xl" | "mobile" | "pill";
@@ -59,12 +60,25 @@ const variantClasses: Record<BtnCtaVariant, string> = {
 };
 
 /**
+ * 시각적으로만 비활성인 상태 (aria-disabled)
+ *
+ * 필수 입력을 건너뛰고 눌렀을 때 안내 토스트를 띄우려면 클릭 이벤트가 살아 있어야
+ * 해서, disabled 대신 aria-disabled를 쓰는 화면이 있습니다. 그 경우에도 같은
+ * 비활성 스타일이 적용되도록 컴포넌트가 직접 처리합니다.
+ */
+const ariaDisabledClasses =
+  "bg-grayscale-200 text-grayscale-400 border-transparent hover:opacity-100";
+
+/**
  * CTA 버튼 (Figma: btn_cta, node 133:839)
  *
  * - variant × size 조합은 Figma 컴포넌트 셋의 변형과 1:1 대응
  * - hover 변형은 CSS :hover(opacity 80%)로 구현 (Figma 주석 "26.7.12 호버추가")
  * - Figma의 고정 너비(154/196/335/398/492px)는 인스턴스 예시 값이므로
  *   기본은 내용 너비, 필요 시 className="w-full" 등으로 지정
+ *
+ * className으로 넘긴 유틸리티는 Tailwind의 출력 순서에 따라 기본 스타일에 밀릴 수
+ * 있습니다. 색을 바꿔야 하면 variant를 쓰거나 `bg-white!`처럼 important를 붙이세요.
  */
 export function BtnCta({
   variant = "default",
@@ -76,18 +90,18 @@ export function BtnCta({
   children,
   ...rest
 }: BtnCtaProps) {
-  const classes = [
+  const visuallyDisabled = rest["aria-disabled"] === true || rest["aria-disabled"] === "true";
+
+  const classes = cn(
     base,
     sizeClasses[size],
     iconSize[size],
-    variantClasses[variant],
+    visuallyDisabled ? ariaDisabledClasses : variantClasses[variant],
     variant === "stroke" && size === "mobile" && "font-medium",
     shape === "pill" && "rounded-full",
     shape === "rect" && size === "pill" && "rounded-xl",
     className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  );
 
   return (
     <button type="button" className={classes} {...rest}>

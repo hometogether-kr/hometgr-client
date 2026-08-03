@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "@/shared/lib/cn";
 import { ResponsiveHeader } from "@/widgets/responsive-header";
 
 export type OnboardingCardWidth = "narrow" | "wide";
@@ -64,12 +65,12 @@ export function OnboardingLayout({
   const header = (
     <header className="flex flex-col gap-1">
       <h1
-        className={[
+        className={cn(
           "text-heading-1 font-semibold text-grayscale-900",
           titlePlacement === "in-card"
             ? "md:text-title-3 md:text-grayscale-800"
             : "md:text-display-3 md:text-grayscale-800",
-        ].join(" ")}
+        )}
       >
         {title}
       </h1>
@@ -87,15 +88,15 @@ export function OnboardingLayout({
 
       <main className="flex flex-1 flex-col px-5 pb-[104px] pt-2 md:items-center md:justify-center md:px-5 md:py-16">
         <div
-          className={["flex w-full flex-col gap-8 md:gap-12", cardWidthClasses[cardWidth]].join(" ")}
+          className={cn("flex w-full flex-col gap-8 md:gap-12", cardWidthClasses[cardWidth])}
         >
           {titlePlacement === "above-card" && header}
 
           <section
-            className={[
+            className={cn(
               "flex flex-col gap-8 md:gap-10 md:bg-white md:px-16 md:py-12",
               cardRadiusClasses[cardWidth],
-            ].join(" ")}
+            )}
           >
             {titlePlacement === "in-card" && header}
             {children}

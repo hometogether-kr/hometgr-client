@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import type { ChangeEvent, TextareaHTMLAttributes } from "react";
+import { cn } from "@/shared/lib/cn";
 
 export type TextAreaSize = "s" | "m" | "l";
 
@@ -56,7 +57,7 @@ export function TextArea({
     onChange?.(e);
   };
 
-  const boxClasses = [
+  const boxClasses = cn(
     "flex w-full flex-col gap-2 rounded-lg border border-solid p-3 transition-colors",
     boxHeightClasses[size],
     disabled
@@ -64,10 +65,10 @@ export function TextArea({
       : error
         ? "border-system-error bg-white"
         : "border-grayscale-300 bg-white focus-within:border-primary-500",
-  ].join(" ");
+  );
 
   return (
-    <div className={["flex flex-col items-start gap-2", className].filter(Boolean).join(" ")}>
+    <div className={cn("flex flex-col items-start gap-2", className)}>
       {label && (
         <label
           htmlFor={textareaId}
@@ -85,11 +86,11 @@ export function TextArea({
           onChange={handleChange}
           disabled={disabled}
           aria-invalid={Boolean(error) || undefined}
-          className={[
+          className={cn(
             "min-h-0 w-full flex-1 resize-none bg-transparent text-base font-medium leading-[1.5] outline-none",
             "placeholder:text-grayscale-400",
             disabled ? "text-grayscale-500" : "text-grayscale-800",
-          ].join(" ")}
+          )}
           {...rest}
         />
         {showCount && (

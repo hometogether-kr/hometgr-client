@@ -1,5 +1,7 @@
 export { MEMBER_ROLE_OPTIONS } from "./model/member-role";
 export type { MemberRole, MemberRoleOption } from "./model/member-role";
+export { GUARDIAN_RELATION_OPTIONS } from "./model/guardian-relation";
+export type { GuardianRelation, GuardianRelationOption } from "./model/guardian-relation";
 export { ANONYMOUS_SESSION } from "./model/current-user";
 export type { CurrentUser, Session, UserRole } from "./model/current-user";
 export { toMemberRole, toUserRole } from "./model/role-mapping";

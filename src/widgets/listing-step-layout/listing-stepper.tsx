@@ -1,3 +1,4 @@
+import { cn } from "@/shared/lib/cn";
 import { ProgressBar } from "@/shared/ui/progress-bar";
 import { LISTING_STEPS, type ListingStepIndex } from "./listing-steps";
 
@@ -44,10 +45,10 @@ export function ListingStepper({ current, autoSaving = false }: ListingStepperPr
               <li key={label} className="flex items-start justify-center gap-2">
                 <div className="flex flex-col items-center self-stretch">
                   <span
-                    className={[
+                    className={cn(
                       "flex size-5 shrink-0 items-center justify-center rounded-full text-xs font-semibold leading-[1.4] tracking-[0.12px] text-white",
                       active ? "bg-primary-500" : "bg-grayscale-200",
-                    ].join(" ")}
+                    )}
                     aria-current={active ? "step" : undefined}
                   >
                     {step}
@@ -70,9 +71,7 @@ export function ListingStepper({ current, autoSaving = false }: ListingStepperPr
           <img
             alt=""
             src={saveIcon}
-            className={["block size-5 max-w-none", autoSaving ? "animate-spin" : ""]
-              .filter(Boolean)
-              .join(" ")}
+            className={cn("block size-5 max-w-none", autoSaving ? "animate-spin" : "")}
           />
         </span>
         <p className="whitespace-nowrap text-sm font-medium leading-[1.5] text-grayscale-700">

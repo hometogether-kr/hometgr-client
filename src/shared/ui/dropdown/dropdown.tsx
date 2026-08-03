@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { cn } from "@/shared/lib/cn";
 
 export interface DropdownOption<T extends string> {
   label: string;
@@ -63,7 +64,7 @@ export function Dropdown<T extends string>({
   return (
     <div
       ref={rootRef}
-      className={["relative flex w-full flex-col gap-2", className].filter(Boolean).join(" ")}
+      className={cn("relative flex w-full flex-col gap-2", className)}
     >
       <button
         type="button"
@@ -72,20 +73,20 @@ export function Dropdown<T extends string>({
         aria-controls={listId}
         aria-haspopup="listbox"
         onClick={() => setOpen((prev) => !prev)}
-        className={[
+        className={cn(
           "flex h-12 w-full items-center justify-between rounded-lg border border-solid bg-white px-3 py-3 transition-colors",
           open ? "border-primary-500" : "border-grayscale-300",
           disabled ? "cursor-not-allowed bg-grayscale-100" : "",
-        ].join(" ")}
+        )}
       >
         <span className="whitespace-nowrap text-base font-medium leading-[1.5] text-grayscale-900">
           {selected?.label ?? placeholder}
         </span>
         <span
-          className={[
+          className={cn(
             "flex size-5 shrink-0 items-center justify-center p-1 transition-transform",
             open ? "rotate-180" : "",
-          ].join(" ")}
+          )}
           aria-hidden="true"
         >
           {arrowIcon ?? (
@@ -115,10 +116,10 @@ export function Dropdown<T extends string>({
                     onChange?.(option.value);
                     setOpen(false);
                   }}
-                  className={[
+                  className={cn(
                     "flex h-12 w-full items-center justify-between bg-white p-3 text-left text-base leading-[1.5] text-grayscale-800 transition-colors hover:bg-grayscale-200",
                     isSelected ? "font-semibold" : "font-medium",
-                  ].join(" ")}
+                  )}
                 >
                   <span className="whitespace-nowrap">{option.label}</span>
                   {option.icon && (

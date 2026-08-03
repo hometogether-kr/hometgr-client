@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSession } from "@/domains/user";
 import { ROUTES } from "@/shared/config";
+import { cn } from "@/shared/lib/cn";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { BtnText } from "@/shared/ui/btn-text";
 
@@ -65,10 +66,10 @@ function toActiveMenu(pathname: string): MenuKey | null {
 function ArrowIcon({ open }: { open: boolean }) {
   return (
     <span
-      className={[
+      className={cn(
         "inline-flex h-5 w-[13.4px] flex-col items-center justify-center transition-transform",
         open ? "rotate-180" : "",
-      ].join(" ")}
+      )}
       aria-hidden="true"
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */}
@@ -125,12 +126,12 @@ export function Navigation() {
               <div className="p-2.5">
                 <Link
                   href={MENU.intro.href}
-                  className={[
+                  className={cn(
                     "text-sm leading-5",
                     activeItem === "intro"
                       ? "font-bold text-primary-500"
                       : "font-medium text-grayscale-700 hover:font-semibold hover:text-grayscale-800",
-                  ].join(" ")}
+                  )}
                 >
                   {MENU.intro.label}
                 </Link>
@@ -163,12 +164,12 @@ export function Navigation() {
             <div className="p-2.5">
               <Link
                 href={MENU.support.href}
-                className={[
+                className={cn(
                   "text-sm leading-5",
                   activeItem === "support"
                     ? "font-bold text-primary-500"
                     : "font-medium text-grayscale-700 hover:font-semibold hover:text-grayscale-800",
-                ].join(" ")}
+                )}
               >
                 {MENU.support.label}
               </Link>

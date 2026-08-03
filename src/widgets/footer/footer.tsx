@@ -1,3 +1,5 @@
+import { cn } from "@/shared/lib/cn";
+
 /** 푸터용 회색 로고 (176×32) */
 const DARK_LOGO = "/images/dark-logo.svg";
 const IC_INSTAGRAM = "/icons/ic-insta.svg";
@@ -69,9 +71,7 @@ function FooterCopyright() {
 export function Footer({ className }: { className?: string }) {
   return (
     <footer
-      className={["w-full bg-grayscale-70 px-4 py-6 md:px-[200px]", className]
-        .filter(Boolean)
-        .join(" ")}
+      className={cn("w-full bg-grayscale-70 px-4 py-6 md:px-[200px]", className)}
     >
       <div className="hidden h-[152px] w-full items-start justify-between md:flex">
         <div className="flex h-full w-[260px] flex-col items-start justify-between">

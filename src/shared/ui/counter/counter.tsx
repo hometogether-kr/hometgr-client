@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/shared/lib/cn";
+
 export interface CounterProps {
   label?: string;
   value: number;
@@ -46,7 +48,7 @@ function StepButton({
  */
 export function Counter({ label, value, onChange, min = 0, max = 99, className }: CounterProps) {
   return (
-    <div className={["flex flex-col justify-center gap-3", className].filter(Boolean).join(" ")}>
+    <div className={cn("flex flex-col justify-center gap-3", className)}>
       {label && (
         <p className="whitespace-nowrap text-sm font-medium leading-[1.4] text-grayscale-600">
           {label}

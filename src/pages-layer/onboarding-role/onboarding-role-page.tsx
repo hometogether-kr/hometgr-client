@@ -58,17 +58,7 @@ export function OnboardingRolePage({ onSelect, onBack }: OnboardingRolePageProps
       titlePlacement="above-card"
       footerPlacement="mobile"
       footer={
-        <BtnCta
-          size="mobile"
-          aria-disabled={!selectedRole}
-          className={[
-            "w-full",
-            !selectedRole && "bg-grayscale-200 text-grayscale-400 hover:opacity-100",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          onClick={handleNext}
-        >
+        <BtnCta size="mobile" aria-disabled={!selectedRole} className="w-full" onClick={handleNext}>
           다음으로
         </BtnCta>
       }

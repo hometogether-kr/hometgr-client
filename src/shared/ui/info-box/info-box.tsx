@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import { cn } from "@/shared/lib/cn";
 
 export interface InfoBoxProps extends HTMLAttributes<HTMLDivElement> {
   /** Figma: title — 있으면 아이콘+제목 행 아래 본문, 없으면 아이콘+본문 한 줄 */
@@ -41,7 +42,7 @@ export function InfoBox({ title, icon, className, children, ...rest }: InfoBoxPr
 
   return (
     <div
-      className={["w-full rounded-xl bg-grayscale-70 p-4", className].filter(Boolean).join(" ")}
+      className={cn("w-full rounded-xl bg-grayscale-70 p-4", className)}
       {...rest}
     >
       {title ? (

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ROUTES } from "@/shared/config";
+import { cn } from "@/shared/lib/cn";
 
 /**
  * TODO: 닫기(X)·화살표 아이콘은 7일 후 만료되는 Figma 임시 URL입니다.
@@ -119,10 +120,10 @@ export function SidebarMobile({
                 >
                   {group.label}
                   <span
-                    className={[
+                    className={cn(
                       "flex size-6 items-center justify-center transition-transform",
                       expanded === group.key ? "rotate-180" : "",
-                    ].join(" ")}
+                    )}
                     aria-hidden="true"
                   >
                     <img

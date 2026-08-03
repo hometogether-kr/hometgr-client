@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { ReactNode } from "react";
+import { cn } from "@/shared/lib/cn";
 import { SidebarMobile } from "@/widgets/sidebar-mobile";
 
 /**
@@ -81,12 +82,10 @@ export function GnbMobile(props: GnbMobileProps) {
     return (
       <>
         <header
-          className={[
+          className={cn(
             "flex w-full items-center justify-between border-b border-grayscale-100 bg-white px-5 py-2",
             className,
-          ]
-            .filter(Boolean)
-            .join(" ")}
+          )}
         >
           <Link href="/" className="flex items-center py-2" aria-label="Home Together">
             {/* eslint-disable-next-line @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */}
@@ -113,9 +112,7 @@ export function GnbMobile(props: GnbMobileProps) {
 
   return (
     <header
-      className={["relative h-[52px] w-full overflow-clip bg-white", className]
-        .filter(Boolean)
-        .join(" ")}
+      className={cn("relative h-[52px] w-full overflow-clip bg-white", className)}
     >
       <BackButton onBack={props.onBack} backIcon={props.backIcon} />
       {props.variant === "title" && (

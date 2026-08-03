@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { BUILDING_TYPE_OPTIONS, type BuildingType } from "@/domains/listing-draft";
+import { cn } from "@/shared/lib/cn";
 import type { SelectedAddress } from "@/shared/lib/kakao-postcode";
 import { AddressSearchDialog } from "@/shared/ui/address-search-dialog";
 import { BtnCta } from "@/shared/ui/btn-cta";
@@ -196,10 +197,10 @@ export function ListingStep2Page({
           </div>
           <div className="flex w-full flex-col">
             <div
-              className={[
+              className={cn(
                 "flex w-full flex-col gap-4 border border-grayscale-200 p-4 md:flex-row md:items-center md:justify-between md:gap-0 md:p-5",
                 manualOpen ? "rounded-t-2xl" : "rounded-2xl",
-              ].join(" ")}
+              )}
             >
               <div className="flex flex-1 flex-col items-start gap-1.5">
                 <div className="flex items-center gap-1.5">

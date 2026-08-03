@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
+import { cn } from "@/shared/lib/cn";
 
 export type CheckboxSize = "20" | "24" | "32";
 
@@ -70,14 +71,12 @@ export function Checkbox({
 
   return (
     <label
-      className={[
+      className={cn(
         "relative inline-flex cursor-pointer items-center justify-center",
         wrapperPadding[size],
         disabled ? "cursor-not-allowed opacity-60" : "",
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
     >
       <input
         ref={inputRef}
@@ -89,21 +88,21 @@ export function Checkbox({
       />
       <span
         aria-hidden="true"
-        className={[
+        className={cn(
           "flex items-center justify-center border-solid transition-colors",
           boxClasses[size],
           active ? "border-primary-500 bg-primary-500" : "border-grayscale-200 bg-transparent",
-        ].join(" ")}
+        )}
       >
         {indeterminate ? (
-          <span className={["flex items-center justify-center", iconClasses[size]].join(" ")}>
+          <span className={cn("flex items-center justify-center", iconClasses[size])}>
             {indeterminateIcon ?? (
               // eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정
               <img alt="" src={FIGMA_TEMP_LINE} className="block size-full max-w-none" />
             )}
           </span>
         ) : checked ? (
-          <span className={["flex items-center justify-center", iconClasses[size]].join(" ")}>
+          <span className={cn("flex items-center justify-center", iconClasses[size])}>
             {checkIcon ?? (
               // eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정
               <img alt="" src={FIGMA_TEMP_CHECK} className="block size-full max-w-none" />

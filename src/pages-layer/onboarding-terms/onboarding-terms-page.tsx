@@ -32,22 +32,16 @@ export function OnboardingTermsPage({ onSubmit, onBack }: OnboardingTermsPagePro
     <OnboardingLayout
       title="서비스 이용을 위해 동의가 필요해요"
       onBack={onBack}
+      /*
+       * disabled 속성 대신 aria-disabled를 씁니다. Figma 749:17266처럼 필수 항목을
+       * 건너뛰고 눌렀을 때 안내 토스트를 띄우려면 클릭 이벤트가 살아 있어야 합니다.
+       * 비활성 스타일은 BtnCta가 aria-disabled를 보고 직접 적용합니다.
+       */
       footer={
         <BtnCta
           size="mobile"
           aria-disabled={!agreement.requiredSatisfied}
-          className={[
-            "w-full md:h-[52px]",
-            /*
-             * disabled 속성 대신 aria-disabled로 비활성 스타일만 적용합니다.
-             * Figma 749:17266처럼 필수 항목을 건너뛰고 눌렀을 때 안내 토스트를
-             * 띄우려면 클릭 이벤트가 살아 있어야 합니다.
-             */
-            !agreement.requiredSatisfied &&
-              "bg-grayscale-200 text-grayscale-400 hover:opacity-100",
-          ]
-            .filter(Boolean)
-            .join(" ")}
+          className="w-full md:h-[52px]"
           onClick={handleSubmit}
         >
           동의하고 시작하기
