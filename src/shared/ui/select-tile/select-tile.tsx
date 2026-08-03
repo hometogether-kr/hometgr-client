@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
 export interface SelectTileProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -19,7 +20,7 @@ export function SelectTile({ selected = false, className, children, ...rest }: S
       type="button"
       aria-pressed={selected}
       className={cn(
-        "flex flex-1 items-center justify-center rounded-xl border border-solid px-5 py-3 text-base font-semibold leading-[1.5] transition-colors",
+        "flex flex-1 items-center justify-center rounded-xl border border-solid px-5 py-3 text-base leading-[1.5] font-semibold transition-colors",
         selected
           ? "border-primary-400 bg-primary-50 text-primary-600"
           : "border-grayscale-200 bg-white text-grayscale-500",

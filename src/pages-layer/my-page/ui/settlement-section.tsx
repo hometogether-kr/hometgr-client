@@ -1,4 +1,5 @@
 import { InfoBox } from "@/shared/ui/info-box";
+
 import { AccountSection } from "./account-section";
 
 export interface SettlementSectionProps {
@@ -16,7 +17,7 @@ interface SettlementRowProps {
 
 function SettlementRow({ label, value }: SettlementRowProps) {
   return (
-    <div className="flex flex-col text-label-1 font-medium leading-[1.5]">
+    <div className="flex flex-col text-label-1 leading-[1.5] font-medium">
       <span className="text-grayscale-900">{label}</span>
       <span className="text-grayscale-600">{value}</span>
     </div>
@@ -47,10 +48,7 @@ export function SettlementSection({
       }
     >
       <div className="flex flex-col gap-6">
-        <SettlementRow
-          label="정산 대금 입금 계좌"
-          value={account ?? "입력된 정보가 없습니다."}
-        />
+        <SettlementRow label="정산 대금 입금 계좌" value={account ?? "입력된 정보가 없습니다."} />
         <SettlementRow
           label="수수료에 대한 영수증 발급"
           value={receiptRequested ? "신청함" : "신청 안 함"}

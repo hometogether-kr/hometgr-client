@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
+
 import { deriveAddressRegion, useDraftStepFlow } from "@/features/save-listing-draft";
 import { ListingStep2Page, type ListingStep2Values } from "@/pages-layer/listing-step-2-place";
 import { useToast } from "@/shared/ui/toast";
@@ -51,7 +52,7 @@ function Step2() {
       }}
       isSaving={isSaving}
       onPrev={goPrev}
-      onNext={handleNext}
+      onNext={(values) => void handleNext(values)}
     />
   );
 }

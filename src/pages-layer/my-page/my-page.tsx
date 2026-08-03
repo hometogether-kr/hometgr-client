@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
+
 import { useSession } from "@/domains/user";
 import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { BtnUnderline } from "@/shared/ui/btn-underline";
 import { useToast } from "@/shared/ui/toast";
 import { SiteLayout } from "@/widgets/site-layout";
+
 import { GuardianSection } from "./ui/guardian-section";
 import { ProfileSection } from "./ui/profile-section";
 import { SettlementSection } from "./ui/settlement-section";

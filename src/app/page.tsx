@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { ROUTES } from "@/shared/config";
 import { SiteLayout } from "@/widgets/site-layout";
 

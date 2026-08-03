@@ -1,7 +1,9 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { type ListingDraft, listingDraftQueryKeys } from "@/domains/listing-draft";
+
 import { saveListingDraftStep } from "../api/draft-command.api";
 import type { SaveStepCommand } from "./step-command.schema";
 
@@ -21,7 +23,7 @@ export function useSaveDraftStep(draftId: string) {
     onSuccess: (draft: ListingDraft) => {
       queryClient.setQueryData(listingDraftQueryKeys.detail(draftId), draft);
       // 목록의 진행 단계·저장 시각이 달라지므로 다음 조회 때 새로 받습니다.
-      queryClient.invalidateQueries({ queryKey: listingDraftQueryKeys.lists() });
+      void queryClient.invalidateQueries({ queryKey: listingDraftQueryKeys.lists() });
     },
   });
 

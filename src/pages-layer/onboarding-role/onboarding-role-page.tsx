@@ -1,8 +1,9 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { MEMBER_ROLE_OPTIONS } from "@/domains/user";
+
 import type { MemberRole } from "@/domains/user";
+import { MEMBER_ROLE_OPTIONS } from "@/domains/user";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { ChoiceCard } from "@/shared/ui/choice-card";
 import { useToast } from "@/shared/ui/toast";

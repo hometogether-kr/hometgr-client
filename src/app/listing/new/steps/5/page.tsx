@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
+
 import { useDraftStepFlow } from "@/features/save-listing-draft";
 import {
   ListingStep5Page,
@@ -29,7 +30,7 @@ function Step5() {
       }}
       isSaving={isSaving}
       onPrev={goPrev}
-      onNext={handleNext}
+      onNext={(values) => void handleNext(values)}
     />
   );
 }

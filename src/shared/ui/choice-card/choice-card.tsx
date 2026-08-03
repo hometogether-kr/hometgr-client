@@ -1,8 +1,8 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
-export interface ChoiceCardProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "title"> {
+export interface ChoiceCardProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "title"> {
   title: string;
   description?: string;
   /** 카드 상단 일러스트 슬롯 */

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+
 import { ROUTES } from "@/shared/config";
 import { cn } from "@/shared/lib/cn";
 
@@ -73,8 +74,12 @@ export function SidebarMobile({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white pt-11 md:hidden" role="dialog" aria-modal="true">
-      <div className="flex w-full items-start justify-end pb-4 pl-6 pr-3 pt-3">
+    <div
+      className="fixed inset-0 z-50 flex flex-col bg-white pt-11 md:hidden"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div className="flex w-full items-start justify-end pt-3 pr-3 pb-4 pl-6">
         <button
           type="button"
           aria-label="메뉴 닫기"
@@ -90,24 +95,31 @@ export function SidebarMobile({
       <div className="flex w-full flex-1 flex-col gap-5 overflow-y-auto px-4">
         <div className="flex w-full flex-col gap-1">
           <Link href={ROUTES.myPage} className="flex items-start gap-1">
-            <span className="whitespace-nowrap text-xl font-semibold leading-[1.4] tracking-[-0.2px] text-grayscale-800">
+            <span className="text-xl leading-[1.4] font-semibold tracking-[-0.2px] whitespace-nowrap text-grayscale-800">
               {userName}님
             </span>
             <span className="flex size-[18px] items-center justify-center p-1" aria-hidden="true">
-              <img alt="" src={FIGMA_TEMP_IC_CHEVRON} className="block h-[9px] w-[4.5px] max-w-none rotate-180" />
+              <img
+                alt=""
+                src={FIGMA_TEMP_IC_CHEVRON}
+                className="block h-[9px] w-[4.5px] max-w-none rotate-180"
+              />
             </span>
           </Link>
-          <p className="py-1.5 text-sm font-medium leading-[1.4] text-grayscale-500">{userRole}</p>
+          <p className="py-1.5 text-sm leading-[1.4] font-medium text-grayscale-500">{userRole}</p>
         </div>
 
         <nav className="flex w-full flex-col gap-2">
           {MENU.map((group) => (
-            <div key={group.key} className="flex w-full flex-col gap-1 border-t border-grayscale-100 pt-2 first:border-t-0 first:pt-0">
+            <div
+              key={group.key}
+              className="flex w-full flex-col gap-1 border-t border-grayscale-100 pt-2 first:border-t-0 first:pt-0"
+            >
               {group.href ? (
                 <Link
                   href={group.href}
                   onClick={onClose}
-                  className="flex w-full items-center px-2 py-3 text-lg font-medium leading-[1.4] tracking-[-0.18px] text-grayscale-800"
+                  className="flex w-full items-center px-2 py-3 text-lg leading-[1.4] font-medium tracking-[-0.18px] text-grayscale-800"
                 >
                   {group.label}
                 </Link>
@@ -116,7 +128,7 @@ export function SidebarMobile({
                   type="button"
                   aria-expanded={expanded === group.key}
                   onClick={() => setExpanded((prev) => (prev === group.key ? null : group.key))}
-                  className="flex w-full items-center justify-between px-2 py-3 text-left text-lg font-medium leading-[1.4] tracking-[-0.18px] text-grayscale-800"
+                  className="flex w-full items-center justify-between px-2 py-3 text-left text-lg leading-[1.4] font-medium tracking-[-0.18px] text-grayscale-800"
                 >
                   {group.label}
                   <span
@@ -141,7 +153,7 @@ export function SidebarMobile({
                       key={item.href}
                       href={item.href}
                       onClick={onClose}
-                      className="flex w-full items-center px-2 py-3 text-base font-medium leading-[1.5] text-grayscale-600"
+                      className="flex w-full items-center px-2 py-3 text-base leading-[1.5] font-medium text-grayscale-600"
                     >
                       {item.label}
                     </Link>
@@ -154,7 +166,7 @@ export function SidebarMobile({
             <button
               type="button"
               onClick={onLogout}
-              className="flex w-full items-center px-2 py-3 text-left text-lg font-medium leading-[1.4] tracking-[-0.18px] text-system-error"
+              className="flex w-full items-center px-2 py-3 text-left text-lg leading-[1.4] font-medium tracking-[-0.18px] text-system-error"
             >
               로그아웃
             </button>

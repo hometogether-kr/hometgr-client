@@ -1,11 +1,14 @@
 "use client";
 
-import { useId } from "react";
 import type { InputHTMLAttributes } from "react";
+import { useId } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
-export interface DateFieldProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> {
+export interface DateFieldProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "type" | "size"
+> {
   label?: string;
   error?: string;
 }
@@ -25,7 +28,7 @@ export function DateField({ label, error, className, id, ...rest }: DateFieldPro
       {label && (
         <label
           htmlFor={inputId}
-          className="w-full text-sm font-medium leading-[1.4] text-grayscale-600"
+          className="w-full text-sm leading-[1.4] font-medium text-grayscale-600"
         >
           {label}
         </label>
@@ -33,21 +36,19 @@ export function DateField({ label, error, className, id, ...rest }: DateFieldPro
       <div
         className={cn(
           "flex w-full items-center gap-2.5 rounded-lg border border-solid bg-white px-3 py-2.5 transition-colors",
-          error
-            ? "border-system-error"
-            : "border-grayscale-300 focus-within:border-primary-500",
+          error ? "border-system-error" : "border-grayscale-300 focus-within:border-primary-500",
         )}
       >
         <input
           id={inputId}
           type="date"
           aria-invalid={Boolean(error) || undefined}
-          className="min-w-0 flex-1 bg-transparent text-base font-medium leading-[1.5] text-grayscale-800 outline-none [&::-webkit-datetime-edit-fields-wrapper]:text-grayscale-800"
+          className="min-w-0 flex-1 bg-transparent text-base leading-[1.5] font-medium text-grayscale-800 outline-none [&::-webkit-datetime-edit-fields-wrapper]:text-grayscale-800"
           {...rest}
         />
       </div>
       {error && (
-        <p className="w-full px-1 text-[13px] font-medium leading-[1.4] text-system-error">
+        <p className="w-full px-1 text-[13px] leading-[1.4] font-medium text-system-error">
           {error}
         </p>
       )}

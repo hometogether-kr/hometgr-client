@@ -1,9 +1,10 @@
 "use client";
 
-import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
-import { Toast } from "./toast";
+import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import type { ToastVariant } from "./toast";
+import { Toast } from "./toast";
 import { ToastViewport } from "./toast-viewport";
 
 export interface ShowToastOptions {

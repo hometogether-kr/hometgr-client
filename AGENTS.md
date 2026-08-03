@@ -80,13 +80,13 @@ Each slice exposes its external API through its root `index.ts`.
 Prefer public imports across slice boundaries:
 
 ```ts
-import {ListingStepper} from "@/widgets/listing-step-layout";
+import { ListingStepper } from "@/widgets/listing-step-layout";
 ```
 
 Avoid deep imports across slice boundaries:
 
 ```ts
-import {ListingStepper} from "@/widgets/listing-step-layout/listing-stepper";
+import { ListingStepper } from "@/widgets/listing-step-layout/listing-stepper";
 ```
 
 Inside the same slice, use relative imports. Export only what other slices
@@ -199,9 +199,9 @@ const handle = ...
 Event handlers should describe the event or action:
 
 ```ts
-handleSubmit
-handleListingDelete
-handleModalClose
+handleSubmit;
+handleListingDelete;
+handleModalClose;
 ```
 
 ## Types

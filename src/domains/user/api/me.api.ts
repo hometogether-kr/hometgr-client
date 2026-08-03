@@ -1,4 +1,5 @@
 import { ApiError, apiRequest } from "@/shared/api";
+
 import { ANONYMOUS_SESSION, type Session } from "../model/current-user";
 import { meResponseDtoSchema } from "./user.dto";
 import { toSession } from "./user.mapper";

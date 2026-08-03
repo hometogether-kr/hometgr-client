@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+
 import { clearSessionTokens } from "@/shared/api/server";
 
 /**

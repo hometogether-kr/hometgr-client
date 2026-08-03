@@ -1,15 +1,17 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import {
   type DraftMediaMutationDto,
   type ListingDraft,
   listingDraftQueryKeys,
   toDraftPhoto,
 } from "@/domains/listing-draft";
+
 import {
-  type DeleteDraftPhotoInput,
   deleteDraftPhoto,
+  type DeleteDraftPhotoInput,
   uploadDraftPhotos,
 } from "../api/draft-command.api";
 
@@ -27,9 +29,7 @@ function mergePhotoMutation(
     ...draft,
     version: result.version,
     lastSavedAt: new Date(result.lastSavedAt),
-    photos: [...result.media]
-      .sort((a, b) => a.displayOrder - b.displayOrder)
-      .map(toDraftPhoto),
+    photos: [...result.media].sort((a, b) => a.displayOrder - b.displayOrder).map(toDraftPhoto),
   };
 }
 
@@ -38,10 +38,8 @@ export function useDraftPhotos(draftId: string) {
   const detailKey = listingDraftQueryKeys.detail(draftId);
 
   const applyResult = (result: DraftMediaMutationDto) => {
-    queryClient.setQueryData<ListingDraft>(detailKey, (draft) =>
-      mergePhotoMutation(draft, result),
-    );
-    queryClient.invalidateQueries({ queryKey: listingDraftQueryKeys.lists() });
+    queryClient.setQueryData<ListingDraft>(detailKey, (draft) => mergePhotoMutation(draft, result));
+    void queryClient.invalidateQueries({ queryKey: listingDraftQueryKeys.lists() });
   };
 
   const upload = useMutation({

@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 import { getServerEnv } from "@/shared/config/env.server";
 
 /** 토큰 쌍 (OpenAPI: TokenPairResponseDto) — 세션 인프라가 다루는 값입니다. */

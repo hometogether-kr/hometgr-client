@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+
 import { fetchSession } from "../api/me.api";
 import { userQueryKeys } from "../api/user-query-keys";
 import { ANONYMOUS_SESSION, type Session } from "./current-user";

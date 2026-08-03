@@ -1,9 +1,11 @@
 "use client";
 
 import type { ChangeEvent, ReactNode } from "react";
+
+import { cn } from "@/shared/lib/cn";
+
 import { Checkbox } from "../checkbox";
 import { Radio } from "../radio";
-import { cn } from "@/shared/lib/cn";
 
 export interface BtnCardProps {
   /** Figma: btn_card / radio · checkbox — 선택 컨트롤 종류 */
@@ -71,7 +73,7 @@ export function BtnCard({
       <span className="flex flex-col items-start gap-1.5">
         <span
           className={cn(
-            "text-base font-semibold leading-[1.5] md:whitespace-nowrap md:text-lg md:leading-[1.4] md:tracking-[-0.18px]",
+            "text-base leading-[1.5] font-semibold md:text-lg md:leading-[1.4] md:tracking-[-0.18px] md:whitespace-nowrap",
             checked ? "text-primary-600" : "text-grayscale-500",
           )}
         >
@@ -80,7 +82,7 @@ export function BtnCard({
         {description && (
           <span
             className={cn(
-              "text-[13px] font-medium leading-[1.5] md:text-sm",
+              "text-[13px] leading-[1.5] font-medium md:text-sm",
               checked ? "text-primary-500" : "text-grayscale-500",
             )}
           >

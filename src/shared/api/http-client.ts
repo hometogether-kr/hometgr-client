@@ -1,4 +1,5 @@
 import type { z } from "zod";
+
 import { ApiError, toApiError } from "./api-error";
 
 /**
@@ -32,7 +33,7 @@ function buildUrl(path: string, searchParams?: Record<string, QueryParamValue>):
 
     // 배열 파라미터는 같은 key를 반복합니다 (예: amenities=침대&amenities=책상)
     if (Array.isArray(value)) {
-      for (const item of value) params.append(key, item);
+      for (const item of value) params.append(key, String(item));
       continue;
     }
     params.append(key, String(value));
@@ -75,7 +76,11 @@ export async function apiRequest<TResponse = void>({
       method,
       signal,
       // multipart는 boundary를 브라우저가 붙이도록 Content-Type을 지정하지 않습니다.
-      headers: formData ? undefined : body === undefined ? undefined : { "Content-Type": "application/json" },
+      headers: formData
+        ? undefined
+        : body === undefined
+          ? undefined
+          : { "Content-Type": "application/json" },
       body: formData ?? (body === undefined ? undefined : JSON.stringify(body)),
     });
   } catch (cause) {

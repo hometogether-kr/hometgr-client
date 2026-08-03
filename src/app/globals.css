@@ -33,8 +33,9 @@
   --shadow-dropdown: 0 0 8px 0 rgba(46, 47, 49, 0.1);
 
   /* 폰트 파일은 app/layout.tsx에서 로드합니다. */
-  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont,
-    system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-sans:
+    "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+    "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 
   /*
    * Figma 텍스트 스타일 → Tailwind text-* 유틸리티

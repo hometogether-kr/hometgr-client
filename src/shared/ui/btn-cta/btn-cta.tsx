@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
 export type BtnCtaVariant = "default" | "emphasize" | "sub" | "stroke" | "kakao";
@@ -105,9 +106,13 @@ export function BtnCta({
 
   return (
     <button type="button" className={classes} {...rest}>
-      {leftIcon && <span className="inline-flex shrink-0 items-center justify-center">{leftIcon}</span>}
-      <span className="whitespace-nowrap [word-break:break-word]">{children}</span>
-      {rightIcon && <span className="inline-flex shrink-0 items-center justify-center">{rightIcon}</span>}
+      {leftIcon && (
+        <span className="inline-flex shrink-0 items-center justify-center">{leftIcon}</span>
+      )}
+      <span className="[word-break:break-word] whitespace-nowrap">{children}</span>
+      {rightIcon && (
+        <span className="inline-flex shrink-0 items-center justify-center">{rightIcon}</span>
+      )}
     </button>
   );
 }

@@ -1,10 +1,10 @@
 import type { InputHTMLAttributes } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
 export type RadioSize = "20" | "24" | "32";
 
-export interface RadioProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
+export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
   /** Figma: radio / size (20 · 24 · 32) — 히트 영역 크기 */
   size?: RadioSize;
 }

@@ -8,10 +8,8 @@ import { SiteLayout } from "@/widgets/site-layout";
  * 히어로 이미지와 모바일 로고 일러스트를 export해 public/에 커밋한 뒤
  * next/image로 교체하세요.
  */
-const FIGMA_TEMP_HERO =
-  "/figma/hero-32b08abb.png";
-const FIGMA_TEMP_LOGO_ILLUST =
-  "/figma/logo-illust-da269702.svg";
+const FIGMA_TEMP_HERO = "/figma/hero-32b08abb.png";
+const FIGMA_TEMP_LOGO_ILLUST = "/figma/logo-illust-da269702.svg";
 
 /* eslint-disable @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 이미지로 교체 예정 */
 

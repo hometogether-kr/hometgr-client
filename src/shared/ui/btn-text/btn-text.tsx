@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
 export type BtnTextSize = "14" | "16" | "20";
@@ -41,7 +42,7 @@ export function BtnText({
   ...rest
 }: BtnTextProps) {
   const classes = cn(
-    "inline-flex items-center justify-center gap-1 whitespace-nowrap leading-5",
+    "inline-flex items-center justify-center gap-1 leading-5 whitespace-nowrap",
     sizeClasses[size],
     iconSize[size],
     selected

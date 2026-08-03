@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
 export type BtnUnderlineSize = "13" | "14" | "16";
@@ -14,7 +15,8 @@ interface BtnUnderlineBaseProps {
 }
 
 export interface BtnUnderlineProps
-  extends BtnUnderlineBaseProps,
+  extends
+    BtnUnderlineBaseProps,
     Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof BtnUnderlineBaseProps> {
   /** 지정하면 button 대신 링크로 렌더링합니다. */
   href?: string;

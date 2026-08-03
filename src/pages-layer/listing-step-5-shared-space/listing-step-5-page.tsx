@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import {
   BATHROOM_USAGE_TYPE_OPTIONS,
   type BathroomUsageType,
@@ -23,7 +24,7 @@ const REQUIRED_MESSAGE = "필수 항목입니다.";
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <p className="w-full pl-1 pt-3 text-[13px] font-medium leading-[1.4] text-system-error">
+    <p className="w-full pt-3 pl-1 text-[13px] leading-[1.4] font-medium text-system-error">
       {message}
     </p>
   );
@@ -58,10 +59,14 @@ function FacilityCard<TValue extends string>({
   return (
     <div className="flex w-full flex-col rounded-2xl border border-grayscale-200 bg-white p-6">
       <div className="flex flex-col gap-3">
-        <p className="pl-1 text-base font-semibold leading-[1.5] text-grayscale-800">{label}</p>
+        <p className="pl-1 text-base leading-[1.5] font-semibold text-grayscale-800">{label}</p>
         <div className="flex flex-col gap-2">
-          <div className="flex flex-col gap-2 md:flex-row">{options.slice(0, 2).map(renderTile)}</div>
-          <div className="flex flex-col gap-2 md:flex-row">{options.slice(2, 4).map(renderTile)}</div>
+          <div className="flex flex-col gap-2 md:flex-row">
+            {options.slice(0, 2).map(renderTile)}
+          </div>
+          <div className="flex flex-col gap-2 md:flex-row">
+            {options.slice(2, 4).map(renderTile)}
+          </div>
           <div className="flex w-full gap-2 md:w-[calc(50%-4px)]">
             {options.slice(4, 5).map(renderTile)}
           </div>
@@ -191,7 +196,7 @@ export function ListingStep5Page({
           <div className="flex w-full flex-col gap-9">
             <div className="flex w-full flex-col">
               <div className="flex w-full flex-col gap-3">
-                <p className="text-xl font-semibold leading-[1.4] tracking-[-0.2px] text-grayscale-800">
+                <p className="text-xl leading-[1.4] font-semibold tracking-[-0.2px] text-grayscale-800">
                   화장실 사용 방식
                 </p>
                 <div className="flex flex-col gap-4">
@@ -204,7 +209,7 @@ export function ListingStep5Page({
                         checked={bathroom === option.value}
                         onChange={() => setBathroom(option.value)}
                       />
-                      <span className="text-base font-medium leading-[1.6] text-grayscale-700">
+                      <span className="text-base leading-[1.6] font-medium text-grayscale-700">
                         {option.label}
                       </span>
                     </label>

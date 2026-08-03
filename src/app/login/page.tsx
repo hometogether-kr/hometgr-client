@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
+
 import { LoginPage } from "@/pages-layer/login";
 import { ROUTES } from "@/shared/config";
 import { useToast } from "@/shared/ui/toast";

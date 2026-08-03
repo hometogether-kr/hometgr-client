@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import {
   PRIVATE_ROOM_OPTION_OPTIONS,
   PRIVATE_ROOM_SIZE_OPTIONS,
@@ -21,7 +22,7 @@ const OPTIONS_MESSAGE = "필수 항목입니다. (없다면 '없음' 선택)";
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <p className="w-full pl-1 pt-3 text-[13px] font-medium leading-[1.4] text-system-error">
+    <p className="w-full pt-3 pl-1 text-[13px] leading-[1.4] font-medium text-system-error">
       {message}
     </p>
   );
@@ -113,7 +114,7 @@ export function ListingStep4Page({
         <div className="flex w-full flex-col gap-9">
           <div className="flex w-full flex-col">
             <div className="flex w-full flex-col gap-3">
-              <p className="w-full text-sm font-medium leading-[1.4] text-grayscale-600">
+              <p className="w-full text-sm leading-[1.4] font-medium text-grayscale-600">
                 이용 형태
               </p>
               <div className="flex flex-col gap-3">
@@ -127,11 +128,11 @@ export function ListingStep4Page({
                       onChange={() => setUsage(option.value)}
                     />
                     <span className="flex items-center gap-2.5 whitespace-nowrap">
-                      <span className="text-base font-semibold leading-[1.4] text-grayscale-700">
+                      <span className="text-base leading-[1.4] font-semibold text-grayscale-700">
                         {option.label}
                       </span>
                       {option.description && (
-                        <span className="text-[13px] font-medium leading-[1.5] text-grayscale-500">
+                        <span className="text-[13px] leading-[1.5] font-medium text-grayscale-500">
                           {option.description}
                         </span>
                       )}

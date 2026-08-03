@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+
 import { BUILDING_TYPE_OPTIONS, type BuildingType } from "@/domains/listing-draft";
 import { cn } from "@/shared/lib/cn";
 import type { SelectedAddress } from "@/shared/lib/kakao-postcode";
@@ -64,9 +65,7 @@ export function ListingStep2Page({
   const [searchOpen, setSearchOpen] = useState(false);
   const [addressDetail, setAddressDetail] = useState(initialValues.addressDetail);
   const [roughLocation, setRoughLocation] = useState(initialValues.approximateLocation);
-  const [buildingType, setBuildingType] = useState<BuildingType | null>(
-    initialValues.buildingType,
-  );
+  const [buildingType, setBuildingType] = useState<BuildingType | null>(initialValues.buildingType);
   const [buildingTypeOther, setBuildingTypeOther] = useState(initialValues.buildingTypeOther);
   const [manualOpen, setManualOpen] = useState(initialValues.approximateLocation !== "");
   const [showError, setShowError] = useState(false);
@@ -154,7 +153,7 @@ export function ListingStep2Page({
             </div>
           </div>
           {addressRegion && (
-            <p className="-mt-3 pl-1 text-[13px] font-medium leading-[1.4] text-grayscale-500">
+            <p className="-mt-3 pl-1 text-[13px] leading-[1.4] font-medium text-grayscale-500">
               {zonecode && `(${zonecode}) `}
               {addressRegion}
             </p>
@@ -168,7 +167,7 @@ export function ListingStep2Page({
             onChange={(e) => setAddressDetail(e.target.value)}
           />
           <div className="flex w-full flex-col gap-3">
-            <p className="w-full text-sm font-medium leading-[1.4] text-grayscale-600">건물 유형</p>
+            <p className="w-full text-sm leading-[1.4] font-medium text-grayscale-600">건물 유형</p>
             <div className="flex items-center gap-1.5">
               {BUILDING_TYPE_OPTIONS.map((option) => (
                 <ChipNormal
@@ -212,11 +211,11 @@ export function ListingStep2Page({
                     className="size-5 shrink-0"
                     aria-hidden="true"
                   />
-                  <p className="whitespace-nowrap text-sm font-bold leading-[1.4] text-grayscale-700">
+                  <p className="text-sm leading-[1.4] font-bold whitespace-nowrap text-grayscale-700">
                     주소 입력이 어려우신가요?
                   </p>
                 </div>
-                <p className="text-sm font-medium leading-[1.5] text-grayscale-600 md:whitespace-nowrap">
+                <p className="text-sm leading-[1.5] font-medium text-grayscale-600 md:whitespace-nowrap">
                   정확한 주소를 모르셔도 괜찮아요. 동 / 역 / 건물명 정도만 입력해 주시면 확인 후
                   연락드려요.
                 </p>
@@ -230,7 +229,7 @@ export function ListingStep2Page({
               )}
             </div>
             {manualOpen && (
-              <div className="flex w-full flex-col rounded-b-2xl border-x border-b border-grayscale-200 px-5 pb-5 pt-4">
+              <div className="flex w-full flex-col rounded-b-2xl border-x border-b border-grayscale-200 px-5 pt-4 pb-5">
                 <TextField
                   label="대략적인 위치"
                   placeholder="예) OO동 / OO역 근처 / OO아파트 근처"

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
 export interface DropdownOption<T extends string> {
@@ -62,10 +63,7 @@ export function Dropdown<T extends string>({
   }, [open]);
 
   return (
-    <div
-      ref={rootRef}
-      className={cn("relative flex w-full flex-col gap-2", className)}
-    >
+    <div ref={rootRef} className={cn("relative flex w-full flex-col gap-2", className)}>
       <button
         type="button"
         disabled={disabled}
@@ -79,7 +77,7 @@ export function Dropdown<T extends string>({
           disabled ? "cursor-not-allowed bg-grayscale-100" : "",
         )}
       >
-        <span className="whitespace-nowrap text-base font-medium leading-[1.5] text-grayscale-900">
+        <span className="text-base leading-[1.5] font-medium whitespace-nowrap text-grayscale-900">
           {selected?.label ?? placeholder}
         </span>
         <span
@@ -108,7 +106,9 @@ export function Dropdown<T extends string>({
                 key={option.value}
                 role="option"
                 aria-selected={isSelected}
-                className={index < options.length - 1 ? "border-b border-solid border-grayscale-300" : ""}
+                className={
+                  index < options.length - 1 ? "border-b border-solid border-grayscale-300" : ""
+                }
               >
                 <button
                   type="button"
@@ -123,7 +123,10 @@ export function Dropdown<T extends string>({
                 >
                   <span className="whitespace-nowrap">{option.label}</span>
                   {option.icon && (
-                    <span className="flex size-6 shrink-0 items-center justify-center" aria-hidden="true">
+                    <span
+                      className="flex size-6 shrink-0 items-center justify-center"
+                      aria-hidden="true"
+                    >
                       {option.icon}
                     </span>
                   )}

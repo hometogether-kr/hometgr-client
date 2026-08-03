@@ -5,6 +5,7 @@ import { cn } from "@/shared/lib/cn";
 import { BtnUnderline } from "@/shared/ui/btn-underline";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Divider } from "@/shared/ui/divider";
+
 import { TERMS } from "../model/terms";
 import type { TermsAgreement } from "../model/use-terms-agreement";
 
@@ -45,11 +46,7 @@ export function TermsAgreementList({ agreement, className }: TermsAgreementListP
             <Divider />
             <div className="flex w-full items-center justify-between gap-3">
               <label className="flex min-w-0 cursor-pointer items-center gap-3">
-                <Checkbox
-                  size="24"
-                  checked={isAgreed(term.id)}
-                  onChange={() => toggle(term.id)}
-                />
+                <Checkbox size="24" checked={isAgreed(term.id)} onChange={() => toggle(term.id)} />
                 <span className="flex min-w-0 items-center gap-3 text-label-1 font-medium">
                   <span className={term.required ? "text-primary-500" : "text-grayscale-700"}>
                     {term.required ? "[필수]" : "[선택]"}

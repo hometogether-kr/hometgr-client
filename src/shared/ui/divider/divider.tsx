@@ -12,8 +12,6 @@ export interface DividerProps {
  */
 export function Divider({ className }: DividerProps) {
   return (
-    <hr
-      className={cn("w-full border-0 border-t border-solid border-grayscale-200", className)}
-    />
+    <hr className={cn("w-full border-0 border-t border-solid border-grayscale-200", className)} />
   );
 }

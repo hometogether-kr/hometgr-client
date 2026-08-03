@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+
 import { useSession } from "@/domains/user";
 import { ROUTES } from "@/shared/config";
 import { cn } from "@/shared/lib/cn";
@@ -17,7 +18,8 @@ const IC_ARROW_DOWN = "/figma/ic-arrow-down-2f96af07.svg";
  * TODO: 프로필 기본 이미지는 아직 로컬 에셋이 없습니다.
  * Figma에서 btn_profile_header_empty_l을 export해 public/icons에 넣고 교체하세요.
  */
-const FIGMA_TEMP_PROFILE = "https://www.figma.com/api/mcp/asset/a42cd553-723b-4b8f-ad81-ad28a4a2ca6a";
+const FIGMA_TEMP_PROFILE =
+  "https://www.figma.com/api/mcp/asset/a42cd553-723b-4b8f-ad81-ad28a4a2ca6a";
 
 interface SubMenuItem {
   label: string;
@@ -80,12 +82,12 @@ function ArrowIcon({ open }: { open: boolean }) {
 
 function SubMenu({ items }: { items: readonly SubMenuItem[] }) {
   return (
-    <div className="absolute left-0 top-[calc(100%+16px)] z-20 flex w-max flex-col">
+    <div className="absolute top-[calc(100%+16px)] left-0 z-20 flex w-max flex-col">
       {items.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className="p-2.5 text-sm font-medium leading-5 text-grayscale-700 hover:font-semibold hover:text-grayscale-800"
+          className="p-2.5 text-sm leading-5 font-medium text-grayscale-700 hover:font-semibold hover:text-grayscale-800"
         >
           {item.label}
         </Link>
@@ -197,11 +199,7 @@ export function Navigation() {
                   </Link>
                 </>
               ) : (
-                <BtnCta
-                  variant="stroke"
-                  size="xs"
-                  onClick={() => router.push(ROUTES.auth.login)}
-                >
+                <BtnCta variant="stroke" size="xs" onClick={() => router.push(ROUTES.auth.login)}>
                   로그인/회원가입
                 </BtnCta>
               )}
@@ -211,7 +209,7 @@ export function Navigation() {
       </div>
       {open && (
         <div
-          className="absolute left-0 top-full z-10 h-[154px] w-full border-b border-grayscale-100 bg-white"
+          className="absolute top-full left-0 z-10 h-[154px] w-full border-b border-grayscale-100 bg-white"
           aria-hidden="true"
         />
       )}

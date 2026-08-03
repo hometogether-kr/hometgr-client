@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+
 import type { CurrentUser, MemberRole } from "@/domains/user";
 import { TextField } from "@/shared/ui/text-field";
+
 import { AccountSection } from "./account-section";
 import { SaveButton } from "./save-button";
 

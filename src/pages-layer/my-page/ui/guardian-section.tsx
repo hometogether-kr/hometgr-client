@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { GUARDIAN_RELATION_OPTIONS } from "@/domains/user";
+
 import type { GuardianRelation } from "@/domains/user";
+import { GUARDIAN_RELATION_OPTIONS } from "@/domains/user";
 import { ChipNormal } from "@/shared/ui/chip-normal";
 import { TextField } from "@/shared/ui/text-field";
+
 import { AccountSection } from "./account-section";
 import { SaveButton } from "./save-button";
 

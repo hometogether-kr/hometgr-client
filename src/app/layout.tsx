@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from "next";
+
 import { SessionHintProvider } from "@/domains/user";
 import { hasSessionCookie } from "@/shared/api/server";
 import { ToastProvider } from "@/shared/ui/toast";
+
 import { QueryProvider } from "./query-provider";
+
 import "./globals.css";
 
 /**

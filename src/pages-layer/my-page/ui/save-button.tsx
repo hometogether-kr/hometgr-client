@@ -15,7 +15,7 @@ export function SaveButton({ onClick, disabled }: SaveButtonProps) {
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="flex h-[34px] items-center justify-center whitespace-nowrap rounded-lg bg-primary-500 px-4 py-2 text-label-2 font-semibold text-white transition-opacity hover:opacity-80 disabled:bg-grayscale-200 disabled:text-grayscale-400 disabled:hover:opacity-100"
+      className="flex h-[34px] items-center justify-center rounded-lg bg-primary-500 px-4 py-2 text-label-2 font-semibold whitespace-nowrap text-white transition-opacity hover:opacity-80 disabled:bg-grayscale-200 disabled:text-grayscale-400 disabled:hover:opacity-100"
     >
       수정완료
     </button>

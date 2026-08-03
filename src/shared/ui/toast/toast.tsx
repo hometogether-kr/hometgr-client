@@ -1,6 +1,8 @@
 import type { HTMLAttributes, ReactNode } from "react";
-import { BtnCta } from "../btn-cta";
+
 import { cn } from "@/shared/lib/cn";
+
+import { BtnCta } from "../btn-cta";
 
 export type ToastVariant = "info" | "error" | "success";
 
@@ -69,12 +71,12 @@ export function Toast({
             className="size-5 shrink-0"
             aria-hidden="true"
           />
-          <p className="min-w-0 text-base font-semibold leading-[1.5] text-grayscale-700 [word-break:keep-all]">
+          <p className="min-w-0 text-base leading-[1.5] font-semibold [word-break:keep-all] text-grayscale-700">
             {children}
           </p>
         </div>
         {description && (
-          <div className="w-full pl-6 pt-2 text-sm font-medium leading-[1.5] text-grayscale-600 [word-break:keep-all]">
+          <div className="w-full pt-2 pl-6 text-sm leading-[1.5] font-medium [word-break:keep-all] text-grayscale-600">
             {description}
           </div>
         )}

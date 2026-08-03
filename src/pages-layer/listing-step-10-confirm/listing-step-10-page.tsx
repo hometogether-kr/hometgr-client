@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import {
   PREFERRED_CONTACT_METHOD_OPTIONS,
   PREFERRED_CONTACT_TIME_OPTIONS,
@@ -73,11 +74,7 @@ export function ListingStep10Page({
   const errors = {
     name: name.trim() === "" ? REQUIRED_MESSAGE : undefined,
     phone:
-      phone.trim() === ""
-        ? REQUIRED_MESSAGE
-        : validatePhone(phone)
-          ? undefined
-          : PHONE_MESSAGE,
+      phone.trim() === "" ? REQUIRED_MESSAGE : validatePhone(phone) ? undefined : PHONE_MESSAGE,
     contactTime: !contactTime ? REQUIRED_MESSAGE : undefined,
     contactMethod: !contactMethod ? REQUIRED_MESSAGE : undefined,
     agreed: !agreed ? AGREEMENT_MESSAGE : undefined,
@@ -116,7 +113,7 @@ export function ListingStep10Page({
       >
         <div className="flex w-full flex-col gap-9">
           <div className="flex w-full flex-col gap-7">
-            <h2 className="w-full text-xl font-semibold leading-[1.4] tracking-[-0.2px] text-grayscale-900">
+            <h2 className="w-full text-xl leading-[1.4] font-semibold tracking-[-0.2px] text-grayscale-900">
               연락받으실 정보를 남겨주세요
             </h2>
             <div className="flex w-full flex-col items-start gap-4 md:flex-row">
@@ -157,17 +154,17 @@ export function ListingStep10Page({
           </div>
           <hr className="w-full border-grayscale-200" />
           <div className="flex w-full flex-col gap-3">
-            <h2 className="w-full text-2xl font-semibold leading-[1.4] tracking-[-0.24px] text-grayscale-900">
+            <h2 className="w-full text-2xl leading-[1.4] font-semibold tracking-[-0.24px] text-grayscale-900">
               약관 동의
             </h2>
             <label className="flex cursor-pointer items-center gap-2">
               <Checkbox size="24" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
-              <span className="text-base font-medium leading-[1.5] text-grayscale-700">
+              <span className="text-base leading-[1.5] font-medium text-grayscale-700">
                 매물 등록 검수 및 연락을 위해 개인정보 수집·이용에 동의합니다.
               </span>
             </label>
             {show("agreed") && (
-              <p className="w-full text-[13px] font-medium leading-[1.4] text-system-error">
+              <p className="w-full text-[13px] leading-[1.4] font-medium text-system-error">
                 {show("agreed")}
               </p>
             )}

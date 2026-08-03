@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import { ChipNormal } from "@/shared/ui/chip-normal";
 import { TextArea } from "@/shared/ui/text-area";
 import { ListingStepLayout } from "@/widgets/listing-step-layout";
@@ -105,10 +106,10 @@ export function ListingStep9Page({
         {SECTIONS.map((section) => (
           <div key={section.key} className="flex w-full flex-col gap-6">
             <div className="flex w-full flex-col gap-1">
-              <h2 className="w-full text-lg font-semibold leading-[1.4] tracking-[-0.18px] text-grayscale-900">
+              <h2 className="w-full text-lg leading-[1.4] font-semibold tracking-[-0.18px] text-grayscale-900">
                 {section.title}
               </h2>
-              <p className="w-full text-sm font-medium leading-[1.4] text-grayscale-600">
+              <p className="w-full text-sm leading-[1.4] font-medium text-grayscale-600">
                 {section.description}
               </p>
             </div>

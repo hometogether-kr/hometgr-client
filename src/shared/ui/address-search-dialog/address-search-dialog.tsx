@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+
 import {
   loadKakaoPostcode,
   type SelectedAddress,
@@ -93,7 +94,7 @@ export function AddressSearchDialog({ open, onClose, onSelect }: AddressSearchDi
         className="relative flex w-full max-w-[500px] flex-col overflow-hidden rounded-2xl bg-white shadow-lg"
       >
         <div className="flex items-center justify-between border-b border-grayscale-200 px-5 py-4">
-          <h2 className="text-base font-semibold leading-[1.4] text-grayscale-900">주소 검색</h2>
+          <h2 className="text-base leading-[1.4] font-semibold text-grayscale-900">주소 검색</h2>
           <button
             type="button"
             onClick={onClose}

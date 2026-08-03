@@ -1,13 +1,16 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
+import { useEffect, useRef } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
 export type CheckboxSize = "20" | "24" | "32";
 
-export interface CheckboxProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
+export interface CheckboxProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "size" | "type"
+> {
   /** Figma: checkbox / size (20 · 24 · 32) — 히트 영역 크기 */
   size?: CheckboxSize;
   /** Figma: Property 1 = interminate — 전체선택 등 부분 선택 상태 */

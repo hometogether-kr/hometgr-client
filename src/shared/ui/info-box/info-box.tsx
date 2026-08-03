@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
 export interface InfoBoxProps extends HTMLAttributes<HTMLDivElement> {
@@ -41,22 +42,19 @@ export function InfoBox({ title, icon, className, children, ...rest }: InfoBoxPr
   );
 
   return (
-    <div
-      className={cn("w-full rounded-xl bg-grayscale-70 p-4", className)}
-      {...rest}
-    >
+    <div className={cn("w-full rounded-xl bg-grayscale-70 p-4", className)} {...rest}>
       {title ? (
         <div className="flex flex-col items-start gap-1">
           <div className="flex items-center gap-1.5">
             {infoIcon}
-            <p className="text-[15px] font-semibold leading-[1.5] text-grayscale-700">{title}</p>
+            <p className="text-[15px] leading-[1.5] font-semibold text-grayscale-700">{title}</p>
           </div>
-          <div className="text-sm font-medium leading-[1.5] text-grayscale-700">{children}</div>
+          <div className="text-sm leading-[1.5] font-medium text-grayscale-700">{children}</div>
         </div>
       ) : (
         <div className="flex items-center gap-1.5">
           {infoIcon}
-          <div className="text-sm font-medium leading-[1.5] text-grayscale-700">{children}</div>
+          <div className="text-sm leading-[1.5] font-medium text-grayscale-700">{children}</div>
         </div>
       )}
     </div>

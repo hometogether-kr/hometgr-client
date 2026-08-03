@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import {
   AREA_RANGE_OPTIONS,
   type AreaRange,
@@ -37,7 +38,7 @@ const COUNT_MESSAGE = "집 전체 방 개수, 거주 중인 인원(집주인 포
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <p className="w-full pt-3 text-[13px] font-medium leading-[1.4] text-system-error">{message}</p>
+    <p className="w-full pt-3 text-[13px] leading-[1.4] font-medium text-system-error">{message}</p>
   );
 }
 
@@ -224,10 +225,10 @@ export function ListingStep3Page({
                       onChange={() => setParkingKind(option.value)}
                     />
                     <span className="flex flex-col justify-center gap-1 whitespace-nowrap">
-                      <span className="text-base font-semibold leading-[1.6] text-grayscale-700">
+                      <span className="text-base leading-[1.6] font-semibold text-grayscale-700">
                         {option.label}
                       </span>
-                      <span className="text-[13px] font-medium leading-[1.5] text-grayscale-500">
+                      <span className="text-[13px] leading-[1.5] font-medium text-grayscale-500">
                         {option.description}
                       </span>
                     </span>

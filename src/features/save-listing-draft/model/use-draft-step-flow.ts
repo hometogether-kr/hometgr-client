@@ -1,15 +1,12 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  type ApiStep,
-  type ListingDraft,
-  toScreenStep,
-  useListingDraft,
-} from "@/domains/listing-draft";
+
+import { type ListingDraft, toScreenStep, useListingDraft } from "@/domains/listing-draft";
 import { ApiError } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { useToast } from "@/shared/ui/toast";
+
 import type { SaveStepCommand, StepDataMap } from "./step-command.schema";
 import { useSaveDraftStep } from "./use-save-draft-step";
 
@@ -30,7 +27,11 @@ export interface DraftStepFlow<TStep extends keyof StepDataMap> {
  * 저장 성공 응답에 최신 `version`이 담겨 캐시가 갱신되므로, 다음 단계는 재조회 없이
  * 바로 저장할 수 있습니다.
  */
-export function useDraftStepFlow<TStep extends ApiStep & keyof StepDataMap>(
+/*
+ * keyof StepDataMap은 현재 ApiStep과 같은 집합이라 교차 타입이 중복이었습니다.
+ * DraftStepFlow도 같은 제약을 쓰므로 여기에 맞춥니다.
+ */
+export function useDraftStepFlow<TStep extends keyof StepDataMap>(
   apiStep: TStep,
 ): DraftStepFlow<TStep> {
   const router = useRouter();

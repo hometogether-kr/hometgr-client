@@ -1,13 +1,13 @@
 "use client";
 
-import { useId, useState } from "react";
 import type { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
+import { useId, useState } from "react";
+
 import { cn } from "@/shared/lib/cn";
 
 export type TextFieldSize = "s" | "m" | "L";
 
-export interface TextFieldProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   /** Figma: title — 상단 라벨 */
   label?: string;
   /** Figma: property 1 = error — 에러 문구. 있으면 error 스타일 적용 */
@@ -55,9 +55,7 @@ export function TextField({
 }: TextFieldProps) {
   const autoId = useId();
   const inputId = id ?? autoId;
-  const [innerLength, setInnerLength] = useState(
-    String(defaultValue ?? "").length,
-  );
+  const [innerLength, setInnerLength] = useState(String(defaultValue ?? "").length);
   const length = value != null ? String(value).length : innerLength;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -80,7 +78,7 @@ export function TextField({
       {label && (
         <label
           htmlFor={inputId}
-          className="w-full text-sm font-medium leading-[1.4] text-grayscale-600"
+          className="w-full text-sm leading-[1.4] font-medium text-grayscale-600"
         >
           {label}
         </label>
@@ -96,14 +94,14 @@ export function TextField({
             disabled={disabled}
             aria-invalid={Boolean(error) || undefined}
             className={cn(
-              "min-w-0 flex-1 bg-transparent text-base font-medium leading-[1.5] outline-none",
+              "min-w-0 flex-1 bg-transparent text-base leading-[1.5] font-medium outline-none",
               "placeholder:text-grayscale-400",
               disabled ? "text-grayscale-500" : "text-grayscale-800",
             )}
             {...rest}
           />
           {showCount && (
-            <span className="shrink-0 self-center whitespace-nowrap text-right text-[13px] font-normal leading-[1.4] text-grayscale-500">
+            <span className="shrink-0 self-center text-right text-[13px] leading-[1.4] font-normal whitespace-nowrap text-grayscale-500">
               {length}/{maxLength ?? 1000}
             </span>
           )}
@@ -111,7 +109,7 @@ export function TextField({
         {action && <div className="shrink-0">{action}</div>}
       </div>
       {error && (
-        <p className="w-full px-1 text-[13px] font-medium leading-[1.4] text-system-error">
+        <p className="w-full px-1 text-[13px] leading-[1.4] font-medium text-system-error">
           {error}
         </p>
       )}

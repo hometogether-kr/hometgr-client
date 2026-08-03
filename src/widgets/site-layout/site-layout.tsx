@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+
 import { cn } from "@/shared/lib/cn";
 import { Footer } from "@/widgets/footer";
 import { ResponsiveHeader } from "@/widgets/responsive-header";
@@ -23,11 +24,7 @@ export interface SiteLayoutProps {
  * 로고형 헤더(데스크톱 Navigation · 모바일 gnb_mobile logo)와 본문, 푸터로
  * 구성됩니다. 온보딩처럼 뒤로가기 헤더가 필요한 화면은 OnboardingLayout을 쓰세요.
  */
-export function SiteLayout({
-  children,
-  showFooter = true,
-  background = "gray",
-}: SiteLayoutProps) {
+export function SiteLayout({ children, showFooter = true, background = "gray" }: SiteLayoutProps) {
   return (
     <div
       className={cn(

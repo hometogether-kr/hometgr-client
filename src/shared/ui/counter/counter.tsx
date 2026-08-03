@@ -31,9 +31,9 @@ function StepButton({
       className="flex size-8 shrink-0 items-center justify-center rounded-full border border-solid border-grayscale-400 transition-opacity hover:opacity-70 disabled:opacity-40"
     >
       <span className="relative block size-3" aria-hidden="true">
-        <span className="absolute left-0 top-1/2 h-px w-3 -translate-y-1/2 bg-grayscale-700" />
+        <span className="absolute top-1/2 left-0 h-px w-3 -translate-y-1/2 bg-grayscale-700" />
         {sign === "plus" && (
-          <span className="absolute left-1/2 top-0 h-3 w-px -translate-x-1/2 bg-grayscale-700" />
+          <span className="absolute top-0 left-1/2 h-3 w-px -translate-x-1/2 bg-grayscale-700" />
         )}
       </span>
     </button>
@@ -50,7 +50,7 @@ export function Counter({ label, value, onChange, min = 0, max = 99, className }
   return (
     <div className={cn("flex flex-col justify-center gap-3", className)}>
       {label && (
-        <p className="whitespace-nowrap text-sm font-medium leading-[1.4] text-grayscale-600">
+        <p className="text-sm leading-[1.4] font-medium whitespace-nowrap text-grayscale-600">
           {label}
         </p>
       )}
@@ -61,7 +61,7 @@ export function Counter({ label, value, onChange, min = 0, max = 99, className }
           onClick={() => onChange(Math.max(min, value - 1))}
           disabled={value <= min}
         />
-        <span className="flex w-8 justify-center whitespace-nowrap text-lg font-semibold leading-[1.4] tracking-[-0.18px] text-grayscale-700">
+        <span className="flex w-8 justify-center text-lg leading-[1.4] font-semibold tracking-[-0.18px] whitespace-nowrap text-grayscale-700">
           {value}
         </span>
         <StepButton

@@ -1,12 +1,6 @@
 /** 보호자와의 관계 (Figma: 보호자 정보 (비상 연락처), node 646:26187) */
 export type GuardianRelation =
-  | "father"
-  | "mother"
-  | "spouse"
-  | "sibling"
-  | "child"
-  | "acquaintance"
-  | "other";
+  "father" | "mother" | "spouse" | "sibling" | "child" | "acquaintance" | "other";
 
 export interface GuardianRelationOption {
   value: GuardianRelation;
