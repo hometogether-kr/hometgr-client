@@ -9,11 +9,12 @@ function Step3() {
   const { draft, isSaving, saveAndGoNext, goPrev } = useDraftStepFlow(4);
   const household = draft?.data.household;
 
-  const handleNext = ({ parkingDescription, ...values }: ListingStep3Values) =>
-    // 주차가 불가능하면 설명 키 자체를 빼야 서버 검증을 통과합니다.
+  // 주차가 불가능하면 주차 유형·설명 키 자체를 빼야 서버 검증을 통과합니다.
+  const handleNext = ({ parkingType, parkingDescription, ...values }: ListingStep3Values) =>
     saveAndGoNext({
       ...values,
-      ...(values.parkingAvailable && parkingDescription ? { parkingDescription } : {}),
+      ...(parkingType ? { parkingType } : {}),
+      ...(parkingDescription ? { parkingDescription } : {}),
     });
 
   return (
@@ -27,6 +28,7 @@ function Step3() {
         residentGenderComposition: household?.residentGenderComposition ?? null,
         elevatorAvailable: household?.elevatorAvailable ?? null,
         parkingAvailable: household?.parkingAvailable ?? null,
+        parkingType: household?.parkingType ?? null,
         parkingDescription: household?.parkingDescription ?? "",
       }}
       isSaving={isSaving}

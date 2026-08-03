@@ -101,22 +101,23 @@ export const RESIDENT_GENDER_COMPOSITION_OPTIONS = toOptions(
   RESIDENT_GENDER_COMPOSITION_LABEL,
 );
 
-/**
- * 주차 상세는 서버에 자유 텍스트(`parkingDescription`) 한 칸만 있습니다.
- * 화면의 선택지를 그대로 잃지 않도록 라벨을 문장 앞머리로 붙여 보냅니다.
- */
-export const PARKING_KINDS = ["freePlenty", "freeFirstCome", "paid"] as const;
-export type ParkingKind = (typeof PARKING_KINDS)[number];
+/** 주차 유형 (OpenAPI: ParkingType) — 주차 가능일 때만 보냅니다. */
+export const PARKING_TYPES = ["freeAvailable", "freeFirstCome", "paid"] as const;
+export type ParkingType = (typeof PARKING_TYPES)[number];
 
-export const PARKING_KIND_OPTIONS = [
-  { value: "freePlenty", label: "무료(여유)", description: "여유로운 무료 주차 공간이 있습니다." },
+export const PARKING_TYPE_OPTIONS = [
+  {
+    value: "freeAvailable",
+    label: "무료(여유)",
+    description: "여유로운 무료 주차 공간이 있습니다.",
+  },
   {
     value: "freeFirstCome",
     label: "무료(선착순)",
     description: "선착순으로 이용 가능한 무료 주차 공간이 있습니다.",
   },
   { value: "paid", label: "유료", description: "유료 주차 공간이 있습니다." },
-] as const satisfies readonly (SelectOption<ParkingKind> & { description: string })[];
+] as const satisfies readonly (SelectOption<ParkingType> & { description: string })[];
 
 /* 5단계 · 게스트 공간 (API step 5) */
 

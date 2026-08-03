@@ -24,7 +24,25 @@ export interface ListingStep10Values {
   contactPhone: string;
   preferredContactTime: PreferredContactTime;
   preferredContactMethod: PreferredContactMethod;
+  /** 매물 공개 동의 — 서버는 true만 받습니다. */
+  roomPublication: true;
+  /** 사기 방지 서약 — 서버는 true만 받습니다. */
+  noFraudPledge: true;
 }
+
+/** 최종 확인 단계의 필수 동의 2종 (OpenAPI: Step11ContactDto) */
+const REQUIRED_AGREEMENTS = [
+  {
+    key: "roomPublication",
+    label: "매물 등록 검수 및 연락을 위해 개인정보 수집·이용에 동의합니다.",
+  },
+  {
+    key: "noFraudPledge",
+    label: "허위 매물을 등록하지 않으며, 직접 거래를 유도하지 않을 것을 서약합니다.",
+  },
+] as const satisfies readonly { key: "roomPublication" | "noFraudPledge"; label: string }[];
+
+type AgreementKey = (typeof REQUIRED_AGREEMENTS)[number]["key"];
 
 export interface ListingStep10InitialValues {
   contactName: string;
@@ -68,8 +86,13 @@ export function ListingStep10Page({
   const [contactMethod, setContactMethod] = useState<PreferredContactMethod | null>(
     initialValues.preferredContactMethod,
   );
-  const [agreed, setAgreed] = useState(false);
+  const [agreements, setAgreements] = useState<Record<AgreementKey, boolean>>({
+    roomPublication: false,
+    noFraudPledge: false,
+  });
   const [submitted, setSubmitted] = useState(false);
+
+  const allAgreed = REQUIRED_AGREEMENTS.every(({ key }) => agreements[key]);
 
   const errors = {
     name: name.trim() === "" ? REQUIRED_MESSAGE : undefined,
@@ -77,7 +100,7 @@ export function ListingStep10Page({
       phone.trim() === "" ? REQUIRED_MESSAGE : validatePhone(phone) ? undefined : PHONE_MESSAGE,
     contactTime: !contactTime ? REQUIRED_MESSAGE : undefined,
     contactMethod: !contactMethod ? REQUIRED_MESSAGE : undefined,
-    agreed: !agreed ? AGREEMENT_MESSAGE : undefined,
+    agreed: !allAgreed ? AGREEMENT_MESSAGE : undefined,
   };
   const hasError = Object.values(errors).some(Boolean);
   const show = (key: keyof typeof errors) => (submitted ? errors[key] : undefined);
@@ -91,6 +114,8 @@ export function ListingStep10Page({
       contactPhone: phone.trim(),
       preferredContactTime: contactTime,
       preferredContactMethod: contactMethod,
+      roomPublication: true,
+      noFraudPledge: true,
     });
   };
 
@@ -157,12 +182,18 @@ export function ListingStep10Page({
             <h2 className="w-full text-2xl leading-[1.4] font-semibold tracking-[-0.24px] text-grayscale-900">
               약관 동의
             </h2>
-            <label className="flex cursor-pointer items-center gap-2">
-              <Checkbox size="24" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} />
-              <span className="text-base leading-[1.5] font-medium text-grayscale-700">
-                매물 등록 검수 및 연락을 위해 개인정보 수집·이용에 동의합니다.
-              </span>
-            </label>
+            {REQUIRED_AGREEMENTS.map(({ key, label }) => (
+              <label key={key} className="flex cursor-pointer items-center gap-2">
+                <Checkbox
+                  size="24"
+                  checked={agreements[key]}
+                  onChange={(e) => setAgreements((prev) => ({ ...prev, [key]: e.target.checked }))}
+                />
+                <span className="text-base leading-[1.5] font-medium text-grayscale-700">
+                  {label}
+                </span>
+              </label>
+            ))}
             {show("agreed") && (
               <p className="w-full text-[13px] leading-[1.4] font-medium text-system-error">
                 {show("agreed")}

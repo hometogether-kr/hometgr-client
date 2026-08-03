@@ -7,6 +7,7 @@ import {
   INTERACTION_PREFERENCES,
   KITCHEN_USAGE_POLICIES,
   LIVING_ROOM_USAGE_POLICIES,
+  PARKING_TYPES,
   PREFERRED_CONTACT_METHODS,
   PREFERRED_CONTACT_TIMES,
   PREFERRED_GENDERS,
@@ -37,12 +38,8 @@ export const step2DataSchema = z.object({
 });
 
 /*
- * 주소는 화면 규칙을 따릅니다.
- *
- * API는 도로명·상세·지역을 모두 required로 두지만, 화면은 "정확한 주소를 몰라도
- * 대략적인 위치만으로 진행"할 수 있게 설계돼 있습니다. 화면 기준으로 확정했으므로
- * 세 필드를 optional로 두고, 둘 중 한 가지 방식만 채우면 통과시킵니다.
- * 백엔드가 required를 풀기 전까지 이 요청은 400으로 거절됩니다(README 3번 항목).
+ * 주소는 "정확 주소 3종" 또는 "대략적 위치" 중 하나로 보냅니다 (API의 oneOf).
+ * 정확 주소를 보낼 때는 도로명·상세·지역이 한 묶음이라 셋 다 있어야 합니다.
  */
 export const step3DataSchema = z
   .object({
@@ -54,13 +51,21 @@ export const step3DataSchema = z
     approximateLocation: z.string().min(1).max(255).optional(),
   })
   .superRefine((value, ctx) => {
-    const hasExactAddress = Boolean(value.addressRoad && value.addressDetail);
+    const exactAddressFields = [value.addressRoad, value.addressDetail, value.addressRegion];
+    const filledCount = exactAddressFields.filter(Boolean).length;
 
-    if (!hasExactAddress && !value.approximateLocation) {
+    if (filledCount === 0 && !value.approximateLocation) {
       ctx.addIssue({
         code: "custom",
         path: ["approximateLocation"],
         message: "주소 검색과 상세 주소를 입력하거나, 대략적인 위치를 입력해주세요.",
+      });
+    }
+    if (filledCount > 0 && filledCount < exactAddressFields.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["addressDetail"],
+        message: "정확한 주소를 보낼 때는 도로명·상세·지역 주소를 모두 입력해주세요.",
       });
     }
 
@@ -91,17 +96,27 @@ export const step4DataSchema = z
     residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS),
     elevatorAvailable: z.boolean(),
     parkingAvailable: z.boolean(),
+    parkingType: z.enum(PARKING_TYPES).optional(),
     parkingDescription: z.string().min(1).max(500).optional(),
   })
   .superRefine((value, ctx) => {
-    if (value.parkingAvailable && !value.parkingDescription) {
+    if (value.parkingAvailable && !value.parkingType) {
       ctx.addIssue({
         code: "custom",
-        path: ["parkingDescription"],
+        path: ["parkingType"],
         message: "주차 방식을 선택해주세요.",
       });
     }
-    if (!value.parkingAvailable && value.parkingDescription !== undefined) {
+    if (value.parkingAvailable) return;
+
+    if (value.parkingType !== undefined) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["parkingType"],
+        message: "주차가 불가능할 때는 보낼 수 없습니다.",
+      });
+    }
+    if (value.parkingDescription !== undefined) {
       ctx.addIssue({
         code: "custom",
         path: ["parkingDescription"],
@@ -177,8 +192,8 @@ export const step8DataSchema = z.object({
 });
 
 /*
- * 사진 장수도 화면 규칙(6~20장)을 따릅니다. API는 1~10장으로 제한하고 있어,
- * 백엔드가 상한을 20으로 올리기 전까지 10장을 넘기면 거절됩니다(README 2번 항목).
+ * 화면은 6~20장을 요구하고 API 상한도 20장입니다. 업로드 요청 하나가 받는 파일
+ * 수는 10개라, 업로드 쪽에서만 10장씩 나눠 보냅니다.
  */
 export const MIN_LISTING_PHOTOS = 6;
 export const MAX_LISTING_PHOTOS = 20;
@@ -210,6 +225,9 @@ export const step11DataSchema = z.object({
   contactPhone: z.string().length(13),
   preferredContactTime: z.enum(PREFERRED_CONTACT_TIMES),
   preferredContactMethod: z.enum(PREFERRED_CONTACT_METHODS),
+  /** 최종 확인 단계의 필수 동의 2종 — 서버는 true만 받습니다. */
+  roomPublication: z.literal(true, "매물 공개에 동의해주세요."),
+  noFraudPledge: z.literal(true, "사기 방지 서약에 동의해주세요."),
 });
 
 /** 화면 단계별 데이터 스키마 — key는 API 단계 번호입니다. */

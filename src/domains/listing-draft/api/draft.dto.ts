@@ -7,6 +7,7 @@ import {
   INTERACTION_PREFERENCES,
   KITCHEN_USAGE_POLICIES,
   LIVING_ROOM_USAGE_POLICIES,
+  PARKING_TYPES,
   PREFERRED_CONTACT_METHODS,
   PREFERRED_CONTACT_TIMES,
   PREFERRED_GENDERS,
@@ -29,10 +30,14 @@ export const draftRegistrantDataSchema = z.object({
   registrantRelationship: z.enum(REGISTRANT_RELATIONSHIPS),
 });
 
+/**
+ * 정확 주소 3종은 대략적 위치만으로 저장한 초안에서 비어 있습니다.
+ * 서버가 세 필드를 nullable로 내려주므로 화면도 없는 상태를 정상으로 다룹니다.
+ */
 export const draftLocationDataSchema = z.object({
-  addressRoad: z.string(),
-  addressDetail: z.string(),
-  addressRegion: z.string(),
+  addressRoad: z.string().nullish(),
+  addressDetail: z.string().nullish(),
+  addressRegion: z.string().nullish(),
   buildingType: z.enum(BUILDING_TYPES),
   buildingTypeOther: z.string().nullish(),
   approximateLocation: z.string().nullish(),
@@ -46,6 +51,7 @@ export const draftHouseholdDataSchema = z.object({
   residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS),
   elevatorAvailable: z.boolean(),
   parkingAvailable: z.boolean(),
+  parkingType: z.enum(PARKING_TYPES).nullish(),
   parkingDescription: z.string().nullish(),
 });
 
@@ -93,11 +99,14 @@ export const draftDescriptionsDataSchema = z.object({
   precautions: z.string().nullish(),
 });
 
+/** 동의 2종은 계약이 추가되기 전에 만든 초안에서 null입니다. */
 export const draftContactDataSchema = z.object({
   contactName: z.string(),
   contactPhone: z.string(),
   preferredContactTime: z.enum(PREFERRED_CONTACT_TIMES),
   preferredContactMethod: z.enum(PREFERRED_CONTACT_METHODS),
+  roomPublication: z.literal(true).nullish(),
+  noFraudPledge: z.literal(true).nullish(),
 });
 
 /** OpenAPI: DraftDataResponse — 아직 저장하지 않은 단계는 null입니다. */
@@ -133,6 +142,21 @@ export type DraftMediaDto = z.infer<typeof draftMediaSchema>;
 
 const apiStepSchema = z.union(API_STEPS.map((step) => z.literal(step)));
 
+/* 자동 임시저장 */
+
+/**
+ * OpenAPI: DraftAutosaveEntryResponse
+ *
+ * `data`는 검증 전 부분 입력 snapshot이라 서버도 형태를 고정하지 않습니다.
+ * 화면이 값을 쓰기 전에 각자 좁혀야 하므로 여기서는 unknown으로 받습니다.
+ */
+export const draftAutosaveEntrySchema = z.object({
+  step: apiStepSchema,
+  data: z.record(z.string(), z.unknown()),
+});
+
+export type DraftAutosaveEntryDto = z.infer<typeof draftAutosaveEntrySchema>;
+
 /* 초안 응답 */
 
 export const draftSummarySchema = z.object({
@@ -156,6 +180,7 @@ export const draftDetailSchema = z.object({
   completedSteps: z.array(apiStepSchema),
   lastSavedAt: z.string(),
   expiresAt: z.string(),
+  autosaves: z.array(draftAutosaveEntrySchema),
   data: draftDataSchema,
   media: z.array(draftMediaSchema),
 });

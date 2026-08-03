@@ -1,11 +1,13 @@
 export { fetchListingDraft, fetchListingDrafts } from "./api/draft.api";
 export type {
+  DraftAutosaveEntryDto,
   DraftDetailDto,
   DraftMediaMutationDto,
   DraftSummaryDto,
   RoomSubmissionDto,
 } from "./api/draft.dto";
 export {
+  draftAutosaveEntrySchema,
   draftDetailSchema,
   draftMediaMutationSchema,
   draftMediaSchema,

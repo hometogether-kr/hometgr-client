@@ -5,8 +5,8 @@ import { useState } from "react";
 import {
   AREA_RANGE_OPTIONS,
   type AreaRange,
-  PARKING_KIND_OPTIONS,
-  type ParkingKind,
+  PARKING_TYPE_OPTIONS,
+  type ParkingType,
   RESIDENT_GENDER_COMPOSITION_OPTIONS,
   RESIDENT_TYPE_OPTIONS,
   type ResidentGenderComposition,
@@ -50,8 +50,10 @@ export interface ListingStep3Values {
   residentGenderComposition: ResidentGenderComposition;
   elevatorAvailable: boolean;
   parkingAvailable: boolean;
-  /** 주차 방식 선택 + 부가 설명을 합친 문장 — 서버에는 자유 텍스트 한 칸만 있습니다. */
-  parkingDescription: string;
+  /** 주차 가능일 때만 채웁니다. */
+  parkingType: ParkingType | null;
+  /** 주차 부가 설명(선택). 비어 있으면 null */
+  parkingDescription: string | null;
 }
 
 export interface ListingStep3InitialValues {
@@ -62,6 +64,7 @@ export interface ListingStep3InitialValues {
   residentGenderComposition: ResidentGenderComposition | null;
   elevatorAvailable: boolean | null;
   parkingAvailable: boolean | null;
+  parkingType: ParkingType | null;
   parkingDescription: string;
 }
 
@@ -73,6 +76,7 @@ const EMPTY_VALUES: ListingStep3InitialValues = {
   residentGenderComposition: null,
   elevatorAvailable: null,
   parkingAvailable: null,
+  parkingType: null,
   parkingDescription: "",
 };
 
@@ -108,7 +112,7 @@ export function ListingStep3Page({
   );
   const [elevator, setElevator] = useState<YesNo | null>(toYesNo(initialValues.elevatorAvailable));
   const [parking, setParking] = useState<YesNo | null>(toYesNo(initialValues.parkingAvailable));
-  const [parkingKind, setParkingKind] = useState<ParkingKind | null>(null);
+  const [parkingKind, setParkingKind] = useState<ParkingType | null>(initialValues.parkingType);
   const [parkingNote, setParkingNote] = useState(initialValues.parkingDescription);
   const [submitted, setSubmitted] = useState(false);
 
@@ -133,9 +137,7 @@ export function ListingStep3Page({
     // 위 검증을 통과하면 필수 값이 모두 채워져 있지만, 타입 좁히기를 위해 한 번 더 확인합니다.
     if (!areaRange || !residentType || !genderComposition || !elevator || !parking) return;
 
-    const parkingKindLabel = PARKING_KIND_OPTIONS.find(
-      (option) => option.value === parkingKind,
-    )?.label;
+    const note = parkingNote.trim();
 
     onNext?.({
       areaRange,
@@ -145,7 +147,9 @@ export function ListingStep3Page({
       residentGenderComposition: genderComposition,
       elevatorAvailable: elevator === "yes",
       parkingAvailable,
-      parkingDescription: [parkingKindLabel, parkingNote.trim()].filter(Boolean).join(" · "),
+      // 주차가 불가능하면 서버가 두 필드를 아예 받지 않습니다.
+      parkingType: parkingAvailable ? parkingKind : null,
+      parkingDescription: parkingAvailable && note ? note : null,
     });
   };
 
@@ -215,7 +219,7 @@ export function ListingStep3Page({
             />
             {parkingAvailable && (
               <div className="flex flex-col gap-4">
-                {PARKING_KIND_OPTIONS.map((option) => (
+                {PARKING_TYPE_OPTIONS.map((option) => (
                   <label key={option.value} className="flex cursor-pointer items-center gap-3">
                     <Radio
                       size="24"
@@ -235,19 +239,19 @@ export function ListingStep3Page({
                   </label>
                 ))}
                 <FieldError message={show("parkingKind")} />
+                <TextArea
+                  label="주차 부가 설명 (선택)"
+                  size="l"
+                  className="w-full"
+                  placeholder={
+                    "주차 관련 안내 사항을 입력해 주세요.\n예) 1일 주차요금은 15,000원입니다 · 최대 2대 주차 가능하며, 사전 등록이 필요합니다."
+                  }
+                  value={parkingNote}
+                  onChange={(e) => setParkingNote(e.target.value)}
+                />
               </div>
             )}
           </div>
-          <TextArea
-            label="주차 부가 설명 (선택)"
-            size="l"
-            className="w-full"
-            placeholder={
-              "주차 관련 안내 사항을 입력해 주세요.\n예) 1일 주차요금은 15,000원입니다 · 최대 2대 주차 가능하며, 사전 등록이 필요합니다."
-            }
-            value={parkingNote}
-            onChange={(e) => setParkingNote(e.target.value)}
-          />
         </div>
       </ListingStepLayout>
     </>
