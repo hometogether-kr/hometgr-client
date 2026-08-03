@@ -24,7 +24,7 @@ interface MenuGroup {
 }
 
 const MENU: MenuGroup[] = [
-  { key: "intro", label: "서비스 소개", href: ROUTES.intro },
+  { key: "intro", label: "서비스 소개", href: ROUTES.intro.root },
   {
     key: "listing",
     label: "방 내놓기",

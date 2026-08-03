@@ -27,7 +27,7 @@ interface SubMenuItem {
 }
 
 const MENU = {
-  intro: { label: "서비스 소개", href: ROUTES.intro },
+  intro: { label: "서비스 소개", href: ROUTES.intro.root },
   listing: {
     label: "방 내놓기",
     items: [
@@ -57,7 +57,9 @@ type MenuKey = "intro" | "listing" | "finding" | "support";
 function toActiveMenu(pathname: string): MenuKey | null {
   const startsWith = (prefix: string) => pathname === prefix || pathname.startsWith(`${prefix}/`);
 
-  if (startsWith(ROUTES.intro)) return "intro";
+  if (pathname === ROUTES.home || startsWith("/intro")) {
+    return "intro";
+  }
   if (startsWith("/listing")) return "listing";
   if ([ROUTES.rooms, ROUTES.reservations, ROUTES.favorites].some(startsWith)) return "finding";
   if (startsWith(ROUTES.support)) return "support";

@@ -1,11 +1,18 @@
 /**
  * 앱 라우트 경로 모음
  *
- * TODO: 서비스 소개·고객센터 등 미구현 라우트는 페이지 추가 시 함께 갱신하세요.
+ * TODO: 고객센터 등 미구현 라우트는 페이지 추가 시 함께 갱신하세요.
  */
 export const ROUTES = {
   home: "/",
-  intro: "/intro",
+  /** 서비스 소개 — 홈에서 Host/Guest를 고르면 각 상세 소개로 들어갑니다. */
+  intro: {
+    root: "/",
+    /** 집주인용 서비스 소개 */
+    host: "/intro/host",
+    /** 세입자용 서비스 소개 */
+    guest: "/intro/guest",
+  },
   support: "/support",
   auth: {
     /** 로그인 / 회원가입 */
