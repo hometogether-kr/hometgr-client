@@ -25,8 +25,8 @@ pnpm dev
 없어서, Next.js Route Handler를 BFF로 두고 토큰을 서버에서만 다룹니다.
 
 ```
-브라우저 → /api/auth/kakao          → (서버) GET  /auth/kakao          → 카카오 인증 화면
-브라우저 ← /api/auth/kakao/callback ← 카카오
+브라우저 → /auth/kakao          → (서버) GET  /auth/kakao          → 카카오 인증 화면
+브라우저 ← /auth/kakao/callback ← 카카오
          → (서버) GET /auth/kakao/callback → httpOnly 쿠키에 토큰 저장 → 화면 이동
 브라우저 → /api/bff/<API 경로>      → (서버) Authorization 주입 후 API 호출
 ```
@@ -39,13 +39,13 @@ pnpm dev
 
 ### ⚠️ 백엔드에 필요한 설정 (아직 미적용)
 
-API 서버에 등록된 **카카오 redirect URI를 `{APP_BASE_URL}/api/auth/kakao/callback`
+API 서버에 등록된 **카카오 redirect URI를 `{APP_BASE_URL}/auth/kakao/callback`
 으로 변경**해야 합니다.
 
 ```
 현재:   https://dev-api.hometogether.kr/auth/kakao/callback
-필요:   http://localhost:3000/api/auth/kakao/callback          (로컬)
-        https://<배포된 프론트 도메인>/api/auth/kakao/callback   (dev·운영)
+필요:   http://localhost:3000/auth/kakao/callback          (로컬)
+        https://<배포된 프론트 도메인>/auth/kakao/callback   (dev·운영)
 ```
 
 카카오 개발자 콘솔의 Redirect URI 목록에도 같은 값을 등록해야 합니다.
@@ -76,7 +76,7 @@ Figma 기준으로 만든 화면과 현재 OpenAPI 계약이 어긋나는 지점
 | 4 | 위치기반 약관 | 약관 4종 중 "위치 기반 서비스 이용 약관" 포함 | `ConsentKey`에 **대응 키 없음** (11종 중 없음) | ⚠️ 미해결 |
 | 5 | 최종 확인 약관 | 10단계 하단 필수 동의 체크박스 | step 11(contact)에 동의 필드 없음 | ⚠️ `roomPublication`·`noFraudPledge`로 볼 수 있으나 확정 필요 |
 | 6 | 주차 상세 | 무료(여유)·무료(선착순)·유료 **선택지** + 부가 설명 | `parkingDescription` **자유 텍스트 1개** | 선택지 라벨과 부가 설명을 한 문자열로 합쳐 전송 |
-| 7 | 카카오 콜백 | — | 콜백이 프론트로 redirect하지 않고 토큰 JSON 반환 | BFF로 우회 (위 "인증 구조" 참고) |
+| 7 | 카카오 콜백 | — | 콜백이 프론트로 redirect하지 않고 토큰 JSON 반환 | `/auth/kakao*` BFF로 우회 (위 "인증 구조" 참고) |
 | 8 | 자동 임시저장 | 작성 중 저장 중/완료 상태를 보여주고, 사용자가 단계를 떠나기 전에도 최신 입력을 보존 | 전용 API 없음. 현재는 `PUT /host/rooms/drafts/{draftId}` 단계 저장만 존재 | ⚠️ 자동 임시저장 API 계약 필요. debounce 저장, 부분 입력 허용 범위, `expectedVersion` 충돌 처리, 응답의 `version`·`lastSavedAt` 반환 정책 확정 필요 |
 
 ### 프론트에서 흡수한 항목
