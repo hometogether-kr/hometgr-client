@@ -25,8 +25,8 @@ pnpm dev
 없어서, Next.js Route Handler를 BFF로 두고 토큰을 서버에서만 다룹니다.
 
 ```
-브라우저 → /api/auth/kakao          → (서버) GET  /auth/kakao          → 카카오 인증 화면
-브라우저 ← /api/auth/kakao/callback ← 카카오
+브라우저 → /auth/kakao          → (서버) GET  /auth/kakao          → 카카오 인증 화면
+브라우저 ← /auth/kakao/callback ← 카카오
          → (서버) GET /auth/kakao/callback → httpOnly 쿠키에 토큰 저장 → 화면 이동
 브라우저 → /api/bff/<API 경로>      → (서버) Authorization 주입 후 API 호출
 ```
@@ -39,13 +39,13 @@ pnpm dev
 
 ### ⚠️ 백엔드에 필요한 설정 (아직 미적용)
 
-API 서버에 등록된 **카카오 redirect URI를 `{APP_BASE_URL}/api/auth/kakao/callback`
+API 서버에 등록된 **카카오 redirect URI를 `{APP_BASE_URL}/auth/kakao/callback`
 으로 변경**해야 합니다.
 
 ```
 현재:   https://dev-api.hometogether.kr/auth/kakao/callback
-필요:   http://localhost:3000/api/auth/kakao/callback          (로컬)
-        https://<배포된 프론트 도메인>/api/auth/kakao/callback   (dev·운영)
+필요:   http://localhost:3000/auth/kakao/callback          (로컬)
+        https://<배포된 프론트 도메인>/auth/kakao/callback   (dev·운영)
 ```
 
 카카오 개발자 콘솔의 Redirect URI 목록에도 같은 값을 등록해야 합니다.
@@ -66,9 +66,9 @@ Figma 기준으로 만든 화면과 현재 OpenAPI 계약이 어긋나는 지점
 
 ### 남은 항목
 
-| #   | 항목        | 화면 | API                                              | 현재 처리                        |
-| --- | ----------- | ---- | ------------------------------------------------ | -------------------------------- |
-| 7   | 카카오 콜백 | —    | 콜백이 프론트로 redirect하지 않고 토큰 JSON 반환 | BFF로 우회 (위 "인증 구조" 참고) |
+| #   | 항목        | 화면 | API                                              | 현재 처리                                       |
+| --- | ----------- | ---- | ------------------------------------------------ | ----------------------------------------------- |
+| 7   | 카카오 콜백 | —    | 콜백이 프론트로 redirect하지 않고 토큰 JSON 반환 | `/auth/kakao*` BFF로 우회 (위 "인증 구조" 참고) |
 
 ### 해결된 항목 (계약 갱신으로 반영 완료)
 
