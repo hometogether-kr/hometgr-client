@@ -1,3 +1,5 @@
+import { cn } from "@/shared/lib/cn";
+
 export interface DividerProps {
   className?: string;
 }
@@ -10,10 +12,6 @@ export interface DividerProps {
  */
 export function Divider({ className }: DividerProps) {
   return (
-    <hr
-      className={["w-full border-0 border-t border-solid border-grayscale-200", className]
-        .filter(Boolean)
-        .join(" ")}
-    />
+    <hr className={cn("w-full border-0 border-t border-solid border-grayscale-200", className)} />
   );
 }

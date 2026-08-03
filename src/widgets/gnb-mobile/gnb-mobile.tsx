@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 import type { ReactNode } from "react";
+import { useState } from "react";
+
+import { cn } from "@/shared/lib/cn";
 import { SidebarMobile } from "@/widgets/sidebar-mobile";
 
 /**
@@ -10,7 +12,8 @@ import { SidebarMobile } from "@/widgets/sidebar-mobile";
  * logo(icon+wordmark), ic_arrow(28), ic_menu(24)를 SVG로 export해
  * public/icons 또는 public/figma에 커밋한 뒤 교체하세요.
  */
-const FIGMA_TEMP_BACK_ARROW = "https://www.figma.com/api/mcp/asset/182d15c2-b495-477d-a117-2854940ad283";
+const FIGMA_TEMP_BACK_ARROW =
+  "https://www.figma.com/api/mcp/asset/182d15c2-b495-477d-a117-2854940ad283";
 /** 아이콘과 워드마크가 합쳐진 113×20 로고 */
 const LOGO = "/images/logo.svg";
 const FIGMA_TEMP_MENU = "https://www.figma.com/api/mcp/asset/db6273c5-1d64-4523-ac94-7e5d57044100";
@@ -53,7 +56,7 @@ function BackButton({ onBack, backIcon }: { onBack?: () => void; backIcon?: Reac
       type="button"
       aria-label="뒤로 가기"
       onClick={onBack}
-      className="absolute left-0 top-0 flex items-center p-2.5"
+      className="absolute top-0 left-0 flex items-center p-2.5"
     >
       <span className="flex size-7 items-center justify-center">
         {backIcon ?? (
@@ -81,12 +84,10 @@ export function GnbMobile(props: GnbMobileProps) {
     return (
       <>
         <header
-          className={[
+          className={cn(
             "flex w-full items-center justify-between border-b border-grayscale-100 bg-white px-5 py-2",
             className,
-          ]
-            .filter(Boolean)
-            .join(" ")}
+          )}
         >
           <Link href="/" className="flex items-center py-2" aria-label="Home Together">
             {/* eslint-disable-next-line @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */}
@@ -112,14 +113,10 @@ export function GnbMobile(props: GnbMobileProps) {
   }
 
   return (
-    <header
-      className={["relative h-[52px] w-full overflow-clip bg-white", className]
-        .filter(Boolean)
-        .join(" ")}
-    >
+    <header className={cn("relative h-[52px] w-full overflow-clip bg-white", className)}>
       <BackButton onBack={props.onBack} backIcon={props.backIcon} />
       {props.variant === "title" && (
-        <p className="absolute left-[38px] top-1/2 -translate-y-1/2 whitespace-nowrap text-lg font-semibold leading-[1.4] tracking-[-0.18px] text-grayscale-900">
+        <p className="absolute top-1/2 left-[38px] -translate-y-1/2 text-lg leading-[1.4] font-semibold tracking-[-0.18px] whitespace-nowrap text-grayscale-900">
           {props.title}
         </p>
       )}

@@ -1,5 +1,5 @@
-import { GnbMobile } from "@/widgets/gnb-mobile";
 import type { GnbMobileProps } from "@/widgets/gnb-mobile";
+import { GnbMobile } from "@/widgets/gnb-mobile";
 import { Navigation } from "@/widgets/navigation";
 
 export interface ResponsiveHeaderProps {

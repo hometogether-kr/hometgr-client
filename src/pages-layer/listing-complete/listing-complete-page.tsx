@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { BtnCta } from "@/shared/ui/btn-cta";
+
 import { ROUTES } from "@/shared/config";
+import { BtnCta } from "@/shared/ui/btn-cta";
 import { Navigation } from "@/widgets/navigation";
 
 const IC_SUCCESS = "/icons/ic-success.svg";
@@ -42,30 +43,30 @@ export function ListingCompletePage() {
               className="size-20"
               aria-hidden="true"
             />
-            <h1 className="text-center text-2xl font-semibold leading-[1.4] tracking-[-0.24px] text-grayscale-900">
+            <h1 className="text-center text-2xl leading-[1.4] font-semibold tracking-[-0.24px] text-grayscale-900">
               매물 등록 요청이 완료되었습니다
             </h1>
-            <p className="w-full text-center text-sm font-medium leading-[1.5] text-grayscale-600">
+            <p className="w-full text-center text-sm leading-[1.5] font-medium text-grayscale-600">
               정성껏 작성해주신 소중한 정보가 안전하게 접수되었습니다. 담당자가 확인 후 영업일 기준
               24시간 이내에 연락드릴 예정입니다. 검수 이전에는 세입자에게 공개되지 않으니, 부족한
               내용이 있더라도 걱정하지 마세요!
             </p>
           </div>
           <div className="mt-6 rounded-2xl bg-grayscale-70 px-6 py-4">
-            <h2 className="text-lg font-semibold leading-[1.4] tracking-[-0.18px] text-grayscale-900">
+            <h2 className="text-lg leading-[1.4] font-semibold tracking-[-0.18px] text-grayscale-900">
               향후 진행 과정
             </h2>
             <ol className="mt-5 flex flex-col gap-5">
               {NEXT_STEPS.map((step, index) => (
                 <li key={step.title} className="flex gap-5">
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-white text-base font-semibold leading-[1.4] text-grayscale-700">
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-white text-base leading-[1.4] font-semibold text-grayscale-700">
                     {index + 1}
                   </span>
                   <span className="flex flex-col gap-1">
-                    <span className="text-base font-semibold leading-[1.4] text-grayscale-800">
+                    <span className="text-base leading-[1.4] font-semibold text-grayscale-800">
                       {step.title}
                     </span>
-                    <span className="text-sm font-medium leading-[1.5] text-grayscale-600">
+                    <span className="text-sm leading-[1.5] font-medium text-grayscale-600">
                       {step.description}
                     </span>
                   </span>

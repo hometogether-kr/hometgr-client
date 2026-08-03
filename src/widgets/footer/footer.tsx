@@ -1,3 +1,5 @@
+import { cn } from "@/shared/lib/cn";
+
 /** 푸터용 회색 로고 (176×32) */
 const DARK_LOGO = "/images/dark-logo.svg";
 const IC_INSTAGRAM = "/icons/ic-insta.svg";
@@ -17,7 +19,7 @@ function FooterLogo() {
 
 function FooterContact() {
   return (
-    <div className="text-sm font-normal leading-[1.5] text-grayscale-600 md:text-[15px] md:leading-[1.6]">
+    <div className="text-sm leading-[1.5] font-normal text-grayscale-600 md:text-[15px] md:leading-[1.6]">
       <p>
         E-mail : <a href="mailto:hometo.kr@gmail.com">hometo.kr@gmail.com</a>
       </p>
@@ -35,7 +37,7 @@ function FooterSocial() {
         target="_blank"
         rel="noreferrer"
         aria-label="Instagram"
-        className="rounded-full w-13.5 h-13.5 bg-grayscale-500 items-center justify-center flex"
+        className="flex h-13.5 w-13.5 items-center justify-center rounded-full bg-grayscale-500"
       >
         <img alt="" src={IC_INSTAGRAM} className="block size-7 max-w-none" />
       </a>
@@ -43,7 +45,7 @@ function FooterSocial() {
       <a
         href="#"
         aria-label="채팅 문의"
-        className="rounded-full w-13.5 h-13.5 bg-grayscale-500 items-center justify-center flex"
+        className="flex h-13.5 w-13.5 items-center justify-center rounded-full bg-grayscale-500"
       >
         <img alt="" src={IC_KAKAO} className="block size-7 max-w-none" />
       </a>
@@ -53,7 +55,7 @@ function FooterSocial() {
 
 function FooterCopyright() {
   return (
-    <p className="whitespace-nowrap text-sm font-normal leading-[1.5] text-grayscale-600">
+    <p className="text-sm leading-[1.5] font-normal whitespace-nowrap text-grayscale-600">
       © 2026 Home Together. All rights reserved.
     </p>
   );
@@ -68,11 +70,7 @@ function FooterCopyright() {
  */
 export function Footer({ className }: { className?: string }) {
   return (
-    <footer
-      className={["w-full bg-grayscale-70 px-4 py-6 md:px-[200px]", className]
-        .filter(Boolean)
-        .join(" ")}
-    >
+    <footer className={cn("w-full bg-grayscale-70 px-4 py-6 md:px-[200px]", className)}>
       <div className="hidden h-[152px] w-full items-start justify-between md:flex">
         <div className="flex h-full w-[260px] flex-col items-start justify-between">
           <FooterLogo />

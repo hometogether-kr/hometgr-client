@@ -1,14 +1,15 @@
 import {
+  draftDetailSchema,
   type DraftMediaMutationDto,
+  draftMediaMutationSchema,
   type ListingDraft,
   type RoomSubmissionDto,
-  draftDetailSchema,
-  draftMediaMutationSchema,
   roomSubmissionSchema,
   toListingDraft,
 } from "@/domains/listing-draft";
 import { ApiError, apiRequest } from "@/shared/api";
-import { STEP_DATA_SCHEMA, type SaveStepCommand } from "../model/step-command.schema";
+
+import { type SaveStepCommand, STEP_DATA_SCHEMA } from "../model/step-command.schema";
 
 const DRAFTS_PATH = "/host/rooms/drafts";
 
@@ -111,7 +112,11 @@ export async function uploadDraftPhotos({
     throw new ApiError("업로드할 사진을 선택해주세요.", { status: 0, kind: "validation" });
   }
 
-  let result = await uploadPhotoChunk(draftId, expectedVersion, files.slice(0, MAX_FILES_PER_REQUEST));
+  let result = await uploadPhotoChunk(
+    draftId,
+    expectedVersion,
+    files.slice(0, MAX_FILES_PER_REQUEST),
+  );
 
   for (let offset = MAX_FILES_PER_REQUEST; offset < files.length; offset += MAX_FILES_PER_REQUEST) {
     result = await uploadPhotoChunk(

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+
 import { BtnIc } from "@/shared/ui/btn-ic";
 
 const IC_DIAGONAL_ARROW = "/icons/ic-diagonal-arrow.svg";
@@ -17,14 +18,19 @@ interface StartCardBaseProps {
 const CARD_CLASS_NAME =
   "flex w-full flex-col items-start rounded-2xl bg-white px-5 py-4 text-left md:w-[568px] md:rounded-[32px] md:px-9 md:py-10";
 
-function CardBody({ title, description, illustration, actionLabel = "등록하기" }: StartCardBaseProps) {
+function CardBody({
+  title,
+  description,
+  illustration,
+  actionLabel = "등록하기",
+}: StartCardBaseProps) {
   return (
     <div className="flex w-full flex-col items-start gap-4 md:gap-16">
       <div className="flex flex-col items-start gap-2 md:whitespace-nowrap">
-        <h2 className="text-lg font-semibold leading-[1.4] text-grayscale-900 md:text-[32px] md:font-bold md:leading-[52px]">
+        <h2 className="text-lg leading-[1.4] font-semibold text-grayscale-900 md:text-[32px] md:leading-[52px] md:font-bold">
           {title}
         </h2>
-        <p className="text-sm font-medium leading-[1.5] text-grayscale-600 md:text-2xl md:leading-[1.54]">
+        <p className="text-sm leading-[1.5] font-medium text-grayscale-600 md:text-2xl md:leading-[1.54]">
           {description}
         </p>
       </div>
@@ -33,7 +39,7 @@ function CardBody({ title, description, illustration, actionLabel = "등록하�
           <BtnIc size="64" label={`${title} 시작하기`} className="pointer-events-none">
             <img alt="" src={IC_DIAGONAL_ARROW} className="block size-[18.6px] max-w-none" />
           </BtnIc>
-          <span className="whitespace-nowrap text-2xl font-medium leading-[1.54] text-grayscale-600">
+          <span className="text-2xl leading-[1.54] font-medium whitespace-nowrap text-grayscale-600">
             {actionLabel}
           </span>
         </span>

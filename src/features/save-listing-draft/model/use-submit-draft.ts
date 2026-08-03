@@ -1,7 +1,9 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { listingDraftQueryKeys } from "@/domains/listing-draft";
+
 import { submitListingDraft } from "../api/draft-command.api";
 
 /**
@@ -16,7 +18,7 @@ export function useSubmitDraft(draftId: string) {
     mutationFn: (expectedVersion: number) => submitListingDraft(draftId, expectedVersion),
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: listingDraftQueryKeys.detail(draftId) });
-      queryClient.invalidateQueries({ queryKey: listingDraftQueryKeys.lists() });
+      void queryClient.invalidateQueries({ queryKey: listingDraftQueryKeys.lists() });
     },
   });
 

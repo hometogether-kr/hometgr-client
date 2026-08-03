@@ -1,11 +1,18 @@
 /**
  * 앱 라우트 경로 모음
  *
- * TODO: 서비스 소개·고객센터 등 미구현 라우트는 페이지 추가 시 함께 갱신하세요.
+ * TODO: 고객센터 등 미구현 라우트는 페이지 추가 시 함께 갱신하세요.
  */
 export const ROUTES = {
   home: "/",
-  intro: "/intro",
+  /** 서비스 소개 — 홈에서 Host/Guest를 고르면 각 상세 소개로 들어갑니다. */
+  intro: {
+    root: "/",
+    /** 집주인용 서비스 소개 */
+    host: "/intro/host",
+    /** 세입자용 서비스 소개 */
+    guest: "/intro/guest",
+  },
   support: "/support",
   auth: {
     /** 로그인 / 회원가입 */
@@ -47,6 +54,8 @@ export const ROUTES = {
   },
   /** 마이페이지 — 헤더 프로필·모바일 사이드바에서 진입 */
   myPage: "/mypage",
+  /** 정산 대금 입금계좌 등록·수정 (집주인 전용, 마이페이지 정산 정보에서 진입) */
+  settlementAccount: "/mypage/settlement-account",
   rooms: "/rooms",
   reservations: "/reservations",
   favorites: "/favorites",

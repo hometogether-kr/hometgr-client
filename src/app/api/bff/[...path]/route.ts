@@ -1,4 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server";
+
 import {
   backendFetch,
   clearSessionTokens,
@@ -96,7 +97,12 @@ async function proxy(request: NextRequest, context: ProxyContext): Promise<NextR
 
   let response: Response;
   try {
-    response = await backendFetch(targetPath, { method: request.method, headers, body, accessToken });
+    response = await backendFetch(targetPath, {
+      method: request.method,
+      headers,
+      body,
+      accessToken,
+    });
   } catch {
     return errorResponse(502, "API 서버에 연결하지 못했습니다.", targetPath);
   }
@@ -124,10 +130,4 @@ async function proxy(request: NextRequest, context: ProxyContext): Promise<NextR
   }
 }
 
-export {
-  proxy as GET,
-  proxy as POST,
-  proxy as PUT,
-  proxy as PATCH,
-  proxy as DELETE,
-};
+export { proxy as DELETE, proxy as GET, proxy as PATCH, proxy as POST, proxy as PUT };

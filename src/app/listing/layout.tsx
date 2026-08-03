@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
+
 import { hasSessionCookie } from "@/shared/api/server";
 import { ROUTES } from "@/shared/config";
 

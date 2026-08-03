@@ -1,8 +1,9 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { TERMS } from "./terms";
+
 import type { TermId } from "./terms";
+import { TERMS } from "./terms";
 
 export interface TermsAgreement {
   agreedIds: readonly TermId[];
@@ -37,7 +38,9 @@ export function useTermsAgreement(): TermsAgreement {
   const allAgreed = agreedIds.length === TERMS.length;
 
   const toggleAll = useCallback(() => {
-    setAgreedIds((current) => (current.length === TERMS.length ? [] : TERMS.map((term) => term.id)));
+    setAgreedIds((current) =>
+      current.length === TERMS.length ? [] : TERMS.map((term) => term.id),
+    );
   }, []);
 
   return {

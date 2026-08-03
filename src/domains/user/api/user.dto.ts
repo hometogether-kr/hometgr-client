@@ -30,6 +30,7 @@ export const consentKeyDtoSchema = z.enum([
   "termsOfService",
   "privacyCollection",
   "privacyThirdParty",
+  "locationBasedServiceTerms",
   "roomPublication",
   "noFraudPledge",
   "alimtalkOptIn",

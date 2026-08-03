@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+
 import { OnboardingTermsPage } from "@/pages-layer/onboarding-terms";
 import { ROUTES } from "@/shared/config";
 

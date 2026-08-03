@@ -1,9 +1,10 @@
 import type { InputHTMLAttributes } from "react";
 
+import { cn } from "@/shared/lib/cn";
+
 export type RadioSize = "20" | "24" | "32";
 
-export interface RadioProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
+export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
   /** Figma: radio / size (20 · 24 · 32) — 히트 영역 크기 */
   size?: RadioSize;
 }
@@ -38,26 +39,24 @@ const dotClasses: Record<RadioSize, string> = {
 export function Radio({ size = "20", disabled, className, ...rest }: RadioProps) {
   return (
     <label
-      className={[
+      className={cn(
         "relative inline-flex items-center justify-center",
         wrapperPadding[size],
         disabled ? "cursor-not-allowed opacity-[0.43]" : "cursor-pointer",
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
     >
       <input type="radio" disabled={disabled} className="peer sr-only" {...rest} />
       <span
         aria-hidden="true"
-        className={[
+        className={cn(
           "flex items-center justify-center rounded-full border-solid border-grayscale-200 transition-colors",
           "peer-checked:border-primary-500 peer-checked:bg-primary-500",
           "[&>span]:opacity-0 peer-checked:[&>span]:opacity-100",
           boxClasses[size],
-        ].join(" ")}
+        )}
       >
-        <span className={["rounded-full bg-white", dotClasses[size]].join(" ")} />
+        <span className={cn("rounded-full bg-white", dotClasses[size])} />
       </span>
     </label>
   );

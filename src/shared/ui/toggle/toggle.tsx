@@ -1,5 +1,7 @@
 import type { HTMLAttributes } from "react";
 
+import { cn } from "@/shared/lib/cn";
+
 export type ToggleMode = "web" | "mobile";
 
 export interface ToggleOption<T extends string> {
@@ -7,8 +9,10 @@ export interface ToggleOption<T extends string> {
   value: T;
 }
 
-export interface ToggleProps<T extends string>
-  extends Omit<HTMLAttributes<HTMLDivElement>, "onChange"> {
+export interface ToggleProps<T extends string> extends Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "onChange"
+> {
   /** 두 개의 세그먼트 옵션 (Figma 예시: 정산예정 · 정산완료) */
   options: readonly [ToggleOption<T>, ToggleOption<T>];
   /** 현재 선택된 값 */
@@ -47,13 +51,11 @@ export function Toggle<T extends string>({
   return (
     <div
       role="tablist"
-      className={[
+      className={cn(
         "inline-flex items-center rounded-full bg-grayscale-100",
         trackClasses[mode],
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
       {...rest}
     >
       {options.map((option) => {
@@ -65,13 +67,13 @@ export function Toggle<T extends string>({
             role="tab"
             aria-selected={selected}
             onClick={() => onChange?.(option.value)}
-            className={[
-              "flex flex-1 items-center justify-center whitespace-nowrap rounded-full leading-[1.4] transition-colors",
+            className={cn(
+              "flex flex-1 items-center justify-center rounded-full leading-[1.4] whitespace-nowrap transition-colors",
               segmentClasses[mode],
               selected
                 ? "border-solid border-primary-500 bg-primary-100 text-primary-500"
                 : "border-transparent text-grayscale-500",
-            ].join(" ")}
+            )}
           >
             {option.label}
           </button>

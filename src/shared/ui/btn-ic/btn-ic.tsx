@@ -1,5 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
+import { cn } from "@/shared/lib/cn";
+
 export type BtnIcSize = "40" | "44" | "48" | "64";
 export type BtnIcShape = "ellipse" | "square";
 export type BtnIcTone = "default" | "dark";
@@ -46,15 +48,13 @@ export function BtnIc({
     <button
       type="button"
       aria-label={label}
-      className={[
+      className={cn(
         "flex shrink-0 items-center justify-center overflow-clip transition-opacity hover:opacity-80",
         shape === "ellipse" ? "rounded-full" : "rounded-lg",
         toneClasses[tone],
         sizeClasses[size],
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
       {...rest}
     >
       {children}

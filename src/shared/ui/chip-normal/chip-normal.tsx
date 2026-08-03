@@ -1,5 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
+import { cn } from "@/shared/lib/cn";
+
 export type ChipNormalShape = "round" | "square";
 export type ChipNormalSize = "s" | "m" | "lg";
 
@@ -43,7 +45,7 @@ export function ChipNormal({
   ...rest
 }: ChipNormalProps) {
   const isRoundDefault = shape === "round" && !selected;
-  const classes = [
+  const classes = cn(
     "inline-flex items-center justify-center border border-solid text-center leading-[1.4] whitespace-nowrap transition-colors",
     shapeSizeClasses[shape][size],
     isRoundDefault ? "font-medium" : "font-semibold",
@@ -51,9 +53,7 @@ export function ChipNormal({
       ? "border-primary-500 bg-primary-100 text-primary-600"
       : "border-grayscale-300 bg-white text-grayscale-500",
     className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  );
 
   return (
     <button type="button" aria-pressed={selected} className={classes} {...rest}>

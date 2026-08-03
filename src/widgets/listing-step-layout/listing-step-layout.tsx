@@ -1,7 +1,9 @@
 import type { ReactNode } from "react";
+
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { ProgressBar } from "@/shared/ui/progress-bar";
 import { ResponsiveHeader } from "@/widgets/responsive-header";
+
 import { ListingStepper } from "./listing-stepper";
 import { LISTING_STEPS, type ListingStepIndex } from "./listing-steps";
 
@@ -49,28 +51,28 @@ export function ListingStepLayout({
         mobile={{ variant: "title", title: LISTING_STEPS[step - 1], onBack: onPrev }}
       />
 
-      <main className="flex justify-center px-5 pb-[104px] pt-4 md:px-4 md:pb-[152px] md:pt-[100px]">
+      <main className="flex justify-center px-5 pt-4 pb-[104px] md:px-4 md:pt-[100px] md:pb-[152px]">
         <div className="flex w-full flex-col items-start gap-4 md:w-auto md:flex-row md:items-start md:gap-6">
           {/* 모바일 진행 표시 */}
           <div className="flex w-full flex-col gap-2 md:hidden">
             <ProgressBar value={step} max={totalSteps} />
-            <p className="text-[13px] font-medium leading-[1.4] text-grayscale-500">
+            <p className="text-[13px] leading-[1.4] font-medium text-grayscale-500">
               {step}/{totalSteps}
             </p>
           </div>
 
           <section className="flex w-full flex-col justify-between md:min-h-[720px] md:w-[850px] md:rounded-[20px] md:bg-white md:px-10 md:py-8">
             <div className="flex w-full flex-col gap-3">
-              <p className="hidden whitespace-nowrap text-base font-medium leading-[1.5] text-grayscale-500 md:block">
+              <p className="hidden text-base leading-[1.5] font-medium whitespace-nowrap text-grayscale-500 md:block">
                 {eyebrow ?? LISTING_STEPS[step - 1]}
               </p>
               <div className="flex w-full flex-col gap-6 md:gap-9">
                 <div className="flex w-full flex-col gap-2 md:max-w-[729px] md:gap-2.5">
-                  <h1 className="text-[22px] font-semibold leading-[1.4] tracking-[-0.22px] text-grayscale-900 md:text-[28px] md:leading-[1.3] md:tracking-[-0.28px]">
+                  <h1 className="text-[22px] leading-[1.4] font-semibold tracking-[-0.22px] text-grayscale-900 md:text-[28px] md:leading-[1.3] md:tracking-[-0.28px]">
                     {title}
                   </h1>
                   {description && (
-                    <p className="text-sm font-medium leading-[1.5] text-grayscale-600 md:text-lg md:leading-[1.4] md:tracking-[-0.18px]">
+                    <p className="text-sm leading-[1.5] font-medium text-grayscale-600 md:text-lg md:leading-[1.4] md:tracking-[-0.18px]">
                       {description}
                     </p>
                   )}
@@ -99,7 +101,7 @@ export function ListingStepLayout({
       </main>
 
       {/* 모바일 하단 고정 버튼 */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-grayscale-100 bg-white px-5 pb-6 pt-2 md:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-grayscale-100 bg-white px-5 pt-2 pb-6 md:hidden">
         <BtnCta size="mobile" className="w-full" onClick={onNext} disabled={nextDisabled}>
           {nextLabel}
         </BtnCta>

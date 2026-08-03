@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import {
   REGISTRANT_RELATIONSHIP_OPTIONS,
   type RegistrantRelationship,
@@ -78,7 +79,7 @@ export function ListingStep1Page({
               />
             ))}
             {showError && (
-              <p className="pl-1 pt-3 text-[13px] font-medium leading-[1.4] text-system-error">
+              <p className="pt-3 pl-1 text-[13px] leading-[1.4] font-medium text-system-error">
                 필수 항목입니다.
               </p>
             )}

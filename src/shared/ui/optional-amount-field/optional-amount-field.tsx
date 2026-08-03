@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/shared/lib/cn";
+
 import { Radio } from "../radio";
 import { TextField } from "../text-field";
 
@@ -34,8 +36,8 @@ export function OptionalAmountField({
   className,
 }: OptionalAmountFieldProps) {
   return (
-    <div className={["flex w-full flex-col gap-3", className].filter(Boolean).join(" ")}>
-      <p className="w-full text-sm font-medium leading-[1.4] text-grayscale-600">{label}</p>
+    <div className={cn("flex w-full flex-col gap-3", className)}>
+      <p className="w-full text-sm leading-[1.4] font-medium text-grayscale-600">{label}</p>
       <div className="flex flex-col gap-3">
         <label className="flex cursor-pointer items-center gap-3">
           <Radio
@@ -45,7 +47,7 @@ export function OptionalAmountField({
             checked={mode === "none"}
             onChange={() => onModeChange("none")}
           />
-          <span className="text-base font-semibold leading-[1.4] text-grayscale-700">없음</span>
+          <span className="text-base leading-[1.4] font-semibold text-grayscale-700">없음</span>
         </label>
         <label className="flex cursor-pointer items-center gap-3">
           <Radio
@@ -55,7 +57,7 @@ export function OptionalAmountField({
             checked={mode === "custom"}
             onChange={() => onModeChange("custom")}
           />
-          <span className="text-base font-semibold leading-[1.4] text-grayscale-700">
+          <span className="text-base leading-[1.4] font-semibold text-grayscale-700">
             있음(직접 입력하기)
           </span>
         </label>
@@ -70,7 +72,7 @@ export function OptionalAmountField({
         )}
       </div>
       {error && (
-        <p className="w-full pl-1 text-[13px] font-medium leading-[1.4] text-system-error">
+        <p className="w-full pl-1 text-[13px] leading-[1.4] font-medium text-system-error">
           {error}
         </p>
       )}

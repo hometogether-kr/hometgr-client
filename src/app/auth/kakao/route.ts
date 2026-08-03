@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+
 import { backendFetch, toCookieHeaderValue, writeOAuthStateCookie } from "@/shared/api/server";
 import { ROUTES } from "@/shared/config";
 import { getServerEnv } from "@/shared/config/env.server";

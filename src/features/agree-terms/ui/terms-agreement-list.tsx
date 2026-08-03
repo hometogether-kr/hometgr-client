@@ -1,9 +1,11 @@
 "use client";
 
 import { ROUTES } from "@/shared/config";
+import { cn } from "@/shared/lib/cn";
 import { BtnUnderline } from "@/shared/ui/btn-underline";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Divider } from "@/shared/ui/divider";
+
 import { TERMS } from "../model/terms";
 import type { TermsAgreement } from "../model/use-terms-agreement";
 
@@ -23,12 +25,10 @@ export function TermsAgreementList({ agreement, className }: TermsAgreementListP
 
   return (
     <div
-      className={[
+      className={cn(
         "flex w-full flex-col gap-5 rounded-xl border border-grayscale-200 bg-white p-4 md:gap-5 md:rounded-none md:border-0 md:p-0",
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
     >
       <label className="flex cursor-pointer items-center gap-3">
         <Checkbox
@@ -46,11 +46,7 @@ export function TermsAgreementList({ agreement, className }: TermsAgreementListP
             <Divider />
             <div className="flex w-full items-center justify-between gap-3">
               <label className="flex min-w-0 cursor-pointer items-center gap-3">
-                <Checkbox
-                  size="24"
-                  checked={isAgreed(term.id)}
-                  onChange={() => toggle(term.id)}
-                />
+                <Checkbox size="24" checked={isAgreed(term.id)} onChange={() => toggle(term.id)} />
                 <span className="flex min-w-0 items-center gap-3 text-label-1 font-medium">
                   <span className={term.required ? "text-primary-500" : "text-grayscale-700"}>
                     {term.required ? "[필수]" : "[선택]"}

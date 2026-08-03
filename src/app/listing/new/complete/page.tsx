@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import { ListingCompletePage } from "@/pages-layer/listing-complete";
 
 export const metadata: Metadata = {

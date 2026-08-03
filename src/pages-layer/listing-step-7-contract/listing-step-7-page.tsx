@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import { DateField } from "@/shared/ui/date-field";
 import { OptionalAmountField } from "@/shared/ui/optional-amount-field";
 import { TextField } from "@/shared/ui/text-field";
@@ -68,7 +69,9 @@ export function ListingStep7Page({
   const [depositMode, setDepositMode] = useState<AmountMode>(
     initialValues.deposit === "" ? null : initialValues.deposit === "0" ? "none" : "custom",
   );
-  const [deposit, setDeposit] = useState(initialValues.deposit === "0" ? "" : initialValues.deposit);
+  const [deposit, setDeposit] = useState(
+    initialValues.deposit === "0" ? "" : initialValues.deposit,
+  );
   const [maintenanceMode, setMaintenanceMode] = useState<AmountMode>(
     initialValues.maintenanceFee === ""
       ? null
@@ -195,12 +198,12 @@ export function ListingStep7Page({
                 value={availableFrom}
                 onChange={(e) => setAvailableFrom(e.target.value)}
               />
-              <p className="py-2.5 text-[13px] font-normal leading-[1.4] text-grayscale-600">
+              <p className="py-2.5 text-[13px] leading-[1.4] font-normal text-grayscale-600">
                 이후부터 가능
               </p>
             </div>
             {show("availableFrom") && (
-              <p className="w-full pl-1 pt-2 text-[13px] font-medium leading-[1.4] text-system-error">
+              <p className="w-full pt-2 pl-1 text-[13px] leading-[1.4] font-medium text-system-error">
                 {show("availableFrom")}
               </p>
             )}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+
 import {
   INTERACTION_PREFERENCE_OPTIONS,
   type InteractionPreference,

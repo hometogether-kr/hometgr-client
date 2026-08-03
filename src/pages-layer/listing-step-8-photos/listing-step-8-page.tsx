@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+
 import { MAX_LISTING_PHOTOS, MIN_LISTING_PHOTOS } from "@/features/save-listing-draft";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { InfoBox } from "@/shared/ui/info-box";
@@ -107,7 +108,7 @@ export function ListingStep8Page({
         autoSaving={isUploading || isSaving}
       >
         {submitted && hasError && (
-          <p className="w-full pb-1 text-[13px] font-medium leading-[1.4] text-system-error">
+          <p className="w-full pb-1 text-[13px] leading-[1.4] font-medium text-system-error">
             {MIN_PHOTOS_MESSAGE}
           </p>
         )}
@@ -153,7 +154,7 @@ export function ListingStep8Page({
                     className="size-full object-cover"
                   />
                   {index === 0 && (
-                    <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-primary-500 py-2 text-base font-bold leading-[1.5] text-white">
+                    <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-primary-500 py-2 text-base leading-[1.5] font-bold text-white">
                       대표 사진
                     </span>
                   )}

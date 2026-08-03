@@ -7,15 +7,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "assets:sync": "node scripts/sync-figma-assets.mjs",
     "assets:check": "node scripts/sync-figma-assets.mjs --check"
   },
   "dependencies": {
+    "@daypicker/react": "^10.0.1",
     "@tanstack/react-query": "^5.90.2",
     "clsx": "^2.1.1",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "tailwind-merge": "^3.4.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -26,7 +31,13 @@
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-boundaries": "^7.1.0",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.64.0"
   }
 }

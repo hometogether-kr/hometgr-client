@@ -1,0 +1,30 @@
+"use client";
+
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import { listingDraftQueryKeys } from "@/domains/listing-draft";
+
+import { submitListingDraft } from "../api/draft-command.api";
+
+/**
+ * 매물 등록 요청 제출
+ *
+ * 제출한 초안은 더 이상 이어쓸 수 없으므로 상세 캐시를 지우고 목록을 새로 받습니다.
+ */
+export function useSubmitDraft(draftId: string) {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: (expectedVersion: number) => submitListingDraft(draftId, expectedVersion),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: listingDraftQueryKeys.detail(draftId) });
+      queryClient.invalidateQueries({ queryKey: listingDraftQueryKeys.lists() });
+    },
+  });
+
+  return {
+    submitDraft: mutation.mutateAsync,
+    isSubmitting: mutation.isPending,
+    submitError: mutation.error,
+  };
+}

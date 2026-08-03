@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import { ListingStartPage } from "@/pages-layer/listing-start";
 
 export const metadata: Metadata = {

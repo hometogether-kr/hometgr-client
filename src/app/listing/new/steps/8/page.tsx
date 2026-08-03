@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
+
 import { useDraftPhotos, useDraftStepFlow } from "@/features/save-listing-draft";
 import { ListingStep8Page } from "@/pages-layer/listing-step-8-photos";
 import { ApiError } from "@/shared/api";
@@ -43,9 +44,9 @@ function Step8() {
       photos={photos}
       isUploading={isUploading}
       isSaving={isSaving}
-      onAddFiles={handleAddFiles}
+      onAddFiles={(files) => void handleAddFiles(files)}
       onPrev={goPrev}
-      onNext={handleNext}
+      onNext={(values) => void handleNext(values)}
     />
   );
 }

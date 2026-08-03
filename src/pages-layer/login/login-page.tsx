@@ -8,10 +8,8 @@ import { SiteLayout } from "@/widgets/site-layout";
  * 히어로 이미지와 모바일 로고 일러스트를 export해 public/에 커밋한 뒤
  * next/image로 교체하세요.
  */
-const FIGMA_TEMP_HERO =
-  "/figma/hero-32b08abb.png";
-const FIGMA_TEMP_LOGO_ILLUST =
-  "/figma/logo-illust-da269702.svg";
+const FIGMA_TEMP_HERO = "/figma/hero-32b08abb.png";
+const FIGMA_TEMP_LOGO_ILLUST = "/figma/logo-illust-da269702.svg";
 
 /* eslint-disable @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 이미지로 교체 예정 */
 
@@ -57,6 +55,7 @@ export function LoginPage({ onKakaoLogin, onExplore }: LoginPageProps) {
               <BtnCta size="pill" variant="kakao" className="min-w-[200px]" onClick={onKakaoLogin}>
                 카카오로 시작하기
               </BtnCta>
+              {/* Figma 643:19334는 공통 stroke보다 연한 테두리에 흰 배경입니다. */}
               <BtnCta
                 size="pill"
                 variant="stroke"
@@ -77,6 +76,7 @@ export function LoginPage({ onKakaoLogin, onExplore }: LoginPageProps) {
 
         {/* 모바일 버튼 */}
         <div className="flex shrink-0 flex-col gap-2.5 md:hidden">
+          {/* Figma 693:13683은 배경이 페이지와 같은 grayscale-50입니다. */}
           <BtnCta
             size="mobile"
             variant="stroke"

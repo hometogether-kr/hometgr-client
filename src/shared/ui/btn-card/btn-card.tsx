@@ -1,6 +1,9 @@
 "use client";
 
 import type { ChangeEvent, ReactNode } from "react";
+
+import { cn } from "@/shared/lib/cn";
+
 import { Checkbox } from "../checkbox";
 import { Radio } from "../radio";
 
@@ -41,14 +44,12 @@ export function BtnCard({
 }: BtnCardProps) {
   return (
     <label
-      className={[
+      className={cn(
         "flex w-full items-center gap-4 rounded-xl border border-solid px-4 py-3 transition-colors md:gap-5 md:rounded-2xl md:px-6 md:py-4",
         checked ? "border-primary-400 bg-primary-50" : "border-grayscale-200 bg-white",
         disabled ? "cursor-not-allowed" : "cursor-pointer",
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
     >
       {control === "radio" ? (
         <Radio
@@ -71,19 +72,19 @@ export function BtnCard({
       )}
       <span className="flex flex-col items-start gap-1.5">
         <span
-          className={[
-            "text-base font-semibold leading-[1.5] md:whitespace-nowrap md:text-lg md:leading-[1.4] md:tracking-[-0.18px]",
+          className={cn(
+            "text-base leading-[1.5] font-semibold md:text-lg md:leading-[1.4] md:tracking-[-0.18px] md:whitespace-nowrap",
             checked ? "text-primary-600" : "text-grayscale-500",
-          ].join(" ")}
+          )}
         >
           {title}
         </span>
         {description && (
           <span
-            className={[
-              "text-[13px] font-medium leading-[1.5] md:text-sm",
+            className={cn(
+              "text-[13px] leading-[1.5] font-medium md:text-sm",
               checked ? "text-primary-500" : "text-grayscale-500",
-            ].join(" ")}
+            )}
           >
             {description}
           </span>

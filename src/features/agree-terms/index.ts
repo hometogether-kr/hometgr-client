@@ -1,6 +1,6 @@
-export { TERMS } from "./model/terms";
 export type { TermId, TermItem } from "./model/terms";
-export { useTermsAgreement } from "./model/use-terms-agreement";
+export { TERMS } from "./model/terms";
 export type { TermsAgreement } from "./model/use-terms-agreement";
-export { TermsAgreementList } from "./ui/terms-agreement-list";
+export { useTermsAgreement } from "./model/use-terms-agreement";
 export type { TermsAgreementListProps } from "./ui/terms-agreement-list";
+export { TermsAgreementList } from "./ui/terms-agreement-list";

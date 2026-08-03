@@ -5,7 +5,7 @@ description: Use when adding a new slice (domain, feature, widget, or page) to t
 
 # FSD scaffolding for hometogether
 
-This project organizes `src/` as Feature-Sliced Design layers: `app → pages-layer → widgets → features → domains → shared`. Imports only flow downward (see `AGENTS.md` for the hard constraint on import direction). This skill covers *how* to scaffold a new slice inside those layers.
+This project organizes `src/` as Feature-Sliced Design layers: `app → pages-layer → widgets → features → domains → shared`. Imports only flow downward (see `AGENTS.md` for the hard constraint on import direction). This skill covers _how_ to scaffold a new slice inside those layers.
 
 ## Which layer does this belong in?
 

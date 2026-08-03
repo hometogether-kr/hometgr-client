@@ -1,8 +1,12 @@
 "use client";
 
 import { Suspense } from "react";
+
 import { useDraftStepFlow } from "@/features/save-listing-draft";
-import { ListingStep6Page, type ListingStep6Values } from "@/pages-layer/listing-step-6-house-rules";
+import {
+  ListingStep6Page,
+  type ListingStep6Values,
+} from "@/pages-layer/listing-step-6-house-rules";
 
 function Step6() {
   const { draft, isSaving, saveAndGoNext, goPrev } = useDraftStepFlow(7);
@@ -28,7 +32,7 @@ function Step6() {
       }}
       isSaving={isSaving}
       onPrev={goPrev}
-      onNext={handleNext}
+      onNext={(values) => void handleNext(values)}
     />
   );
 }

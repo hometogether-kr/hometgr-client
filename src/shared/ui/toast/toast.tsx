@@ -1,4 +1,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
+
+import { cn } from "@/shared/lib/cn";
+
 import { BtnCta } from "../btn-cta";
 
 export type ToastVariant = "info" | "error" | "success";
@@ -50,13 +53,11 @@ export function Toast({
   return (
     <div
       role={variant === "error" ? "alert" : "status"}
-      className={[
+      className={cn(
         "inline-flex max-w-[calc(100vw-40px)] gap-1.5 rounded-xl bg-white px-4 py-3 shadow-toast md:max-w-[480px]",
         hasAction ? "items-center" : "items-start",
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
       {...rest}
     >
       <div className="flex min-w-0 flex-col items-start">
@@ -70,12 +71,12 @@ export function Toast({
             className="size-5 shrink-0"
             aria-hidden="true"
           />
-          <p className="min-w-0 text-base font-semibold leading-[1.5] text-grayscale-700 [word-break:keep-all]">
+          <p className="min-w-0 text-base leading-[1.5] font-semibold [word-break:keep-all] text-grayscale-700">
             {children}
           </p>
         </div>
         {description && (
-          <div className="w-full pl-6 pt-2 text-sm font-medium leading-[1.5] text-grayscale-600 [word-break:keep-all]">
+          <div className="w-full pt-2 pl-6 text-sm leading-[1.5] font-medium [word-break:keep-all] text-grayscale-600">
             {description}
           </div>
         )}

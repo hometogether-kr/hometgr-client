@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
+
 import { useDraftStepFlow } from "@/features/save-listing-draft";
 import { ListingStep1Page } from "@/pages-layer/listing-step-1-registrant";
 
@@ -13,7 +14,7 @@ function Step1() {
       initialRelationship={draft?.data.registrant?.registrantRelationship ?? null}
       isSaving={isSaving}
       onPrev={goPrev}
-      onNext={(registrantRelationship) => saveAndGoNext({ registrantRelationship })}
+      onNext={(registrantRelationship) => void saveAndGoNext({ registrantRelationship })}
     />
   );
 }

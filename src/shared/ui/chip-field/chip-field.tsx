@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/shared/lib/cn";
+
 import { ChipNormal } from "../chip-normal";
 
 /** 표시 문구와 실제 값이 다를 수 있어 라벨과 값을 따로 받습니다. */
@@ -31,8 +33,7 @@ interface MultiChipFieldProps<TValue extends string> extends ChipFieldBaseProps<
 }
 
 export type ChipFieldProps<TValue extends string> =
-  | SingleChipFieldProps<TValue>
-  | MultiChipFieldProps<TValue>;
+  SingleChipFieldProps<TValue> | MultiChipFieldProps<TValue>;
 
 /**
  * 라벨 + 칩 선택 그룹 (Figma: textfield + chip_normal 조합)
@@ -63,9 +64,9 @@ export function ChipField<TValue extends string>(props: ChipFieldProps<TValue>) 
   };
 
   return (
-    <div className={["flex w-full flex-col", className].filter(Boolean).join(" ")}>
+    <div className={cn("flex w-full flex-col", className)}>
       <div className="flex w-full flex-col gap-3">
-        <p className="w-full text-sm font-medium leading-[1.4] text-grayscale-600">{label}</p>
+        <p className="w-full text-sm leading-[1.4] font-medium text-grayscale-600">{label}</p>
         <div className="flex flex-wrap items-center gap-1.5">
           {options.map((option) => (
             <ChipNormal
@@ -81,7 +82,7 @@ export function ChipField<TValue extends string>(props: ChipFieldProps<TValue>) 
         </div>
       </div>
       {error && (
-        <p className="w-full pl-1 pt-3 text-[13px] font-medium leading-[1.4] text-system-error">
+        <p className="w-full pt-3 pl-1 text-[13px] leading-[1.4] font-medium text-system-error">
           {error}
         </p>
       )}

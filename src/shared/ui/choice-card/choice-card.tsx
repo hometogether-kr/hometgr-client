@@ -1,7 +1,8 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-export interface ChoiceCardProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "title"> {
+import { cn } from "@/shared/lib/cn";
+
+export interface ChoiceCardProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "title"> {
   title: string;
   description?: string;
   /** 카드 상단 일러스트 슬롯 */
@@ -30,15 +31,13 @@ export function ChoiceCard({
     <button
       type="button"
       aria-pressed={selected}
-      className={[
+      className={cn(
         "flex w-full flex-col items-center gap-2 rounded-xl border-solid px-4 py-3 text-left transition-colors",
         selected
           ? "border-[1.8px] border-primary-500 bg-primary-100"
           : "border border-grayscale-200 bg-grayscale-50",
         className,
-      ]
-        .filter(Boolean)
-        .join(" ")}
+      )}
       {...rest}
     >
       {illustration && (
@@ -47,10 +46,10 @@ export function ChoiceCard({
         </span>
       )}
       <span
-        className={[
+        className={cn(
           "w-full text-headline-2 font-semibold",
           selected ? "text-primary-600" : "text-grayscale-900",
-        ].join(" ")}
+        )}
       >
         {title}
       </span>

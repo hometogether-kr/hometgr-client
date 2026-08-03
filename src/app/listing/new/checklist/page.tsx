@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+
 import { useCreateDraft } from "@/features/save-listing-draft";
 import { ListingChecklistPage } from "@/pages-layer/listing-checklist";
 import { ApiError } from "@/shared/api";
@@ -28,7 +29,7 @@ export default function Page() {
 
   return (
     <ListingChecklistPage
-      onStart={handleStart}
+      onStart={() => void handleStart()}
       isStarting={isCreating}
       onBack={() => router.push(ROUTES.listing.start)}
     />

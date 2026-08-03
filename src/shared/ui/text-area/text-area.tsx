@@ -1,12 +1,13 @@
 "use client";
 
-import { useId, useState } from "react";
 import type { ChangeEvent, TextareaHTMLAttributes } from "react";
+import { useId, useState } from "react";
+
+import { cn } from "@/shared/lib/cn";
 
 export type TextAreaSize = "s" | "m" | "l";
 
-export interface TextAreaProps
-  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
+export interface TextAreaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
   /** Figma: title — 상단 라벨 */
   label?: string;
   /** Figma: property 1 = error — 에러 문구. 있으면 error 스타일 적용 */
@@ -46,9 +47,7 @@ export function TextArea({
 }: TextAreaProps) {
   const autoId = useId();
   const textareaId = id ?? autoId;
-  const [innerLength, setInnerLength] = useState(
-    String(defaultValue ?? "").length,
-  );
+  const [innerLength, setInnerLength] = useState(String(defaultValue ?? "").length);
   const length = value != null ? String(value).length : innerLength;
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -56,7 +55,7 @@ export function TextArea({
     onChange?.(e);
   };
 
-  const boxClasses = [
+  const boxClasses = cn(
     "flex w-full flex-col gap-2 rounded-lg border border-solid p-3 transition-colors",
     boxHeightClasses[size],
     disabled
@@ -64,14 +63,14 @@ export function TextArea({
       : error
         ? "border-system-error bg-white"
         : "border-grayscale-300 bg-white focus-within:border-primary-500",
-  ].join(" ");
+  );
 
   return (
-    <div className={["flex flex-col items-start gap-2", className].filter(Boolean).join(" ")}>
+    <div className={cn("flex flex-col items-start gap-2", className)}>
       {label && (
         <label
           htmlFor={textareaId}
-          className="w-full text-sm font-medium leading-[1.4] text-grayscale-600"
+          className="w-full text-sm leading-[1.4] font-medium text-grayscale-600"
         >
           {label}
         </label>
@@ -85,21 +84,21 @@ export function TextArea({
           onChange={handleChange}
           disabled={disabled}
           aria-invalid={Boolean(error) || undefined}
-          className={[
-            "min-h-0 w-full flex-1 resize-none bg-transparent text-base font-medium leading-[1.5] outline-none",
+          className={cn(
+            "min-h-0 w-full flex-1 resize-none bg-transparent text-base leading-[1.5] font-medium outline-none",
             "placeholder:text-grayscale-400",
             disabled ? "text-grayscale-500" : "text-grayscale-800",
-          ].join(" ")}
+          )}
           {...rest}
         />
         {showCount && (
-          <span className="w-full shrink-0 text-right text-[13px] font-normal leading-[1.4] text-grayscale-500">
+          <span className="w-full shrink-0 text-right text-[13px] leading-[1.4] font-normal text-grayscale-500">
             {length}/{maxLength ?? 1000}
           </span>
         )}
       </div>
       {error && (
-        <p className="w-full px-1 text-[13px] font-medium leading-[1.4] text-system-error">
+        <p className="w-full px-1 text-[13px] leading-[1.4] font-medium text-system-error">
           {error}
         </p>
       )}

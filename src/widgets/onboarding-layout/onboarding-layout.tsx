@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+
+import { cn } from "@/shared/lib/cn";
 import { ResponsiveHeader } from "@/widgets/responsive-header";
 
 export type OnboardingCardWidth = "narrow" | "wide";
@@ -64,17 +66,17 @@ export function OnboardingLayout({
   const header = (
     <header className="flex flex-col gap-1">
       <h1
-        className={[
+        className={cn(
           "text-heading-1 font-semibold text-grayscale-900",
           titlePlacement === "in-card"
             ? "md:text-title-3 md:text-grayscale-800"
             : "md:text-display-3 md:text-grayscale-800",
-        ].join(" ")}
+        )}
       >
         {title}
       </h1>
       {description && (
-        <p className="text-label-1 font-medium leading-[1.5] text-grayscale-600 md:text-body-1 md:text-grayscale-700">
+        <p className="text-label-1 leading-[1.5] font-medium text-grayscale-600 md:text-body-1 md:text-grayscale-700">
           {description}
         </p>
       )}
@@ -85,27 +87,27 @@ export function OnboardingLayout({
     <div className="flex min-h-screen flex-col bg-grayscale-50">
       <ResponsiveHeader mobile={{ variant: "back", onBack }} />
 
-      <main className="flex flex-1 flex-col px-5 pb-[104px] pt-2 md:items-center md:justify-center md:px-5 md:py-16">
-        <div
-          className={["flex w-full flex-col gap-8 md:gap-12", cardWidthClasses[cardWidth]].join(" ")}
-        >
+      <main className="flex flex-1 flex-col px-5 pt-2 pb-[104px] md:items-center md:justify-center md:px-5 md:py-16">
+        <div className={cn("flex w-full flex-col gap-8 md:gap-12", cardWidthClasses[cardWidth])}>
           {titlePlacement === "above-card" && header}
 
           <section
-            className={[
+            className={cn(
               "flex flex-col gap-8 md:gap-10 md:bg-white md:px-16 md:py-12",
               cardRadiusClasses[cardWidth],
-            ].join(" ")}
+            )}
           >
             {titlePlacement === "in-card" && header}
             {children}
-            {footer && footerPlacement === "both" && <div className="hidden md:block">{footer}</div>}
+            {footer && footerPlacement === "both" && (
+              <div className="hidden md:block">{footer}</div>
+            )}
           </section>
         </div>
       </main>
 
       {footer && (
-        <div className="fixed inset-x-0 bottom-0 z-40 bg-grayscale-50 px-5 pb-6 pt-2 md:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-40 bg-grayscale-50 px-5 pt-2 pb-6 md:hidden">
           {footer}
         </div>
       )}

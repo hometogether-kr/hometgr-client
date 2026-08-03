@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { GnbMobile } from "@/widgets/gnb-mobile";
 import { Navigation } from "@/widgets/navigation";
@@ -75,8 +76,8 @@ export function ListingChecklistPage({
         <Navigation />
       </div>
 
-      <main className="flex justify-center px-5 pb-[104px] pt-12 md:px-4 md:pb-[100px] md:pt-[100px]">
-        <div className="flex w-full flex-col items-end gap-10 md:max-w-[886px] md:rounded-[20px] md:bg-white md:px-12 md:pb-10 md:pt-12">
+      <main className="flex justify-center px-5 pt-12 pb-[104px] md:px-4 md:pt-[100px] md:pb-[100px]">
+        <div className="flex w-full flex-col items-end gap-10 md:max-w-[886px] md:rounded-[20px] md:bg-white md:px-12 md:pt-12 md:pb-10">
           <div className="flex w-full flex-col items-center gap-6 md:gap-9">
             <div className="flex flex-col items-center gap-3 md:gap-8">
               <div className="relative size-10 overflow-clip md:size-[120px]">
@@ -86,10 +87,10 @@ export function ListingChecklistPage({
                   className="absolute inset-0 block size-full max-w-none object-contain"
                 />
               </div>
-              <h1 className="text-center text-[22px] font-semibold leading-[1.4] tracking-[-0.22px] text-grayscale-900 md:text-[32px] md:leading-[1.3] md:tracking-[-0.32px]">
+              <h1 className="text-center text-[22px] leading-[1.4] font-semibold tracking-[-0.22px] text-grayscale-900 md:text-[32px] md:leading-[1.3] md:tracking-[-0.32px]">
                 방 등록 신청, 3분이면 끝나요!
               </h1>
-              <p className="max-w-[266px] text-center text-sm font-medium leading-[1.5] text-grayscale-600 md:hidden">
+              <p className="max-w-[266px] text-center text-sm leading-[1.5] font-medium text-grayscale-600 md:hidden">
                 직접 등록이 어려운 경우, 소유자의 동의를 받은 가족이나 보호자가 대신 등록할 수
                 있어요.
               </p>
@@ -98,13 +99,17 @@ export function ListingChecklistPage({
               {CHECKLIST.map((item, index) => (
                 <li key={index} className="flex w-full items-center gap-4 md:gap-7">
                   <span className="flex size-6 shrink-0 items-center justify-center md:size-10">
-                    <img alt="" src={item.icon} className="block size-full max-w-none object-contain" />
+                    <img
+                      alt=""
+                      src={item.icon}
+                      className="block size-full max-w-none object-contain"
+                    />
                   </span>
                   <div className="flex flex-col items-start gap-1">
-                    <p className="text-base font-semibold leading-[1.4] text-grayscale-800 md:text-2xl md:tracking-[-0.24px]">
+                    <p className="text-base leading-[1.4] font-semibold text-grayscale-800 md:text-2xl md:tracking-[-0.24px]">
                       {item.title}
                     </p>
-                    <p className="text-[13px] font-medium leading-[1.5] text-grayscale-600 md:text-base md:leading-[1.6] md:text-grayscale-700">
+                    <p className="text-[13px] leading-[1.5] font-medium text-grayscale-600 md:text-base md:leading-[1.6] md:text-grayscale-700">
                       {item.description}
                     </p>
                   </div>
@@ -123,7 +128,7 @@ export function ListingChecklistPage({
         </div>
       </main>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-grayscale-100 bg-white px-5 pb-6 pt-2 md:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-grayscale-100 bg-white px-5 pt-2 pb-6 md:hidden">
         <BtnCta size="mobile" className="w-full" onClick={onStart} disabled={isStarting}>
           {startLabel}
         </BtnCta>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
+
 import {
   parseKrwAmount,
   parseStayMonths,
@@ -42,7 +43,7 @@ function Step7() {
       parseAmount={parseKrwAmount}
       parsePeriod={parseStayMonths}
       onPrev={goPrev}
-      onNext={handleNext}
+      onNext={(values) => void handleNext(values)}
     />
   );
 }

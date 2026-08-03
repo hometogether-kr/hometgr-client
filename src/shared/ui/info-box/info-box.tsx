@@ -1,5 +1,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
+import { cn } from "@/shared/lib/cn";
+
 export interface InfoBoxProps extends HTMLAttributes<HTMLDivElement> {
   /** Figma: title — 있으면 아이콘+제목 행 아래 본문, 없으면 아이콘+본문 한 줄 */
   title?: string;
@@ -40,22 +42,19 @@ export function InfoBox({ title, icon, className, children, ...rest }: InfoBoxPr
   );
 
   return (
-    <div
-      className={["w-full rounded-xl bg-grayscale-70 p-4", className].filter(Boolean).join(" ")}
-      {...rest}
-    >
+    <div className={cn("w-full rounded-xl bg-grayscale-70 p-4", className)} {...rest}>
       {title ? (
         <div className="flex flex-col items-start gap-1">
           <div className="flex items-center gap-1.5">
             {infoIcon}
-            <p className="text-[15px] font-semibold leading-[1.5] text-grayscale-700">{title}</p>
+            <p className="text-[15px] leading-[1.5] font-semibold text-grayscale-700">{title}</p>
           </div>
-          <div className="text-sm font-medium leading-[1.5] text-grayscale-700">{children}</div>
+          <div className="text-sm leading-[1.5] font-medium text-grayscale-700">{children}</div>
         </div>
       ) : (
         <div className="flex items-center gap-1.5">
           {infoIcon}
-          <div className="text-sm font-medium leading-[1.5] text-grayscale-700">{children}</div>
+          <div className="text-sm leading-[1.5] font-medium text-grayscale-700">{children}</div>
         </div>
       )}
     </div>

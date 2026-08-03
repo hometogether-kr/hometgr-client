@@ -2,16 +2,10 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+
 import { useListingDraft } from "@/domains/listing-draft";
-import {
-  formatKoreanPhone,
-  useSaveDraftStep,
-  useSubmitDraft,
-} from "@/features/save-listing-draft";
-import {
-  ListingStep10Page,
-  type ListingStep10Values,
-} from "@/pages-layer/listing-step-10-confirm";
+import { formatKoreanPhone, useSaveDraftStep, useSubmitDraft } from "@/features/save-listing-draft";
+import { ListingStep10Page, type ListingStep10Values } from "@/pages-layer/listing-step-10-confirm";
 import { ApiError } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { useToast } from "@/shared/ui/toast";
@@ -70,7 +64,7 @@ function Step10() {
       isSubmitting={isSaving || isSubmitting}
       validatePhone={(phone) => formatKoreanPhone(phone) !== null}
       onPrev={() => router.push(ROUTES.listing.step(9, draftId ?? undefined))}
-      onSubmit={handleSubmit}
+      onSubmit={(values) => void handleSubmit(values)}
     />
   );
 }
