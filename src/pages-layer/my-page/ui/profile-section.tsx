@@ -65,12 +65,12 @@ export function ProfileSection({
             {/* eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정 */}
             <img alt="" src={FIGMA_TEMP_SWITCH_ICON} className="block w-full max-w-none" />
           </span>
-          <span className="hidden md:inline">{SWITCH_LABEL[memberRole]}</span>
-          <span className="md:hidden">계정 전환</span>
+          {SWITCH_LABEL[memberRole]}
         </button>
       }
     >
-      <div className="flex flex-col gap-6">
+      {/* 모바일은 필드 간격 28px, 데스크톱은 24px (Figma 714:4458 · 646:26541) */}
+      <div className="flex flex-col gap-7 md:gap-6">
         {/* 카카오에서 받아온 값이라 이 화면에서는 수정할 수 없습니다. */}
         <TextField label="카카오 계정 (이메일)" value={user.email ?? ""} disabled />
         <TextField label="이름" value={user.name ?? ""} disabled />

@@ -59,7 +59,7 @@ export function GuardianSection({
         <TextField
           label="휴대폰 번호"
           inputMode="numeric"
-          placeholder="01012345678"
+          placeholder="숫자만 입력해주세요"
           value={phone}
           error={error}
           onChange={(event) => {
@@ -69,9 +69,10 @@ export function GuardianSection({
           action={<SaveButton onClick={handleSave} />}
         />
 
-        <fieldset className="flex flex-col gap-2">
-          <legend className="pb-2 text-label-1 font-medium text-grayscale-600">관계 선택</legend>
-          <div className="flex flex-wrap gap-2">
+        <fieldset className="flex flex-col gap-2 md:px-0">
+          <legend className="py-2.5 text-label-1 font-medium text-grayscale-600">관계 선택</legend>
+          {/* 칩 간격 12px, 줄바꿈 허용 (Figma 714:4614) */}
+          <div className="flex flex-wrap gap-3">
             {GUARDIAN_RELATION_OPTIONS.map((option) => (
               <ChipNormal
                 key={option.value}

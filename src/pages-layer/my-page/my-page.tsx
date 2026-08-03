@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
 import { useSession } from "@/domains/user";
 import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { BtnUnderline } from "@/shared/ui/btn-underline";
+import { Divider } from "@/shared/ui/divider";
 import { useToast } from "@/shared/ui/toast";
 import { SiteLayout } from "@/widgets/site-layout";
 
@@ -20,7 +22,8 @@ const SAVE_SUCCESS_MESSAGE = "수정이 성공적으로 완료되었습니다.";
 function MyPageShell({ children }: { children: ReactNode }) {
   return (
     <SiteLayout>
-      <div className="mx-auto flex w-full max-w-[850px] flex-1 flex-col gap-8 px-5 py-10 md:gap-16 md:py-20">
+      {/* 모바일은 흰 배경 위에 바로 얹히고(Figma 714:4444), 데스크톱만 회색 배경에 카드가 뜹니다. */}
+      <div className="mx-auto flex w-full max-w-[850px] flex-1 flex-col gap-6 bg-white px-5 py-6 md:gap-16 md:bg-transparent md:py-20">
         {children}
       </div>
     </SiteLayout>
@@ -34,6 +37,7 @@ function MyPageShell({ children }: { children: ReactNode }) {
  * 입주자는 보호자 정보로 갈립니다.
  */
 export function MyPage() {
+  const router = useRouter();
   const { session, isLoading, isAuthenticated } = useSession();
   const { showToast } = useToast();
 
@@ -75,19 +79,28 @@ export function MyPage() {
 
   return (
     <MyPageShell>
-      <h1 className="text-heading-1 font-semibold text-grayscale-900 md:text-title-2">계정 정보</h1>
+      {/*
+       * Figma 모바일은 이 제목을 GNB 타이틀로 처리하지만, 이 화면은 헤더 프로필에서
+       * 들어오는 흐름이라 로고 GNB를 유지하기로 해서 본문에 제목을 남깁니다.
+       */}
+      <h1 className="text-headline-1 font-semibold text-grayscale-900 md:text-title-2">
+        계정 정보
+      </h1>
 
-      <div className="flex flex-col gap-7">
+      <div className="flex flex-col gap-6 md:gap-7">
         <ProfileSection user={user} memberRole={memberRole} onSaveIntroduction={notifySaved} />
 
+        {/* 모바일은 카드 대신 구분선으로 섹션을 나눕니다 (Figma 714:4470). */}
+        <Divider className="md:hidden" />
+
         {memberRole === "host" ? (
-          <SettlementSection />
+          <SettlementSection onEdit={() => router.push(ROUTES.settlementAccount)} />
         ) : (
           <GuardianSection onSavePhone={notifySaved} />
         )}
       </div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center pt-4 md:pt-0">
         <BtnUnderline tone="muted">회원 탈퇴</BtnUnderline>
       </div>
     </MyPageShell>

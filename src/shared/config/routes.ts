@@ -47,6 +47,8 @@ export const ROUTES = {
   },
   /** 마이페이지 — 헤더 프로필·모바일 사이드바에서 진입 */
   myPage: "/mypage",
+  /** 정산 대금 입금계좌 등록·수정 (집주인 전용, 마이페이지 정산 정보에서 진입) */
+  settlementAccount: "/mypage/settlement-account",
   rooms: "/rooms",
   reservations: "/reservations",
   favorites: "/favorites",
