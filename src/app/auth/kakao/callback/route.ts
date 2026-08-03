@@ -15,7 +15,7 @@ import { getServerEnv } from "@/shared/config/env.server";
  * 카카오는 이 경로로 사용자를 되돌려 보냅니다. 인가 코드를 API 서버와 교환하는 일은
  * 서버끼리 처리하고, 브라우저에는 토큰 대신 httpOnly 쿠키와 화면 이동만 남깁니다.
  *
- * 전제: API 서버에 등록된 카카오 redirect URI가 `{APP_BASE_URL}/api/auth/kakao/callback`
+ * 전제: API 서버에 등록된 카카오 redirect URI가 `{APP_BASE_URL}/auth/kakao/callback`
  * 이어야 합니다. 토큰 교환은 인증 시작에 사용한 redirect URI와 같은 값을 요구합니다.
  */
 export async function GET(request: NextRequest) {

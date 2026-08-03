@@ -16,7 +16,7 @@ export const ROUTES = {
      * SPA 라우터가 아니라 브라우저 전체 이동으로 열어야 합니다.
      * fetch로 호출하면 카카오 인증 화면으로 이동할 수 없습니다.
      */
-    kakaoStart: "/api/auth/kakao",
+    kakaoStart: "/auth/kakao",
     /** 로그아웃 (POST) */
     logout: "/api/auth/logout",
     /** 약관 동의 (카카오 인증 직후) */
