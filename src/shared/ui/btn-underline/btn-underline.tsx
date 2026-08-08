@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 import { cn } from "@/shared/lib/cn";
 
-export type BtnUnderlineSize = "13" | "14" | "16";
+export type BtnUnderlineSize = "12" | "13" | "14" | "16";
 export type BtnUnderlineTone = "default" | "muted";
 
 interface BtnUnderlineBaseProps {
@@ -23,6 +23,7 @@ export interface BtnUnderlineProps
 }
 
 const sizeClasses: Record<BtnUnderlineSize, string> = {
+  "12": "text-caption-1",
   "13": "text-label-2",
   "14": "text-label-1",
   "16": "text-body-1",
