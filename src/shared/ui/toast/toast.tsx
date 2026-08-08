@@ -93,7 +93,7 @@ export function Toast({
           type="button"
           aria-label="닫기"
           onClick={onClose}
-          className="flex shrink-0 items-center py-1 pl-1.5"
+          className="flex shrink-0 items-center py-0.5"
         >
           <span className="flex size-5 items-center justify-center overflow-clip rounded-lg">
             {closeIcon ?? (

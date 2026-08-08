@@ -11,7 +11,8 @@ import "./globals.css";
 // 추후 next/font/local 사용
 const PRETENDARD_CSS =
   "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css";
-const ICON_CSS = "https://googleapis.com";
+const MATERIAL_SYMBOLS_CSS =
+  "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
 
 export const metadata: Metadata = {
   title: {
@@ -39,7 +40,9 @@ export default async function RootLayout({
       <head>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="" />
         <link rel="stylesheet" href={PRETENDARD_CSS} />
-        <link rel="stylesheet" href={ICON_CSS} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link rel="stylesheet" href={MATERIAL_SYMBOLS_CSS} />
       </head>
       <body className="flex min-h-full flex-col font-sans">
         <SessionHintProvider authenticated={authenticated}>
