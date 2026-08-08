@@ -44,8 +44,8 @@ export function InfoBox({ title, icon, className, children, ...rest }: InfoBoxPr
   return (
     <div className={cn("w-full rounded-xl bg-grayscale-70 p-4", className)} {...rest}>
       {title ? (
-        <div className="flex flex-col items-start gap-1">
-          <div className="flex items-center gap-1.5">
+        <div className="flex flex-col items-start gap-2">
+          <div className="flex gap-1.5">
             {infoIcon}
             <p className="text-[15px] leading-[1.5] font-semibold text-grayscale-700">{title}</p>
           </div>

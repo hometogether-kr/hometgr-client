@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import type { CurrentUser, MemberRole } from "@/domains/user";
+import { Icon } from "@/shared/ui/icons";
 import { TextField } from "@/shared/ui/text-field";
 
 import { AccountSection } from "./account-section";
@@ -14,13 +15,6 @@ export interface ProfileSectionProps {
   onSaveIntroduction?: (introduction: string) => void;
   onRequestRoleSwitch?: () => void;
 }
-
-/**
- * TODO: 7일 후 만료되는 Figma 임시 URL입니다. ic_switch를 SVG로 export해
- * shared/ui/icons에 커밋한 뒤 교체하세요.
- */
-const FIGMA_TEMP_SWITCH_ICON =
-  "https://www.figma.com/api/mcp/asset/6a02e128-069f-47c4-8310-2d385e0a4f7b";
 
 /** 집주인은 입주자로, 입주자는 집주인으로 전환을 요청합니다. */
 const SWITCH_LABEL: Record<MemberRole, string> = {
@@ -62,8 +56,7 @@ export function ProfileSection({
           className="flex shrink-0 items-center justify-center gap-1.5 rounded-lg border border-grayscale-300 px-4 py-2 text-label-2 font-semibold text-grayscale-600 transition-opacity hover:opacity-80"
         >
           <span className="flex size-4 items-center justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정 */}
-            <img alt="" src={FIGMA_TEMP_SWITCH_ICON} className="block w-full max-w-none" />
+            <Icon name="sync_alt" size={16} />
           </span>
           {SWITCH_LABEL[memberRole]}
         </button>

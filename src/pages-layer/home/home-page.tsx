@@ -86,9 +86,9 @@ export function HomePage() {
   return (
     <SiteLayout background="white">
       <section className="relative isolate overflow-hidden bg-white">
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[220px] bg-gradient-to-b from-white via-white via-[12%] to-white/0 md:h-[440px] md:via-white md:via-[0%]" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[220px]" />
         <div
-          className="pointer-events-none absolute top-[70px] bottom-0 left-0 hidden w-1/2 bg-grayscale-50 md:block"
+          className="pointer-events-none absolute top-0 bottom-0 left-0 hidden w-1/2 bg-grayscale-50 md:block"
           aria-hidden="true"
         />
         <div className="relative grid md:grid-cols-2">
@@ -96,7 +96,7 @@ export function HomePage() {
             role="Host"
             title={["거주하는 댁에", "비어있는 방이 있으신가요?"]}
             description={["밥 챙겨주지 않아도 되는", "하숙으로 제태크 시작하세요!"]}
-            ctaLabel="더알아보기"
+            ctaLabel="더 알아보기"
             href={ROUTES.intro.host}
             className="bg-grayscale-50 md:bg-transparent"
           />

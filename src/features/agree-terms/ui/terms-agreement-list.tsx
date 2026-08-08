@@ -1,13 +1,16 @@
 "use client";
 
-import { ROUTES } from "@/shared/config";
+import { useState } from "react";
+
 import { cn } from "@/shared/lib/cn";
 import { BtnUnderline } from "@/shared/ui/btn-underline";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Divider } from "@/shared/ui/divider";
 
+import type { TermId } from "../model/terms";
 import { TERMS } from "../model/terms";
 import type { TermsAgreement } from "../model/use-terms-agreement";
+import { TermsDocumentModal } from "./terms-document-modal";
 
 export interface TermsAgreementListProps {
   agreement: TermsAgreement;
@@ -17,11 +20,12 @@ export interface TermsAgreementListProps {
 /**
  * 약관 동의 목록 (Figma: 643:19267 데스크톱 · 749:17279 모바일)
  *
- * 전체 동의 행 아래에 구분선으로 나뉜 개별 약관이 오고, 각 행 우측에는
- * 약관 전문으로 이동하는 밑줄 링크가 붙습니다.
+ * 전체 동의 행 아래에 구분선으로 나뉜 개별 약관이 오고, 각 행 우측의 "약관 보기"는
+ * 약관 전문 모달(Figma 646:28085)을 엽니다.
  */
 export function TermsAgreementList({ agreement, className }: TermsAgreementListProps) {
   const { isAgreed, toggle, allAgreed, partiallyAgreed, toggleAll } = agreement;
+  const [openedTermId, setOpenedTermId] = useState<TermId | null>(null);
 
   return (
     <div
@@ -54,11 +58,17 @@ export function TermsAgreementList({ agreement, className }: TermsAgreementListP
                   <span className="truncate text-grayscale-900">{term.label}</span>
                 </span>
               </label>
-              <BtnUnderline href={ROUTES.policy(term.id)}>약관 보기</BtnUnderline>
+              <BtnUnderline size="12" onClick={() => setOpenedTermId(term.id)}>
+                약관 보기
+              </BtnUnderline>
             </div>
           </div>
         ))}
       </div>
+
+      {openedTermId && (
+        <TermsDocumentModal termId={openedTermId} onClose={() => setOpenedTermId(null)} />
+      )}
     </div>
   );
 }

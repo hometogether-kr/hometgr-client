@@ -1,18 +1,25 @@
 import { cn } from "@/shared/lib/cn";
 
-/** 푸터용 회색 로고 (176×32) */
-const DARK_LOGO = "/images/dark-logo.svg";
+const DARK_LOGO_L = "/images/logos/logo-dark-l.svg";
+const DARK_LOGO_M = "/images/logos/logo-dark-m.svg";
 const IC_INSTAGRAM = "/icons/ic-insta.svg";
 const IC_KAKAO = "/icons/ic-kakao.svg";
 
-/* eslint-disable @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정 */
+/* eslint-disable @next/next/no-img-element -- SVG 에셋을 원본 그대로 렌더링합니다 */
 
-function FooterLogo() {
+function FooterLogo({ size }: { size: "l" | "m" }) {
+  const logo =
+    size === "l"
+      ? { src: DARK_LOGO_L, width: 176, height: 32, className: "h-8 w-[176px]" }
+      : { src: DARK_LOGO_M, width: 155, height: 28, className: "h-7 w-[155px]" };
+
   return (
     <img
       alt="Home Together"
-      src={DARK_LOGO}
-      className="block h-7 w-[154px] max-w-none md:h-8 md:w-[176px]"
+      src={logo.src}
+      width={logo.width}
+      height={logo.height}
+      className={cn("block max-w-none", logo.className)}
     />
   );
 }
@@ -73,7 +80,7 @@ export function Footer({ className }: { className?: string }) {
     <footer className={cn("w-full bg-grayscale-70 px-4 py-6 md:px-[200px]", className)}>
       <div className="hidden h-[152px] w-full items-start justify-between md:flex">
         <div className="flex h-full w-[260px] flex-col items-start justify-between">
-          <FooterLogo />
+          <FooterLogo size="l" />
           <FooterContact />
         </div>
         <div className="flex h-full flex-col items-end justify-between">
@@ -83,7 +90,7 @@ export function Footer({ className }: { className?: string }) {
       </div>
       <div className="flex flex-col gap-7 md:hidden">
         <div className="flex flex-col items-start gap-5 px-2">
-          <FooterLogo />
+          <FooterLogo size="m" />
           <FooterContact />
           <FooterCopyright />
         </div>

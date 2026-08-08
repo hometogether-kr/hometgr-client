@@ -18,17 +18,11 @@ export interface DropdownProps<T extends string> {
   onChange?: (value: T) => void;
   /** 선택 전 트리거에 표시할 텍스트 (Figma 예시: "Select") */
   placeholder?: string;
-  /**
-   * 트리거 우측 화살표 아이콘 (Figma: ic_arrow).
-   * TODO: 기본값은 7일 후 만료되는 Figma 임시 에셋 URL — Figma에서 ic_arrow를
-   * SVG로 export해 public/icons/ic-arrow.svg로 커밋한 뒤 교체하세요.
-   */
+  /** 트리거 우측 화살표 아이콘 (Figma: ic_arrow). 기본값은 Material Symbols keyboard_arrow_down. */
   arrowIcon?: ReactNode;
   disabled?: boolean;
   className?: string;
 }
-
-const IC_ARROW_DOWN = "/figma/ic-arrow-down-2f96af07.svg";
 
 /**
  * 드롭다운 (Figma: dropdown, node 536:8573)
@@ -87,10 +81,7 @@ export function Dropdown<T extends string>({
           )}
           aria-hidden="true"
         >
-          {arrowIcon ?? (
-            // eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정
-            <img alt="" src={IC_ARROW_DOWN} className="block size-full max-w-none" />
-          )}
+          {arrowIcon ?? <span className="material-symbols-outlined">keyboard_arrow_down</span>}
         </span>
       </button>
       {open && (

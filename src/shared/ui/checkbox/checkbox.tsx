@@ -4,6 +4,7 @@ import type { InputHTMLAttributes, ReactNode } from "react";
 import { useEffect, useRef } from "react";
 
 import { cn } from "@/shared/lib/cn";
+import { Icon } from "@/shared/ui/icons";
 
 export type CheckboxSize = "20" | "24" | "32";
 
@@ -15,17 +16,10 @@ export interface CheckboxProps extends Omit<
   size?: CheckboxSize;
   /** Figma: Property 1 = interminate — 전체선택 등 부분 선택 상태 */
   indeterminate?: boolean;
-  /**
-   * 체크/부분선택 아이콘 (Figma: ic_check, Line Horizontal).
-   * TODO: 기본값은 7일 후 만료되는 Figma 임시 에셋 URL — Figma에서 export해
-   * public/icons 또는 public/figma에 커밋한 뒤 교체하세요.
-   */
+  /** 체크/부분선택 아이콘 (기본값: Material Symbols check / remove) */
   checkIcon?: ReactNode;
   indeterminateIcon?: ReactNode;
 }
-
-const FIGMA_TEMP_CHECK = "https://www.figma.com/api/mcp/asset/4df91953-2163-40df-bb89-8513a0f851d7";
-const FIGMA_TEMP_LINE = "https://www.figma.com/api/mcp/asset/1e8a876e-b1f4-4d75-a674-538a17265125";
 
 const wrapperPadding: Record<CheckboxSize, string> = {
   "20": "p-0.5",
@@ -43,6 +37,12 @@ const iconClasses: Record<CheckboxSize, string> = {
   "20": "size-3.5",
   "24": "size-4",
   "32": "size-[21px]",
+};
+
+const iconSizePx: Record<CheckboxSize, number> = {
+  "20": 14,
+  "24": 16,
+  "32": 21,
 };
 
 /**
@@ -100,15 +100,13 @@ export function Checkbox({
         {indeterminate ? (
           <span className={cn("flex items-center justify-center", iconClasses[size])}>
             {indeterminateIcon ?? (
-              // eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정
-              <img alt="" src={FIGMA_TEMP_LINE} className="block size-full max-w-none" />
+              <Icon name="remove" size={iconSizePx[size]} filled className="text-white" />
             )}
           </span>
         ) : checked ? (
           <span className={cn("flex items-center justify-center", iconClasses[size])}>
             {checkIcon ?? (
-              // eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정
-              <img alt="" src={FIGMA_TEMP_CHECK} className="block size-full max-w-none" />
+              <Icon name="check" size={iconSizePx[size]} filled className="text-white" />
             )}
           </span>
         ) : null}

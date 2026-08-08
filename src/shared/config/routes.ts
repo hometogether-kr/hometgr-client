@@ -31,8 +31,6 @@ export const ROUTES = {
     /** 회원 유형 선택 */
     role: "/onboarding/role",
   },
-  /** 약관 전문 — slug: service · privacy · location · marketing */
-  policy: (slug: string) => `/policy/${slug}`,
   listing: {
     /** 매물 등록 시작 (새 등록 / 임시저장 이어쓰기 선택) */
     start: "/listing/new",
@@ -54,6 +52,10 @@ export const ROUTES = {
   },
   /** 마이페이지 — 헤더 프로필·모바일 사이드바에서 진입 */
   myPage: "/mypage",
+  /** 계정 정보 */
+  accountInfo: "/mypage/account",
+  /** 알림 설정 */
+  notificationSettings: "/mypage/notifications",
   /** 정산 대금 입금계좌 등록·수정 (집주인 전용, 마이페이지 정산 정보에서 진입) */
   settlementAccount: "/mypage/settlement-account",
   rooms: "/rooms",
