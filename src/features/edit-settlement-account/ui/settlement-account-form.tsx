@@ -1,15 +1,14 @@
 "use client";
 
 import type { ReceiptRequest } from "@/domains/settlement";
-import { BANK_OPTIONS } from "@/domains/settlement";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { Divider } from "@/shared/ui/divider";
-import { Dropdown } from "@/shared/ui/dropdown";
 import { InfoBox } from "@/shared/ui/info-box";
 import { Radio } from "@/shared/ui/radio";
 import { TextField } from "@/shared/ui/text-field";
 
 import type { SettlementAccountForm as FormState } from "../model/use-settlement-account-form";
+import { BankSelectField } from "./bank-select-field";
 
 export interface SettlementAccountFormProps {
   form: FormState;
@@ -38,18 +37,7 @@ export function SettlementAccountForm({ form }: SettlementAccountFormProps) {
       <section className="flex flex-col gap-6">
         <SectionTitle>정산대금 입금계좌</SectionTitle>
 
-        <div className="flex flex-col gap-2">
-          <span className="text-label-1 font-medium text-grayscale-600">은행명</span>
-          <Dropdown
-            options={BANK_OPTIONS}
-            value={values.bank ?? undefined}
-            onChange={form.setBank}
-            placeholder="은행을 선택해주세요"
-          />
-          {errors.bank && (
-            <p className="px-1 text-label-2 font-medium text-system-error">{errors.bank}</p>
-          )}
-        </div>
+        <BankSelectField value={values.bank} onChange={form.setBank} error={errors.bank} />
 
         <TextField
           label="계좌 번호"
