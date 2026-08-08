@@ -5,18 +5,11 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
+import { Icon } from "@/shared/ui/icons";
 import { SidebarMobile } from "@/widgets/sidebar-mobile";
 
-/**
- * TODO: 아래 에셋은 7일 후 만료되는 Figma 임시 URL입니다.
- * logo(icon+wordmark), ic_arrow(28), ic_menu(24)를 SVG로 export해
- * public/icons 또는 public/figma에 커밋한 뒤 교체하세요.
- */
-const FIGMA_TEMP_BACK_ARROW =
-  "https://www.figma.com/api/mcp/asset/182d15c2-b495-477d-a117-2854940ad283";
 /** 아이콘과 워드마크가 합쳐진 113×20 로고 */
-const LOGO = "/images/logo.svg";
-const FIGMA_TEMP_MENU = "https://www.figma.com/api/mcp/asset/db6273c5-1d64-4523-ac94-7e5d57044100";
+const LOGO = "/images/logos/logo-s.svg";
 
 interface GnbMobileBase {
   className?: string;
@@ -59,10 +52,7 @@ function BackButton({ onBack, backIcon }: { onBack?: () => void; backIcon?: Reac
       className="absolute top-0 left-0 flex items-center p-2.5"
     >
       <span className="flex size-7 items-center justify-center">
-        {backIcon ?? (
-          // eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정
-          <img alt="" src={FIGMA_TEMP_BACK_ARROW} className="block h-3.5 w-[7px] max-w-none" />
-        )}
+        {backIcon ?? <Icon name="arrow_back_ios_new" size={20} />}
       </span>
     </button>
   );
@@ -100,10 +90,7 @@ export function GnbMobile(props: GnbMobileProps) {
             className="flex items-center"
           >
             <span className="flex size-6 items-center justify-center">
-              {props.menuIcon ?? (
-                // eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정
-                <img alt="" src={FIGMA_TEMP_MENU} className="block size-full max-w-none" />
-              )}
+              {props.menuIcon ?? <Icon name="menu" size={24} />}
             </span>
           </button>
         </header>

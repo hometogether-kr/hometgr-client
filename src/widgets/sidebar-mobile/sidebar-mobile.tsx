@@ -1,24 +1,25 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Fragment, useState } from "react";
 
+import { logout, MEMBER_ROLE_LABELS, userQueryKeys, useSession } from "@/domains/user";
 import { ROUTES } from "@/shared/config";
 import { cn } from "@/shared/lib/cn";
+import { Divider } from "@/shared/ui/divider";
 
-/**
- * TODO: 닫기(X)·화살표 아이콘은 7일 후 만료되는 Figma 임시 URL입니다.
- * export해 public/icons 또는 public/figma에 커밋한 뒤 교체하세요.
- */
-const FIGMA_TEMP_IC_CLOSE = "/figma/ic-close-2aee5b2b.svg";
-const FIGMA_TEMP_IC_ARROW_DOWN = "/figma/ic-arrow-down-2f96af07.svg";
-const FIGMA_TEMP_IC_CHEVRON = "/figma/ic-chevron-4aebc6c0.svg";
+/* eslint-disable @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */
 
-/* eslint-disable @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정 */
+const IC_CLOSE = "/icons/ic-x-cancel.svg";
+const IC_ARROW_DOWN = "/icons/ic_nav_arrow.svg";
+const IC_CHEVRON = "/figma/ic-chevron-4aebc6c0.svg";
 
 interface MenuGroup {
   key: string;
   label: string;
+  /** 하위 메뉴가 없는 단일 링크 */
   href?: string;
   items?: { label: string; href: string }[];
 }
@@ -42,135 +43,175 @@ const MENU: MenuGroup[] = [
       { label: "관심 목록", href: ROUTES.favorites },
     ],
   },
-  // TODO: 마이페이지 하위 메뉴가 정해지면 items를 채우세요.
-  { key: "mypage", label: "마이페이지", items: [] },
+  {
+    key: "mypage",
+    label: "마이페이지",
+    items: [
+      { label: "마이페이지로 가기", href: ROUTES.myPage },
+      { label: "계정 정보", href: ROUTES.accountInfo },
+      { label: "알림 설정", href: ROUTES.notificationSettings },
+    ],
+  },
 ];
+
+/** Figma card_list_mobile — 최상위 행 (px-8 py-12 · 18px Medium) */
+const ROW = "flex w-full items-center px-2 py-3 text-headline-1 font-medium text-grayscale-800";
 
 export interface SidebarMobileProps {
   open: boolean;
   onClose: () => void;
-  /** 로그인 사용자 이름 */
-  userName?: string;
-  /** 회원 유형 라벨 (예: 호스트 회원) */
-  userRole?: string;
-  onLogout?: () => void;
 }
 
 /**
- * 모바일 사이드 메뉴 (Figma: sidebar_mobile, node 541:21240)
+ * 모바일 사이드 메뉴 (Figma: 비로그인 1504:41914 · 로그인 1504:41931 · 펼침 1504:41953)
  *
- * - 전체 화면 흰 배경 드로어, 우상단 닫기
- * - 그룹 메뉴는 아코디언(기본: 방 내놓기 펼침)
+ * 전체 화면 흰 배경 드로어입니다. 메뉴 행 사이마다 구분선이 들어가고, 하위 메뉴가
+ * 있는 항목은 아코디언으로 열립니다(기본은 모두 접힘).
+ *
+ * 로그인 여부는 화면이 내려주는 값이 아니라 세션에서 직접 읽습니다. 사이드바는
+ * 모든 화면에 공통으로 붙어서, 화면마다 상태를 전달하면 어긋나기 쉽습니다.
  */
-export function SidebarMobile({
-  open,
-  onClose,
-  userName = "홍길동",
-  userRole = "호스트 회원",
-  onLogout,
-}: SidebarMobileProps) {
-  const [expanded, setExpanded] = useState<string | null>("listing");
+export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { isAuthenticated, session } = useSession();
+  const [expandedKey, setExpandedKey] = useState<string | null>(null);
 
   if (!open) return null;
+
+  const handleLogout = async () => {
+    await logout();
+    await queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
+    onClose();
+    router.push(ROUTES.home);
+  };
+
+  const memberRole = session.user?.memberRole;
 
   return (
     <div
       className="fixed inset-0 z-50 flex flex-col bg-white pt-11 md:hidden"
       role="dialog"
       aria-modal="true"
+      aria-label="메뉴"
     >
       <div className="flex w-full items-start justify-end pt-3 pr-3 pb-4 pl-6">
         <button
           type="button"
           aria-label="메뉴 닫기"
           onClick={onClose}
-          className="flex size-12 items-center justify-center"
+          className="flex items-center justify-center p-2 transition-opacity hover:opacity-70"
         >
           <span className="flex size-6 items-center justify-center">
-            <img alt="" src={FIGMA_TEMP_IC_CLOSE} className="block size-full max-w-none" />
+            <img alt="" src={IC_CLOSE} className="block size-full max-w-none" />
           </span>
         </button>
       </div>
 
       <div className="flex w-full flex-1 flex-col gap-5 overflow-y-auto px-4">
         <div className="flex w-full flex-col gap-1">
-          <Link href={ROUTES.myPage} className="flex items-start gap-1">
-            <span className="text-xl leading-[1.4] font-semibold tracking-[-0.2px] whitespace-nowrap text-grayscale-800">
-              {userName}님
-            </span>
-            <span className="flex size-[18px] items-center justify-center p-1" aria-hidden="true">
-              <img
-                alt=""
-                src={FIGMA_TEMP_IC_CHEVRON}
-                className="block h-[9px] w-[4.5px] max-w-none rotate-180"
-              />
-            </span>
-          </Link>
-          <p className="py-1.5 text-sm leading-[1.4] font-medium text-grayscale-500">{userRole}</p>
+          {isAuthenticated ? (
+            <>
+              <Link href={ROUTES.myPage} onClick={onClose} className="flex items-start gap-1">
+                <span className="text-heading-2 font-semibold whitespace-nowrap text-grayscale-800">
+                  {session.user?.name ? `${session.user.name}님` : "마이페이지"}
+                </span>
+                <span className="flex items-center p-1" aria-hidden="true">
+                  {/* 아래를 향한 셰브론을 반시계로 90도 돌려 오른쪽을 보게 합니다. */}
+                  <img
+                    alt=""
+                    src={IC_CHEVRON}
+                    className="block h-[4.5px] w-[9px] max-w-none -rotate-90"
+                  />
+                </span>
+              </Link>
+              {memberRole && (
+                <p className="py-1.5 text-label-1 font-medium text-grayscale-500">
+                  {MEMBER_ROLE_LABELS[memberRole]}
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <Link
+                href={ROUTES.auth.login}
+                onClick={onClose}
+                className="text-heading-2 font-semibold whitespace-nowrap text-grayscale-800"
+              >
+                로그인해주세요
+              </Link>
+              <Link
+                href={ROUTES.auth.login}
+                onClick={onClose}
+                className="py-1.5 text-label-1 font-medium text-grayscale-500"
+              >
+                로그인 또는 회원가입
+              </Link>
+            </>
+          )}
         </div>
 
-        <nav className="flex w-full flex-col gap-2">
-          {MENU.map((group) => (
-            <div
-              key={group.key}
-              className="flex w-full flex-col gap-1 border-t border-grayscale-100 pt-2 first:border-t-0 first:pt-0"
-            >
-              {group.href ? (
-                <Link
-                  href={group.href}
-                  onClick={onClose}
-                  className="flex w-full items-center px-2 py-3 text-lg leading-[1.4] font-medium tracking-[-0.18px] text-grayscale-800"
-                >
-                  {group.label}
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  aria-expanded={expanded === group.key}
-                  onClick={() => setExpanded((prev) => (prev === group.key ? null : group.key))}
-                  className="flex w-full items-center justify-between px-2 py-3 text-left text-lg leading-[1.4] font-medium tracking-[-0.18px] text-grayscale-800"
-                >
-                  {group.label}
-                  <span
-                    className={cn(
-                      "flex size-6 items-center justify-center transition-transform",
-                      expanded === group.key ? "rotate-180" : "",
-                    )}
-                    aria-hidden="true"
-                  >
-                    <img
-                      alt=""
-                      src={FIGMA_TEMP_IC_ARROW_DOWN}
-                      className="block h-[5.4px] w-[10.8px] max-w-none"
-                    />
-                  </span>
-                </button>
-              )}
-              {group.items && expanded === group.key && (
-                <div className="flex flex-col">
-                  {group.items.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={onClose}
-                      className="flex w-full items-center px-2 py-3 text-base leading-[1.5] font-medium text-grayscale-600"
+        <nav className="flex w-full flex-col gap-2 pb-6">
+          {MENU.map((group) => {
+            const expanded = expandedKey === group.key;
+
+            return (
+              <Fragment key={group.key}>
+                {group.href ? (
+                  <Link href={group.href} onClick={onClose} className={ROW}>
+                    {group.label}
+                  </Link>
+                ) : (
+                  <div className="flex w-full flex-col gap-1">
+                    <button
+                      type="button"
+                      aria-expanded={expanded}
+                      onClick={() => setExpandedKey(expanded ? null : group.key)}
+                      className={cn(ROW, "justify-between text-left")}
                     >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-          <div className="border-t border-grayscale-100 pt-2">
+                      {group.label}
+                      <span
+                        className={cn(
+                          "flex size-6 items-center justify-center transition-transform",
+                          expanded && "rotate-180",
+                        )}
+                        aria-hidden="true"
+                      >
+                        <img alt="" src={IC_ARROW_DOWN} className="block size-5 max-w-none" />
+                      </span>
+                    </button>
+                    {expanded && (
+                      <div className="flex w-full flex-col">
+                        {group.items?.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            onClick={onClose}
+                            className="flex w-full items-center px-2 py-3 text-body-1 font-medium text-grayscale-600"
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                <Divider />
+              </Fragment>
+            );
+          })}
+
+          {isAuthenticated && (
             <button
               type="button"
-              onClick={onLogout}
-              className="flex w-full items-center px-2 py-3 text-left text-lg leading-[1.4] font-medium tracking-[-0.18px] text-system-error"
+              onClick={() => {
+                void handleLogout();
+              }}
+              className={cn(ROW, "text-left text-system-error")}
             >
               로그아웃
             </button>
-          </div>
+          )}
         </nav>
       </div>
     </div>

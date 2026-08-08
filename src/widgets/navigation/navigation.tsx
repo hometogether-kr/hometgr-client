@@ -9,17 +9,11 @@ import { ROUTES } from "@/shared/config";
 import { cn } from "@/shared/lib/cn";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { BtnText } from "@/shared/ui/btn-text";
+import { Icon } from "@/shared/ui/icons";
 
 /** 아이콘과 워드마크가 합쳐진 113×20 로고 */
-const LOGO = "/images/logo.svg";
-const IC_ARROW_DOWN = "/figma/ic-arrow-down-2f96af07.svg";
-
-/**
- * TODO: 프로필 기본 이미지는 아직 로컬 에셋이 없습니다.
- * Figma에서 btn_profile_header_empty_l을 export해 public/icons에 넣고 교체하세요.
- */
-const FIGMA_TEMP_PROFILE =
-  "https://www.figma.com/api/mcp/asset/a42cd553-723b-4b8f-ad81-ad28a4a2ca6a";
+const LOGO = "/images/logos/logo-s.svg";
+const IC_ARROW_DOWN = "/icons/ic_nav_arrow.svg";
 
 interface SubMenuItem {
   label: string;
@@ -71,13 +65,13 @@ function ArrowIcon({ open }: { open: boolean }) {
   return (
     <span
       className={cn(
-        "inline-flex h-5 w-[13.4px] flex-col items-center justify-center transition-transform",
+        "inline-flex h-4.5 w-[13.4px] flex-col items-center justify-center transition-transform",
         open ? "rotate-180" : "",
       )}
       aria-hidden="true"
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */}
-      <img alt="" src={IC_ARROW_DOWN} className="block h-[7.4px] w-[13.4px] max-w-none" />
+      <img alt="" src={IC_ARROW_DOWN} className="block max-w-none" />
     </span>
   );
 }
@@ -194,9 +188,8 @@ export function Navigation() {
                       session.user?.name ? `${session.user.name}님 마이페이지` : "마이페이지"
                     }
                   >
-                    <span className="block size-8 overflow-hidden rounded-full">
-                      {/* eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정 */}
-                      <img alt="" src={FIGMA_TEMP_PROFILE} className="block size-full max-w-none" />
+                    <span className="flex size-8 items-center justify-center overflow-hidden rounded-full bg-grayscale-100 text-grayscale-400">
+                      <Icon name="account_circle" size={32} filled />
                     </span>
                   </Link>
                 </>
