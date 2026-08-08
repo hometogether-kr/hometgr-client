@@ -28,12 +28,14 @@ export function SiteLayout({ children, showFooter = true, background = "gray" }:
   return (
     <div
       className={cn(
-        "flex min-h-screen flex-col",
+        "flex min-h-dvh flex-col",
         background === "gray" ? "bg-grayscale-50" : "bg-white",
       )}
     >
-      <ResponsiveHeader mobile={{ variant: "logo" }} />
-      <main className="flex flex-1 flex-col">{children}</main>
+      <div className="sticky top-0 z-30">
+        <ResponsiveHeader mobile={{ variant: "logo" }} />
+      </div>
+      <main className="flex min-h-[calc(100dvh-52px)] flex-col">{children}</main>
       {showFooter && <Footer />}
     </div>
   );
