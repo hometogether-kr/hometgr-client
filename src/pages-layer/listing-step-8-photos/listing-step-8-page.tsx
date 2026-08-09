@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { MAX_LISTING_PHOTOS, MIN_LISTING_PHOTOS } from "@/features/save-listing-draft";
 import { BtnCta } from "@/shared/ui/btn-cta";
@@ -43,6 +43,20 @@ export interface ListingStep8PageProps {
   isSaving?: boolean;
 }
 
+function orderSavedPhotos(
+  orderedPhotoIds: readonly string[],
+  savedPhotos: readonly ListingStep8Photo[],
+): readonly ListingStep8Photo[] {
+  const savedById = new Map(savedPhotos.map((photo) => [photo.id, photo]));
+  const ordered = orderedPhotoIds
+    .map((photoId) => savedById.get(photoId))
+    .filter((photo): photo is ListingStep8Photo => photo !== undefined);
+  const orderedIds = new Set(ordered.map((photo) => photo.id));
+  const added = savedPhotos.filter((photo) => !orderedIds.has(photo.id));
+
+  return [...ordered, ...added];
+}
+
 /**
  * 8단계 · 사진 업로드 (Figma: node 420:7100 · 420:7141)
  *
@@ -59,14 +73,16 @@ export function ListingStep8Page({
   isSaving = false,
 }: ListingStep8PageProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  /*
-   * 순서 변경은 사용자가 의도적으로 편집하는 값이라 로컬 상태로 둡니다.
-   * 사진이 추가·삭제되면 상위에서 key를 바꿔 서버 순서로 다시 시작합니다.
-   */
-  const [photos, setPhotos] = useState<readonly ListingStep8Photo[]>(savedPhotos);
+  const [orderedPhotoIds, setOrderedPhotoIds] = useState<readonly string[]>(() =>
+    savedPhotos.map((photo) => photo.id),
+  );
   const [submitted, setSubmitted] = useState(false);
   const dragIndex = useRef<number | null>(null);
   const { showToast } = useToast();
+  const photos = useMemo(
+    () => orderSavedPhotos(orderedPhotoIds, savedPhotos),
+    [orderedPhotoIds, savedPhotos],
+  );
 
   const hasError = photos.length < MIN_PHOTOS;
 
@@ -87,8 +103,8 @@ export function ListingStep8Page({
   };
 
   const reorder = (from: number, to: number) => {
-    setPhotos((prev) => {
-      const next = [...prev];
+    setOrderedPhotoIds(() => {
+      const next = photos.map((photo) => photo.id);
       const [moved] = next.splice(from, 1);
       next.splice(to, 0, moved);
       return next;
