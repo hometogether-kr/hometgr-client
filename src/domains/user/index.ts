@@ -1,14 +1,17 @@
-export { fetchSession, logout } from "./api/me.api";
+export type { CompleteOnboardingInput } from "./api/me.api";
+export { completeOnboarding, fetchSession, logout } from "./api/me.api";
 export type {
   AuthOwnerResponseDto,
   ConsentKeyDto,
   MeResponseDto,
+  PutMeResponseDto,
   UserProfileDto,
 } from "./api/user.dto";
 export {
   authOwnerResponseDtoSchema,
   consentKeyDtoSchema,
   meResponseDtoSchema,
+  putMeResponseDtoSchema,
   userProfileDtoSchema,
   userRoleDtoSchema,
 } from "./api/user.dto";
