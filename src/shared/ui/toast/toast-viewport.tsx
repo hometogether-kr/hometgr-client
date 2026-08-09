@@ -13,9 +13,7 @@ export interface ToastViewportProps {
 export function ToastViewport({ children }: ToastViewportProps) {
   return (
     <div className="pointer-events-none fixed inset-x-0 top-[42px] z-50 flex justify-center px-5 md:px-0">
-      <div className="pointer-events-auto w-full md:w-auto [&>*]:w-full md:[&>*]:w-auto">
-        {children}
-      </div>
+      <div className="pointer-events-auto flex w-full justify-center md:w-fit">{children}</div>
     </div>
   );
 }

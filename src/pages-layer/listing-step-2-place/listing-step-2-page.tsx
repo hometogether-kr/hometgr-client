@@ -11,7 +11,7 @@ import { BtnCta } from "@/shared/ui/btn-cta";
 import { BtnIc } from "@/shared/ui/btn-ic";
 import { ChipNormal } from "@/shared/ui/chip-normal";
 import { TextField } from "@/shared/ui/text-field";
-import { Toast, ToastViewport } from "@/shared/ui/toast";
+import { useToast } from "@/shared/ui/toast";
 import { ListingStepLayout } from "@/widgets/listing-step-layout";
 
 /**
@@ -69,20 +69,31 @@ export function ListingStep2Page({
   const [buildingTypeOther, setBuildingTypeOther] = useState(initialValues.buildingTypeOther);
   const [manualOpen, setManualOpen] = useState(initialValues.approximateLocation !== "");
   const [showError, setShowError] = useState(false);
+  const { showToast } = useToast();
 
   const hasAddress = address.trim() !== "" && addressDetail.trim() !== "";
   const hasRough = roughLocation.trim() !== "";
   const needsBuildingTypeOther = buildingType === "other";
   const hasBuildingTypeOther = buildingTypeOther.trim() !== "";
 
+  const showRequiredToast = () => {
+    showToast("필수항목을 작성해주세요.", {
+      variant: "error",
+      description:
+        "정확한 주소를 안다면 주소 검색+상세 주소를 / 정확한 주소를 모르신다면 대략적인 위치를 입력해주세요.",
+    });
+  };
+
   const handleNext = () => {
     if (!hasAddress && !hasRough) {
       setManualOpen(true);
       setShowError(true);
+      showRequiredToast();
       return;
     }
     if (needsBuildingTypeOther && !hasBuildingTypeOther) {
       setShowError(true);
+      showRequiredToast();
       return;
     }
 
@@ -106,17 +117,6 @@ export function ListingStep2Page({
 
   return (
     <>
-      {showError && (
-        <ToastViewport>
-          <Toast
-            variant="error"
-            description="정확한 주소를 안다면 주소 검색+상세 주소를 / 정확한 주소를 모르신다면 대략적인 위치를 입력해주세요."
-            onClose={() => setShowError(false)}
-          >
-            필수항목을 작성해주세요.
-          </Toast>
-        </ToastViewport>
-      )}
       <ListingStepLayout
         step={2}
         title="주소와 건물 기본 정보를 알려주세요."

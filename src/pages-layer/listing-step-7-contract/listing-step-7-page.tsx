@@ -5,7 +5,7 @@ import { useState } from "react";
 import { DateField } from "@/shared/ui/date-field";
 import { OptionalAmountField } from "@/shared/ui/optional-amount-field";
 import { TextField } from "@/shared/ui/text-field";
-import { Toast, ToastViewport } from "@/shared/ui/toast";
+import { useToast } from "@/shared/ui/toast";
 import { ListingStepLayout } from "@/widgets/listing-step-layout";
 
 type AmountMode = "none" | "custom" | null;
@@ -85,6 +85,7 @@ export function ListingStep7Page({
   const [availableFrom, setAvailableFrom] = useState(initialValues.moveInAvailableOn);
   const [minPeriod, setMinPeriod] = useState(initialValues.minStay);
   const [submitted, setSubmitted] = useState(false);
+  const { showToast } = useToast();
 
   /** "없음"은 0원으로 보냅니다. */
   const amountOf = (mode: AmountMode, value: string) =>
@@ -119,7 +120,10 @@ export function ListingStep7Page({
 
   const handleNext = () => {
     setSubmitted(true);
-    if (hasError) return;
+    if (hasError) {
+      showToast("필수항목을 모두 입력해주세요.", { variant: "error" });
+      return;
+    }
 
     const monthlyRentKrw = parseAmount(rent);
     const depositKrw = amountOf(depositMode, deposit);
@@ -145,80 +149,73 @@ export function ListingStep7Page({
   };
 
   return (
-    <>
-      {submitted && hasError && (
-        <ToastViewport>
-          <Toast variant="error">필수항목을 모두 입력해주세요.</Toast>
-        </ToastViewport>
-      )}
-      <ListingStepLayout
-        step={7}
-        title="가격과 입주 조건을 입력해주세요"
-        description="입주자가 예약 전 확인할 수 있도록 월세, 보증금, 입주 가능일을 정확히 알려주세요."
-        onPrev={onPrev}
-        onNext={handleNext}
-        nextDisabled={isSaving}
-        autoSaving={isSaving}
-      >
-        <div className="flex w-full max-w-[580px] flex-col gap-6">
-          <TextField
-            label="월세"
-            placeholder="예) 65만원"
-            size="L"
-            className="w-full"
-            value={rent}
-            onChange={(e) => setRent(e.target.value)}
-            error={show("rent")}
-          />
-          <OptionalAmountField
-            label="보증금"
-            name="deposit"
-            mode={depositMode}
-            onModeChange={setDepositMode}
-            value={deposit}
-            onValueChange={setDeposit}
-            placeholder="예) 500만원"
-            error={show("deposit")}
-          />
-          <OptionalAmountField
-            label="관리비"
-            name="maintenance"
-            mode={maintenanceMode}
-            onModeChange={setMaintenanceMode}
-            value={maintenance}
-            onValueChange={setMaintenance}
-            placeholder="예) 5만원"
-            error={show("maintenance")}
-          />
-          <div className="flex w-full flex-col">
-            <div className="flex items-end gap-3">
-              <DateField
-                label="입주 가능일"
-                className="w-[249px]"
-                value={availableFrom}
-                onChange={(e) => setAvailableFrom(e.target.value)}
-              />
-              <p className="py-2.5 text-[13px] leading-[1.4] font-normal text-grayscale-600">
-                이후부터 가능
-              </p>
-            </div>
-            {show("availableFrom") && (
-              <p className="w-full pt-2 pl-1 text-[13px] leading-[1.4] font-medium text-system-error">
-                {show("availableFrom")}
-              </p>
-            )}
+    <ListingStepLayout
+      step={7}
+      title="가격과 입주 조건을 입력해주세요"
+      description="입주자가 예약 전 확인할 수 있도록 월세, 보증금, 입주 가능일을 정확히 알려주세요."
+      onPrev={onPrev}
+      onNext={handleNext}
+      nextDisabled={isSaving}
+      autoSaving={isSaving}
+    >
+      <div className="flex w-full max-w-[580px] flex-col gap-6">
+        <TextField
+          label="월세"
+          placeholder="예) 65만원"
+          size="L"
+          className="w-full"
+          value={rent}
+          onChange={(e) => setRent(e.target.value)}
+          error={show("rent")}
+        />
+        <OptionalAmountField
+          label="보증금"
+          name="deposit"
+          mode={depositMode}
+          onModeChange={setDepositMode}
+          value={deposit}
+          onValueChange={setDeposit}
+          placeholder="예) 500만원"
+          error={show("deposit")}
+        />
+        <OptionalAmountField
+          label="관리비"
+          name="maintenance"
+          mode={maintenanceMode}
+          onModeChange={setMaintenanceMode}
+          value={maintenance}
+          onValueChange={setMaintenance}
+          placeholder="예) 5만원"
+          error={show("maintenance")}
+        />
+        <div className="flex w-full flex-col">
+          <div className="flex items-end gap-3">
+            <DateField
+              label="입주 가능일"
+              className="w-[249px]"
+              value={availableFrom}
+              onChange={(e) => setAvailableFrom(e.target.value)}
+            />
+            <p className="py-2.5 text-[13px] leading-[1.4] font-normal text-grayscale-600">
+              이후부터 가능
+            </p>
           </div>
-          <TextField
-            label="최소 거주 기간"
-            placeholder="예) 6개월, 1년"
-            size="L"
-            className="w-full"
-            value={minPeriod}
-            onChange={(e) => setMinPeriod(e.target.value)}
-            error={show("minPeriod")}
-          />
+          {show("availableFrom") && (
+            <p className="w-full pt-2 pl-1 text-[13px] leading-[1.4] font-medium text-system-error">
+              {show("availableFrom")}
+            </p>
+          )}
         </div>
-      </ListingStepLayout>
-    </>
+        <TextField
+          label="최소 거주 기간"
+          placeholder="예) 6개월, 1년"
+          size="L"
+          className="w-full"
+          value={minPeriod}
+          onChange={(e) => setMinPeriod(e.target.value)}
+          error={show("minPeriod")}
+        />
+      </div>
+    </ListingStepLayout>
   );
 }

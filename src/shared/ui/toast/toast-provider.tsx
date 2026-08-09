@@ -12,7 +12,9 @@ export interface ShowToastOptions {
   description?: ReactNode;
   actionLabel?: string;
   onAction?: () => void;
-  /** 자동 닫힘까지의 시간(ms). 0이면 닫기 버튼으로만 닫힙니다. */
+  /** 지정 시 우측 닫기 버튼을 표시합니다. */
+  showCloseButton?: boolean;
+  /** 자동 닫힘까지의 시간(ms). 0이면 자동으로 닫히지 않습니다. */
   duration?: number;
 }
 
@@ -56,7 +58,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       clearTimer();
       setToast({ message, ...options });
 
-      const duration = options.duration ?? DEFAULT_DURATION;
+      const duration = options.duration ?? (options.showCloseButton ? 0 : DEFAULT_DURATION);
       if (duration > 0) {
         timerRef.current = setTimeout(() => setToast(null), duration);
       }
@@ -78,7 +80,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             description={toast.description}
             actionLabel={toast.actionLabel}
             onAction={toast.onAction}
-            onClose={toast.actionLabel ? undefined : hideToast}
+            onClose={toast.showCloseButton && !toast.actionLabel ? hideToast : undefined}
           >
             {toast.message}
           </Toast>
