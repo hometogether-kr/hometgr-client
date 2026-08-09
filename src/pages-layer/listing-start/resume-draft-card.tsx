@@ -40,6 +40,7 @@ export function ResumeDraftCard({ illustration }: ResumeDraftCardProps) {
   const { showToast } = useToast();
 
   const resumableDraft = findResumableDraft(drafts);
+  const disabled = isLoading || Boolean(error);
 
   const handleResume = () => {
     if (error) {
@@ -62,7 +63,7 @@ export function ResumeDraftCard({ illustration }: ResumeDraftCardProps) {
       description={toProgressDescription(resumableDraft)}
       actionLabel="이어서 작성하기"
       illustration={illustration}
-      disabled={isLoading}
+      disabled={disabled}
       onClick={handleResume}
     />
   );
