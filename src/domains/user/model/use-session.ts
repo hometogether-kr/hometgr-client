@@ -19,13 +19,22 @@ export interface UseSessionResult {
   onboardingRequired: boolean;
 }
 
+export interface UseSessionOptions {
+  /**
+   * 기본값은 서버가 내려준 쿠키 힌트가 있을 때만 `/me`를 조회합니다.
+   * OAuth 직후처럼 힌트가 이전 화면 값일 수 있는 복구 구간에서는 always를 사용합니다.
+   */
+  mode?: "hinted" | "always";
+}
+
 /**
  * 현재 로그인 세션
  *
  * 세션은 여러 화면이 함께 보는 값이라 서버 상태 캐시에 한 번만 담아 공유합니다.
  */
-export function useSession(): UseSessionResult {
+export function useSession({ mode = "hinted" }: UseSessionOptions = {}): UseSessionResult {
   const hintedAuthenticated = useSessionHint();
+  const shouldFetchSession = mode === "always" || hintedAuthenticated;
   const { data, isLoading } = useQuery({
     queryKey: userQueryKeys.me(),
     queryFn: ({ signal }) => fetchSession(signal),
@@ -34,7 +43,7 @@ export function useSession(): UseSessionResult {
      * 세션 쿠키가 없으면 `/me`는 반드시 401이므로 아예 호출하지 않습니다.
      * 비로그인 방문자의 모든 페이지에서 불필요한 요청이 나가는 것을 막습니다.
      */
-    enabled: hintedAuthenticated,
+    enabled: shouldFetchSession,
   });
 
   const session = data ?? ANONYMOUS_SESSION;
