@@ -27,10 +27,19 @@ function KakaoResultToast() {
   useEffect(() => {
     if (!error) return;
 
-    showToast(LOGIN_ERROR_MESSAGE[error] ?? LOGIN_ERROR_MESSAGE.kakao_failed, {
-      variant: "error",
-      duration: 0,
-    });
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    const message = LOGIN_ERROR_MESSAGE[error] ?? LOGIN_ERROR_MESSAGE.kakao_failed;
+
+    showToast(
+      message,
+      isDesktop
+        ? {
+            variant: "error",
+            showCloseButton: true,
+            duration: 0,
+          }
+        : { variant: "error" },
+    );
   }, [error, showToast]);
 
   return null;

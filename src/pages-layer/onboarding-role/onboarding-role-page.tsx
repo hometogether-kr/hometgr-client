@@ -6,6 +6,7 @@ import type { MemberRole } from "@/domains/user";
 import { MEMBER_ROLE_OPTIONS } from "@/domains/user";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { ChoiceCard } from "@/shared/ui/choice-card";
+import { TextField } from "@/shared/ui/text-field";
 import { useToast } from "@/shared/ui/toast";
 import { OnboardingLayout } from "@/widgets/onboarding-layout";
 
@@ -26,8 +27,17 @@ const FIGMA_TEMP_ILLUST: Record<MemberRole, string> = {
  */
 const MOBILE_ROLE_OPTIONS = [...MEMBER_ROLE_OPTIONS].reverse();
 
+export interface OnboardingProfileValues {
+  name: string;
+  phone: string;
+}
+
 export interface OnboardingRolePageProps {
-  onSelect?: (role: MemberRole) => void;
+  initialName?: string;
+  initialPhone?: string;
+  isSubmitting?: boolean;
+  validatePhone?: (phone: string) => boolean;
+  onSelect?: (role: MemberRole, profile: OnboardingProfileValues) => void;
   onBack?: () => void;
 }
 
@@ -35,20 +45,62 @@ export interface OnboardingRolePageProps {
  * 회원 유형 선택
  *
  * - 데스크톱(Figma 643:19159): 카드 위에 제목, 카드 안에 2단 컬럼.
- *   각 컬럼의 CTA를 누르면 바로 해당 유형으로 진행합니다.
+ *   각 컬럼의 CTA를 누르면 해당 유형을 선택합니다.
  * - 모바일(Figma 693:14014·14191·14277): 선택 카드 2장 + 하단 고정 "다음으로"
  */
-export function OnboardingRolePage({ onSelect, onBack }: OnboardingRolePageProps) {
+export function OnboardingRolePage({
+  initialName = "",
+  initialPhone = "",
+  isSubmitting = false,
+  validatePhone = () => true,
+  onSelect,
+  onBack,
+}: OnboardingRolePageProps) {
+  const [name, setName] = useState(initialName);
+  const [phone, setPhone] = useState(initialPhone);
   const [selectedRole, setSelectedRole] = useState<MemberRole | null>(null);
+  const [submitted, setSubmitted] = useState(false);
   const { showToast } = useToast();
 
-  const handleNext = () => {
-    if (!selectedRole) {
+  const nameError = submitted && name.trim() === "" ? "이름을 입력해주세요." : undefined;
+  const phoneError =
+    submitted && phone.trim() === ""
+      ? "휴대폰 번호를 입력해주세요."
+      : submitted && !validatePhone(phone)
+        ? "휴대폰 번호 형식을 확인해주세요."
+        : undefined;
+  const selectRole = (role: MemberRole) => {
+    setSelectedRole(role);
+  };
+
+  const submitRole = (role: MemberRole | null) => {
+    if (isSubmitting) return;
+
+    setSubmitted(true);
+
+    if (!role) {
       showToast("회원 유형을 선택해주세요", { variant: "error" });
       return;
     }
-    onSelect?.(selectedRole);
+
+    setSelectedRole(role);
+
+    if (name.trim() === "" || phone.trim() === "" || !validatePhone(phone)) {
+      showToast("이름과 휴대폰 번호를 입력해주세요.", { variant: "error" });
+      return;
+    }
+
+    onSelect?.(role, {
+      name: name.trim(),
+      phone: phone.trim(),
+    });
   };
+
+  const handleNext = () => {
+    submitRole(selectedRole);
+  };
+
+  const submitDisabled = isSubmitting || !selectedRole;
 
   return (
     <OnboardingLayout
@@ -59,29 +111,61 @@ export function OnboardingRolePage({ onSelect, onBack }: OnboardingRolePageProps
       titlePlacement="above-card"
       footerPlacement="mobile"
       footer={
-        <BtnCta size="mobile" aria-disabled={!selectedRole} className="w-full" onClick={handleNext}>
+        <BtnCta
+          size="mobile"
+          aria-disabled={submitDisabled}
+          className="w-full"
+          onClick={handleNext}
+        >
           다음으로
         </BtnCta>
       }
     >
-      {/* 모바일: 선택 카드 2장 */}
-      <div className="flex flex-col gap-2 md:hidden">
-        {MOBILE_ROLE_OPTIONS.map((option) => (
-          <ChoiceCard
-            key={option.role}
-            title={option.title}
-            description={option.description}
-            selected={selectedRole === option.role}
-            onClick={() => setSelectedRole(option.role)}
-            illustration={
-              <img
-                alt=""
-                src={FIGMA_TEMP_ILLUST[option.role]}
-                className="block h-[164px] max-w-full object-contain"
-              />
-            }
+      <div className="flex flex-col gap-8 md:gap-10">
+        <div className="grid gap-4 md:grid-cols-2">
+          <TextField
+            label="이름"
+            placeholder="홍길동"
+            size="L"
+            value={name}
+            maxLength={100}
+            disabled={isSubmitting}
+            error={nameError}
+            onChange={(event) => setName(event.target.value)}
           />
-        ))}
+          <TextField
+            label="휴대폰 번호"
+            placeholder="010-1234-5678"
+            size="L"
+            type="tel"
+            inputMode="tel"
+            value={phone}
+            disabled={isSubmitting}
+            error={phoneError}
+            onChange={(event) => setPhone(event.target.value)}
+          />
+        </div>
+
+        {/* 모바일: 선택 카드 2장 */}
+        <div className="flex flex-col gap-2 md:hidden">
+          {MOBILE_ROLE_OPTIONS.map((option) => (
+            <ChoiceCard
+              key={option.role}
+              title={option.title}
+              description={option.description}
+              selected={selectedRole === option.role}
+              disabled={isSubmitting}
+              onClick={() => selectRole(option.role)}
+              illustration={
+                <img
+                  alt=""
+                  src={FIGMA_TEMP_ILLUST[option.role]}
+                  className="block h-[164px] max-w-full object-contain"
+                />
+              }
+            />
+          ))}
+        </div>
       </div>
 
       {/* 데스크톱: 세로 구분선으로 나뉜 2단 컬럼, 각 컬럼에 CTA */}
@@ -103,7 +187,14 @@ export function OnboardingRolePage({ onSelect, onBack }: OnboardingRolePageProps
                   className="block max-h-full max-w-full object-contain"
                 />
               </div>
-              <BtnCta size="l" className="w-full" onClick={() => onSelect?.(option.role)}>
+              <BtnCta
+                size="l"
+                variant={selectedRole === option.role ? "sub" : "default"}
+                className="w-full"
+                disabled={isSubmitting}
+                aria-pressed={selectedRole === option.role}
+                onClick={() => submitRole(option.role)}
+              >
                 {option.ctaLabel}
               </BtnCta>
             </div>

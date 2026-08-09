@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { MAX_LISTING_PHOTOS, MIN_LISTING_PHOTOS } from "@/features/save-listing-draft";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { InfoBox } from "@/shared/ui/info-box";
-import { Toast, ToastViewport } from "@/shared/ui/toast";
+import { useToast } from "@/shared/ui/toast";
 import { ListingStepLayout } from "@/widgets/listing-step-layout";
 
 /**
@@ -66,12 +66,16 @@ export function ListingStep8Page({
   const [photos, setPhotos] = useState<readonly ListingStep8Photo[]>(savedPhotos);
   const [submitted, setSubmitted] = useState(false);
   const dragIndex = useRef<number | null>(null);
+  const { showToast } = useToast();
 
   const hasError = photos.length < MIN_PHOTOS;
 
   const handleNext = () => {
     setSubmitted(true);
-    if (hasError) return;
+    if (hasError) {
+      showToast(MIN_PHOTOS_MESSAGE, { variant: "error" });
+      return;
+    }
     onNext?.(photos.map((photo) => photo.id));
   };
 
@@ -92,103 +96,96 @@ export function ListingStep8Page({
   };
 
   return (
-    <>
+    <ListingStepLayout
+      step={8}
+      title="사용할 공간의 사진과 영상을 업로드해주세요"
+      description="방의 분위기가 잘 보이는 사진일수록 입주자가 더 안심하고 선택할 수 있어요."
+      onPrev={onPrev}
+      onNext={handleNext}
+      nextDisabled={isUploading || isSaving}
+      autoSaving={isUploading || isSaving}
+    >
       {submitted && hasError && (
-        <ToastViewport>
-          <Toast variant="error">{MIN_PHOTOS_MESSAGE}</Toast>
-        </ToastViewport>
+        <p className="w-full pb-1 text-[13px] leading-[1.4] font-medium text-system-error">
+          {MIN_PHOTOS_MESSAGE}
+        </p>
       )}
-      <ListingStepLayout
-        step={8}
-        title="사용할 공간의 사진과 영상을 업로드해주세요"
-        description="방의 분위기가 잘 보이는 사진일수록 입주자가 더 안심하고 선택할 수 있어요."
-        onPrev={onPrev}
-        onNext={handleNext}
-        nextDisabled={isUploading || isSaving}
-        autoSaving={isUploading || isSaving}
-      >
-        {submitted && hasError && (
-          <p className="w-full pb-1 text-[13px] leading-[1.4] font-medium text-system-error">
-            {MIN_PHOTOS_MESSAGE}
-          </p>
-        )}
-        <div className="flex w-full flex-col items-center gap-2">
-          {photos.length === 0 ? (
-            <div className="flex min-h-[257px] w-full items-center justify-center rounded-[10px] border border-dashed border-grayscale-400 px-4 py-[120px]">
-              <div className="flex w-[92px] flex-col items-center gap-5">
-                <span className="block size-10" aria-hidden="true">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정 */}
-                  <img alt="" src={FIGMA_TEMP_IC_PHOTO} className="block size-full max-w-none" />
-                </span>
-                <BtnCta
-                  variant="stroke"
-                  size="xs"
-                  className="w-full"
-                  disabled={isUploading}
-                  onClick={() => inputRef.current?.click()}
-                >
-                  사진 업로드
-                </BtnCta>
-              </div>
+      <div className="flex w-full flex-col items-center gap-2">
+        {photos.length === 0 ? (
+          <div className="flex min-h-[257px] w-full items-center justify-center rounded-[10px] border border-dashed border-grayscale-400 px-4 py-[120px]">
+            <div className="flex w-[92px] flex-col items-center gap-5">
+              <span className="block size-10" aria-hidden="true">
+                {/* eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정 */}
+                <img alt="" src={FIGMA_TEMP_IC_PHOTO} className="block size-full max-w-none" />
+              </span>
+              <BtnCta
+                variant="stroke"
+                size="xs"
+                className="w-full"
+                disabled={isUploading}
+                onClick={() => inputRef.current?.click()}
+              >
+                사진 업로드
+              </BtnCta>
             </div>
-          ) : (
-            <ul className="grid w-full grid-cols-2 gap-3 md:flex md:flex-wrap md:gap-4">
-              {photos.map((photo, index) => (
-                <li
-                  key={photo.id}
-                  draggable
-                  onDragStart={() => {
-                    dragIndex.current = index;
-                  }}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => {
-                    if (dragIndex.current !== null) reorder(dragIndex.current, index);
-                    dragIndex.current = null;
-                  }}
-                  className="relative aspect-square w-full cursor-grab overflow-hidden rounded-[10px] md:size-[180px]"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element -- 사용자가 업로드한 로컬 파일 미리보기 */}
-                  <img
-                    alt={`매물 사진 ${index + 1}`}
-                    src={photo.url}
-                    className="size-full object-cover"
-                  />
-                  {index === 0 && (
-                    <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-primary-500 py-2 text-base leading-[1.5] font-bold text-white">
-                      대표 사진
-                    </span>
-                  )}
-                </li>
-              ))}
-              {photos.length < MAX_PHOTOS && (
-                <li className="flex aspect-square w-full items-center justify-center rounded-[10px] border border-dashed border-grayscale-400 md:size-[180px]">
-                  <BtnCta variant="stroke" size="xs" onClick={() => inputRef.current?.click()}>
-                    사진 추가
-                  </BtnCta>
-                </li>
-              )}
-            </ul>
-          )}
-          <input
-            ref={inputRef}
-            type="file"
-            accept="image/*,video/*"
-            multiple
-            className="sr-only"
-            onChange={(e) => {
-              addFiles(e.target.files);
-              e.target.value = "";
-            }}
-          />
-          <InfoBox title="안내" className="w-full">
-            <ul className="flex flex-col">
-              {GUIDE_LINES.map((line) => (
-                <li key={line}>· {line}</li>
-              ))}
-            </ul>
-          </InfoBox>
-        </div>
-      </ListingStepLayout>
-    </>
+          </div>
+        ) : (
+          <ul className="grid w-full grid-cols-2 gap-3 md:flex md:flex-wrap md:gap-4">
+            {photos.map((photo, index) => (
+              <li
+                key={photo.id}
+                draggable
+                onDragStart={() => {
+                  dragIndex.current = index;
+                }}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => {
+                  if (dragIndex.current !== null) reorder(dragIndex.current, index);
+                  dragIndex.current = null;
+                }}
+                className="relative aspect-square w-full cursor-grab overflow-hidden rounded-[10px] md:size-[180px]"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element -- 사용자가 업로드한 로컬 파일 미리보기 */}
+                <img
+                  alt={`매물 사진 ${index + 1}`}
+                  src={photo.url}
+                  className="size-full object-cover"
+                />
+                {index === 0 && (
+                  <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-primary-500 py-2 text-base leading-[1.5] font-bold text-white">
+                    대표 사진
+                  </span>
+                )}
+              </li>
+            ))}
+            {photos.length < MAX_PHOTOS && (
+              <li className="flex aspect-square w-full items-center justify-center rounded-[10px] border border-dashed border-grayscale-400 md:size-[180px]">
+                <BtnCta variant="stroke" size="xs" onClick={() => inputRef.current?.click()}>
+                  사진 추가
+                </BtnCta>
+              </li>
+            )}
+          </ul>
+        )}
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*,video/*"
+          multiple
+          className="sr-only"
+          onChange={(e) => {
+            addFiles(e.target.files);
+            e.target.value = "";
+          }}
+        />
+        <InfoBox title="안내" className="w-full">
+          <ul className="flex flex-col">
+            {GUIDE_LINES.map((line) => (
+              <li key={line}>· {line}</li>
+            ))}
+          </ul>
+        </InfoBox>
+      </div>
+    </ListingStepLayout>
   );
 }

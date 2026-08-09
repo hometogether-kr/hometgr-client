@@ -1,3 +1,8 @@
+export {
+  clearOnboardingTermsAgreement,
+  hasRequiredOnboardingTermsAgreement,
+  saveOnboardingTermsAgreement,
+} from "./model/onboarding-terms-storage";
 export type { TermId, TermItem } from "./model/terms";
 export { TERMS } from "./model/terms";
 export { getTermsPageSources } from "./model/terms-document";

@@ -1,12 +1,13 @@
 "use client";
 
+import type { TermId } from "@/features/agree-terms";
 import { TermsAgreementList, useTermsAgreement } from "@/features/agree-terms";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { useToast } from "@/shared/ui/toast";
 import { OnboardingLayout } from "@/widgets/onboarding-layout";
 
 export interface OnboardingTermsPageProps {
-  onSubmit?: (agreedIds: readonly string[]) => void;
+  onSubmit?: (agreedIds: readonly TermId[]) => void;
   onBack?: () => void;
 }
 

@@ -90,3 +90,11 @@ export const authOwnerResponseDtoSchema = z.object({
 });
 
 export type AuthOwnerResponseDto = z.infer<typeof authOwnerResponseDtoSchema>;
+
+/** OpenAPI: PutMeResponseDto — 온보딩 완료 후 새 토큰과 현재 프로필 */
+export const putMeResponseDtoSchema = authOwnerResponseDtoSchema.extend({
+  student: studentMeDtoSchema.nullable(),
+  consents: meConsentsDtoSchema.nullable(),
+});
+
+export type PutMeResponseDto = z.infer<typeof putMeResponseDtoSchema>;

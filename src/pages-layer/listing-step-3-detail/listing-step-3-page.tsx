@@ -16,7 +16,7 @@ import { ChipField } from "@/shared/ui/chip-field";
 import { Counter } from "@/shared/ui/counter";
 import { Radio } from "@/shared/ui/radio";
 import { TextArea } from "@/shared/ui/text-area";
-import { Toast, ToastViewport } from "@/shared/ui/toast";
+import { useToast } from "@/shared/ui/toast";
 import { ListingStepLayout } from "@/widgets/listing-step-layout";
 
 /** 있음/없음, 가능/불가능처럼 boolean을 칩으로 고르는 선택지 */
@@ -115,6 +115,7 @@ export function ListingStep3Page({
   const [parkingKind, setParkingKind] = useState<ParkingType | null>(initialValues.parkingType);
   const [parkingNote, setParkingNote] = useState(initialValues.parkingDescription);
   const [submitted, setSubmitted] = useState(false);
+  const { showToast } = useToast();
 
   const parkingAvailable = parking === "yes";
 
@@ -132,7 +133,10 @@ export function ListingStep3Page({
 
   const handleNext = () => {
     setSubmitted(true);
-    if (hasError) return;
+    if (hasError) {
+      showToast("필수항목을 모두 입력해주세요.", { variant: "error" });
+      return;
+    }
 
     // 위 검증을 통과하면 필수 값이 모두 채워져 있지만, 타입 좁히기를 위해 한 번 더 확인합니다.
     if (!areaRange || !residentType || !genderComposition || !elevator || !parking) return;
@@ -154,106 +158,99 @@ export function ListingStep3Page({
   };
 
   return (
-    <>
-      {submitted && hasError && (
-        <ToastViewport>
-          <Toast variant="error">필수항목을 모두 입력해주세요.</Toast>
-        </ToastViewport>
-      )}
-      <ListingStepLayout
-        step={3}
-        title="집 전체 정보를 알려주세요"
-        description="집 전체의 크기와 구조를 대략적으로 알려주세요."
-        onPrev={onPrev}
-        onNext={handleNext}
-        nextDisabled={isSaving}
-        autoSaving={isSaving}
-      >
-        <div className="flex w-full flex-col gap-9">
+    <ListingStepLayout
+      step={3}
+      title="집 전체 정보를 알려주세요"
+      description="집 전체의 크기와 구조를 대략적으로 알려주세요."
+      onPrev={onPrev}
+      onNext={handleNext}
+      nextDisabled={isSaving}
+      autoSaving={isSaving}
+    >
+      <div className="flex w-full flex-col gap-9">
+        <ChipField
+          label="집 평수"
+          options={AREA_RANGE_OPTIONS}
+          value={areaRange}
+          onChange={setAreaRange}
+          error={show("areaRange")}
+        />
+        <div className="flex w-full flex-col">
+          <div className="flex flex-wrap items-start gap-8 md:gap-12">
+            <Counter label="집 전체 방 개수" value={rooms} onChange={setRooms} />
+            <Counter
+              label="거주 중인 인원(집주인 포함)"
+              value={residents}
+              onChange={setResidents}
+            />
+          </div>
+          <FieldError message={show("counts")} />
+        </div>
+        <ChipField
+          label="현재 거주 형태"
+          options={RESIDENT_TYPE_OPTIONS}
+          value={residentType}
+          onChange={setResidentType}
+          error={show("residentType")}
+        />
+        <ChipField
+          label="거주 중인 인원 성별"
+          options={RESIDENT_GENDER_COMPOSITION_OPTIONS}
+          value={genderComposition}
+          onChange={setGenderComposition}
+          error={show("genderComposition")}
+        />
+        <ChipField
+          label="엘리베이터"
+          options={YES_NO_OPTIONS}
+          value={elevator}
+          onChange={setElevator}
+          error={show("elevator")}
+        />
+        <div className="flex w-full flex-col gap-4">
           <ChipField
-            label="집 평수"
-            options={AREA_RANGE_OPTIONS}
-            value={areaRange}
-            onChange={setAreaRange}
-            error={show("areaRange")}
+            label="주차"
+            options={PARKING_OPTIONS}
+            value={parking}
+            onChange={setParking}
+            error={show("parking")}
           />
-          <div className="flex w-full flex-col">
-            <div className="flex flex-wrap items-start gap-8 md:gap-12">
-              <Counter label="집 전체 방 개수" value={rooms} onChange={setRooms} />
-              <Counter
-                label="거주 중인 인원(집주인 포함)"
-                value={residents}
-                onChange={setResidents}
+          {parkingAvailable && (
+            <div className="flex flex-col gap-4">
+              {PARKING_TYPE_OPTIONS.map((option) => (
+                <label key={option.value} className="flex cursor-pointer items-center gap-3">
+                  <Radio
+                    size="24"
+                    name="parkingKind"
+                    value={option.value}
+                    checked={parkingKind === option.value}
+                    onChange={() => setParkingKind(option.value)}
+                  />
+                  <span className="flex flex-col justify-center gap-1 whitespace-nowrap">
+                    <span className="text-base leading-[1.6] font-semibold text-grayscale-700">
+                      {option.label}
+                    </span>
+                    <span className="text-[13px] leading-[1.5] font-medium text-grayscale-500">
+                      {option.description}
+                    </span>
+                  </span>
+                </label>
+              ))}
+              <FieldError message={show("parkingKind")} />
+              <TextArea
+                label="주차 부가 설명 (선택)"
+                size="l"
+                className="w-full"
+                placeholder={
+                  "주차 관련 안내 사항을 입력해 주세요.\n예) 1일 주차요금은 15,000원입니다 · 최대 2대 주차 가능하며, 사전 등록이 필요합니다."
+                }
+                value={parkingNote}
+                onChange={(e) => setParkingNote(e.target.value)}
               />
             </div>
-            <FieldError message={show("counts")} />
-          </div>
-          <ChipField
-            label="현재 거주 형태"
-            options={RESIDENT_TYPE_OPTIONS}
-            value={residentType}
-            onChange={setResidentType}
-            error={show("residentType")}
-          />
-          <ChipField
-            label="거주 중인 인원 성별"
-            options={RESIDENT_GENDER_COMPOSITION_OPTIONS}
-            value={genderComposition}
-            onChange={setGenderComposition}
-            error={show("genderComposition")}
-          />
-          <ChipField
-            label="엘리베이터"
-            options={YES_NO_OPTIONS}
-            value={elevator}
-            onChange={setElevator}
-            error={show("elevator")}
-          />
-          <div className="flex w-full flex-col gap-4">
-            <ChipField
-              label="주차"
-              options={PARKING_OPTIONS}
-              value={parking}
-              onChange={setParking}
-              error={show("parking")}
-            />
-            {parkingAvailable && (
-              <div className="flex flex-col gap-4">
-                {PARKING_TYPE_OPTIONS.map((option) => (
-                  <label key={option.value} className="flex cursor-pointer items-center gap-3">
-                    <Radio
-                      size="24"
-                      name="parkingKind"
-                      value={option.value}
-                      checked={parkingKind === option.value}
-                      onChange={() => setParkingKind(option.value)}
-                    />
-                    <span className="flex flex-col justify-center gap-1 whitespace-nowrap">
-                      <span className="text-base leading-[1.6] font-semibold text-grayscale-700">
-                        {option.label}
-                      </span>
-                      <span className="text-[13px] leading-[1.5] font-medium text-grayscale-500">
-                        {option.description}
-                      </span>
-                    </span>
-                  </label>
-                ))}
-                <FieldError message={show("parkingKind")} />
-                <TextArea
-                  label="주차 부가 설명 (선택)"
-                  size="l"
-                  className="w-full"
-                  placeholder={
-                    "주차 관련 안내 사항을 입력해 주세요.\n예) 1일 주차요금은 15,000원입니다 · 최대 2대 주차 가능하며, 사전 등록이 필요합니다."
-                  }
-                  value={parkingNote}
-                  onChange={(e) => setParkingNote(e.target.value)}
-                />
-              </div>
-            )}
-          </div>
+          )}
         </div>
-      </ListingStepLayout>
-    </>
+      </div>
+    </ListingStepLayout>
   );
 }

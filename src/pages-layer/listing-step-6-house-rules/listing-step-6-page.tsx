@@ -16,7 +16,7 @@ import {
 } from "@/domains/listing-draft";
 import { ChipField } from "@/shared/ui/chip-field";
 import { TextArea } from "@/shared/ui/text-area";
-import { Toast, ToastViewport } from "@/shared/ui/toast";
+import { useToast } from "@/shared/ui/toast";
 import { ListingStepLayout } from "@/widgets/listing-step-layout";
 
 const REQUIRED_MESSAGE = "필수 항목입니다.";
@@ -93,14 +93,7 @@ export function ListingStep6Page({
   );
   const [note, setNote] = useState(initialValues.additionalGuidance);
   const [submitted, setSubmitted] = useState(false);
-
-  const hasError =
-    !visitorPolicy ||
-    !petAllowed ||
-    !smokingPreference ||
-    !preferredGender ||
-    !roomCapacity ||
-    !interactionPreference;
+  const { showToast } = useToast();
 
   const requiredError = (value: unknown) => (submitted && !value ? REQUIRED_MESSAGE : undefined);
 
@@ -114,6 +107,7 @@ export function ListingStep6Page({
       !roomCapacity ||
       !interactionPreference
     ) {
+      showToast("필수항목을 모두 입력해주세요.", { variant: "error" });
       return;
     }
 
@@ -129,73 +123,66 @@ export function ListingStep6Page({
   };
 
   return (
-    <>
-      {submitted && hasError && (
-        <ToastViewport>
-          <Toast variant="error">필수항목을 모두 입력해주세요.</Toast>
-        </ToastViewport>
-      )}
-      <ListingStepLayout
-        step={6}
-        title="생활 규칙에 대해 알려주세요"
-        onPrev={onPrev}
-        onNext={handleNext}
-        nextDisabled={isSaving}
-        autoSaving={isSaving}
-      >
-        <div className="flex w-full flex-col gap-9">
-          <ChipField
-            label="외부 방문객 초대"
-            options={VISITOR_POLICY_OPTIONS}
-            value={visitorPolicy}
-            onChange={setVisitorPolicy}
-            error={requiredError(visitorPolicy)}
-          />
-          <ChipField
-            label="반려동물 가능 여부"
-            options={PET_OPTIONS}
-            value={petAllowed}
-            onChange={setPetAllowed}
-            error={requiredError(petAllowed)}
-          />
-          <ChipField
-            label="실내 흡연 가능 여부"
-            options={SMOKING_PREFERENCE_OPTIONS}
-            value={smokingPreference}
-            onChange={setSmokingPreference}
-            error={requiredError(smokingPreference)}
-          />
-          <ChipField
-            label="원하시는 입주자 성별"
-            options={PREFERRED_GENDER_OPTIONS}
-            value={preferredGender}
-            onChange={setPreferredGender}
-            error={requiredError(preferredGender)}
-          />
-          <ChipField
-            label="등록하실 방 1개에 몇명까지 입주 허용 예정인가요?"
-            options={ROOM_CAPACITY_OPTIONS}
-            value={roomCapacity}
-            onChange={setRoomCapacity}
-            error={requiredError(roomCapacity)}
-          />
-          <ChipField
-            label="선호하는 입주자 성향"
-            options={INTERACTION_PREFERENCE_OPTIONS}
-            value={interactionPreference}
-            onChange={setInteractionPreference}
-            error={requiredError(interactionPreference)}
-          />
-          <TextArea
-            label="추가 안내사항(선택)"
-            size="l"
-            className="w-full"
-            placeholder="게스트가 미리 알아야 할 생활 패턴이나 규칙이 있다면 적어주세요."
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-          />
-        </div>
-      </ListingStepLayout>
-    </>
+    <ListingStepLayout
+      step={6}
+      title="생활 규칙에 대해 알려주세요"
+      onPrev={onPrev}
+      onNext={handleNext}
+      nextDisabled={isSaving}
+      autoSaving={isSaving}
+    >
+      <div className="flex w-full flex-col gap-9">
+        <ChipField
+          label="외부 방문객 초대"
+          options={VISITOR_POLICY_OPTIONS}
+          value={visitorPolicy}
+          onChange={setVisitorPolicy}
+          error={requiredError(visitorPolicy)}
+        />
+        <ChipField
+          label="반려동물 가능 여부"
+          options={PET_OPTIONS}
+          value={petAllowed}
+          onChange={setPetAllowed}
+          error={requiredError(petAllowed)}
+        />
+        <ChipField
+          label="실내 흡연 가능 여부"
+          options={SMOKING_PREFERENCE_OPTIONS}
+          value={smokingPreference}
+          onChange={setSmokingPreference}
+          error={requiredError(smokingPreference)}
+        />
+        <ChipField
+          label="원하시는 입주자 성별"
+          options={PREFERRED_GENDER_OPTIONS}
+          value={preferredGender}
+          onChange={setPreferredGender}
+          error={requiredError(preferredGender)}
+        />
+        <ChipField
+          label="등록하실 방 1개에 몇명까지 입주 허용 예정인가요?"
+          options={ROOM_CAPACITY_OPTIONS}
+          value={roomCapacity}
+          onChange={setRoomCapacity}
+          error={requiredError(roomCapacity)}
+        />
+        <ChipField
+          label="선호하는 입주자 성향"
+          options={INTERACTION_PREFERENCE_OPTIONS}
+          value={interactionPreference}
+          onChange={setInteractionPreference}
+          error={requiredError(interactionPreference)}
+        />
+        <TextArea
+          label="추가 안내사항(선택)"
+          size="l"
+          className="w-full"
+          placeholder="게스트가 미리 알아야 할 생활 패턴이나 규칙이 있다면 적어주세요."
+          value={note}
+          onChange={(e) => setNote(e.target.value)}
+        />
+      </div>
+    </ListingStepLayout>
   );
 }
