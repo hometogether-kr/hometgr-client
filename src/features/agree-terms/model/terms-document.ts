@@ -12,16 +12,24 @@ interface TermsDocument {
   pageCount: number;
 }
 
-const TERMS_DOCUMENTS: Record<TermId, TermsDocument> = {
+// TODO(consent): 백엔드 필수 consent에 대응하는 약관 전문 에셋을 받으면 누락 항목을 연결합니다.
+const TERMS_DOCUMENTS: Partial<Record<TermId, TermsDocument>> = {
   service: { directory: "terms-of-service", pageCount: 15 },
   privacy: { directory: "privacy-policy", pageCount: 12 },
   location: { directory: "location-terms", pageCount: 5 },
   marketing: { directory: "marketing-options", pageCount: 3 },
 };
 
+export function hasTermsDocument(id: TermId): boolean {
+  return TERMS_DOCUMENTS[id] !== undefined;
+}
+
 /** 약관 전문 이미지 경로를 쪽 순서대로 돌려줍니다. */
 export function getTermsPageSources(id: TermId): string[] {
-  const { directory, pageCount } = TERMS_DOCUMENTS[id];
+  const document = TERMS_DOCUMENTS[id];
+  if (!document) return [];
+
+  const { directory, pageCount } = document;
 
   return Array.from(
     { length: pageCount },

@@ -11,6 +11,7 @@ import {
 } from "@/shared/api/server";
 
 const consentItemSchema = z.object({
+  // TODO(consent): 백엔드 consent 계약이 피그마 terms 기준으로 정리되면 허용 key도 축소합니다.
   key: z.enum([
     "termsOfService",
     "privacyCollection",

@@ -9,6 +9,7 @@ import { Divider } from "@/shared/ui/divider";
 
 import type { TermId } from "../model/terms";
 import { TERMS } from "../model/terms";
+import { hasTermsDocument } from "../model/terms-document";
 import type { TermsAgreement } from "../model/use-terms-agreement";
 import { TermsDocumentModal } from "./terms-document-modal";
 
@@ -45,25 +46,35 @@ export function TermsAgreementList({ agreement, className }: TermsAgreementListP
       </label>
 
       <div className="flex w-full flex-col gap-4">
-        {TERMS.map((term) => (
-          <div key={term.id} className="flex w-full flex-col gap-4">
-            <Divider />
-            <div className="flex w-full items-center justify-between gap-3">
-              <label className="flex min-w-0 cursor-pointer items-center gap-3">
-                <Checkbox size="24" checked={isAgreed(term.id)} onChange={() => toggle(term.id)} />
-                <span className="flex min-w-0 items-center gap-3 text-label-1 font-medium">
-                  <span className={term.required ? "text-primary-500" : "text-grayscale-700"}>
-                    {term.required ? "[필수]" : "[선택]"}
+        {TERMS.map((term) => {
+          const documentAvailable = hasTermsDocument(term.id);
+
+          return (
+            <div key={term.id} className="flex w-full flex-col gap-4">
+              <Divider />
+              <div className="flex w-full items-center justify-between gap-3">
+                <label className="flex min-w-0 cursor-pointer items-center gap-3">
+                  <Checkbox
+                    size="24"
+                    checked={isAgreed(term.id)}
+                    onChange={() => toggle(term.id)}
+                  />
+                  <span className="flex min-w-0 items-center gap-3 text-label-1 font-medium">
+                    <span className={term.required ? "text-primary-500" : "text-grayscale-700"}>
+                      {term.required ? "[필수]" : "[선택]"}
+                    </span>
+                    <span className="truncate text-grayscale-900">{term.label}</span>
                   </span>
-                  <span className="truncate text-grayscale-900">{term.label}</span>
-                </span>
-              </label>
-              <BtnUnderline size="12" onClick={() => setOpenedTermId(term.id)}>
-                약관 보기
-              </BtnUnderline>
+                </label>
+                {documentAvailable && (
+                  <BtnUnderline size="12" onClick={() => setOpenedTermId(term.id)}>
+                    약관 보기
+                  </BtnUnderline>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {openedTermId && (

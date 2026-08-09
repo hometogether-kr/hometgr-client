@@ -8,6 +8,7 @@ import { toSession } from "./user.mapper";
 
 const ONBOARDING_CONSENT_POLICY_VERSION = "1.0.0";
 
+// TODO(consent): 백엔드가 피그마 terms 기준으로 필수 consent를 정리하면 이 목록도 함께 줄입니다.
 const REQUIRED_ONBOARDING_CONSENT_KEYS = {
   host: ["termsOfService", "privacyCollection", "privacyThirdParty", "locationBasedServiceTerms"],
   student: [
