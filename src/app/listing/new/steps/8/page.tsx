@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 
 import { useDraftPhotos, useDraftStepFlow } from "@/features/save-listing-draft";
 import { ListingStep8Page } from "@/pages-layer/listing-step-8-photos";
@@ -12,7 +12,10 @@ function Step8() {
   const { uploadPhotos, isUploading } = useDraftPhotos(draftId ?? "");
   const { showToast } = useToast();
 
-  const photos = (draft?.photos ?? []).map((photo) => ({ id: photo.id, url: photo.readUrl }));
+  const photos = useMemo(
+    () => (draft?.photos ?? []).map((photo) => ({ id: photo.id, url: photo.readUrl })),
+    [draft?.photos],
+  );
 
   /*
    * 사진은 다음 단계로 넘어갈 때가 아니라 고르는 즉시 업로드합니다.
@@ -39,8 +42,6 @@ function Step8() {
 
   return (
     <ListingStep8Page
-      /* 사진이 추가·삭제되면 순서 편집 상태를 서버 순서로 되돌립니다. */
-      key={photos.map((photo) => photo.id).join(",")}
       photos={photos}
       isUploading={isUploading}
       isSaving={isSaving}
