@@ -4,10 +4,10 @@ import { z } from "zod";
 import { meResponseDtoSchema, putMeResponseDtoSchema } from "@/domains/user";
 import {
   backendFetch,
-  clearSessionTokens,
+  clearSessionTokensFromResponse,
   readSessionTokens,
   refreshTokenPair,
-  writeSessionTokens,
+  writeSessionTokensToResponse,
 } from "@/shared/api/server";
 
 const consentItemSchema = z.object({
@@ -88,11 +88,11 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   if (response.status === 401 && refreshToken) {
     const renewed = await refreshTokenPair(refreshToken);
     if (!renewed) {
-      await clearSessionTokens();
-      return errorResponse(401, "로그인이 필요합니다.", request.nextUrl.pathname);
+      const nextResponse = errorResponse(401, "로그인이 필요합니다.", request.nextUrl.pathname);
+      clearSessionTokensFromResponse(nextResponse);
+      return nextResponse;
     }
 
-    await writeSessionTokens(renewed);
     try {
       response = await putMe(parsed.data, renewed.accessToken);
     } catch {
@@ -113,9 +113,14 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   }
 
   const { accessToken: nextAccessToken, refreshToken: nextRefreshToken, ...session } = result.data;
-  await writeSessionTokens({ accessToken: nextAccessToken, refreshToken: nextRefreshToken });
 
-  return NextResponse.json(meResponseDtoSchema.parse(session), {
+  const nextResponse = NextResponse.json(meResponseDtoSchema.parse(session), {
     headers: { "Cache-Control": "no-store", Pragma: "no-cache" },
   });
+  writeSessionTokensToResponse(nextResponse, {
+    accessToken: nextAccessToken,
+    refreshToken: nextRefreshToken,
+  });
+
+  return nextResponse;
 }

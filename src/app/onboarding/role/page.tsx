@@ -17,7 +17,7 @@ import { useToast } from "@/shared/ui/toast";
 export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { session, isAuthenticated, isLoading } = useSession();
+  const { session, isAuthenticated, isLoading } = useSession({ mode: "always" });
   const { showToast } = useToast();
 
   useEffect(() => {
