@@ -2,10 +2,10 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import {
   backendFetch,
-  clearSessionTokens,
+  clearSessionTokensFromResponse,
   readSessionTokens,
   refreshTokenPair,
-  writeSessionTokens,
+  writeSessionTokensToResponse,
 } from "@/shared/api/server";
 import { getServerEnv } from "@/shared/config/env.server";
 
@@ -111,11 +111,10 @@ async function proxy(request: NextRequest, context: ProxyContext): Promise<NextR
 
   const renewed = await refreshTokenPair(refreshToken);
   if (!renewed) {
-    await clearSessionTokens();
-    return toClientResponse(response);
+    const clientResponse = toClientResponse(response);
+    clearSessionTokensFromResponse(clientResponse);
+    return clientResponse;
   }
-
-  await writeSessionTokens(renewed);
 
   try {
     const retried = await backendFetch(targetPath, {
@@ -124,7 +123,9 @@ async function proxy(request: NextRequest, context: ProxyContext): Promise<NextR
       body,
       accessToken: renewed.accessToken,
     });
-    return toClientResponse(retried);
+    const clientResponse = toClientResponse(retried);
+    writeSessionTokensToResponse(clientResponse, renewed);
+    return clientResponse;
   } catch {
     return toClientResponse(response);
   }
