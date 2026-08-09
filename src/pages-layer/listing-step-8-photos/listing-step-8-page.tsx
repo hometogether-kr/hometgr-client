@@ -25,6 +25,9 @@ const GUIDE_LINES = [
 const MIN_PHOTOS = MIN_LISTING_PHOTOS;
 const MAX_PHOTOS = MAX_LISTING_PHOTOS;
 const MIN_PHOTOS_MESSAGE = `최소 ${MIN_PHOTOS}장의 사진을 필수로 등록해야합니다.`;
+const ACCEPTED_PHOTO_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
+const ACCEPTED_PHOTO_TYPES_MESSAGE = "JPEG, PNG, WebP 형식의 사진만 업로드할 수 있어요.";
+type AcceptedPhotoMimeType = (typeof ACCEPTED_PHOTO_MIME_TYPES)[number];
 
 /** 서버에 저장된 초안 사진 */
 export interface ListingStep8Photo {
@@ -55,6 +58,10 @@ function orderSavedPhotos(
   const added = savedPhotos.filter((photo) => !orderedIds.has(photo.id));
 
   return [...ordered, ...added];
+}
+
+function isAcceptedPhotoMimeType(type: string): type is AcceptedPhotoMimeType {
+  return (ACCEPTED_PHOTO_MIME_TYPES as readonly string[]).includes(type);
 }
 
 /**
@@ -98,7 +105,13 @@ export function ListingStep8Page({
   const addFiles = (fileList: FileList | null) => {
     if (!fileList) return;
 
-    const files = Array.from(fileList).slice(0, MAX_PHOTOS - photos.length);
+    const selectedFiles = Array.from(fileList);
+    const files = selectedFiles
+      .filter((file) => isAcceptedPhotoMimeType(file.type))
+      .slice(0, MAX_PHOTOS - photos.length);
+    if (files.length !== selectedFiles.length) {
+      showToast(ACCEPTED_PHOTO_TYPES_MESSAGE, { variant: "error" });
+    }
     if (files.length > 0) onAddFiles?.(files);
   };
 
@@ -186,7 +199,7 @@ export function ListingStep8Page({
         <input
           ref={inputRef}
           type="file"
-          accept="image/*,video/*"
+          accept={ACCEPTED_PHOTO_MIME_TYPES.join(",")}
           multiple
           className="sr-only"
           onChange={(e) => {
