@@ -106,6 +106,7 @@ export function Footer({ className }: { className?: string }) {
           <FooterSocial />
         </div>
       </div>
+    <FooterBusinessInfo />
     </footer>
   );
 }
