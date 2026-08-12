@@ -50,7 +50,7 @@ function FooterSocial() {
       </a>
       {/* TODO: 채팅 채널 링크가 정해지면 href를 교체하세요. */}
       <a
-        href="#"
+        href="http://pf.kakao.com/_BKlhX"
         aria-label="채팅 문의"
         className="flex h-13.5 w-13.5 items-center justify-center rounded-full bg-grayscale-500"
       >
