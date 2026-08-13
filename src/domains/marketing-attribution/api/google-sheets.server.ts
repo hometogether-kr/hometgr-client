@@ -49,7 +49,11 @@ function createGoogleSheetsOidcClient() {
     service_account_impersonation_url:
       "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/" +
       `${config.GCP_SERVICE_ACCOUNT_EMAIL}:generateAccessToken`,
-    subject_token_supplier: { getSubjectToken: getVercelOidcToken },
+    subject_token_supplier: {
+      // Ignore Google's supplier context here. Passing it directly would treat
+      // context.audience as a Vercel custom OIDC audience.
+      getSubjectToken: () => getVercelOidcToken(),
+    },
     subject_token_type: "urn:ietf:params:oauth:token-type:jwt",
     token_url: "https://sts.googleapis.com/v1/token",
     type: "external_account",
