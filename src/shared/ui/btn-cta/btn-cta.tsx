@@ -22,6 +22,7 @@ export interface BtnCtaProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** Figma: right_ic — ic_variant 슬롯 */
   rightIcon?: ReactNode;
   children: ReactNode;
+  loading?: boolean;
 }
 
 const base =
@@ -55,7 +56,7 @@ const variantClasses: Record<BtnCtaVariant, string> = {
     "bg-grayscale-800 text-white hover:opacity-80 disabled:bg-grayscale-200 disabled:text-grayscale-400 disabled:hover:opacity-100",
   sub: "bg-primary-100 text-primary-500 hover:opacity-80 disabled:bg-grayscale-200 disabled:text-grayscale-400 disabled:hover:opacity-100",
   stroke:
-    "border border-grayscale-300 bg-transparent text-grayscale-600 hover:opacity-80 disabled:text-grayscale-400 disabled:hover:opacity-100",
+    "border border-grayscale-300 bg-transparent text-grayscale-600 hover:opacity-80 disabled:border-transparent disabled:bg-grayscale-200 disabled:text-grayscale-400 disabled:hover:opacity-100",
   kakao:
     "bg-system-kakao text-grayscale-900 hover:opacity-80 disabled:bg-grayscale-200 disabled:text-grayscale-400 disabled:hover:opacity-100",
 };
@@ -69,6 +70,16 @@ const variantClasses: Record<BtnCtaVariant, string> = {
  */
 const ariaDisabledClasses =
   "bg-grayscale-200 text-grayscale-400 border-transparent hover:opacity-100";
+
+/** 로딩 스피너 — 버튼 텍스트 색(currentColor)을 따르고, iconSize의 [&_svg] 규칙으로 크기가 잡힙니다 */
+function Spinner() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className="animate-spin" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.25" strokeWidth="3" />
+      <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
 
 /**
  * CTA 버튼 (Figma: btn_cta, node 133:839)
@@ -87,11 +98,15 @@ export function BtnCta({
   shape,
   leftIcon,
   rightIcon,
+  loading = false,
+  disabled,
   className,
   children,
   ...rest
 }: BtnCtaProps) {
   const visuallyDisabled = rest["aria-disabled"] === true || rest["aria-disabled"] === "true";
+  // 로딩 중에는 클릭을 막아야 하므로 disabled를 강제합니다(disabled:* 스타일도 함께 적용됩니다).
+  const isDisabled = disabled || loading;
 
   const classes = cn(
     base,
@@ -103,6 +118,25 @@ export function BtnCta({
     shape === "rect" && size === "pill" && "rounded-xl",
     className,
   );
+
+  const left = loading ? <Spinner /> : leftIcon;
+
+  return (
+    <button
+      type="button"
+      className={classes}
+      {...rest}
+      disabled={isDisabled}
+      aria-busy={loading || undefined}
+    >
+      {left && <span className="inline-flex shrink-0 items-center justify-center">{left}</span>}
+      <span className="[word-break:break-word] whitespace-nowrap">{children}</span>
+      {rightIcon && (
+        <span className="inline-flex shrink-0 items-center justify-center">{rightIcon}</span>
+      )}
+    </button>
+  );
+}
 
   return (
     <button type="button" className={classes} {...rest}>
