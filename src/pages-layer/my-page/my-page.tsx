@@ -1,14 +1,19 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
+import { useState } from "react";
 
-import { useSession } from "@/domains/user";
+import { logout, userQueryKeys, useSession } from "@/domains/user";
+import { useDeleteAccount } from "@/features/manage-account-session";
+import { ApiError } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { BtnUnderline } from "@/shared/ui/btn-underline";
 import { Divider } from "@/shared/ui/divider";
+import { Modal } from "@/shared/ui/modal";
 import { useToast } from "@/shared/ui/toast";
 import { SiteLayout } from "@/widgets/site-layout";
 
@@ -39,7 +44,51 @@ function MyPageShell({ children }: { children: ReactNode }) {
 export function MyPage() {
   const router = useRouter();
   const { session, isLoading, isAuthenticated } = useSession();
+  const queryClient = useQueryClient();
+  const { deleteAccount, isDeletingAccount } = useDeleteAccount();
   const { showToast } = useToast();
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  /** 사이드바(widgets/sidebar-mobile)와 같은 경로를 써서 로그아웃 후 상태가 어긋나지 않게 합니다. */
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      await queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
+      router.push(ROUTES.home);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
+
+  const redirectToLogin = () => {
+    router.replace(ROUTES.auth.login);
+    router.refresh();
+  };
+
+  const handleDeleteConfirmClose = () => {
+    if (!isDeletingAccount) setDeleteConfirmOpen(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteAccount();
+      setDeleteConfirmOpen(false);
+      redirectToLogin();
+    } catch (error) {
+      if (error instanceof ApiError && error.isUnauthorized) {
+        redirectToLogin();
+        return;
+      }
+
+      showToast(error instanceof ApiError ? error.message : "회원 탈퇴를 처리하지 못했습니다.", {
+        variant: "error",
+      });
+    }
+  };
 
   if (isLoading) {
     return (
@@ -100,9 +149,58 @@ export function MyPage() {
         )}
       </div>
 
-      <div className="flex justify-center pt-4 md:pt-0">
-        <BtnUnderline tone="muted">회원 탈퇴</BtnUnderline>
+      <div className="flex flex-col justify-center gap-4 pt-4">
+        <BtnUnderline
+          tone="muted"
+          disabled={isLoggingOut}
+          onClick={() => {
+            void handleLogout();
+          }}
+        >
+          {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
+        </BtnUnderline>
+        <BtnUnderline
+          tone="muted"
+          disabled={isLoggingOut || isDeletingAccount}
+          onClick={() => setDeleteConfirmOpen(true)}
+        >
+          {isDeletingAccount ? "탈퇴 처리 중..." : "회원 탈퇴"}
+        </BtnUnderline>
       </div>
+
+      <Modal
+        open={deleteConfirmOpen}
+        onClose={handleDeleteConfirmClose}
+        title="회원 탈퇴"
+        footer={
+          <div className="flex w-full gap-2">
+            <BtnCta
+              variant="stroke"
+              size="l"
+              className="flex-1"
+              disabled={isDeletingAccount}
+              onClick={handleDeleteConfirmClose}
+            >
+              취소
+            </BtnCta>
+            <BtnCta
+              variant="emphasize"
+              size="l"
+              className="flex-1 bg-system-error! text-white"
+              disabled={isDeletingAccount}
+              onClick={() => {
+                void handleDeleteAccount();
+              }}
+            >
+              {isDeletingAccount ? "처리 중..." : "탈퇴하기"}
+            </BtnCta>
+          </div>
+        }
+      >
+        <p className="text-body-1 font-medium [word-break:keep-all] text-grayscale-700">
+          탈퇴하면 계정 정보가 삭제되며 되돌릴 수 없습니다.
+        </p>
+      </Modal>
     </MyPageShell>
   );
 }
