@@ -11,7 +11,7 @@ import { SiteLayout } from "@/widgets/site-layout";
 export function RoomsPage() {
   return (
     <SiteLayout>
-      <div className="mx-auto w-full max-w-[1520px] px-5 py-8 lg:px-10">
+      <div className="mx-auto w-full max-w-[1600px] px-5 py-8 lg:px-10">
         {/* TODO(E/HOM-209): 히어로 검색바가 이 자리에 들어오며 <h1>을 대체합니다 */}
         <h1 className="sr-only">매물 보기</h1>
         <RoomList />

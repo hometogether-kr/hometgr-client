@@ -38,7 +38,7 @@ export function RoomAvailabilityChip({ availability, className }: RoomAvailabili
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-label-2 font-medium",
+        "inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-label-1 font-medium",
         style.container,
         className,
       )}
