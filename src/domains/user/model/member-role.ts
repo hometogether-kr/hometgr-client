@@ -1,9 +1,9 @@
 /** 회원 유형 — host(방을 내놓는 사람) · guest(방을 찾는 사람) */
 export type MemberRole = "host" | "guest";
 
-/** 회원 유형 표시 문구 (Figma: 모바일 사이드바 1504:41941 — "호스트 회원") */
+/** 헤더·사이드바에서 사용자 이름 아래에 붙는 짧은 회원 유형 라벨 (Figma: 모바일 사이드바 1504:41941) */
 export const MEMBER_ROLE_LABELS: Record<MemberRole, string> = {
-  host: "호스트 회원",
+  host: "집주인 회원",
   guest: "입주자 회원",
 };
 
