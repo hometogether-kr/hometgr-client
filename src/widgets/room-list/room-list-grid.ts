@@ -7,4 +7,4 @@
  * 열: 1(모바일) → 2(≥640) → 3(≥1024) → 4(≥1440), 열 간격 20px, 행 간격 48px (설계 §8).
  */
 export const ROOM_GRID_CLASS =
-  "grid grid-cols-1 gap-x-5 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 min-[1440px]:grid-cols-4";
+  "grid grid-cols-1 gap-x-5 gap-y-12 sm:grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4";
