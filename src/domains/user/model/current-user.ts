@@ -1,3 +1,4 @@
+import type { UserConsents } from "./consent";
 import type { MemberRole } from "./member-role";
 
 /**
@@ -34,10 +35,12 @@ export interface Session {
   /** 필수 온보딩(약관 동의·회원 유형·기본 정보)이 남았는지 */
   onboardingRequired: boolean;
   user: CurrentUser | null;
+  consents: UserConsents | null;
 }
 
 export const ANONYMOUS_SESSION: Session = {
   isAuthenticated: false,
   onboardingRequired: false,
   user: null,
+  consents: null,
 };

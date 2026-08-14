@@ -1,6 +1,12 @@
 /** 회원 유형 — host(방을 내놓는 사람) · guest(방을 찾는 사람) */
 export type MemberRole = "host" | "guest";
 
+/** 헤더·사이드바에서 사용자 이름 아래에 붙는 짧은 회원 유형 라벨 */
+export const MEMBER_ROLE_LABEL: Record<MemberRole, string> = {
+  host: "집주인 회원",
+  guest: "입주자 회원",
+};
+
 export interface MemberRoleOption {
   role: MemberRole;
   /** 회원 유형 선택 화면의 카드 제목 */

@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { CONSENT_KEYS } from "../model/consent";
+
 /** OpenAPI: UserRole */
 export const userRoleDtoSchema = z.enum([
   "student",
@@ -26,20 +28,7 @@ export const userProfileDtoSchema = z.object({
 export type UserProfileDto = z.infer<typeof userProfileDtoSchema>;
 
 /** OpenAPI: ConsentKey */
-export const consentKeyDtoSchema = z.enum([
-  "termsOfService",
-  "privacyCollection",
-  "privacyThirdParty",
-  "locationBasedServiceTerms",
-  "roomPublication",
-  "noFraudPledge",
-  "alimtalkOptIn",
-  "econtractAgreement",
-  "careServiceMarketing",
-  "marketingOptIn",
-  "paymentRefundPolicy",
-  "kakaoChannelOptIn",
-]);
+export const consentKeyDtoSchema = z.enum(CONSENT_KEYS);
 
 export type ConsentKeyDto = z.infer<typeof consentKeyDtoSchema>;
 
@@ -52,11 +41,15 @@ export const consentStateItemDtoSchema = z.object({
   agreedAt: z.string().nullable(),
 });
 
+export type ConsentStateItemDto = z.infer<typeof consentStateItemDtoSchema>;
+
 /** OpenAPI: MeConsentsResponseDto */
 export const meConsentsDtoSchema = z.object({
   items: z.array(consentStateItemDtoSchema),
   requiredSatisfied: z.boolean(),
 });
+
+export type MeConsentsDto = z.infer<typeof meConsentsDtoSchema>;
 
 /** OpenAPI: StudentMeResponseDto */
 export const studentMeDtoSchema = z.object({
