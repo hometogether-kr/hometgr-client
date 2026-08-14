@@ -26,6 +26,8 @@ export const ROUTES = {
     kakaoStart: "/auth/kakao",
     /** 로그아웃 (POST) */
     logout: "/api/auth/logout",
+    /** 회원 탈퇴 (DELETE, BFF Route Handler) */
+    account: "/api/auth/account",
     /** 약관 동의 (카카오 인증 직후) */
     terms: "/onboarding/terms",
     /** 회원 유형 선택 */
