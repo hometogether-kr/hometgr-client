@@ -21,8 +21,12 @@ export interface BtnCtaProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   leftIcon?: ReactNode;
   /** Figma: right_ic — ic_variant 슬롯 */
   rightIcon?: ReactNode;
-  children: ReactNode;
+  /**
+   * 비동기 처리 중 표시. leftIcon 자리에 스피너를 띄우고 버튼을 강제로 disabled +
+   * aria-busy 처리합니다. size별 아이콘 크기·버튼 높이가 고정이라 레이아웃은 유지됩니다.
+   */
   loading?: boolean;
+  children: ReactNode;
 }
 
 const base =
@@ -130,19 +134,6 @@ export function BtnCta({
       aria-busy={loading || undefined}
     >
       {left && <span className="inline-flex shrink-0 items-center justify-center">{left}</span>}
-      <span className="[word-break:break-word] whitespace-nowrap">{children}</span>
-      {rightIcon && (
-        <span className="inline-flex shrink-0 items-center justify-center">{rightIcon}</span>
-      )}
-    </button>
-  );
-}
-
-  return (
-    <button type="button" className={classes} {...rest}>
-      {leftIcon && (
-        <span className="inline-flex shrink-0 items-center justify-center">{leftIcon}</span>
-      )}
       <span className="[word-break:break-word] whitespace-nowrap">{children}</span>
       {rightIcon && (
         <span className="inline-flex shrink-0 items-center justify-center">{rightIcon}</span>
