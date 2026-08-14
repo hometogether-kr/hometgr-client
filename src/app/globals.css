@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @theme {
+  --breakpoint-3xl: 90rem; /* 1440px — 매물 그리드 4열 (설계 §8) */
+
   /* Figma: Primary/Blue */
   --color-primary-50: #f2f8ff;
   --color-primary-100: #e2eeff;
