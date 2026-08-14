@@ -49,11 +49,13 @@ const MENU: MenuGroup[] = [
 export interface SidebarMobileProps {
   open: boolean;
   onClose: () => void;
-  /** 로그인 사용자 이름 */
+  /** 로그인 사용자 이름. 없으면 비로그인으로 보고 로그인 링크를 보여줍니다. */
   userName?: string;
-  /** 회원 유형 라벨 (예: 호스트 회원) */
+  /** 회원 유형 라벨 (예: 집주인 회원). 관리자 계정처럼 유형이 없으면 생략하세요. */
   userRole?: string;
+  /** 지정하면 메뉴 하단에 로그아웃 버튼이 나옵니다. */
   onLogout?: () => void;
+  isLoggingOut?: boolean;
 }
 
 /**
@@ -65,9 +67,10 @@ export interface SidebarMobileProps {
 export function SidebarMobile({
   open,
   onClose,
-  userName = "홍길동",
-  userRole = "호스트 회원",
+  userName,
+  userRole,
   onLogout,
+  isLoggingOut = false,
 }: SidebarMobileProps) {
   const [expanded, setExpanded] = useState<string | null>("listing");
 
@@ -94,9 +97,13 @@ export function SidebarMobile({
 
       <div className="flex w-full flex-1 flex-col gap-5 overflow-y-auto px-4">
         <div className="flex w-full flex-col gap-1">
-          <Link href={ROUTES.myPage} className="flex items-start gap-1">
+          <Link
+            href={userName ? ROUTES.myPage : ROUTES.auth.login}
+            onClick={onClose}
+            className="flex items-start gap-1"
+          >
             <span className="text-xl leading-[1.4] font-semibold tracking-[-0.2px] whitespace-nowrap text-grayscale-800">
-              {userName}님
+              {userName ? `${userName}님` : "로그인/회원가입"}
             </span>
             <span className="flex size-[18px] items-center justify-center p-1" aria-hidden="true">
               <img
@@ -106,7 +113,10 @@ export function SidebarMobile({
               />
             </span>
           </Link>
-          <p className="py-1.5 text-sm leading-[1.4] font-medium text-grayscale-500">{userRole}</p>
+          {/* 높이를 비워두면 세션 조회가 끝날 때 아래 메뉴가 밀립니다. */}
+          <p className="min-h-[29px] py-1.5 text-sm leading-[1.4] font-medium text-grayscale-500">
+            {userRole}
+          </p>
         </div>
 
         <nav className="flex w-full flex-col gap-2">
@@ -162,15 +172,18 @@ export function SidebarMobile({
               )}
             </div>
           ))}
-          <div className="border-t border-grayscale-100 pt-2">
-            <button
-              type="button"
-              onClick={onLogout}
-              className="flex w-full items-center px-2 py-3 text-left text-lg leading-[1.4] font-medium tracking-[-0.18px] text-system-error"
-            >
-              로그아웃
-            </button>
-          </div>
+          {onLogout && (
+            <div className="border-t border-grayscale-100 pt-2">
+              <button
+                type="button"
+                onClick={onLogout}
+                disabled={isLoggingOut}
+                className="flex w-full items-center px-2 py-3 text-left text-lg leading-[1.4] font-medium tracking-[-0.18px] text-system-error disabled:text-grayscale-400"
+              >
+                {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
+              </button>
+            </div>
+          )}
         </nav>
       </div>
     </div>

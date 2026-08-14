@@ -4,6 +4,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
+import { MEMBER_ROLE_LABEL, useSession } from "@/domains/user";
+import { useLogoutFlow } from "@/features/manage-account-session";
 import { cn } from "@/shared/lib/cn";
 import { SidebarMobile } from "@/widgets/sidebar-mobile";
 
@@ -69,6 +71,71 @@ function BackButton({ onBack, backIcon }: { onBack?: () => void; backIcon?: Reac
 }
 
 /**
+ * 로고 + 햄버거 헤더와 내장 사이드 드로어
+ *
+ * 세션 훅은 이 변형에서만 필요해서 별도 컴포넌트로 분리했습니다. back·title 변형까지
+ * 한 컴포넌트에 두면 뒤로가기 헤더만 있는 화면에서도 세션 조회가 걸립니다.
+ */
+function GnbMobileLogoBar({ className, onMenuClick, menuIcon }: Omit<GnbMobileLogo, "variant">) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { session, isAuthenticated } = useSession();
+  const { logout, isLoggingOut } = useLogoutFlow();
+
+  const user = isAuthenticated ? session.user : null;
+  const memberRole = user?.memberRole;
+
+  const handleLogout = async () => {
+    await logout();
+    setMenuOpen(false);
+  };
+
+  return (
+    <>
+      <header
+        className={cn(
+          "flex w-full items-center justify-between border-b border-grayscale-100 bg-white px-5 py-2",
+          className,
+        )}
+      >
+        <Link href="/" className="flex items-center py-2" aria-label="Home Together">
+          {/* eslint-disable-next-line @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */}
+          <img src={LOGO} alt="Home Together" width={113} height={20} className="block" />
+        </Link>
+        <button
+          type="button"
+          aria-label="메뉴 열기"
+          onClick={onMenuClick ?? (() => setMenuOpen(true))}
+          className="flex items-center"
+        >
+          <span className="flex size-6 items-center justify-center">
+            {menuIcon ?? (
+              // eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정
+              <img alt="" src={FIGMA_TEMP_MENU} className="block size-full max-w-none" />
+            )}
+          </span>
+        </button>
+      </header>
+      {!onMenuClick && (
+        <SidebarMobile
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          userName={user?.name ?? undefined}
+          userRole={memberRole ? MEMBER_ROLE_LABEL[memberRole] : undefined}
+          isLoggingOut={isLoggingOut}
+          onLogout={
+            isAuthenticated
+              ? () => {
+                  void handleLogout();
+                }
+              : undefined
+          }
+        />
+      )}
+    </>
+  );
+}
+
+/**
  * 모바일 GNB (Figma: gnb_mobile, node 541:22207)
  *
  * - logo: 로고 + 햄버거 (border-b grayscale-100 · px-20 py-8)
@@ -77,38 +144,14 @@ function BackButton({ onBack, backIcon }: { onBack?: () => void; backIcon?: Reac
  */
 export function GnbMobile(props: GnbMobileProps) {
   const { className } = props;
-  const [menuOpen, setMenuOpen] = useState(false);
 
   if (props.variant === "logo") {
-    const { onMenuClick } = props;
     return (
-      <>
-        <header
-          className={cn(
-            "flex w-full items-center justify-between border-b border-grayscale-100 bg-white px-5 py-2",
-            className,
-          )}
-        >
-          <Link href="/" className="flex items-center py-2" aria-label="Home Together">
-            {/* eslint-disable-next-line @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */}
-            <img src={LOGO} alt="Home Together" width={113} height={20} className="block" />
-          </Link>
-          <button
-            type="button"
-            aria-label="메뉴 열기"
-            onClick={onMenuClick ?? (() => setMenuOpen(true))}
-            className="flex items-center"
-          >
-            <span className="flex size-6 items-center justify-center">
-              {props.menuIcon ?? (
-                // eslint-disable-next-line @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정
-                <img alt="" src={FIGMA_TEMP_MENU} className="block size-full max-w-none" />
-              )}
-            </span>
-          </button>
-        </header>
-        {!onMenuClick && <SidebarMobile open={menuOpen} onClose={() => setMenuOpen(false)} />}
-      </>
+      <GnbMobileLogoBar
+        className={className}
+        onMenuClick={props.onMenuClick}
+        menuIcon={props.menuIcon}
+      />
     );
   }
 
