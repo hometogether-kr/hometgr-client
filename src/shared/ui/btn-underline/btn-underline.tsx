@@ -29,7 +29,7 @@ const sizeClasses: Record<BtnUnderlineSize, string> = {
 };
 
 const baseClasses =
-  "inline-flex shrink-0 items-center justify-center whitespace-nowrap border-b border-solid font-medium transition-opacity hover:opacity-70";
+  "inline-flex shrink-0 items-center justify-center whitespace-nowrap border-b border-solid font-medium transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:opacity-40";
 
 const toneClasses: Record<BtnUnderlineTone, string> = {
   default: "border-grayscale-700 text-grayscale-700",
