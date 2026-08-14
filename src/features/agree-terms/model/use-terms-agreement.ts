@@ -2,10 +2,16 @@
 
 import { useCallback, useState } from "react";
 
-import type { TermId } from "./terms";
+import type { TermId, TermItem } from "./terms";
 import { TERMS } from "./terms";
 
+export interface UseTermsAgreementOptions {
+  terms?: readonly TermItem[];
+  initialAgreedIds?: readonly TermId[];
+}
+
 export interface TermsAgreement {
+  terms: readonly TermItem[];
   agreedIds: readonly TermId[];
   isAgreed: (id: TermId) => boolean;
   toggle: (id: TermId) => void;
@@ -24,8 +30,11 @@ export interface TermsAgreement {
  * 전체 동의는 모든 항목을 한 번에 켜고 끄며, 개별 항목을 하나라도 해제하면
  * 자동으로 풀립니다(파생 값으로 계산).
  */
-export function useTermsAgreement(): TermsAgreement {
-  const [agreedIds, setAgreedIds] = useState<TermId[]>([]);
+export function useTermsAgreement({
+  terms = TERMS,
+  initialAgreedIds = [],
+}: UseTermsAgreementOptions = {}): TermsAgreement {
+  const [agreedIds, setAgreedIds] = useState<TermId[]>(() => [...initialAgreedIds]);
 
   const isAgreed = useCallback((id: TermId) => agreedIds.includes(id), [agreedIds]);
 
@@ -35,22 +44,23 @@ export function useTermsAgreement(): TermsAgreement {
     );
   }, []);
 
-  const allAgreed = agreedIds.length === TERMS.length;
+  const allAgreed = terms.every((term) => agreedIds.includes(term.id));
 
   const toggleAll = useCallback(() => {
     setAgreedIds((current) =>
-      current.length === TERMS.length ? [] : TERMS.map((term) => term.id),
+      terms.every((term) => current.includes(term.id)) ? [] : terms.map((term) => term.id),
     );
-  }, []);
+  }, [terms]);
 
   return {
+    terms,
     agreedIds,
     isAgreed,
     toggle,
     allAgreed,
-    partiallyAgreed: agreedIds.length > 0 && !allAgreed,
+    partiallyAgreed: terms.some((term) => agreedIds.includes(term.id)) && !allAgreed,
     toggleAll,
-    requiredSatisfied: TERMS.filter((term) => term.required).every((term) =>
+    requiredSatisfied: terms.filter((term) => term.required).every((term) =>
       agreedIds.includes(term.id),
     ),
   };

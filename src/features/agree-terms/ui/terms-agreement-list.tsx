@@ -6,7 +6,6 @@ import { BtnUnderline } from "@/shared/ui/btn-underline";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Divider } from "@/shared/ui/divider";
 
-import { TERMS } from "../model/terms";
 import type { TermsAgreement } from "../model/use-terms-agreement";
 
 export interface TermsAgreementListProps {
@@ -21,7 +20,7 @@ export interface TermsAgreementListProps {
  * 약관 전문으로 이동하는 밑줄 링크가 붙습니다.
  */
 export function TermsAgreementList({ agreement, className }: TermsAgreementListProps) {
-  const { isAgreed, toggle, allAgreed, partiallyAgreed, toggleAll } = agreement;
+  const { terms, isAgreed, toggle, allAgreed, partiallyAgreed, toggleAll } = agreement;
 
   return (
     <div
@@ -41,7 +40,7 @@ export function TermsAgreementList({ agreement, className }: TermsAgreementListP
       </label>
 
       <div className="flex w-full flex-col gap-4">
-        {TERMS.map((term) => (
+        {terms.map((term) => (
           <div key={term.id} className="flex w-full flex-col gap-4">
             <Divider />
             <div className="flex w-full items-center justify-between gap-3">
