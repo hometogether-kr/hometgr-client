@@ -33,6 +33,8 @@ export type ApiErrorKind =
 export interface ApiErrorOptions {
   status: number;
   kind: ApiErrorKind;
+  /** 서버가 내려준 애플리케이션 오류 코드 */
+  code?: string;
   /** 필드 단위 검증 메시지 — 서버가 배열로 내려준 경우 채워집니다. */
   details?: readonly string[];
   cause?: unknown;
@@ -47,13 +49,15 @@ export interface ApiErrorOptions {
 export class ApiError extends Error {
   readonly status: number;
   readonly kind: ApiErrorKind;
+  readonly code: string | null;
   readonly details: readonly string[];
 
-  constructor(message: string, { status, kind, details = [], cause }: ApiErrorOptions) {
+  constructor(message: string, { status, kind, code, details = [], cause }: ApiErrorOptions) {
     super(message, { cause });
     this.name = "ApiError";
     this.status = status;
     this.kind = kind;
+    this.code = code ?? null;
     this.details = details;
   }
 
@@ -109,6 +113,7 @@ export function toApiError(status: number, rawBody: unknown): ApiError {
   return new ApiError(primaryMessage || (DEFAULT_MESSAGE[kind] ?? "요청을 처리하지 못했습니다."), {
     status,
     kind,
+    code: parsed.data.error,
     details,
   });
 }
