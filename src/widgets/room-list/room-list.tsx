@@ -37,7 +37,7 @@ function RoomListContent({ filter }: { filter: RoomFilter }) {
     // 정규화된 필터 문자열을 키로 씁니다 — 같은 조건이 항상 같은 캐시로 갑니다(설계 §2-6).
     // page는 키에 넣지 않습니다(무한 쿼리가 한 키 아래 페이지를 누적).
     queryKey: roomQueryKeys.list(serializeRoomFilter({ ...filter, page: 1 })),
-    queryFn: ({ pageParam }) => fetchRooms({ ...listQuery, page: pageParam }),
+    queryFn: ({ pageParam, signal }) => fetchRooms({ ...listQuery, page: pageParam }, signal),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => (lastPage.hasNext ? lastPage.page + 1 : undefined),
   });

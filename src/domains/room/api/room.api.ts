@@ -1,3 +1,5 @@
+import { apiRequest } from "@/shared/api";
+
 import type { RoomListResult, RoomSort } from "../model/room";
 import { DEFAULT_ROOM_SORT } from "../model/room";
 import type {
@@ -6,8 +8,6 @@ import type {
   OccupancyCount,
   RoomType,
 } from "../model/room-options";
-import { MOCK_ROOM_DTOS } from "./mock-rooms";
-import type { RoomDto } from "./room.dto";
 import { roomListResponseSchema } from "./room.dto";
 import { toRoomListResult } from "./room.mapper";
 
@@ -47,98 +47,78 @@ export interface RoomListQuery {
   gender?: GenderPreference;
 }
 
+/** 그리드 한 페이지 = 카드 8개 (설계 §2 스켈레톤 8개와 일치) */
 const PAGE_SIZE = 8;
 const KRW_PER_MANWON = 10_000;
 
-function matchesKeyword(dto: RoomDto, keyword: string): boolean {
-  const q = keyword.toLowerCase();
-  return (
-    dto.buildingName.toLowerCase().includes(q) ||
-    dto.neighborhood.toLowerCase().includes(q) ||
-    dto.transitSummary.toLowerCase().includes(q)
-  );
+/** 우리 `minTerm` enum → API `minStayMonths`(숫자). 의미: "요청 기간 이하 최소거주" (백엔드 확인) */
+const MIN_STAY_MONTHS: Record<ContractTerm, number> = {
+  months1: 1,
+  months3: 3,
+  months6: 6,
+  year1Plus: 12,
+};
+
+/**
+ * 우리 `sort` → API `sortBy` + `order`.
+ *
+ * API에는 "추천" 정렬이 없어 `recommended`는 기본값(createdAt DESC)으로 두어 파라미터를
+ * 보내지 않습니다 — 현재 `latest`와 결과가 같습니다. 서버 추천 정렬이 생기면 여기만 바꿉니다.
+ */
+const SORT_PARAM: Record<RoomSort, { sortBy?: string; order?: "ASC" | "DESC" }> = {
+  recommended: {},
+  latest: { sortBy: "createdAt", order: "DESC" },
+  rentAsc: { sortBy: "monthlyRentKrw", order: "ASC" },
+  depositAsc: { sortBy: "depositKrw", order: "ASC" },
+  moveInAsc: { sortBy: "availableFrom", order: "ASC" },
+};
+
+/** 만원 → 원. undefined는 그대로 통과(미지정). */
+function toKrw(manwon: number | undefined): number | undefined {
+  return manwon === undefined ? undefined : manwon * KRW_PER_MANWON;
 }
 
 /**
- * 목 필터링 — DTO에 필드가 있는 조건(검색어·월세·보증금)만 적용합니다.
+ * 매물 목록을 조회합니다. (`GET /rooms` — 공개 엔드포인트, 인증 불필요)
  *
- * 유형·지역·계약기간·인원·성별은 목 DTO에 대응 필드가 없어 여기서 걸러지지 않습니다.
- * 다만 이 값들은 정규화된 쿼리 키에는 반영돼 캐시가 분리됩니다. 실제 API를 붙일 때는
- * 이 함수 대신 서버가 필터링하고, `fetchRooms` 본문만 교체됩니다(설계 §2-5).
- */
-function applyMockFilter(dtos: readonly RoomDto[], query: RoomListQuery): RoomDto[] {
-  return dtos.filter((dto) => {
-    if (query.keyword && !matchesKeyword(dto, query.keyword)) return false;
-
-    const rent = Math.round(dto.monthlyRentKrw / KRW_PER_MANWON);
-    const deposit = Math.round(dto.depositKrw / KRW_PER_MANWON);
-    if (query.rentMin !== undefined && rent < query.rentMin) return false;
-    if (query.rentMax !== undefined && rent > query.rentMax) return false;
-    if (query.depositMin !== undefined && deposit < query.depositMin) return false;
-    if (query.depositMax !== undefined && deposit > query.depositMax) return false;
-
-    return true;
-  });
-}
-
-/** "YYYY-MM-DD" 문자열 비교 = 날짜 비교. 미정(null)은 뒤로 보냅니다. */
-function compareMoveIn(a: string | null, b: string | null): number {
-  if (a === b) return 0;
-  if (a === null) return 1;
-  if (b === null) return -1;
-  return a < b ? -1 : 1;
-}
-
-/**
- * 목 정렬 — DTO 필드로 표현 가능한 것만 실제로 재배열합니다.
+ * 클라이언트(`"use client"` 위젯)에서만 호출되며, same-origin BFF 프록시(`/api/bff/rooms`)를
+ * 거칩니다. 응답은 `roomListResponseSchema`로 검증된 뒤 매퍼가 도메인 모델로 바꿉니다.
+ * SSR 프리페치를 쓰지 않는 이유: 사진이 만료되는 서명 URL이라, 서버에서 미리 받아 늦게
+ * 하이드레이션하면 만료된 URL을 그릴 수 있습니다(설계 §2-5 — 하이드레이션 보류 결정).
  *
- * recommended·latest는 목 DTO에 등록일시가 없어 목 순서를 그대로 둡니다(실제 API에서
- * 정렬). rentAsc·depositAsc·moveInAsc는 즉시 확인 가능합니다.
+ * ⚠️ 스텁: 아래 4개 필터는 서버 계약이 없어 **전송하지 않습니다**(설계 §11 남은 질문).
+ * URL·UI에는 남아 있지만 서버 필터링에는 반영되지 않습니다 — PR "가정한 값"에 명시.
+ *   - keyword(q): 자유 검색 파라미터 없음 (API는 `region` 정확일치만 지원)
+ *   - sido/sigungu: `region`은 "서울시 강남구" 같은 정확일치 문자열 — 유효 목록 확정 후
+ *   - roomTypes: `roomType`/`propertyType`/`buildingType`/`rentalSpaceType` 단일 enum ×4
+ *                (v1/v2 두 세대) — 타깃 필드·다중 허용 여부 확정 후
+ *   - people: 대응 파라미터 없음
  */
-function applyMockSort(dtos: readonly RoomDto[], sort: RoomSort): RoomDto[] {
-  const sorted = [...dtos];
-  switch (sort) {
-    case "rentAsc":
-      sorted.sort((a, b) => a.monthlyRentKrw - b.monthlyRentKrw);
-      break;
-    case "depositAsc":
-      sorted.sort((a, b) => a.depositKrw - b.depositKrw);
-      break;
-    case "moveInAsc":
-      sorted.sort((a, b) => compareMoveIn(a.availableFrom, b.availableFrom));
-      break;
-    case "recommended":
-    case "latest":
-    default:
-      break;
-  }
-  return sorted;
-}
-
-/**
- * 매물 목록을 조회합니다.
- *
- * 서버 컴포넌트·클라이언트 훅 양쪽에서 호출 가능한 시그니처입니다. 지금은 목 데이터를
- * 필터·정렬·페이지네이션하지만, 실제 API 응답과 동일한 경로(응답 스키마 `parse` → 매퍼)를
- * 통과시켜 두어 API 확정 시 이 함수 본문만 바꾸면 됩니다(설계 §2-5).
- */
-export async function fetchRooms(query: RoomListQuery): Promise<RoomListResult> {
+export async function fetchRooms(
+  query: RoomListQuery,
+  signal?: AbortSignal,
+): Promise<RoomListResult> {
   const { page, sort = DEFAULT_ROOM_SORT } = query;
+  const sortParam = SORT_PARAM[sort];
 
-  const filtered = applyMockFilter(MOCK_ROOM_DTOS, query);
-  const sorted = applyMockSort(filtered, sort);
+  const dto = await apiRequest({
+    path: "/rooms",
+    schema: roomListResponseSchema,
+    signal,
+    searchParams: {
+      page,
+      limit: PAGE_SIZE,
+      sortBy: sortParam.sortBy,
+      order: sortParam.order,
+      depositMin: toKrw(query.depositMin),
+      depositMax: toKrw(query.depositMax),
+      monthlyRentMin: toKrw(query.rentMin),
+      monthlyRentMax: toKrw(query.rentMax),
+      preferredGender: query.gender,
+      minStayMonths: query.minTerm ? MIN_STAY_MONTHS[query.minTerm] : undefined,
+      availableFrom: query.moveInDate,
+    },
+  });
 
-  const start = (page - 1) * PAGE_SIZE;
-  const pageItems = sorted.slice(start, start + PAGE_SIZE);
-
-  const response = {
-    rooms: pageItems,
-    totalCount: sorted.length,
-    page,
-    hasNext: start + PAGE_SIZE < sorted.length,
-  };
-
-  // 서버 응답은 계약 위반을 오류로 드러내야 하므로 safeParse가 아닌 parse를 씁니다(설계 §6.0c).
-  const dto = roomListResponseSchema.parse(response);
-  return Promise.resolve(toRoomListResult(dto));
+  return toRoomListResult(dto);
 }
