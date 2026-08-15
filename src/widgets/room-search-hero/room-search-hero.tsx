@@ -101,7 +101,7 @@ export function RoomSearchHero({ filter }: RoomSearchHeroProps) {
   };
 
   return (
-    <section className="flex flex-col items-center gap-6 py-6">
+    <section className="flex flex-col items-center gap-8 pt-15 pb-6">
       <h1 className="text-title-2 font-semibold text-grayscale-900">머물고 싶은 방을 탐색하세요</h1>
 
       <div ref={rootRef} className="relative w-full max-w-[990px]">
@@ -109,7 +109,7 @@ export function RoomSearchHero({ filter }: RoomSearchHeroProps) {
           <label htmlFor={`${baseId}-input`} className="sr-only">
             매물 검색
           </label>
-          <div className="flex items-center gap-2 rounded-xl border border-grayscale-300 bg-white py-2 pr-3 pl-5 focus-within:border-primary-500">
+          <div className="flex items-center rounded-xl border border-grayscale-300 bg-white py-2 pr-3 pl-5 focus-within:border-primary-500">
             <input
               id={`${baseId}-input`}
               type="search"
@@ -127,12 +127,12 @@ export function RoomSearchHero({ filter }: RoomSearchHeroProps) {
               onFocus={() => setOpen(true)}
               onKeyDown={handleKeyDown}
               placeholder="지역, 동, 지하철역 등으로 검색해보세요"
-              className="min-w-0 flex-1 bg-transparent text-body-1 text-grayscale-900 placeholder:text-grayscale-300 focus:outline-none"
+              className="min-w-0 flex-1 bg-transparent text-body-1 font-medium text-grayscale-900 placeholder:text-grayscale-300 focus:outline-none"
             />
             <button
               type="submit"
               aria-label="검색"
-              className="shrink-0 rounded-lg p-1 text-grayscale-700 transition-colors hover:text-primary-500 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+              className="shrink-0 rounded-lg p-2 text-grayscale-600 transition-colors hover:text-primary-500 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none"
             >
               <Icon name="search" size={24} />
             </button>
