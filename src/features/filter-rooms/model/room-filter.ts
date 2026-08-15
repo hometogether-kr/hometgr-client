@@ -135,3 +135,30 @@ export function toRoomListQuery(filter: RoomFilter): RoomListQuery {
     gender: filter.gender ?? undefined,
   };
 }
+
+export interface RoomFilterErrors {
+  deposit: string | null;
+  rent: string | null;
+}
+
+/**
+ * 금액 범위 검증 (설계 §9)
+ *
+ * 최소 > 최대면 해당 쌍에 에러 문구를 냅니다. 가격 섹션은 이 문구를 표시하고, 모달은
+ * `hasRoomFilterError`로 "완료"를 비활성화합니다 — 표시와 판단이 draft라는 한 소스에서
+ * 파생되도록 여기 모아둡니다.
+ */
+export function getRoomFilterErrors(filter: RoomFilter): RoomFilterErrors {
+  const rangeError = (min: number | null, max: number | null) =>
+    min !== null && max !== null && min > max ? "최소 금액이 최대 금액보다 커요" : null;
+
+  return {
+    deposit: rangeError(filter.depositMin, filter.depositMax),
+    rent: rangeError(filter.rentMin, filter.rentMax),
+  };
+}
+
+export function hasRoomFilterError(filter: RoomFilter): boolean {
+  const errors = getRoomFilterErrors(filter);
+  return errors.deposit !== null || errors.rent !== null;
+}

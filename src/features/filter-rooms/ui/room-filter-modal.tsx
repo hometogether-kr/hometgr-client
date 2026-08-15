@@ -1,6 +1,6 @@
 "use client";
 
-import type { KeyboardEvent } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 import { useId, useRef, useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
@@ -8,7 +8,14 @@ import { BtnCta } from "@/shared/ui/btn-cta";
 import { Modal } from "@/shared/ui/modal";
 
 import type { RoomFilter } from "../model/room-filter";
+import { hasRoomFilterError } from "../model/room-filter";
 import { useFilterDraft } from "../model/use-filter-draft";
+import { MoveInSection } from "./sections/move-in-section";
+import { OccupancySection } from "./sections/occupancy-section";
+import { PriceSection } from "./sections/price-section";
+import { RegionSection } from "./sections/region-section";
+import { RoomTypeSection } from "./sections/room-type-section";
+import { TermSection } from "./sections/term-section";
 
 /** 모달 탭 6개 (칩 8개가 이 6개로 매핑됩니다 — 설계 §6.4·§11) */
 export type FilterTab = "region" | "moveIn" | "term" | "price" | "type" | "occupancy";
@@ -22,6 +29,20 @@ const TABS: readonly { id: FilterTab; label: string }[] = [
   { id: "occupancy", label: "인원·성별" },
 ];
 
+type SectionComponent = (props: {
+  draft: RoomFilter;
+  patch: (partial: Partial<RoomFilter>) => void;
+}) => ReactNode;
+
+const SECTIONS: Record<FilterTab, SectionComponent> = {
+  region: RegionSection,
+  moveIn: MoveInSection,
+  term: TermSection,
+  price: PriceSection,
+  type: RoomTypeSection,
+  occupancy: OccupancySection,
+};
+
 interface RoomFilterModalProps {
   /** 어느 칩으로 열었는지에 따른 초기 활성 탭 */
   initialTab: FilterTab;
@@ -34,18 +55,17 @@ interface RoomFilterModalProps {
 }
 
 /**
- * 필터 모달 셸 (Figma: 1061:39358 · 1067:43383)
+ * 필터 모달 (Figma: 1061:39358 · 1067:43383)
  *
  * `shared/ui/modal`을 재사용하되 탭 전용 슬롯이 없어 탭바 + 패널을 하나의 `div`로 묶어
  * children으로 넘깁니다(설계 §6.4). 폭은 Modal 기본값(`w-full md:w-[572px]`)을 그대로
  * 씁니다 — 접두사 없는 `w-[572px]`를 넘기면 tailwind-merge가 `w-full`을 지웁니다.
  *
- * 이 PR(C/HOM-208)은 **셸과 상태만** 담당합니다. 각 탭의 실제 입력(지역 아코디언·캘린더·
- * 금액 필드 등)은 D/HOM-210에서 패널을 채웁니다. 그래서 지금은 초안이 바뀌지 않아
- * "완료"가 항상 비활성입니다.
+ * 각 탭 패널에는 해당 섹션을 그려 초안(`draft`)을 편집합니다. "완료"는 초안이 현재
+ * 필터와 다르고(isDirty) 금액 범위 에러가 없을 때만 활성입니다(§9).
  */
 export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFilterModalProps) {
-  const { draft, isDirty } = useFilterDraft(filter);
+  const { draft, patchDraft, isDirty } = useFilterDraft(filter);
   const [activeTab, setActiveTab] = useState<FilterTab>(initialTab);
   const baseId = useId();
   const tabId = (id: FilterTab) => `${baseId}-tab-${id}`;
@@ -72,7 +92,12 @@ export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFi
   };
 
   const footer = (
-    <BtnCta size="xl" className="w-full" disabled={!isDirty} onClick={() => onApply(draft)}>
+    <BtnCta
+      size="xl"
+      className="w-full"
+      disabled={!isDirty || hasRoomFilterError(draft)}
+      onClick={() => onApply(draft)}
+    >
       완료
     </BtnCta>
   );
@@ -115,22 +140,20 @@ export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFi
           })}
         </div>
 
-        {TABS.map((tab) => (
-          <div
-            key={tab.id}
-            role="tabpanel"
-            id={panelId(tab.id)}
-            aria-labelledby={tabId(tab.id)}
-            hidden={tab.id !== activeTab}
-          >
-            {/* TODO(D/HOM-210): 이 자리에 탭별 필터 섹션이 들어옵니다 */}
-            {tab.id === activeTab && (
-              <p className="py-8 text-center text-body-2 text-grayscale-400">
-                이 항목의 필터는 준비 중입니다.
-              </p>
-            )}
-          </div>
-        ))}
+        {TABS.map((tab) => {
+          const Section = SECTIONS[tab.id];
+          return (
+            <div
+              key={tab.id}
+              role="tabpanel"
+              id={panelId(tab.id)}
+              aria-labelledby={tabId(tab.id)}
+              hidden={tab.id !== activeTab}
+            >
+              {tab.id === activeTab && <Section draft={draft} patch={patchDraft} />}
+            </div>
+          );
+        })}
       </div>
     </Modal>
   );

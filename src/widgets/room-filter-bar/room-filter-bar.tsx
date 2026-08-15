@@ -2,8 +2,21 @@
 
 import { useState } from "react";
 
+import {
+  CONTRACT_TERM_LABEL,
+  GENDER_PREFERENCE_LABEL,
+  OCCUPANCY_COUNT_LABEL,
+  ROOM_TYPE_LABEL,
+} from "@/domains/room";
 import type { FilterTab, RoomFilter } from "@/features/filter-rooms";
-import { isRoomFilterActive, RoomFilterModal, useRoomFilter } from "@/features/filter-rooms";
+import {
+  amountRangeLabel,
+  dateChipLabel,
+  isRoomFilterActive,
+  regionChipLabel,
+  RoomFilterModal,
+  useRoomFilter,
+} from "@/features/filter-rooms";
 import { Icon } from "@/shared/ui/icons";
 
 import { FilterChip } from "./filter-chip";
@@ -11,36 +24,58 @@ import { FilterChip } from "./filter-chip";
 /** 필터 칩(=전체 필터 진입) 식별자 */
 const ALL_CHIP = "__all__";
 
+function roomTypeChipLabel(filter: RoomFilter): string | null {
+  const [first, ...rest] = filter.roomTypes;
+  if (first === undefined) return null;
+  return rest.length === 0 ? ROOM_TYPE_LABEL[first] : `${ROOM_TYPE_LABEL[first]} 외 ${rest.length}`;
+}
+
 /**
+ * 칩 정의: 어떤 필드를 참조하고(활성 판정), 선택 시 어떤 요약을 보여줄지(summary).
+ *
  * 목록 칩은 피그마 문구대로 둡니다(모달 탭은 "매물 유형", 목록 칩은 "건물 유형" — §11).
  * 보증금·월 이용료는 `price` 탭 하나로, 이용 인원·전용 성별은 `occupancy` 탭 하나로
  * 모입니다. 어느 칩을 눌러도 같은 탭이 열리고 두 조건을 함께 설정합니다(§6.4).
- * 요약 라벨(강남구·1,000 이상 등)은 D에서 채웁니다 — 지금은 카테고리명 + 활성 여부만.
  */
 const CHIPS: readonly {
   key: string;
   label: string;
   tab: FilterTab;
-  isActive: (filter: RoomFilter) => boolean;
+  summary: (filter: RoomFilter) => string | null;
 }[] = [
-  { key: "region", label: "지역", tab: "region", isActive: (f) => f.sido !== null },
-  { key: "moveIn", label: "입주 희망일", tab: "moveIn", isActive: (f) => f.moveInDate !== null },
-  { key: "term", label: "계약 기간", tab: "term", isActive: (f) => f.minTerm !== null },
+  { key: "region", label: "지역", tab: "region", summary: (f) => regionChipLabel(f) },
+  { key: "moveIn", label: "입주 희망일", tab: "moveIn", summary: (f) => dateChipLabel(f.moveInDate) },
+  {
+    key: "term",
+    label: "계약 기간",
+    tab: "term",
+    summary: (f) => (f.minTerm ? CONTRACT_TERM_LABEL[f.minTerm] : null),
+  },
   {
     key: "deposit",
     label: "보증금",
     tab: "price",
-    isActive: (f) => f.depositMin !== null || f.depositMax !== null,
+    summary: (f) => amountRangeLabel(f.depositMin, f.depositMax),
   },
   {
     key: "rent",
     label: "월 이용료",
     tab: "price",
-    isActive: (f) => f.rentMin !== null || f.rentMax !== null,
+    summary: (f) => amountRangeLabel(f.rentMin, f.rentMax),
   },
-  { key: "type", label: "건물 유형", tab: "type", isActive: (f) => f.roomTypes.length > 0 },
-  { key: "people", label: "이용 인원", tab: "occupancy", isActive: (f) => f.people !== null },
-  { key: "gender", label: "전용 성별", tab: "occupancy", isActive: (f) => f.gender !== null },
+  { key: "type", label: "건물 유형", tab: "type", summary: roomTypeChipLabel },
+  {
+    key: "people",
+    label: "이용 인원",
+    tab: "occupancy",
+    summary: (f) => (f.people ? OCCUPANCY_COUNT_LABEL[f.people] : null),
+  },
+  {
+    key: "gender",
+    label: "전용 성별",
+    tab: "occupancy",
+    summary: (f) => (f.gender ? GENDER_PREFERENCE_LABEL[f.gender] : null),
+  },
 ];
 
 /**
@@ -48,7 +83,7 @@ const CHIPS: readonly {
  *
  * 칩을 누르면 지정된 탭으로 필터 모달을 엽니다. 모달은 열려 있을 때만 마운트해 초안이
  * 매번 새 스냅샷으로 시작하게 합니다(§7-1). "완료"는 push로 커밋(뒤로가기 복원), 닫기는
- * 초안 폐기입니다. 활성 필터가 하나라도 있으면 아래에 전체 초기화 링크를 노출합니다.
+ * 초안 폐기입니다. 조건이 설정된 칩은 요약 값을 라벨로 보여줍니다(§6.3).
  */
 export function RoomFilterBar({ filter }: { filter: RoomFilter }) {
   const { commitFilter, resetFilter } = useRoomFilter(filter);
@@ -75,15 +110,18 @@ export function RoomFilterBar({ filter }: { filter: RoomFilter }) {
           onClick={() => openModal("region", ALL_CHIP)}
         />
         <span className="h-4 w-px shrink-0 bg-grayscale-200" aria-hidden="true" />
-        {CHIPS.map((chip) => (
-          <FilterChip
-            key={chip.key}
-            label={chip.label}
-            active={chip.isActive(filter)}
-            expanded={open && openedChip === chip.key}
-            onClick={() => openModal(chip.tab, chip.key)}
-          />
-        ))}
+        {CHIPS.map((chip) => {
+          const summary = chip.summary(filter);
+          return (
+            <FilterChip
+              key={chip.key}
+              label={summary ?? chip.label}
+              active={summary !== null}
+              expanded={open && openedChip === chip.key}
+              onClick={() => openModal(chip.tab, chip.key)}
+            />
+          );
+        })}
       </div>
 
       {active && (

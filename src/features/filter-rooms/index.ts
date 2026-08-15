@@ -1,6 +1,9 @@
-export type { RoomFilter } from "./model/room-filter";
+export { amountRangeLabel, dateChipLabel, regionChipLabel } from "./model/chip-summary";
+export type { RoomFilter, RoomFilterErrors } from "./model/room-filter";
 export {
   EMPTY_ROOM_FILTER,
+  getRoomFilterErrors,
+  hasRoomFilterError,
   isRoomFilterActive,
   serializeRoomFilter,
   toRoomListQuery,
