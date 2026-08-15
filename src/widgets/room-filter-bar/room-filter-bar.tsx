@@ -44,7 +44,12 @@ const CHIPS: readonly {
   summary: (filter: RoomFilter) => string | null;
 }[] = [
   { key: "region", label: "지역", tab: "region", summary: (f) => regionChipLabel(f) },
-  { key: "moveIn", label: "입주 희망일", tab: "moveIn", summary: (f) => dateChipLabel(f.moveInDate) },
+  {
+    key: "moveIn",
+    label: "입주 희망일",
+    tab: "moveIn",
+    summary: (f) => dateChipLabel(f.moveInDate),
+  },
   {
     key: "term",
     label: "계약 기간",
@@ -100,35 +105,38 @@ export function RoomFilterBar({ filter }: { filter: RoomFilter }) {
   const active = isRoomFilterActive(filter);
 
   return (
-    <div className="mb-6 flex flex-col gap-3">
-      <div className="flex items-center gap-2 overflow-x-auto">
+    <div className="mb-5 flex flex-col gap-5 border-b border-grayscale-200 pb-6">
+      <div className="flex items-center gap-4 overflow-x-auto">
         <FilterChip
           label="필터"
+          variant="all"
           active={active}
           expanded={open && openedChip === ALL_CHIP}
           leftIcon={<Icon name="filter_alt" size={16} />}
           onClick={() => openModal("region", ALL_CHIP)}
         />
-        <span className="h-4 w-px shrink-0 bg-grayscale-200" aria-hidden="true" />
-        {CHIPS.map((chip) => {
-          const summary = chip.summary(filter);
-          return (
-            <FilterChip
-              key={chip.key}
-              label={summary ?? chip.label}
-              active={summary !== null}
-              expanded={open && openedChip === chip.key}
-              onClick={() => openModal(chip.tab, chip.key)}
-            />
-          );
-        })}
+        <span className="h-[26px] w-px shrink-0 bg-grayscale-200" aria-hidden="true" />
+        <div className="flex items-center gap-1.5">
+          {CHIPS.map((chip) => {
+            const summary = chip.summary(filter);
+            return (
+              <FilterChip
+                key={chip.key}
+                label={summary ?? chip.label}
+                active={summary !== null}
+                expanded={open && openedChip === chip.key}
+                onClick={() => openModal(chip.tab, chip.key)}
+              />
+            );
+          })}
+        </div>
       </div>
 
       {active && (
         <button
           type="button"
           onClick={resetFilter}
-          className="inline-flex items-center gap-1 self-start text-label-1 font-medium text-grayscale-400 transition-colors hover:text-grayscale-500 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+          className="inline-flex items-center gap-1 self-start text-label-1 font-medium text-primary-600 transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none"
         >
           <Icon name="refresh" size={16} aria-hidden />
           초기화하고 전체 매물 보기
