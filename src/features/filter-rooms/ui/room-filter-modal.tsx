@@ -103,13 +103,16 @@ export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFi
   );
 
   return (
-    <Modal open onClose={onClose} title="필터" closeButton="header" footer={footer}>
-      <div className="flex flex-col gap-6">
-        <div
-          role="tablist"
-          aria-label="필터 항목"
-          className="flex overflow-x-auto border-b border-grayscale-200"
-        >
+    <Modal
+      open
+      onClose={onClose}
+      title="필터"
+      closeButton="header"
+      footer={footer}
+      classNames={{ panel: "md:h-[791px]" }}
+    >
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+        <div role="tablist" aria-label="필터 항목" className="flex gap-4 overflow-x-auto">
           {TABS.map((tab, index) => {
             const selected = tab.id === activeTab;
             return (
@@ -127,10 +130,10 @@ export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFi
                 onClick={() => setActiveTab(tab.id)}
                 onKeyDown={(event) => handleTabKeyDown(event, index)}
                 className={cn(
-                  "-mb-px shrink-0 border-b-2 px-3 py-2 text-body-2 font-semibold whitespace-nowrap transition-colors",
+                  "shrink-0 border-b-2 pb-3.5 text-body-2 font-semibold whitespace-nowrap transition-colors",
                   "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none",
                   selected
-                    ? "border-primary-500 text-grayscale-900"
+                    ? "border-grayscale-900 text-grayscale-900"
                     : "border-transparent text-grayscale-400",
                 )}
               >
