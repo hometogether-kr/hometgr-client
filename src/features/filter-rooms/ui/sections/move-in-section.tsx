@@ -33,8 +33,9 @@ export function MoveInSection({ draft, patch }: SectionProps) {
   return (
     <div>
       <SectionHeader
-        title="입주 희망일"
+        title="입주 가능한 날짜 선택"
         titleId={titleId}
+        resetLabel="날짜 초기화"
         canReset={draft.moveInDate !== null}
         onReset={() => patch({ moveInDate: null })}
       />

@@ -18,7 +18,7 @@ export function OccupancySection({ draft, patch }: SectionProps) {
   const peopleId = useId();
   const genderId = useId();
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-5">
       <div>
         <SectionHeader
           title="이용 인원"
@@ -36,7 +36,7 @@ export function OccupancySection({ draft, patch }: SectionProps) {
       </div>
       <div>
         <SectionHeader
-          title="전용 성별"
+          title="성별"
           titleId={genderId}
           canReset={draft.gender !== null}
           onReset={() => patch({ gender: null })}
