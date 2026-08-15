@@ -28,7 +28,7 @@ export function RadioOptionGroup<T extends string>({
   onChange,
 }: RadioOptionGroupProps<T>) {
   return (
-    <div role="radiogroup" aria-labelledby={ariaLabelledby} className="flex flex-col gap-3">
+    <div role="radiogroup" aria-labelledby={ariaLabelledby} className="flex flex-col gap-4">
       {options.map((option) => (
         <label key={option.value} className="flex cursor-pointer items-center gap-3">
           <Radio
@@ -38,7 +38,7 @@ export function RadioOptionGroup<T extends string>({
             checked={value === option.value}
             onChange={() => onChange(option.value)}
           />
-          <span className="text-body-1 text-grayscale-800">{option.label}</span>
+          <span className="text-body-2 font-medium text-grayscale-800">{option.label}</span>
         </label>
       ))}
     </div>
