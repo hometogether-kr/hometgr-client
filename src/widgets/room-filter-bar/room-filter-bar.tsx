@@ -31,7 +31,8 @@ function roomTypeChipLabel(filter: RoomFilter): string | null {
 }
 
 /**
- * 칩 정의: 어떤 필드를 참조하고(활성 판정), 선택 시 어떤 요약을 보여줄지(summary).
+ * 칩 정의: 어떤 필드를 참조하고(활성 판정), 선택 시 어떤 요약을 보여줄지(summary),
+ * X(해제) 클릭 시 어떤 필드를 비울지(clear).
  *
  * 목록 칩은 피그마 문구대로 둡니다(모달 탭은 "매물 유형", 목록 칩은 "건물 유형" — §11).
  * 보증금·월 이용료는 `price` 탭 하나로, 이용 인원·전용 성별은 `occupancy` 탭 하나로
@@ -42,56 +43,76 @@ const CHIPS: readonly {
   label: string;
   tab: FilterTab;
   summary: (filter: RoomFilter) => string | null;
+  /** X(해제) 클릭 시 비울 필드 */
+  clear: Partial<RoomFilter>;
 }[] = [
-  { key: "region", label: "지역", tab: "region", summary: (f) => regionChipLabel(f) },
-  {
-    key: "moveIn",
-    label: "입주 희망일",
-    tab: "moveIn",
-    summary: (f) => dateChipLabel(f.moveInDate),
-  },
-  {
-    key: "term",
-    label: "계약 기간",
-    tab: "term",
-    summary: (f) => (f.minTerm ? CONTRACT_TERM_LABEL[f.minTerm] : null),
-  },
-  {
-    key: "deposit",
-    label: "보증금",
-    tab: "price",
-    summary: (f) => amountRangeLabel(f.depositMin, f.depositMax),
-  },
-  {
-    key: "rent",
-    label: "월 이용료",
-    tab: "price",
-    summary: (f) => amountRangeLabel(f.rentMin, f.rentMax),
-  },
-  { key: "type", label: "건물 유형", tab: "type", summary: roomTypeChipLabel },
-  {
-    key: "people",
-    label: "이용 인원",
-    tab: "occupancy",
-    summary: (f) => (f.people ? OCCUPANCY_COUNT_LABEL[f.people] : null),
-  },
-  {
-    key: "gender",
-    label: "전용 성별",
-    tab: "occupancy",
-    summary: (f) => (f.gender ? GENDER_PREFERENCE_LABEL[f.gender] : null),
-  },
-];
+    {
+      key: "region",
+      label: "지역",
+      tab: "region",
+      summary: (f) => regionChipLabel(f),
+      clear: { sido: null, sigungu: null },
+    },
+    {
+      key: "moveIn",
+      label: "입주 희망일",
+      tab: "moveIn",
+      summary: (f) => dateChipLabel(f.moveInDate),
+      clear: { moveInDate: null },
+    },
+    {
+      key: "term",
+      label: "계약 기간",
+      tab: "term",
+      summary: (f) => (f.minTerm ? CONTRACT_TERM_LABEL[f.minTerm] : null),
+      clear: { minTerm: null },
+    },
+    {
+      key: "deposit",
+      label: "보증금",
+      tab: "price",
+      summary: (f) => amountRangeLabel(f.depositMin, f.depositMax),
+      clear: { depositMin: null, depositMax: null },
+    },
+    {
+      key: "rent",
+      label: "월 이용료",
+      tab: "price",
+      summary: (f) => amountRangeLabel(f.rentMin, f.rentMax),
+      clear: { rentMin: null, rentMax: null },
+    },
+    {
+      key: "type",
+      label: "건물 유형",
+      tab: "type",
+      summary: roomTypeChipLabel,
+      clear: { roomTypes: [] },
+    },
+    {
+      key: "people",
+      label: "이용 인원",
+      tab: "occupancy",
+      summary: (f) => (f.people ? OCCUPANCY_COUNT_LABEL[f.people] : null),
+      clear: { people: null },
+    },
+    {
+      key: "gender",
+      label: "전용 성별",
+      tab: "occupancy",
+      summary: (f) => (f.gender ? GENDER_PREFERENCE_LABEL[f.gender] : null),
+      clear: { gender: null },
+    },
+  ];
 
 /**
  * 필터 칩 바 (Figma: 매물검색필터 1067:43383)
  *
  * 칩을 누르면 지정된 탭으로 필터 모달을 엽니다. 모달은 열려 있을 때만 마운트해 초안이
  * 매번 새 스냅샷으로 시작하게 합니다(§7-1). "완료"는 push로 커밋(뒤로가기 복원), 닫기는
- * 초안 폐기입니다. 조건이 설정된 칩은 요약 값을 라벨로 보여줍니다(§6.3).
+ * 초안 폐기입니다. 조건이 설정된 칩은 요약 값을 라벨로 보여주고, X로 그 필터만 해제합니다(§6.3).
  */
 export function RoomFilterBar({ filter }: { filter: RoomFilter }) {
-  const { commitFilter, resetFilter } = useRoomFilter(filter);
+  const { commitFilter, resetFilter, patchFilter } = useRoomFilter(filter);
   const [open, setOpen] = useState(false);
   const [openedChip, setOpenedChip] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<FilterTab>("region");
@@ -126,6 +147,7 @@ export function RoomFilterBar({ filter }: { filter: RoomFilter }) {
                 active={summary !== null}
                 expanded={open && openedChip === chip.key}
                 onClick={() => openModal(chip.tab, chip.key)}
+                onClear={() => patchFilter(chip.clear)}
               />
             );
           })}
