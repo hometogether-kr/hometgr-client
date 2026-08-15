@@ -23,7 +23,7 @@ import type { RoomFilter } from "./room-filter";
  */
 const optionalString = z.string().trim().min(1).optional().catch(undefined);
 
-/** 만원 단위 정수 금액. 음수·NaN("abc")은 버립니다(zod v4는 NaN을 number로 통과시키지 않음) */
+/** 원 단위 정수 금액. 음수·NaN("abc")은 버립니다(zod v4는 NaN을 number로 통과시키지 않음) */
 const optionalAmount = z.coerce.number().int().nonnegative().optional().catch(undefined);
 
 /** 같은 key 반복(type=a&type=b) 또는 단일 문자열을 배열로 정규화 */

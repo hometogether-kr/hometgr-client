@@ -1,5 +1,5 @@
 import { findSido, REGIONS } from "@/domains/region";
-import { formatAmount } from "@/shared/lib/format-amount";
+import { formatAmount, formatManwon } from "@/shared/lib/format-amount";
 
 import type { RoomFilter } from "./room-filter";
 
@@ -20,11 +20,19 @@ export function regionChipLabel(filter: RoomFilter): string | null {
   return sigungu ? sigungu.name : `${sido.name} 전체`;
 }
 
-/** 금액 범위: "1,000~2,000" / "1,000 이상" / "2,000 이하" / null */
+/**
+ * 금액 범위 (입력·필터는 원 단위, 칩 표기는 만원으로 축약):
+ * "500~1,000만원" / "500만원 이상" / "1,000만원 이하" / null
+ *
+ * 범위 양끝이 모두 있을 때 앞값은 단위 없이(`500~`) 뒤에서 한 번만 `만원`을 붙입니다.
+ * 1만원 미만은 `formatManwon`이 원 그대로 떨어뜨립니다.
+ */
 export function amountRangeLabel(min: number | null, max: number | null): string | null {
-  if (min !== null && max !== null) return `${formatAmount(min)}~${formatAmount(max)}`;
-  if (min !== null) return `${formatAmount(min)} 이상`;
-  if (max !== null) return `${formatAmount(max)} 이하`;
+  if (min !== null && max !== null) {
+    return `${formatAmount(Math.round(min / 10_000))}~${formatManwon(max)}`;
+  }
+  if (min !== null) return `${formatManwon(min)} 이상`;
+  if (max !== null) return `${formatManwon(max)} 이하`;
   return null;
 }
 
