@@ -13,12 +13,12 @@ interface RoomListErrorProps {
  */
 export function RoomListError({ reset }: RoomListErrorProps) {
   return (
-    <div role="alert" className="flex flex-col items-center gap-4 py-20 text-center">
-      <div className="flex flex-col gap-2">
-        <p className="text-heading-2 font-medium text-grayscale-900">매물을 불러오지 못했어요</p>
-        <p className="text-body-1 text-grayscale-500">잠시 후 다시 시도해 주세요.</p>
+    <div role="alert" className="flex flex-col items-center gap-7 py-34 text-center">
+      <div className="flex flex-col items-center gap-3">
+        <p className="text-title-2 font-semibold text-grayscale-800">매물을 불러오지 못했어요</p>
+        <p className="text-heading-2 font-medium text-grayscale-400">잠시 후 다시 시도해 주세요.</p>
       </div>
-      <BtnCta variant="default" size="m" onClick={reset}>
+      <BtnCta variant="default" size="s" onClick={reset}>
         다시 시도
       </BtnCta>
     </div>
