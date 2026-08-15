@@ -125,7 +125,7 @@ export function DropdownS<T extends string>({
         onClick={() => (open ? setOpen(false) : openList(selectedIndex))}
         onKeyDown={handleKeyDown}
         className={cn(
-          "inline-flex items-center gap-1 rounded-lg border border-grayscale-200 bg-white py-2 pr-2 pl-3 text-label-1 font-medium text-grayscale-700 transition-colors",
+          "inline-flex h-9 items-center gap-1.5 rounded-lg border border-grayscale-200 bg-white px-3 text-label-2 leading-normal font-medium text-grayscale-700 transition-colors",
           "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none",
           open && "border-grayscale-300",
         )}
@@ -133,7 +133,7 @@ export function DropdownS<T extends string>({
         <span className="whitespace-nowrap">{selectedLabel}</span>
         <Icon
           name="keyboard_arrow_down"
-          size={20}
+          size={16}
           className={cn("shrink-0 transition-transform", open && "rotate-180")}
         />
       </button>
@@ -144,7 +144,7 @@ export function DropdownS<T extends string>({
           role="listbox"
           aria-label={ariaLabel}
           className={cn(
-            "shadow-dropdown absolute top-full z-20 mt-2 min-w-[140px] overflow-hidden rounded-lg bg-white py-1",
+            "absolute top-full z-20 mt-1 min-w-[140px] overflow-hidden rounded-lg bg-white py-1 shadow-dropdown",
             align === "end" ? "right-0" : "left-0",
           )}
         >
@@ -164,9 +164,8 @@ export function DropdownS<T extends string>({
                   commit(index);
                 }}
                 className={cn(
-                  "cursor-pointer px-3 py-2.5 text-label-1 whitespace-nowrap transition-colors",
-                  isSelected ? "font-semibold text-grayscale-900" : "text-grayscale-700",
-                  isActive && "bg-grayscale-70",
+                  "cursor-pointer px-3 py-2 text-label-1 font-medium whitespace-nowrap transition-colors",
+                  isActive ? "bg-grayscale-70 text-grayscale-700" : "text-grayscale-600",
                 )}
               >
                 {option.label}
