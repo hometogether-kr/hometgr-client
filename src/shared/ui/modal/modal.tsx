@@ -74,7 +74,7 @@ export function Modal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-grayscale-900/40 px-5 py-10"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/35 px-5 py-10"
       onClick={onClose}
     >
       {/*

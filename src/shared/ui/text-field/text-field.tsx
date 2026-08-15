@@ -25,7 +25,7 @@ export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElemen
 
 const boxSizeClasses: Record<TextFieldSize, string> = {
   s: "p-3",
-  m: "h-[46px] items-center p-3",
+  m: "h-12 items-center p-3",   // ← h-[46px]에서 변경 (46→48px)
   L: "p-3",
 };
 

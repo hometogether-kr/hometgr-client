@@ -39,7 +39,7 @@ export function Calendar({ className, classNames, ...rest }: CalendarProps) {
         months: "flex w-full flex-col",
         month: "flex w-full flex-col",
 
-        nav: "flex w-full items-center justify-between p-2",
+        nav: "flex w-full items-center justify-between",
         button_previous:
           "flex size-10 items-center justify-center rounded border-0 bg-transparent text-grayscale-800 transition-colors hover:bg-grayscale-100 disabled:text-grayscale-300 disabled:hover:bg-transparent",
         button_next:
