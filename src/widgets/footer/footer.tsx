@@ -50,7 +50,7 @@ function FooterSocial() {
       </a>
       {/* TODO: 채팅 채널 링크가 정해지면 href를 교체하세요. */}
       <a
-        href="#"
+        href="http://pf.kakao.com/_BKlhX"
         aria-label="채팅 문의"
         className="flex h-13.5 w-13.5 items-center justify-center rounded-full bg-grayscale-500"
       >
@@ -70,10 +70,10 @@ function FooterCopyright() {
 
 function FooterBusinessInfo(){
   return (
-    <div className = "mt-5 border-t border-grayscale-300 pt-4 text-sm leading-[1.6] font-normal text-grayscale-600 md:mt-6">
+    <p className = "mt-5 border-t border-grayscale-300 pt-4 text-sm leading-[1.6] font-normal text-grayscale-600 md:mt-6">
       주식회사 핀타 · 사업자등록번호 481-87-04211 · 인천광역시 연수구 갯벌로 12,
       511호(송도동, 미추홀타워 별관A동)
-    </div>
+    </p>
   );
 }
 /**
