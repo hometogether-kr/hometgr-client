@@ -22,10 +22,10 @@ const publicPrefix = "/figma";
 
 const checkOnly = process.argv.includes("--check");
 
-const ASSET_URL = /https:\/\/www\.figma\.com\/api\/mcp\/asset\/[a-zA-Z0-9-]+/g;
+const ASSET_URL = /https:\/\/www\.figma\.com\/api\/mcp\/asset\/[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9]+)?/g;
 /** `const FIGMA_TEMP_LOGO = "…"` 처럼 이름이 붙은 선언 */
 const NAMED_ASSET =
-  /(?:const\s+)?([A-Za-z0-9_]+)\s*[:=]\s*\n?\s*"(https:\/\/www\.figma\.com\/api\/mcp\/asset\/[a-zA-Z0-9-]+)"/g;
+  /(?:const\s+)?([A-Za-z0-9_]+)\s*[:=]\s*\n?\s*"(https:\/\/www\.figma\.com\/api\/mcp\/asset\/[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9]+)?)"/g;
 
 const EXTENSION_BY_MIME = {
   "image/svg+xml": "svg",
