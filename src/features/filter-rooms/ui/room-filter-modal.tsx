@@ -1,7 +1,7 @@
 "use client";
 
 import type { KeyboardEvent, ReactNode } from "react";
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
 import { BtnCta } from "@/shared/ui/btn-cta";
@@ -71,6 +71,12 @@ export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFi
   const tabId = (id: FilterTab) => `${baseId}-tab-${id}`;
   const panelId = (id: FilterTab) => `${baseId}-panel-${id}`;
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // 탭을 바꾸면 이전 탭의 스크롤 위치가 남지 않도록 패널을 맨 위로 되돌립니다.
+  useEffect(() => {
+    panelRef.current?.scrollTo({ top: 0 });
+  }, [activeTab]);
 
   const focusTab = (id: FilterTab) => {
     setActiveTab(id);
@@ -109,10 +115,11 @@ export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFi
       title="필터"
       closeButton="header"
       footer={footer}
-      classNames={{ panel: "md:h-[791px]" }}
+      classNames={{ panel: "md:h-[791px] max-h-[calc(100dvh-5rem)]" }}
     >
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-        <div role="tablist" aria-label="필터 항목" className="flex gap-4 overflow-x-auto">
+      <div className="flex min-h-0 flex-1 flex-col">
+        {/* 탭바: 고정 헤더 — 스크롤 영역 밖에 둬 캘린더처럼 큰 탭에서도 사라지지 않습니다(QA C) */}
+        <div role="tablist" aria-label="필터 항목" className="flex shrink-0 gap-4 overflow-x-auto">
           {TABS.map((tab, index) => {
             const selected = tab.id === activeTab;
             return (
@@ -130,7 +137,7 @@ export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFi
                 onClick={() => setActiveTab(tab.id)}
                 onKeyDown={(event) => handleTabKeyDown(event, index)}
                 className={cn(
-                  "shrink-0 border-b-2 pb-3.5 text-body-2 font-semibold whitespace-nowrap transition-colors",
+                  "shrink-0 border-b-[3px] pb-3.5 text-body-2 font-semibold whitespace-nowrap transition-colors",
                   "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none",
                   selected
                     ? "border-grayscale-900 text-grayscale-900"
@@ -143,20 +150,23 @@ export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFi
           })}
         </div>
 
-        {TABS.map((tab) => {
-          const Section = SECTIONS[tab.id];
-          return (
-            <div
-              key={tab.id}
-              role="tabpanel"
-              id={panelId(tab.id)}
-              aria-labelledby={tabId(tab.id)}
-              hidden={tab.id !== activeTab}
-            >
-              {tab.id === activeTab && <Section draft={draft} patch={patchDraft} />}
-            </div>
-          );
-        })}
+        {/* 패널: 여기서만 스크롤. pt-5(20px)가 탭바 ↔ 섹션 제목 간격입니다(QA E 위쪽) */}
+        <div ref={panelRef} className="min-h-0 flex-1 overflow-y-auto pt-5">
+          {TABS.map((tab) => {
+            const Section = SECTIONS[tab.id];
+            return (
+              <div
+                key={tab.id}
+                role="tabpanel"
+                id={panelId(tab.id)}
+                aria-labelledby={tabId(tab.id)}
+                hidden={tab.id !== activeTab}
+              >
+                {tab.id === activeTab && <Section draft={draft} patch={patchDraft} />}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </Modal>
   );

@@ -110,7 +110,7 @@ export function Modal({
           )}
         >
           {title && (
-            <div className="flex items-center justify-between">
+            <div className="flex shrink-0 items-center justify-between">
               <h2
                 id={titleId}
                 className={cn("text-heading-1 font-medium text-grayscale-900", classNames?.title)}
@@ -132,7 +132,7 @@ export function Modal({
 
           {children}
 
-          {footer}
+          {footer && <div className="shrink-0">{footer}</div>}
         </div>
       </div>
     </div>,

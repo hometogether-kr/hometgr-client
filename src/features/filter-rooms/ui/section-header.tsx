@@ -30,7 +30,7 @@ export function SectionHeader({
   onReset,
 }: SectionHeaderProps) {
   return (
-    <div className="mb-4 flex items-center justify-between">
+    <div className="mb-5.5 flex items-center justify-between">
       <p id={titleId} className="text-heading-2 font-medium text-grayscale-800">
         {title}
       </p>

@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+import { SIDO_CODES, SIGUNGU_CODES } from "@/domains/region";
 import {
   CONTRACT_TERMS,
   DEFAULT_ROOM_SORT,
@@ -35,8 +36,10 @@ function toStringArray(value: unknown): string[] {
 
 const roomFilterParamsSchema = z.object({
   q: optionalString,
-  sido: optionalString,
-  sigungu: optionalString,
+  // 화이트리스트(QA A): 구 URL `?sido=26`처럼 목록에 없는 지역 코드는 그 필드만 버립니다.
+  // 그대로 두면 칩은 "지역"으로 보이는데 URL·isActive만 true인 유령 필터가 됩니다.
+  sido: z.enum(SIDO_CODES).optional().catch(undefined),
+  sigungu: z.enum(SIGUNGU_CODES).optional().catch(undefined),
   moveIn: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)

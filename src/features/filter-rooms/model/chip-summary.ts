@@ -1,4 +1,4 @@
-import { findSido, REGIONS } from "@/domains/region";
+import { findSido, REGIONS, SIDO_ETC } from "@/domains/region";
 import { formatAmount, formatManwon } from "@/shared/lib/format-amount";
 
 import type { RoomFilter } from "./room-filter";
@@ -10,9 +10,10 @@ import type { RoomFilter } from "./room-filter";
  * 참조하는지(칩 ↔ 필드 매핑)는 칩 바 위젯이 이 헬퍼들을 조합해 정합니다.
  */
 
-/** 지역: "강남구" / "서울 전체" / null(미선택) */
+/** 지역: "강남구" / "서울 전체" / "기타" / null(미선택) */
 export function regionChipLabel(filter: RoomFilter): string | null {
   if (filter.sido === null) return null;
+  if (filter.sido === SIDO_ETC) return "기타";
   const sido = findSido(REGIONS, filter.sido);
   if (!sido) return null;
   if (filter.sigungu === null) return `${sido.name} 전체`;
