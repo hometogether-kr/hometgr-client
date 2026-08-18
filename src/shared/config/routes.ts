@@ -61,6 +61,10 @@ export const ROUTES = {
   /** 정산 대금 입금계좌 등록·수정 (집주인 전용, 마이페이지 정산 정보에서 진입) */
   settlementAccount: "/mypage/settlement-account",
   rooms: "/rooms",
+  /** 매물 상세 */
+  roomDetail: (roomId: string) => `/rooms/${roomId}`,
+  /** 집주인 정보 — 매물 상세의 "집주인 정보" 카드에서 진입 */
+  roomHost: (roomId: string) => `/rooms/${roomId}/host`,
   reservations: "/reservations",
   favorites: "/favorites",
 } as const;
