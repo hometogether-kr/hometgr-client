@@ -21,7 +21,7 @@ export function ListingHeader({ room }: ListingHeaderProps) {
           {room.title}
         </h1>
         <div className="flex flex-wrap gap-3 text-headline-1 font-medium">
-          <span className="text-grayscale-600">{room.addressRegion}</span>
+          <span className="text-grayscale-600">{room.addressRegion ?? room.locationSummary}</span>
           <span className="text-primary-400">{room.addressDisclosureNote}</span>
         </div>
       </div>

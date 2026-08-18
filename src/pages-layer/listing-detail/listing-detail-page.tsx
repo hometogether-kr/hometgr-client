@@ -64,10 +64,7 @@ export function ListingDetailPage({ room }: ListingDetailPageProps) {
                   petPolicyLabel={room.petPolicyLabel}
                 />
                 <OptionsCard amenities={room.amenities} />
-                <LocationCardMember
-                  mapImageUrl={room.mapImageUrl}
-                  locationNote={room.locationNote}
-                />
+                <LocationCardMember locationNote={room.locationNote} />
               </>
             ) : (
               <>
