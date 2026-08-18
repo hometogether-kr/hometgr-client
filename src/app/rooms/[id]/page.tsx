@@ -1,4 +1,6 @@
-import { getRoomDetail } from "@/domains/listing";
+import { notFound } from "next/navigation";
+
+import { getRoomDetail } from "@/domains/listing/server";
 import { ListingDetailPage } from "@/pages-layer/listing-detail";
 
 interface PageProps {
@@ -8,6 +10,8 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
   const room = await getRoomDetail(id);
+
+  if (room === null) notFound();
 
   return <ListingDetailPage room={room} />;
 }
