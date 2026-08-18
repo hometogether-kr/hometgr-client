@@ -19,6 +19,38 @@ export interface Sido {
   sigungu: readonly Sigungu[];
 }
 
+export const SIDO_ETC = "etc";
+
+export const SIDO_CODES = ["11", SIDO_ETC] as const;
+
+export const SIGUNGU_CODES = [
+  "11110",
+  "11140",
+  "11170",
+  "11200",
+  "11215",
+  "11230",
+  "11260",
+  "11290",
+  "11305",
+  "11320",
+  "11350",
+  "11380",
+  "11410",
+  "11440",
+  "11470",
+  "11500",
+  "11530",
+  "11545",
+  "11560",
+  "11590",
+  "11620",
+  "11650",
+  "11680",
+  "11710",
+  "11740",
+] as const;
+
 /** 시·도 코드로 시·도를 찾습니다. */
 export function findSido(sidos: readonly Sido[], code: string): Sido | undefined {
   return sidos.find((sido) => sido.code === code);

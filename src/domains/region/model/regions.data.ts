@@ -38,8 +38,4 @@ export const REGIONS: readonly Sido[] = [
       { code: "11740", name: "강동구" },
     ],
   },
-  { code: "26", name: "부산", sigungu: [] },
-  { code: "27", name: "대구", sigungu: [] },
-  { code: "28", name: "인천", sigungu: [] },
-  { code: "41", name: "경기", sigungu: [] },
 ];
