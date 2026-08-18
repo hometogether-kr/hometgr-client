@@ -40,6 +40,14 @@ export function PhotoGalleryGuest({ photos, onRequireLogin }: PhotoGalleryGuestP
   const [main, ...rest] = photos;
   const grid = rest.slice(0, 4);
 
+  if (!main) {
+    return (
+      <div className="flex h-[280px] w-full items-center justify-center rounded-2xl bg-grayscale-70 text-headline-1 font-medium text-grayscale-400 md:h-[420px] md:rounded-3xl">
+        등록된 사진이 없어요
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex h-[280px] w-full gap-3 md:h-[420px]">
       <div className="h-full flex-1 overflow-hidden rounded-l-2xl md:rounded-l-3xl">

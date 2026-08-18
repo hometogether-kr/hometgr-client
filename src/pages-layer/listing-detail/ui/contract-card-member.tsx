@@ -3,7 +3,7 @@ import type { RoomDetail } from "@/domains/listing";
 import { DetailSection } from "./detail-section";
 
 export interface ContractCardMemberProps {
-  room: Pick<RoomDetail, "buildingTypeLabel" | "areaPyeong" | "floor" | "price">;
+  room: Pick<RoomDetail, "buildingTypeLabel" | "roomSizeLabel" | "floor" | "price">;
 }
 
 interface Stat {
@@ -23,13 +23,14 @@ function StatTile({ label, value }: Stat) {
 /**
  * 가격 및 계약 조건 — 회원 (Figma: node 1222:45322)
  *
- * 매물 형태 · 전용 면적 · 해당 층 · 관리비를 4칸 통계 타일로 보여줍니다.
+ * 매물 형태 · 방 크기 · (있으면) 해당 층 · 관리비를 통계 타일로 보여줍니다.
+ * 신규 등록 매물은 정확한 층수를 입력받지 않아 `floor`가 없을 수 있습니다.
  */
 export function ContractCardMember({ room }: ContractCardMemberProps) {
   const stats: Stat[] = [
     { label: "매물 형태", value: room.buildingTypeLabel },
-    { label: "전용 면적", value: `${room.areaPyeong}평` },
-    { label: "해당 층", value: `${room.floor}층` },
+    { label: "방 크기", value: room.roomSizeLabel },
+    ...(room.floor !== undefined ? [{ label: "해당 층", value: `${room.floor}층` }] : []),
     { label: "관리비", value: `월 ${Math.round(room.price.maintenanceFeeKrw / 10_000)}만원` },
   ];
 

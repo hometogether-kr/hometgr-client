@@ -43,7 +43,7 @@ export function ListingHostPage({ room }: ListingHostPageProps) {
         <div className="flex w-full flex-col gap-8 md:flex-row md:items-start md:gap-10">
           <div className="flex w-full flex-col gap-7 md:flex-1">
             <HostProfileCard host={room.host} />
-            <HouseholdCard household={room.household} />
+            {room.household && <HouseholdCard household={room.household} />}
             <RoomSummaryCard room={room} />
           </div>
           <VerificationCard />
