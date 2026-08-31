@@ -1,12 +1,12 @@
 import { getReservationTab, reservationFixtures, type ReservationTab } from "@/domains/reservation";
-import { SiteLayout } from "@/widgets/site-layout";
 import {
   ReservationList,
-  ReservationTabs,
   type ReservationTabItem,
+  ReservationTabs,
 } from "@/widgets/reservation-list";
+import { SiteLayout } from "@/widgets/site-layout";
 
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 8;
 
 const tabLabels: Record<ReservationTab, string> = {
   all: "전체",

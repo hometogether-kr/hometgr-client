@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import type { ReservationTab } from "@/domains/reservation";
-import { cn } from "@/shared/lib/cn";
 import { ROUTES } from "@/shared/config";
+import { cn } from "@/shared/lib/cn";
 
 export interface ReservationTabItem {
   value: ReservationTab;

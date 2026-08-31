@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import type { ReservationTab } from "@/domains/reservation";
-import { cn } from "@/shared/lib/cn";
 import { ROUTES } from "@/shared/config";
+import { cn } from "@/shared/lib/cn";
 import { Icon } from "@/shared/ui/icons";
 
 export interface ReservationPaginationProps {
@@ -19,16 +19,15 @@ function getPageHref(tab: ReservationTab, page: number): string {
   return query ? `${ROUTES.reservations}?${query}` : ROUTES.reservations;
 }
 
-function PaginationArrow({
-  direction,
-  disabled,
-  href,
-}: {
+interface PaginationArrowProps {
   direction: "previous" | "next";
   disabled: boolean;
   href: string;
-}) {
+}
+
+function PaginationArrow({ direction, disabled, href }: PaginationArrowProps) {
   const label = direction === "previous" ? "이전 페이지" : "다음 페이지";
+  const iconName = direction === "previous" ? "chevron_left" : "chevron_right";
 
   if (disabled) {
     return (
@@ -37,7 +36,7 @@ function PaginationArrow({
         aria-label={label}
         className="flex size-10 items-center justify-center rounded-lg text-grayscale-300"
       >
-        <Icon name={direction === "previous" ? "chevron_left" : "chevron_right"} size={22} />
+        <Icon name={iconName} size={22} />
       </span>
     );
   }
@@ -46,9 +45,9 @@ function PaginationArrow({
     <Link
       href={href}
       aria-label={label}
-      className="flex size-10 items-center justify-center rounded-lg text-grayscale-600 outline-none hover:bg-grayscale-70 focus-visible:ring-2 focus-visible:ring-primary-500"
+      className="flex size-10 items-center justify-center rounded-lg text-grayscale-600 outline-none transition-colors hover:bg-grayscale-70 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
     >
-      <Icon name={direction === "previous" ? "chevron_left" : "chevron_right"} size={22} />
+      <Icon name={iconName} size={22} />
     </Link>
   );
 }
@@ -69,14 +68,18 @@ export function ReservationPagination({
       />
       {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => {
         const active = page === currentPage;
+
         return (
           <Link
             key={page}
             href={getPageHref(activeTab, page)}
+            aria-label={`${page}페이지`}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex size-10 items-center justify-center rounded-lg text-label-1 font-semibold outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
-              active ? "bg-primary-500 text-white" : "text-grayscale-600 hover:bg-grayscale-70",
+              "flex size-10 items-center justify-center rounded-lg text-label-1 font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
+              active
+                ? "bg-primary-500 text-white"
+                : "text-grayscale-600 hover:bg-grayscale-70",
             )}
           >
             {page}
