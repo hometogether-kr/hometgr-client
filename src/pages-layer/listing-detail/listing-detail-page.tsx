@@ -1,12 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import type { RoomDetail } from "@/domains/listing";
 import { useSession } from "@/domains/user";
 import { LoginPromptModal } from "@/features/prompt-login";
-import { VisitRequestModal } from "@/features/request-visit";
-import { useToast } from "@/shared/ui/toast";
+import { ROUTES } from "@/shared/config";
 import { SiteLayout } from "@/widgets/site-layout";
 
 import { ContractCardGuest } from "./ui/contract-card-guest";
@@ -34,10 +34,9 @@ export interface ListingDetailPageProps {
  * 잠긴 정보를 열람하려 하면 로그인 모달을 띄웁니다.
  */
 export function ListingDetailPage({ room }: ListingDetailPageProps) {
+  const router = useRouter();
   const { isAuthenticated } = useSession();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const [visitModalOpen, setVisitModalOpen] = useState(false);
-  const { showToast } = useToast();
 
   const requireLogin = () => setLoginModalOpen(true);
 
@@ -76,7 +75,10 @@ export function ListingDetailPage({ room }: ListingDetailPageProps) {
           </div>
 
           {isAuthenticated ? (
-            <PriceSidebarMember price={room.price} onRequestVisit={() => setVisitModalOpen(true)} />
+            <PriceSidebarMember
+              price={room.price}
+              onRequestVisit={() => router.push(ROUTES.newRoomReservation(room.id))}
+            />
           ) : (
             <PriceSidebarGuest price={room.price} onRequireLogin={requireLogin} />
           )}
@@ -84,14 +86,6 @@ export function ListingDetailPage({ room }: ListingDetailPageProps) {
       </div>
 
       <LoginPromptModal open={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
-      <VisitRequestModal
-        open={visitModalOpen}
-        onClose={() => setVisitModalOpen(false)}
-        onSubmit={() => {
-          setVisitModalOpen(false);
-          showToast("방문 예약을 신청했어요.", { variant: "success" });
-        }}
-      />
     </SiteLayout>
   );
 }

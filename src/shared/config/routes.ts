@@ -63,6 +63,8 @@ export const ROUTES = {
   rooms: "/rooms",
   /** 매물 상세 */
   roomDetail: (roomId: string) => `/rooms/${roomId}`,
+  /** 매물 방문 예약 신청 */
+  newRoomReservation: (roomId: string) => `/rooms/${encodeURIComponent(roomId)}/reservations/new`,
   /** 집주인 정보 — 매물 상세의 "집주인 정보" 카드에서 진입 */
   roomHost: (roomId: string) => `/rooms/${roomId}/host`,
   reservations: "/reservations",
