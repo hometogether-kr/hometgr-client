@@ -2,6 +2,13 @@ export { reservationFixtures } from "./fixtures/reservations.fixture";
 export { formatReservationDateTime, getVisitDayDifference } from "./lib/format-reservation-date";
 export { getReservationDetailById } from "./lib/get-reservation-detail";
 export { getReservationTab } from "./lib/get-reservation-tab";
+export type { HostReservation } from "./model/host-reservation";
+export {
+  formatHostVisitTime,
+  hostReservationFixtures,
+  hostReservationSchema,
+  hostVisitSlots,
+} from "./model/host-reservation";
 export type {
   ReservationCardViewModel,
   ReservationStatus,
