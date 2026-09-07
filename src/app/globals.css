@@ -31,6 +31,11 @@
   --color-system-success: #427fff;
   --color-system-kakao: #fee500;
 
+  /* Reservation status — 공용 팔레트 확정 전 예약 상태 UI에만 사용 */
+  --color-status-pending: #ffa100;
+  --color-status-pending-border: #ffc800;
+  --color-status-pending-soft: #fff8e6;
+
   --shadow-toast: 0 0 8px 0 rgba(115, 118, 123, 0.23);
   --shadow-dropdown: 0 0 8px 0 rgba(46, 47, 49, 0.1);
 
