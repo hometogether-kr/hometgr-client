@@ -27,11 +27,16 @@ export function ReservationHostCard({ reservation }: ReservationHostCardProps) {
         <div className="flex min-w-0 flex-col gap-2">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             <p className="text-title-3 font-semibold text-grayscale-900">
-              {reservation.hostName} 집주인
+              {reservation.hostName ? `${reservation.hostName} 집주인` : "집주인 정보 없음"}
             </p>
             <span className="flex items-center gap-3 text-body-1 font-medium">
               <span className="text-grayscale-600">
-                응답률 <span className="text-grayscale-800">{reservation.hostResponseRate}%</span>
+                응답률{" "}
+                <span className="text-grayscale-800">
+                  {reservation.hostResponseRate === null
+                    ? "정보 없음"
+                    : `${reservation.hostResponseRate}%`}
+                </span>
               </span>
               <span className="h-3.5 w-px bg-grayscale-300" aria-hidden="true" />
               <span className="text-grayscale-600">
@@ -39,7 +44,9 @@ export function ReservationHostCard({ reservation }: ReservationHostCardProps) {
               </span>
             </span>
           </div>
-          <p className="text-body-1 font-medium text-primary-500">{reservation.hostResidenceNote}</p>
+          <p className="text-body-1 font-medium text-primary-500">
+            {reservation.hostResidenceNote}
+          </p>
         </div>
       </div>
     </section>

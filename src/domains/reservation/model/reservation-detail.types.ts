@@ -27,7 +27,7 @@ export interface ReservationDetailViewModel {
 
   hostName: string;
   /** 집주인 응답률 (%) — 확정 화면 호스트 카드 */
-  hostResponseRate: number;
+  hostResponseRate: number | null;
   /** "2022년 5월" — 가입일 라벨 */
   hostJoinedLabel: string;
   /** "호스트가 집에 함께 거주해요" — 호스트 카드 하단 안내 */
