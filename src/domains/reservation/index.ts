@@ -10,9 +10,7 @@ export {
   reservationStatusDtoSchema,
 } from "./api/reservation.dto";
 export { reservationQueryKeys } from "./api/reservation-query-keys";
-export { reservationFixtures } from "./fixtures/reservations.fixture";
 export { formatReservationDateTime, getVisitDayDifference } from "./lib/format-reservation-date";
-export { getReservationDetailById } from "./lib/get-reservation-detail";
 export { getReservationTab } from "./lib/get-reservation-tab";
 export type { HostReservation } from "./model/host-reservation";
 export {

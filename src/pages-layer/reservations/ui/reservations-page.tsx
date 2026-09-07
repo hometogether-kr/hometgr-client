@@ -1,4 +1,6 @@
-import { getReservationTab, reservationFixtures, type ReservationTab } from "@/domains/reservation";
+"use client";
+
+import { getReservationTab, type ReservationTab, useMyReservations } from "@/domains/reservation";
 import {
   ReservationList,
   type ReservationTabItem,
@@ -22,24 +24,22 @@ export interface ReservationsPageProps {
 }
 
 export function ReservationsPage({ activeTab, requestedPage }: ReservationsPageProps) {
+  const { reservations, isLoading, error } = useMyReservations();
   const tabItems: ReservationTabItem[] = (Object.keys(tabLabels) as ReservationTab[]).map(
     (tab) => ({
       value: tab,
       label: tabLabels[tab],
       count:
         tab === "all"
-          ? reservationFixtures.length
-          : reservationFixtures.filter(
-              (reservation) => getReservationTab(reservation.status) === tab,
-            ).length,
+          ? reservations.length
+          : reservations.filter((reservation) => getReservationTab(reservation.status) === tab)
+              .length,
     }),
   );
   const filteredReservations =
     activeTab === "all"
-      ? reservationFixtures
-      : reservationFixtures.filter(
-          (reservation) => getReservationTab(reservation.status) === activeTab,
-        );
+      ? reservations
+      : reservations.filter((reservation) => getReservationTab(reservation.status) === activeTab);
   const totalPages = Math.max(1, Math.ceil(filteredReservations.length / PAGE_SIZE));
   const currentPage = Math.min(requestedPage, totalPages);
   const start = (currentPage - 1) * PAGE_SIZE;
@@ -61,6 +61,7 @@ export function ReservationsPage({ activeTab, requestedPage }: ReservationsPageP
             activeTab={activeTab}
             currentPage={currentPage}
             totalPages={totalPages}
+            state={isLoading ? "loading" : error ? "error" : "ready"}
           />
         </div>
       </div>
