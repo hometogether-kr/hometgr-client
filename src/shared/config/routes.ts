@@ -68,5 +68,11 @@ export const ROUTES = {
   /** 집주인 정보 — 매물 상세의 "집주인 정보" 카드에서 진입 */
   roomHost: (roomId: string) => `/rooms/${roomId}/host`,
   reservations: "/reservations",
+  /** 예약 상세 — 예약 관리 목록의 "상세 보기"에서 진입 */
+  reservationDetail: (reservationId: string) =>
+    `/reservations/${encodeURIComponent(reservationId)}`,
+  /** 방문 후기 작성 — 방문 완료 예약의 상세에서 진입 */
+  reservationReview: (reservationId: string) =>
+    `/reservations/${encodeURIComponent(reservationId)}/review`,
   favorites: "/favorites",
 } as const;
