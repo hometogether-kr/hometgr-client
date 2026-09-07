@@ -76,7 +76,9 @@ export function HostReservationList({
                       ? `거절 · ${item.reason}`
                       : item.status === "cancelled"
                         ? "예약 취소"
-                        : "방문 신청 │ 2026년 9월 25일 14:00 · 2026년 9월 27일 12:00"}
+                        : `방문 신청 │ ${item.requestedVisitTimes
+                            .map(formatHostVisitTime)
+                            .join(" · ")}`}
               </p>
               <p className="mt-4 text-label-1 text-grayscale-700">
                 자기소개: &quot;{item.introduction}&quot;

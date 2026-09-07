@@ -2,7 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { fetchMyReservation, fetchMyReservations } from "../api/reservation.api";
+import {
+  fetchHostReservation,
+  fetchMyReservation,
+  fetchMyReservations,
+} from "../api/reservation.api";
 import { reservationQueryKeys } from "../api/reservation-query-keys";
 
 export function useMyReservations() {
@@ -28,6 +32,20 @@ export function useMyReservation(reservationId: string) {
   return {
     reservation: query.data ?? null,
     isLoading: query.isPending,
+    error: query.error,
+  };
+}
+
+export function useHostReservation(reservationId: string) {
+  const query = useQuery({
+    queryKey: reservationQueryKeys.hostDetail(reservationId),
+    queryFn: ({ signal }) => fetchHostReservation(reservationId, signal),
+    enabled: reservationId.length > 0,
+  });
+
+  return {
+    reservation: query.data ?? null,
+    isLoading: reservationId.length > 0 && query.isPending,
     error: query.error,
   };
 }

@@ -1,5 +1,5 @@
 export {
-  fetchHostReservationResponse,
+  fetchHostReservation,
   fetchMyReservation,
   fetchMyReservations,
 } from "./api/reservation.api";
@@ -14,10 +14,11 @@ export { formatReservationDateTime, getVisitDayDifference } from "./lib/format-r
 export { getReservationTab } from "./lib/get-reservation-tab";
 export type { HostReservation } from "./model/host-reservation";
 export {
+  formatHostVisitChoice,
   formatHostVisitTime,
   hostReservationFixtures,
   hostReservationSchema,
-  hostVisitSlots,
+  toHostReservation,
 } from "./model/host-reservation";
 export type {
   ReservationCardViewModel,
@@ -31,7 +32,7 @@ export {
   type ReservationDetailTone,
 } from "./model/reservation-detail-presentation";
 export { getReservationStatusDisplay } from "./model/reservation-status";
-export { useMyReservation, useMyReservations } from "./model/use-reservations";
+export { useHostReservation, useMyReservation, useMyReservations } from "./model/use-reservations";
 export type { ReservationCardActions, ReservationCardProps } from "./ui/reservation-card";
 export { ReservationCard } from "./ui/reservation-card";
 export type { ReservationHostCardProps } from "./ui/reservation-host-card";
