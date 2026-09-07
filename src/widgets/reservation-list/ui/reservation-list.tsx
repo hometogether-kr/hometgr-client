@@ -1,5 +1,6 @@
 import type { ReservationCardViewModel, ReservationTab } from "@/domains/reservation";
 import { ReservationCard } from "@/domains/reservation";
+import { ROUTES } from "@/shared/config";
 
 import {
   ReservationListEmpty,
@@ -39,6 +40,7 @@ export function ReservationList({
             <ReservationCard
               key={reservation.id}
               reservation={reservation}
+              detailHref={ROUTES.reservationDetail(reservation.id)}
               eagerImage={index === 0}
             />
           ))}
