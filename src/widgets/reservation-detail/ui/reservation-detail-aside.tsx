@@ -70,11 +70,15 @@ export function ReservationDetailAside({ reservation }: ReservationDetailAsidePr
           </>
         ) : (
           <>
-            <Link href={ROUTES.newRoomReservation(reservation.roomId)} className="flex-1">
-              <BtnCta variant="sub" size="xl" className="w-full">
-                예약 변경
-              </BtnCta>
-            </Link>
+            <BtnCta
+              variant="sub"
+              size="xl"
+              className="flex-1"
+              disabled
+              title="예약 일정 변경 기능은 준비 중입니다."
+            >
+              예약 변경
+            </BtnCta>
             <CancelReservationButton reservationId={reservation.id} className="flex-1" />
           </>
         )}

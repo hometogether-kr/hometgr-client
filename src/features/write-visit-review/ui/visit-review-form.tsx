@@ -22,7 +22,7 @@ function maskName(name: string): string {
 }
 
 export function VisitReviewForm({ reservationId, hostName }: VisitReviewFormProps) {
-  const { values, errors, setField, submit } = useVisitReviewForm(reservationId);
+  const { values, errors, setField, submit } = useVisitReviewForm();
 
   return (
     <form
@@ -48,10 +48,7 @@ export function VisitReviewForm({ reservationId, hostName }: VisitReviewFormProp
           error={errors.roomMatchRating}
         />
         <div className="flex flex-col gap-3">
-          <label
-            htmlFor="review-content"
-            className="text-title-3 font-semibold text-grayscale-900"
-          >
+          <label htmlFor="review-content" className="text-title-3 font-semibold text-grayscale-900">
             상세 후기
           </label>
           <TextArea

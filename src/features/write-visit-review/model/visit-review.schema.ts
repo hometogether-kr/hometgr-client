@@ -12,11 +12,7 @@ export const REVIEW_MAX_LENGTH = 1000;
  * safeParse로 다루고 필드별 메시지를 보여줍니다.
  */
 export const visitReviewSchema = z.object({
-  hostRating: z
-    .number()
-    .int()
-    .min(RATING_MIN, "집주인과의 소통을 평가해 주세요.")
-    .max(RATING_MAX),
+  hostRating: z.number().int().min(RATING_MIN, "집주인과의 소통을 평가해 주세요.").max(RATING_MAX),
   roomMatchRating: z
     .number()
     .int()

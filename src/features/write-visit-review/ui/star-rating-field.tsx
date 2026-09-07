@@ -39,7 +39,7 @@ export function StarRatingField({ name, label, value, onChange, error }: StarRat
               aria-label={`${rating}점`}
               onClick={() => onChange(rating)}
               className={cn(
-                "flex size-7 items-center justify-center rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary-500",
+                "flex size-7 items-center justify-center rounded-md transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
                 filled ? "text-grayscale-900" : "text-grayscale-300 hover:text-grayscale-400",
               )}
             >

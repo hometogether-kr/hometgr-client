@@ -1,9 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { ROUTES } from "@/shared/config";
 import { useToast } from "@/shared/ui/toast";
 
 import { visitReviewSchema } from "./visit-review.schema";
@@ -25,11 +23,10 @@ const EMPTY_VALUES: VisitReviewFormValues = {
 /**
  * 방문 후기 폼 상태
  *
- * 별점·후기 입력을 담고, 제출 시 스키마로 검증합니다. 백엔드 연동 전이라 통과하면
- * 성공 토스트를 띄우고 예약 상세로 돌아갑니다.
+ * 별점·후기 입력을 담고 제출 시 스키마로 검증합니다. 현재 OpenAPI에는 후기 생성
+ * 경로가 없으므로 검증 뒤 준비 중 안내를 표시합니다.
  */
-export function useVisitReviewForm(reservationId: string) {
-  const router = useRouter();
+export function useVisitReviewForm() {
   const { showToast } = useToast();
   const [values, setValues] = useState<VisitReviewFormValues>(EMPTY_VALUES);
   const [errors, setErrors] = useState<VisitReviewFieldErrors>({});
@@ -60,8 +57,7 @@ export function useVisitReviewForm(reservationId: string) {
       return;
     }
 
-    showToast("방문 후기를 등록했어요.", { variant: "success" });
-    router.push(ROUTES.reservationDetail(reservationId));
+    showToast("후기 등록 기능은 준비 중이에요.", { variant: "info" });
   };
 
   return { values, errors, setField, submit };
