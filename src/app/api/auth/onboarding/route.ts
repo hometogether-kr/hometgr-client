@@ -11,27 +11,37 @@ import {
 } from "@/shared/api/server";
 
 const consentItemSchema = z.object({
-  // TODO(consent): 백엔드 consent 계약이 피그마 terms 기준으로 정리되면 허용 key도 축소합니다.
   key: z.enum([
     "termsOfService",
     "privacyCollection",
-    "privacyThirdParty",
     "locationBasedServiceTerms",
-    "alimtalkOptIn",
-    "econtractAgreement",
-    "paymentRefundPolicy",
+    "marketingOptIn",
   ]),
   agreed: z.boolean(),
   policyVersion: z.literal("1.0.0"),
 });
+
+const currentConsentKeys = [
+  "termsOfService",
+  "privacyCollection",
+  "locationBasedServiceTerms",
+  "marketingOptIn",
+] as const;
 
 const onboardingRequestSchema = z.object({
   role: z.enum(["student", "host"]),
   name: z.string().trim().min(1).max(100),
   email: z.email().max(320),
   phone: z.string().trim().min(1),
+  introduction: z.string().trim().min(1).max(1000).optional(),
   consents: z.object({
-    items: z.array(consentItemSchema).min(1),
+    items: z
+      .array(consentItemSchema)
+      .length(currentConsentKeys.length)
+      .refine(
+        (items) => items.every((item, index) => item.key === currentConsentKeys[index]),
+        "동의 항목 순서가 올바르지 않습니다.",
+      ),
   }),
 });
 
@@ -104,7 +114,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     const body = await readBody(response);
     return typeof body === "object" && body !== null
       ? NextResponse.json(body, { status: response.status })
-      : errorResponse(response.status, "가입을 완료하지 못했습니다.", request.nextUrl.pathname);
+      : errorResponse(response.status, "정보를 저장하지 못했습니다.", request.nextUrl.pathname);
   }
 
   const result = putMeResponseDtoSchema.safeParse(await readBody(response));
