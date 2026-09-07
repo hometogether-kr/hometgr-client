@@ -1,31 +1,50 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { ApiError } from "@/shared/api";
+import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { Icon } from "@/shared/ui/icons";
 import { useToast } from "@/shared/ui/toast";
 
-import type { VisitDateOption } from "../model/visit-request.types";
+import { useCreateReservation } from "../model/use-create-reservation";
 import { useVisitSelection } from "../model/use-visit-selection";
+import type { VisitDateOption } from "../model/visit-request.types";
 import { DateStrip } from "./date-strip";
 import { SelectedVisitSlots } from "./selected-visit-slots";
 import { TimeSlotGrid } from "./time-slot-grid";
 
 export interface VisitSlotPickerProps {
+  roomId: string;
   dateOptions: VisitDateOption[];
 }
 
-export function VisitSlotPicker({ dateOptions }: VisitSlotPickerProps) {
+export function VisitSlotPicker({ roomId, dateOptions }: VisitSlotPickerProps) {
   const [selectedDate, setSelectedDate] = useState(dateOptions[0]?.date ?? "");
+  const router = useRouter();
   const { showToast } = useToast();
+  const { createReservation, isCreating } = useCreateReservation();
   const { maxVisitTimes, selectedVisitTimes, selectionMessage, toggleVisitTime, removeVisitTime } =
     useVisitSelection();
   const selectedDateOption = dateOptions.find((option) => option.date === selectedDate);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (selectedVisitTimes.length === 0) return;
-    showToast("방문 예약 요청은 API 연동 후 전송할 수 있어요.", { variant: "info" });
+
+    try {
+      const reservation = await createReservation({
+        roomId,
+        visitRequestTimes: selectedVisitTimes,
+      });
+      showToast("방문 예약을 요청했어요.", { variant: "success" });
+      router.push(ROUTES.reservationDetail(reservation.id));
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : "방문 예약을 요청하지 못했어요.", {
+        variant: "error",
+      });
+    }
   };
 
   return (
@@ -77,9 +96,10 @@ export function VisitSlotPicker({ dateOptions }: VisitSlotPickerProps) {
         size="l"
         className="w-full md:ml-auto md:flex md:w-[280px]"
         disabled={selectedVisitTimes.length === 0}
-        onClick={handleSubmit}
+        loading={isCreating}
+        onClick={() => void handleSubmit()}
       >
-        방문 예약 요청하기
+        {isCreating ? "요청 중..." : "방문 예약 요청하기"}
       </BtnCta>
     </div>
   );

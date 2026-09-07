@@ -1,10 +1,13 @@
-export { visitDateFixtures } from "./fixtures/visit-slots.fixture";
+export type { CreateReservationInput } from "./api/create-reservation.api";
+export { createReservation } from "./api/create-reservation.api";
+export { createVisitDateOptions } from "./model/create-visit-date-options";
+export { useCreateReservation } from "./model/use-create-reservation";
+export { useVisitSelection } from "./model/use-visit-selection";
 export type {
   VisitDateOption,
   VisitRequestFormState,
   VisitTimeSlot,
 } from "./model/visit-request.types";
-export { useVisitSelection } from "./model/use-visit-selection";
 export type { DateStripProps } from "./ui/date-strip";
 export { DateStrip } from "./ui/date-strip";
 export type { SelectedVisitSlotsProps } from "./ui/selected-visit-slots";

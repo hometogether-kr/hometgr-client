@@ -1,6 +1,7 @@
 export {
   clearOnboardingTermsAgreement,
   hasRequiredOnboardingTermsAgreement,
+  isOnboardingTermAgreed,
   saveOnboardingTermsAgreement,
 } from "./model/onboarding-terms-storage";
 export type { TermId, TermItem } from "./model/terms";

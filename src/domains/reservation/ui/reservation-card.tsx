@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { BtnCta } from "@/shared/ui/btn-cta";
 
 import { formatReservationDateTime, getVisitDayDifference } from "../lib/format-reservation-date";
@@ -15,6 +17,8 @@ export interface ReservationCardActions {
 export interface ReservationCardProps {
   reservation: ReservationCardViewModel;
   actions?: ReservationCardActions;
+  /** "상세 보기" 링크 대상. 지정하면 버튼 대신 링크로 렌더링합니다. */
+  detailHref?: string;
   eagerImage?: boolean;
 }
 
@@ -22,7 +26,25 @@ function getPrimaryVisitTime(reservation: ReservationCardViewModel): string | nu
   return reservation.scheduledVisitTime ?? reservation.requestedVisitTimes[0] ?? null;
 }
 
-function ActionButton({ label, onClick }: { label: string; onClick?: () => void }) {
+function ActionButton({
+  label,
+  href,
+  onClick,
+}: {
+  label: string;
+  href?: string;
+  onClick?: () => void;
+}) {
+  if (href) {
+    return (
+      <Link href={href} className="w-full md:w-auto">
+        <BtnCta variant="stroke" size="s" className="w-full">
+          {label}
+        </BtnCta>
+      </Link>
+    );
+  }
+
   return (
     <BtnCta
       variant="stroke"
@@ -37,7 +59,12 @@ function ActionButton({ label, onClick }: { label: string; onClick?: () => void 
   );
 }
 
-export function ReservationCard({ reservation, actions, eagerImage = false }: ReservationCardProps) {
+export function ReservationCard({
+  reservation,
+  actions,
+  detailHref,
+  eagerImage = false,
+}: ReservationCardProps) {
   const tab = getReservationTab(reservation.status);
   const visitTime = getPrimaryVisitTime(reservation);
   const dateLabel = tab === "pending" ? "신청 일시" : "방문 일시";
@@ -89,7 +116,7 @@ export function ReservationCard({ reservation, actions, eagerImage = false }: Re
             <ReservationStatusChip status={reservation.status} />
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
-            <ActionButton label="상세 보기" onClick={actions?.onDetail} />
+            <ActionButton label="상세 보기" href={detailHref} onClick={actions?.onDetail} />
             {(tab === "pending" || tab === "confirmed") && (
               <ActionButton label="일정 변경하기" onClick={actions?.onReschedule} />
             )}

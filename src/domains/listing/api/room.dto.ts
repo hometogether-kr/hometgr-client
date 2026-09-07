@@ -35,9 +35,38 @@ const publicMediaDtoSchema = z.object({
 
 export type PublicMediaDto = z.infer<typeof publicMediaDtoSchema>;
 
+const roomReservationStatusDtoSchema = z.enum([
+  "requested",
+  "hostViewed",
+  "accepted",
+  "rejected",
+  "visitScheduled",
+  "visitCompleted",
+  "contractPending",
+  "contractSent",
+  "contractSigned",
+  "paymentPending",
+  "paymentCompleted",
+  "cancelledByStudent",
+  "cancelledByHost",
+  "expired",
+  "completed",
+  "checkoutPending",
+  "checkoutCompleted",
+]);
+
+const latestReservationDtoSchema = z
+  .object({
+    id: z.uuid(),
+    status: roomReservationStatusDtoSchema,
+  })
+  .nullable();
+
 const commonDtoSchema = z.object({
   host: publicHostDtoSchema,
   mediaCount: z.number().int(),
+  latestReservation: latestReservationDtoSchema,
+  canRequestVisit: z.boolean(),
 });
 
 /* 비회원 미리보기 — 레거시/v2 공통으로 room 식별자·지역·가격·대표사진만 있다 */

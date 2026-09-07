@@ -1,11 +1,26 @@
+import { z } from "zod";
+
 import type { TermId } from "./terms";
 import { TERMS } from "./terms";
 
 const STORAGE_KEY = "hometogether:onboarding:terms";
 
-interface StoredTermsAgreement {
-  agreedIds: TermId[];
-}
+const termIdSchema = z.enum([
+  "service",
+  "privacy",
+  "privacyThirdParty",
+  "location",
+  "alimtalk",
+  "econtract",
+  "paymentRefund",
+  "marketing",
+]);
+
+const storedTermsAgreementSchema = z.object({
+  agreedIds: z.array(termIdSchema),
+});
+
+type StoredTermsAgreement = z.infer<typeof storedTermsAgreementSchema>;
 
 function readStoredAgreement(): StoredTermsAgreement | null {
   if (typeof window === "undefined") return null;
@@ -14,8 +29,8 @@ function readStoredAgreement(): StoredTermsAgreement | null {
   if (!rawValue) return null;
 
   try {
-    const parsed = JSON.parse(rawValue) as Partial<StoredTermsAgreement>;
-    return Array.isArray(parsed.agreedIds) ? { agreedIds: parsed.agreedIds } : null;
+    const parsed = storedTermsAgreementSchema.safeParse(JSON.parse(rawValue) as unknown);
+    return parsed.success ? parsed.data : null;
   } catch {
     return null;
   }
@@ -30,6 +45,10 @@ export function hasRequiredOnboardingTermsAgreement(): boolean {
   if (!stored) return false;
 
   return TERMS.filter((term) => term.required).every((term) => stored.agreedIds.includes(term.id));
+}
+
+export function isOnboardingTermAgreed(termId: TermId): boolean {
+  return readStoredAgreement()?.agreedIds.includes(termId) ?? false;
 }
 
 export function clearOnboardingTermsAgreement(): void {

@@ -16,6 +16,10 @@ export interface TimeSlotGridProps {
 }
 
 export function TimeSlotGrid({ slots, selectedVisitTimes, onSlotToggle }: TimeSlotGridProps) {
+  // 지난 시간 슬롯 비활성화용 현재 시각. 렌더마다 다시 평가돼야 정확하므로 의도된 사용입니다.
+  // eslint-disable-next-line react-hooks/purity
+  const now = Date.now();
+
   if (slots.length === 0) {
     return (
       <div className="flex min-h-40 items-center justify-center rounded-xl bg-grayscale-70 px-5 text-center text-body-2 text-grayscale-500">
@@ -28,7 +32,7 @@ export function TimeSlotGrid({ slots, selectedVisitTimes, onSlotToggle }: TimeSl
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
       {slots.map((slot) => {
         const selected = selectedVisitTimes.includes(slot.startsAt);
-        const isPast = new Date(slot.startsAt).getTime() <= Date.now();
+        const isPast = new Date(slot.startsAt).getTime() <= now;
         const disabled = !slot.available || isPast;
 
         return (

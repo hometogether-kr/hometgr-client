@@ -7,6 +7,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 
 import { logout, userQueryKeys, useSession } from "@/domains/user";
+import { useUpdateIntroduction } from "@/features/edit-profile";
 import { useDeleteAccount } from "@/features/manage-account-session";
 import { ApiError } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
@@ -46,6 +47,7 @@ export function MyPage() {
   const { session, isLoading, isAuthenticated } = useSession();
   const queryClient = useQueryClient();
   const { deleteAccount, isDeletingAccount } = useDeleteAccount();
+  const { updateIntroduction, isUpdating } = useUpdateIntroduction();
   const { showToast } = useToast();
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -120,11 +122,21 @@ export function MyPage() {
   /* 관리자 계정은 memberRole이 없어 입주자 화면을 기본으로 보여줍니다. */
   const memberRole = user.memberRole ?? "guest";
 
-  /*
-   * TODO: 프로필·보호자 정보 수정 API가 아직 없습니다. 엔드포인트가 생기면
-   * features 레이어의 뮤테이션 훅으로 옮기고 성공 시 세션 캐시를 무효화하세요.
-   */
-  const notifySaved = () => showToast(SAVE_SUCCESS_MESSAGE, { variant: "success" });
+  const handleIntroductionSave = async (introduction: string) => {
+    if (!session.consents) {
+      showToast("현재 동의 정보를 확인할 수 없습니다.", { variant: "error" });
+      return;
+    }
+
+    try {
+      await updateIntroduction({ user, consents: session.consents, introduction });
+      showToast(SAVE_SUCCESS_MESSAGE, { variant: "success" });
+    } catch (error) {
+      showToast(error instanceof ApiError ? error.message : "소개를 수정하지 못했습니다.", {
+        variant: "error",
+      });
+    }
+  };
 
   return (
     <MyPageShell>
@@ -137,7 +149,12 @@ export function MyPage() {
       </h1>
 
       <div className="flex flex-col gap-6 md:gap-7">
-        <ProfileSection user={user} memberRole={memberRole} onSaveIntroduction={notifySaved} />
+        <ProfileSection
+          user={user}
+          memberRole={memberRole}
+          isSavingIntroduction={isUpdating}
+          onSaveIntroduction={(introduction) => void handleIntroductionSave(introduction)}
+        />
 
         {/* 모바일은 카드 대신 구분선으로 섹션을 나눕니다 (Figma 714:4470). */}
         <Divider className="md:hidden" />
@@ -145,7 +162,7 @@ export function MyPage() {
         {memberRole === "host" ? (
           <SettlementSection onEdit={() => router.push(ROUTES.settlementAccount)} />
         ) : (
-          <GuardianSection onSavePhone={notifySaved} />
+          <GuardianSection />
         )}
       </div>
 

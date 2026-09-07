@@ -56,4 +56,11 @@ export interface RoomDetail {
   /** 레거시 매물은 household 정보 자체가 없다 */
   household?: RoomHousehold;
   host: RoomHost;
+  /** 현재 학생의 최신 예약. 비회원·비학생이거나 예약이 없으면 null */
+  latestReservation: {
+    id: string;
+    status: string;
+  } | null;
+  /** 서버가 현재 사용자와 예약 상태를 기준으로 계산한 방문 요청 가능 여부 */
+  canRequestVisit: boolean;
 }

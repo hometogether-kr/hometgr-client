@@ -101,6 +101,8 @@ function toLegacyPreviewDetail(dto: LegacyPreviewDetailDto): RoomDetail {
     photos: preview.representativeMedia ? toPhotos([preview.representativeMedia], "매물 사진") : [],
     locationNote: LOCATION_NOTE,
     host: toHost(dto.host),
+    latestReservation: dto.latestReservation,
+    canRequestVisit: dto.canRequestVisit,
   };
 }
 
@@ -129,6 +131,8 @@ function toRegistrationPreviewDetail(dto: RegistrationPreviewDetailDto): RoomDet
     photos: preview.representativeMedia ? toPhotos([preview.representativeMedia], "매물 사진") : [],
     locationNote: LOCATION_NOTE,
     host: toHost(dto.host),
+    latestReservation: dto.latestReservation,
+    canRequestVisit: dto.canRequestVisit,
   };
 }
 
@@ -138,7 +142,9 @@ function toLegacyFullDetail(dto: LegacyFullDetailDto): RoomDetail {
   const locationSummary = dto.addressRegion ?? "";
   const title = dto.title ?? locationSummary ?? "매물 정보";
   const areaPyeong =
-    dto.areaSquareMeters != null ? Math.round(dto.areaSquareMeters / SQUARE_METERS_PER_PYEONG) : null;
+    dto.areaSquareMeters != null
+      ? Math.round(dto.areaSquareMeters / SQUARE_METERS_PER_PYEONG)
+      : null;
 
   return {
     id: dto.id,
@@ -163,6 +169,8 @@ function toLegacyFullDetail(dto: LegacyFullDetailDto): RoomDetail {
     photos: toPhotos(dto.media, title),
     locationNote: LOCATION_NOTE,
     host: toHost(dto.host),
+    latestReservation: dto.latestReservation,
+    canRequestVisit: dto.canRequestVisit,
   };
 }
 
@@ -216,9 +224,12 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
     household: {
       residentCount: household.residentCount,
       residentTypeLabel: RESIDENT_TYPE_LABEL[household.residentType],
-      genderCompositionLabel: RESIDENT_GENDER_COMPOSITION_LABEL[household.residentGenderComposition],
+      genderCompositionLabel:
+        RESIDENT_GENDER_COMPOSITION_LABEL[household.residentGenderComposition],
     },
     host: toHost(dto.host),
+    latestReservation: dto.latestReservation,
+    canRequestVisit: dto.canRequestVisit,
   };
 }
 
@@ -229,5 +240,7 @@ export function toRoomDetail(dto: PublicRoomDetailDto): RoomDetail {
       : toLegacyPreviewDetail(dto);
   }
 
-  return dto.registrationContractVersion === 2 ? toRegistrationFullDetail(dto) : toLegacyFullDetail(dto);
+  return dto.registrationContractVersion === 2
+    ? toRegistrationFullDetail(dto)
+    : toLegacyFullDetail(dto);
 }

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
+import { getRoomDetail } from "@/domains/listing/server";
 import { VisitRequestPage } from "@/pages-layer/visit-request";
 
 export const metadata: Metadata = {
@@ -12,5 +14,9 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { id } = await params;
-  return <VisitRequestPage roomId={id} />;
+  const room = await getRoomDetail(id);
+
+  if (room === null) notFound();
+
+  return <VisitRequestPage room={room} />;
 }
