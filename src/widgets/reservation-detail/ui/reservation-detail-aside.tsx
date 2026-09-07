@@ -75,7 +75,7 @@ export function ReservationDetailAside({ reservation }: ReservationDetailAsidePr
                 예약 변경
               </BtnCta>
             </Link>
-            <CancelReservationButton className="flex-1" />
+            <CancelReservationButton reservationId={reservation.id} className="flex-1" />
           </>
         )}
       </div>
