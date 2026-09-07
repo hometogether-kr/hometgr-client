@@ -28,7 +28,8 @@ export const rejectReasonDtoSchema = z.enum([
   "other",
 ]);
 
-const contractIntentDtoSchema = z.enum(["wantContract", "considering", "declined"]);
+export const contractIntentDtoSchema = z.enum(["wantContract", "considering", "declined"]);
+export type ContractIntentDto = z.infer<typeof contractIntentDtoSchema>;
 const nullableDateTimeSchema = z.string().datetime({ offset: true }).nullable();
 
 /** OpenAPI: ReservationResponseDto */

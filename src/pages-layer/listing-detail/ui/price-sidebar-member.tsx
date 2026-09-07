@@ -1,21 +1,31 @@
 import { formatManwon, type RoomPrice } from "@/domains/listing";
 import { BtnCta } from "@/shared/ui/btn-cta";
-import { useToast } from "@/shared/ui/toast";
 
 export interface PriceSidebarMemberProps {
   price: RoomPrice;
+  canRequestVisit: boolean;
+  canRequestContract: boolean;
+  isRequestingContract: boolean;
+  onRequestContract: () => void;
   onRequestVisit: () => void;
+  onViewReservation: () => void;
 }
 
 /**
  * 가격/예약 사이드바 — 회원 (Figma: node 1222:46291)
  *
- * "바로 계약하기"로 이어지는 계약 플로우는 이번 6개 디자인에 포함되지 않아
- * 아직 없습니다. 클릭 시 안내만 띄워둡니다.
+ * 방문 완료 예약이 있으면 계약 의사를 서버에 전달하고, 활성 예약이 있으면
+ * 중복 방문 신청 대신 해당 예약 상세로 이동합니다.
  */
-export function PriceSidebarMember({ price, onRequestVisit }: PriceSidebarMemberProps) {
-  const { showToast } = useToast();
-
+export function PriceSidebarMember({
+  price,
+  canRequestVisit,
+  canRequestContract,
+  isRequestingContract,
+  onRequestContract,
+  onRequestVisit,
+  onViewReservation,
+}: PriceSidebarMemberProps) {
   return (
     <aside className="flex w-full flex-col gap-10 rounded-2xl border border-grayscale-200 bg-white p-7 md:w-[380px] md:shrink-0 md:p-9">
       <div className="flex flex-col gap-3">
@@ -31,12 +41,20 @@ export function PriceSidebarMember({ price, onRequestVisit }: PriceSidebarMember
         <BtnCta
           size="l"
           className="w-full"
-          onClick={() => showToast("계약 기능은 준비 중이에요.", { variant: "info" })}
+          disabled={!canRequestContract}
+          loading={isRequestingContract}
+          onClick={onRequestContract}
+          title={!canRequestContract ? "방문 완료 후 계약을 진행할 수 있어요." : undefined}
         >
           바로 계약하기
         </BtnCta>
-        <BtnCta variant="sub" size="l" className="w-full" onClick={onRequestVisit}>
-          방문 예약 신청
+        <BtnCta
+          variant="sub"
+          size="l"
+          className="w-full"
+          onClick={canRequestVisit ? onRequestVisit : onViewReservation}
+        >
+          {canRequestVisit ? "방문 예약 신청" : "예약 내역 보기"}
         </BtnCta>
       </div>
     </aside>

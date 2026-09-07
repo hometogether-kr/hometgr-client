@@ -4,8 +4,8 @@ import type { ReservationStatus } from "./reservation.types";
  * 예약 상세 화면이 쓰는 뷰모델
  *
  * 목록 카드({@link ReservationCardViewModel})보다 항목이 많습니다. Figma 5.1.1~5.1.4
- * (예약 상세 정보 · 방문 후기 작성)의 모든 텍스트를 담습니다. 백엔드 연동 전까지는
- * fixture가 채웁니다.
+ * (예약 상세 정보 · 방문 후기 작성)의 모든 텍스트를 담습니다. API가 제공하지 않는
+ * 호스트·사진·상세 주소 항목은 매퍼가 정보 없음 상태로 정규화합니다.
  */
 export interface ReservationDetailViewModel {
   id: string;

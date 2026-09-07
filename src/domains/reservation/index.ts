@@ -3,8 +3,9 @@ export {
   fetchMyReservation,
   fetchMyReservations,
 } from "./api/reservation.api";
-export type { ReservationResponseDto } from "./api/reservation.dto";
+export type { ContractIntentDto, ReservationResponseDto } from "./api/reservation.dto";
 export {
+  contractIntentDtoSchema,
   rejectReasonDtoSchema,
   reservationResponseDtoSchema,
   reservationStatusDtoSchema,
