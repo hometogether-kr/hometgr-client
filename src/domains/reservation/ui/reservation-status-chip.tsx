@@ -1,7 +1,7 @@
 import { cn } from "@/shared/lib/cn";
 
-import { getReservationStatusDisplay } from "../model/reservation-status";
 import type { ReservationStatus } from "../model/reservation.types";
+import { getReservationStatusDisplay } from "../model/reservation-status";
 
 export interface ReservationStatusChipProps {
   status: ReservationStatus;

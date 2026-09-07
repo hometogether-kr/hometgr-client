@@ -46,10 +46,10 @@ export const reservationFixtures: ReservationCardViewModel[] = [
     roomThumbnailUrl: roomPhoto,
     hostDisplayName: "신촌지기",
     status: "accepted",
-    requestedVisitTimes: ["2026-09-07T16:00:00+09:00"],
-    scheduledVisitTime: "2026-09-07T16:00:00+09:00",
+    requestedVisitTimes: ["2026-09-12T16:00:00+09:00"],
+    scheduledVisitTime: "2026-09-12T16:00:00+09:00",
     createdAt: "2026-08-27T18:05:00+09:00",
-    expiresAt: "2026-09-06T18:05:00+09:00",
+    expiresAt: "2026-09-11T18:05:00+09:00",
   },
   {
     id: "reservation-005",
