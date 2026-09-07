@@ -1,4 +1,7 @@
-export { visitDateFixtures } from "./fixtures/visit-slots.fixture";
+export type { CreateReservationInput } from "./api/create-reservation.api";
+export { createReservation } from "./api/create-reservation.api";
+export { createVisitDateOptions } from "./model/create-visit-date-options";
+export { useCreateReservation } from "./model/use-create-reservation";
 export { useVisitSelection } from "./model/use-visit-selection";
 export type {
   VisitDateOption,
