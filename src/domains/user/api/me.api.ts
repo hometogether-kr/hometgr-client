@@ -20,6 +20,7 @@ export interface CompleteOnboardingInput {
   name: string;
   email: string;
   phone: string;
+  marketingOptIn: boolean;
 }
 
 async function readBody(response: Response): Promise<unknown> {
@@ -33,11 +34,11 @@ async function readBody(response: Response): Promise<unknown> {
   }
 }
 
-function createRequiredConsents() {
+function createRequiredConsents(marketingOptIn: boolean) {
   return {
     items: CURRENT_CONSENT_ITEMS.map(({ key, agreed }) => ({
       key,
-      agreed,
+      agreed: key === "marketingOptIn" ? marketingOptIn : agreed,
       policyVersion: ONBOARDING_CONSENT_POLICY_VERSION,
     })),
   };
@@ -80,7 +81,7 @@ export async function completeOnboarding(input: CompleteOnboardingInput): Promis
       name: input.name,
       email: input.email,
       phone: input.phone,
-      consents: createRequiredConsents(),
+      consents: createRequiredConsents(input.marketingOptIn),
     }),
   });
 
