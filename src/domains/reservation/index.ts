@@ -1,3 +1,15 @@
+export {
+  fetchHostReservationResponse,
+  fetchMyReservation,
+  fetchMyReservations,
+} from "./api/reservation.api";
+export type { ReservationResponseDto } from "./api/reservation.dto";
+export {
+  rejectReasonDtoSchema,
+  reservationResponseDtoSchema,
+  reservationStatusDtoSchema,
+} from "./api/reservation.dto";
+export { reservationQueryKeys } from "./api/reservation-query-keys";
 export { reservationFixtures } from "./fixtures/reservations.fixture";
 export { formatReservationDateTime, getVisitDayDifference } from "./lib/format-reservation-date";
 export { getReservationDetailById } from "./lib/get-reservation-detail";
@@ -21,6 +33,7 @@ export {
   type ReservationDetailTone,
 } from "./model/reservation-detail-presentation";
 export { getReservationStatusDisplay } from "./model/reservation-status";
+export { useMyReservation, useMyReservations } from "./model/use-reservations";
 export type { ReservationCardActions, ReservationCardProps } from "./ui/reservation-card";
 export { ReservationCard } from "./ui/reservation-card";
 export type { ReservationHostCardProps } from "./ui/reservation-host-card";
