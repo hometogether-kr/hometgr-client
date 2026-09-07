@@ -6,8 +6,8 @@ import { BtnCta } from "@/shared/ui/btn-cta";
 import { Icon } from "@/shared/ui/icons";
 import { useToast } from "@/shared/ui/toast";
 
-import type { VisitDateOption } from "../model/visit-request.types";
 import { useVisitSelection } from "../model/use-visit-selection";
+import type { VisitDateOption } from "../model/visit-request.types";
 import { DateStrip } from "./date-strip";
 import { SelectedVisitSlots } from "./selected-visit-slots";
 import { TimeSlotGrid } from "./time-slot-grid";
