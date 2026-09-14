@@ -18,6 +18,16 @@ pnpm dev
 둘 다 서버 전용입니다. 브라우저는 API 서버를 직접 호출하지 않으므로 `NEXT_PUBLIC_`
 접두사가 필요하지 않습니다.
 
+## 카카오 문의 유입 추적
+
+`/kakao/instagram`, `/kakao/everytime`, `/kakao/daangn`, `/kakao/website`,
+`/kakao/offline_qr`은 카카오 상담 연결 전 유입 이벤트를 Google Sheets에 직접 기록합니다.
+Google Sheets는 Vercel OIDC와 Google Workload Identity Federation으로 인증하므로 private
+key·서비스 계정 JSON 파일은 사용하지 않습니다.
+
+Vercel에는 `.env.example`의 `NEXT_PUBLIC_KAKAO_*`, `GCP_*`,
+`GOOGLE_SHEETS_SPREADSHEET_ID`를 설정하세요. OIDC 토큰은 Vercel이 자동으로 제공합니다.
+
 ## 인증 구조 (BFF)
 
 `GET /auth/kakao/callback`은 프론트 URL로 redirect하지 않고 토큰 JSON을 그대로

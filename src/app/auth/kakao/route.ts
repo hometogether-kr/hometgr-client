@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 
-import { backendFetch, toCookieHeaderValue, writeOAuthStateCookie } from "@/shared/api/server";
+import {
+  backendFetch,
+  toCookieHeaderValue,
+  writeOAuthStateCookieToResponse,
+} from "@/shared/api/server";
 import { ROUTES } from "@/shared/config";
 import { getServerEnv } from "@/shared/config/env.server";
 
@@ -32,10 +36,9 @@ export async function GET() {
     return NextResponse.redirect(loginUrl);
   }
 
+  const redirectResponse = NextResponse.redirect(authorizeUrl);
   const stateCookie = toCookieHeaderValue(response.headers.getSetCookie());
-  if (stateCookie) {
-    await writeOAuthStateCookie(stateCookie);
-  }
+  if (stateCookie) writeOAuthStateCookieToResponse(redirectResponse, stateCookie);
 
-  return NextResponse.redirect(authorizeUrl);
+  return redirectResponse;
 }

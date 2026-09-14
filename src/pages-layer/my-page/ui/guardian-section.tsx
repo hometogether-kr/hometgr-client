@@ -66,7 +66,7 @@ export function GuardianSection({
             setPhone(event.target.value);
             if (error) setError(undefined);
           }}
-          action={<SaveButton onClick={handleSave} />}
+          action={<SaveButton disabled={!onSavePhone} onClick={handleSave} />}
         />
 
         <fieldset className="flex flex-col gap-2 md:px-0">
@@ -77,12 +77,18 @@ export function GuardianSection({
               <ChipNormal
                 key={option.value}
                 selected={relation === option.value}
+                disabled={!onSelectRelation}
                 onClick={() => handleRelationSelect(option.value)}
               >
                 {option.label}
               </ChipNormal>
             ))}
           </div>
+          {!onSavePhone && (
+            <p className="mt-2 text-label-2 text-grayscale-500">
+              보호자 정보 저장 기능은 준비 중이에요.
+            </p>
+          )}
         </fieldset>
       </div>
     </AccountSection>

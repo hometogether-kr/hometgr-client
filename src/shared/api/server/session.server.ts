@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import type { NextResponse } from "next/server";
 
 /**
  * 세션 쿠키
@@ -30,6 +31,36 @@ const BASE_COOKIE_OPTIONS = {
 export interface SessionTokens {
   accessToken: string;
   refreshToken: string;
+}
+
+export function writeSessionTokensToResponse(
+  response: NextResponse,
+  { accessToken, refreshToken }: SessionTokens,
+): void {
+  response.cookies.set(ACCESS_TOKEN_COOKIE, accessToken, BASE_COOKIE_OPTIONS);
+  response.cookies.set(REFRESH_TOKEN_COOKIE, refreshToken, {
+    ...BASE_COOKIE_OPTIONS,
+    maxAge: REFRESH_TOKEN_MAX_AGE_SECONDS,
+  });
+}
+
+export function clearSessionTokensFromResponse(response: NextResponse): void {
+  response.cookies.set(ACCESS_TOKEN_COOKIE, "", { ...BASE_COOKIE_OPTIONS, maxAge: 0 });
+  response.cookies.set(REFRESH_TOKEN_COOKIE, "", { ...BASE_COOKIE_OPTIONS, maxAge: 0 });
+}
+
+export function writeOAuthStateCookieToResponse(
+  response: NextResponse,
+  rawCookiePair: string,
+): void {
+  response.cookies.set(OAUTH_STATE_COOKIE, rawCookiePair, {
+    ...BASE_COOKIE_OPTIONS,
+    maxAge: OAUTH_STATE_MAX_AGE_SECONDS,
+  });
+}
+
+export function clearOAuthStateCookieFromResponse(response: NextResponse): void {
+  response.cookies.set(OAUTH_STATE_COOKIE, "", { ...BASE_COOKIE_OPTIONS, maxAge: 0 });
 }
 
 /**

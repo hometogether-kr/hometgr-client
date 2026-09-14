@@ -14,6 +14,7 @@ export interface ProfileSectionProps {
   memberRole: MemberRole;
   onSaveIntroduction?: (introduction: string) => void;
   onRequestRoleSwitch?: () => void;
+  isSavingIntroduction?: boolean;
 }
 
 /** 집주인은 입주자로, 입주자는 집주인으로 전환을 요청합니다. */
@@ -43,6 +44,7 @@ export function ProfileSection({
   memberRole,
   onSaveIntroduction,
   onRequestRoleSwitch,
+  isSavingIntroduction = false,
 }: ProfileSectionProps) {
   const [introduction, setIntroduction] = useState(user.introduction ?? "");
 
@@ -50,16 +52,18 @@ export function ProfileSection({
     <AccountSection
       title={SECTION_TITLE[memberRole]}
       action={
-        <button
-          type="button"
-          onClick={onRequestRoleSwitch}
-          className="flex shrink-0 items-center justify-center gap-1.5 rounded-lg border border-grayscale-300 px-4 py-2 text-label-2 font-semibold text-grayscale-600 transition-opacity hover:opacity-80"
-        >
-          <span className="flex size-4 items-center justify-center">
-            <Icon name="sync_alt" size={16} />
-          </span>
-          {SWITCH_LABEL[memberRole]}
-        </button>
+        onRequestRoleSwitch ? (
+          <button
+            type="button"
+            onClick={onRequestRoleSwitch}
+            className="flex shrink-0 items-center justify-center gap-1.5 rounded-lg border border-grayscale-300 px-4 py-2 text-label-2 font-semibold text-grayscale-600 transition-opacity hover:opacity-80"
+          >
+            <span className="flex size-4 items-center justify-center">
+              <Icon name="sync_alt" size={16} />
+            </span>
+            {SWITCH_LABEL[memberRole]}
+          </button>
+        ) : undefined
       }
     >
       {/* 모바일은 필드 간격 28px, 데스크톱은 24px (Figma 714:4458 · 646:26541) */}
@@ -73,7 +77,12 @@ export function ProfileSection({
           placeholder="소개를 입력해주세요"
           value={introduction}
           onChange={(event) => setIntroduction(event.target.value)}
-          action={<SaveButton onClick={() => onSaveIntroduction?.(introduction)} />}
+          action={
+            <SaveButton
+              disabled={!onSaveIntroduction || isSavingIntroduction}
+              onClick={() => onSaveIntroduction?.(introduction)}
+            />
+          }
         />
       </div>
     </AccountSection>

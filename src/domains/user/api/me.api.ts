@@ -8,24 +8,19 @@ import { toSession } from "./user.mapper";
 
 const ONBOARDING_CONSENT_POLICY_VERSION = "1.0.0";
 
-// TODO(consent): 백엔드가 피그마 terms 기준으로 필수 consent를 정리하면 이 목록도 함께 줄입니다.
-const REQUIRED_ONBOARDING_CONSENT_KEYS = {
-  host: ["termsOfService", "privacyCollection", "privacyThirdParty", "locationBasedServiceTerms"],
-  student: [
-    "termsOfService",
-    "privacyCollection",
-    "privacyThirdParty",
-    "alimtalkOptIn",
-    "econtractAgreement",
-    "paymentRefundPolicy",
-  ],
-} as const;
+const CURRENT_CONSENT_ITEMS = [
+  { key: "termsOfService", agreed: true },
+  { key: "privacyCollection", agreed: true },
+  { key: "locationBasedServiceTerms", agreed: true },
+  { key: "marketingOptIn", agreed: false },
+] as const;
 
 export interface CompleteOnboardingInput {
   role: MemberRole;
   name: string;
   email: string;
   phone: string;
+  marketingOptIn: boolean;
 }
 
 async function readBody(response: Response): Promise<unknown> {
@@ -39,11 +34,11 @@ async function readBody(response: Response): Promise<unknown> {
   }
 }
 
-function createRequiredConsents(role: "student" | "host") {
+function createRequiredConsents(marketingOptIn: boolean) {
   return {
-    items: REQUIRED_ONBOARDING_CONSENT_KEYS[role].map((key) => ({
+    items: CURRENT_CONSENT_ITEMS.map(({ key, agreed }) => ({
       key,
-      agreed: true,
+      agreed: key === "marketingOptIn" ? marketingOptIn : agreed,
       policyVersion: ONBOARDING_CONSENT_POLICY_VERSION,
     })),
   };
@@ -86,7 +81,7 @@ export async function completeOnboarding(input: CompleteOnboardingInput): Promis
       name: input.name,
       email: input.email,
       phone: input.phone,
-      consents: createRequiredConsents(role),
+      consents: createRequiredConsents(input.marketingOptIn),
     }),
   });
 

@@ -10,10 +10,8 @@ export default function Page() {
   const router = useRouter();
   const { showToast } = useToast();
 
-  // TODO: 정산 계좌 저장 API가 생기면 뮤테이션으로 교체하세요.
   const handleSubmit = () => {
-    showToast("수정이 성공적으로 완료되었습니다.", { variant: "success" });
-    router.push(ROUTES.myPage);
+    showToast("정산 계좌 저장 기능은 준비 중이에요.", { variant: "info" });
   };
 
   return (

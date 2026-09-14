@@ -17,6 +17,8 @@ export {
 } from "./api/user.dto";
 export { toCurrentUser, toSession } from "./api/user.mapper";
 export { userQueryKeys } from "./api/user-query-keys";
+export type { ConsentKey, ConsentStateItem, UserConsents } from "./model/consent";
+export { CONSENT_KEYS } from "./model/consent";
 export type { CurrentUser, Session, UserRole } from "./model/current-user";
 export { ANONYMOUS_SESSION } from "./model/current-user";
 export type { GuardianRelation, GuardianRelationOption } from "./model/guardian-relation";

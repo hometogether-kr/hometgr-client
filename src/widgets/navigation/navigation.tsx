@@ -27,6 +27,7 @@ const MENU = {
     items: [
       { label: "매물 등록", href: ROUTES.listing.start },
       { label: "내 방 관리", href: ROUTES.listing.manage },
+      { label: "예약 관리", href: ROUTES.hostReservations },
     ] satisfies SubMenuItem[],
   },
   finding: {
@@ -54,7 +55,7 @@ function toActiveMenu(pathname: string): MenuKey | null {
   if (pathname === ROUTES.home || startsWith("/intro")) {
     return "intro";
   }
-  if (startsWith("/listing")) return "listing";
+  if (startsWith("/listing") || startsWith(ROUTES.hostReservations)) return "listing";
   if ([ROUTES.rooms, ROUTES.reservations, ROUTES.favorites].some(startsWith)) return "finding";
   if (startsWith(ROUTES.support)) return "support";
 

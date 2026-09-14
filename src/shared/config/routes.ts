@@ -26,6 +26,8 @@ export const ROUTES = {
     kakaoStart: "/auth/kakao",
     /** 로그아웃 (POST) */
     logout: "/api/auth/logout",
+    /** 회원 탈퇴 (DELETE, BFF Route Handler) */
+    account: "/api/auth/account",
     /** 약관 동의 (카카오 인증 직후) */
     terms: "/onboarding/terms",
     /** 회원 유형 선택 */
@@ -59,6 +61,19 @@ export const ROUTES = {
   /** 정산 대금 입금계좌 등록·수정 (집주인 전용, 마이페이지 정산 정보에서 진입) */
   settlementAccount: "/mypage/settlement-account",
   rooms: "/rooms",
+  /** 매물 상세 */
+  roomDetail: (roomId: string) => `/rooms/${roomId}`,
+  /** 매물 방문 예약 신청 */
+  newRoomReservation: (roomId: string) => `/rooms/${encodeURIComponent(roomId)}/reservations/new`,
+  /** 집주인 정보 — 매물 상세의 "집주인 정보" 카드에서 진입 */
+  roomHost: (roomId: string) => `/rooms/${roomId}/host`,
+  hostReservations: "/host/reservations",
   reservations: "/reservations",
+  /** 예약 상세 — 예약 관리 목록의 "상세 보기"에서 진입 */
+  reservationDetail: (reservationId: string) =>
+    `/reservations/${encodeURIComponent(reservationId)}`,
+  /** 방문 후기 작성 — 방문 완료 예약의 상세에서 진입 */
+  reservationReview: (reservationId: string) =>
+    `/reservations/${encodeURIComponent(reservationId)}/review`,
   favorites: "/favorites",
 } as const;

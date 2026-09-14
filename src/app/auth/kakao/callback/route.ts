@@ -3,9 +3,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import { authOwnerResponseDtoSchema } from "@/domains/user";
 import {
   backendFetch,
-  clearOAuthStateCookie,
+  clearOAuthStateCookieFromResponse,
   readOAuthStateCookie,
-  writeSessionTokens,
+  writeSessionTokensToResponse,
 } from "@/shared/api/server";
 import { ROUTES } from "@/shared/config";
 import { getServerEnv } from "@/shared/config/env.server";
@@ -24,10 +24,11 @@ export async function GET(request: NextRequest) {
   const loginUrl = new URL(ROUTES.auth.login, APP_BASE_URL);
   const searchParams = request.nextUrl.searchParams;
 
-  const failWith = async (reason: string) => {
-    await clearOAuthStateCookie();
+  const failWith = (reason: string) => {
     loginUrl.searchParams.set("error", reason);
-    return NextResponse.redirect(loginUrl);
+    const response = NextResponse.redirect(loginUrl);
+    clearOAuthStateCookieFromResponse(response);
+    return response;
   };
 
   // 사용자가 동의 화면에서 취소하면 code 대신 error가 옵니다.
@@ -57,9 +58,10 @@ export async function GET(request: NextRequest) {
 
   const { accessToken, refreshToken, onboardingRequired } = parsed.data;
 
-  await writeSessionTokens({ accessToken, refreshToken });
-  await clearOAuthStateCookie();
-
   const nextPath = onboardingRequired ? ROUTES.auth.terms : ROUTES.home;
-  return NextResponse.redirect(new URL(nextPath, APP_BASE_URL));
+  const redirectResponse = NextResponse.redirect(new URL(nextPath, APP_BASE_URL));
+  writeSessionTokensToResponse(redirectResponse, { accessToken, refreshToken });
+  clearOAuthStateCookieFromResponse(redirectResponse);
+
+  return redirectResponse;
 }

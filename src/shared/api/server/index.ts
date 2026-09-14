@@ -3,11 +3,15 @@ export { backendFetch, refreshTokenPair, tokenPairSchema } from "./backend-clien
 export type { SessionTokens } from "./session.server";
 export {
   clearOAuthStateCookie,
+  clearOAuthStateCookieFromResponse,
   clearSessionTokens,
+  clearSessionTokensFromResponse,
   hasSessionCookie,
   readOAuthStateCookie,
   readSessionTokens,
   toCookieHeaderValue,
   writeOAuthStateCookie,
+  writeOAuthStateCookieToResponse,
   writeSessionTokens,
+  writeSessionTokensToResponse,
 } from "./session.server";

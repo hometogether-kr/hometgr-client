@@ -1,9 +1,10 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
+import { useOutsideClick } from "@/shared/lib/hooks";   // ← 추가
 
 export interface DropdownOption<T extends string> {
   label: string;
@@ -45,16 +46,7 @@ export function Dropdown<T extends string>({
   const listId = useId();
   const selected = options.find((o) => o.value === value);
 
-  useEffect(() => {
-    if (!open) return;
-    const handle = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handle);
-    return () => document.removeEventListener("mousedown", handle);
-  }, [open]);
+  useOutsideClick(rootRef, () => setOpen(false), open);
 
   return (
     <div ref={rootRef} className={cn("relative flex w-full flex-col gap-2", className)}>

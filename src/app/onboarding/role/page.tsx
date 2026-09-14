@@ -8,6 +8,7 @@ import { completeOnboarding, type MemberRole, userQueryKeys, useSession } from "
 import {
   clearOnboardingTermsAgreement,
   hasRequiredOnboardingTermsAgreement,
+  isOnboardingTermAgreed,
 } from "@/features/agree-terms";
 import { OnboardingRolePage } from "@/pages-layer/onboarding-role";
 import { ROUTES } from "@/shared/config";
@@ -17,7 +18,7 @@ import { useToast } from "@/shared/ui/toast";
 export default function Page() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { session, isAuthenticated, isLoading } = useSession();
+  const { session, isAuthenticated, isLoading } = useSession({ mode: "always" });
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -64,6 +65,7 @@ export default function Page() {
       name: profile.name,
       email: user.email,
       phone,
+      marketingOptIn: isOnboardingTermAgreed("marketing"),
     });
   };
 

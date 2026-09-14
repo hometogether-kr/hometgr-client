@@ -11,7 +11,7 @@
  * 만료된 URL은 Figma MCP로 해당 노드를 다시 export해야 합니다. 어떤 파일의 어떤
  * 상수가 실패했는지 출력하므로 그 부분만 다시 받으면 됩니다.
  */
-import { readFile, writeFile, mkdir, readdir } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
@@ -22,10 +22,10 @@ const publicPrefix = "/figma";
 
 const checkOnly = process.argv.includes("--check");
 
-const ASSET_URL = /https:\/\/www\.figma\.com\/api\/mcp\/asset\/[a-zA-Z0-9-]+/g;
+const ASSET_URL = /https:\/\/www\.figma\.com\/api\/mcp\/asset\/[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9]+)?/g;
 /** `const FIGMA_TEMP_LOGO = "…"` 처럼 이름이 붙은 선언 */
 const NAMED_ASSET =
-  /(?:const\s+)?([A-Za-z0-9_]+)\s*[:=]\s*\n?\s*"(https:\/\/www\.figma\.com\/api\/mcp\/asset\/[a-zA-Z0-9-]+)"/g;
+  /(?:const\s+)?([A-Za-z0-9_]+)\s*[:=]\s*\n?\s*"(https:\/\/www\.figma\.com\/api\/mcp\/asset\/[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9]+)?)"/g;
 
 const EXTENSION_BY_MIME = {
   "image/svg+xml": "svg",

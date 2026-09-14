@@ -25,7 +25,7 @@ export interface TextFieldProps extends Omit<InputHTMLAttributes<HTMLInputElemen
 
 const boxSizeClasses: Record<TextFieldSize, string> = {
   s: "p-3",
-  m: "h-[46px] items-center p-3",
+  m: "h-12 items-center p-3",   // ← h-[46px]에서 변경 (46→48px)
   L: "p-3",
 };
 
@@ -37,6 +37,10 @@ const boxSizeClasses: Record<TextFieldSize, string> = {
  * - completed: 입력값 grayscale-800
  * - error: border system-error + 하단 에러 문구
  * - disable: bg grayscale-100 · text grayscale-500 (disabled prop)
+ *
+ * 에러 문구는 `useId`로 만든 id로 input의 `aria-describedby`와 연결합니다 —
+ * 스크린리더가 잘못된 값 옆에서 에러를 함께 읽도록(설계 §6.7·§9). 호출부가 별도
+ * `aria-describedby`를 넘기면 함께 병합합니다.
  */
 export function TextField({
   label,
@@ -55,8 +59,12 @@ export function TextField({
 }: TextFieldProps) {
   const autoId = useId();
   const inputId = id ?? autoId;
+  const errorId = `${autoId}-error`;
   const [innerLength, setInnerLength] = useState(String(defaultValue ?? "").length);
   const length = value != null ? String(value).length : innerLength;
+
+  const describedBy =
+    [error ? errorId : null, rest["aria-describedby"]].filter(Boolean).join(" ") || undefined;
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInnerLength(e.target.value.length);
@@ -92,13 +100,14 @@ export function TextField({
             defaultValue={defaultValue}
             onChange={handleChange}
             disabled={disabled}
-            aria-invalid={Boolean(error) || undefined}
             className={cn(
               "min-w-0 flex-1 bg-transparent text-base leading-[1.5] font-medium outline-none",
               "placeholder:text-grayscale-400",
               disabled ? "text-grayscale-500" : "text-grayscale-800",
             )}
             {...rest}
+            aria-invalid={Boolean(error) || undefined}
+            aria-describedby={describedBy}
           />
           {showCount && (
             <span className="shrink-0 self-center text-right text-[13px] leading-[1.4] font-normal whitespace-nowrap text-grayscale-500">
@@ -109,7 +118,10 @@ export function TextField({
         {action && <div className="shrink-0">{action}</div>}
       </div>
       {error && (
-        <p className="w-full px-1 text-[13px] leading-[1.4] font-medium text-system-error">
+        <p
+          id={errorId}
+          className="w-full px-1 text-[13px] leading-[1.4] font-medium text-system-error"
+        >
           {error}
         </p>
       )}
