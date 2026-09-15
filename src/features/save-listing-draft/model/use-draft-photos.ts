@@ -7,6 +7,7 @@ import {
   type ListingDraft,
   listingDraftQueryKeys,
   toDraftPhoto,
+  toScreenStep,
 } from "@/domains/listing-draft";
 
 import {
@@ -28,6 +29,8 @@ function mergePhotoMutation(
   return {
     ...draft,
     version: result.version,
+    nextStep: result.nextStep === null ? null : toScreenStep(result.nextStep),
+    completedSteps: result.completedSteps.map(toScreenStep),
     lastSavedAt: new Date(result.lastSavedAt),
     photos: [...result.media].sort((a, b) => a.displayOrder - b.displayOrder).map(toDraftPhoto),
   };
@@ -52,6 +55,8 @@ export function useDraftPhotos(draftId: string) {
     mutationFn: (input: Omit<DeleteDraftPhotoInput, "draftId">) =>
       deleteDraftPhoto({ draftId, ...input }),
     onSuccess: applyResult,
+    // 응답 유실이나 버전 충돌이면 서버의 실제 사진 상태를 다시 확인합니다.
+    onError: () => queryClient.invalidateQueries({ queryKey: detailKey }),
   });
 
   return {

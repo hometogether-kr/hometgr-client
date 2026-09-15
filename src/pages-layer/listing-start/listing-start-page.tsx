@@ -46,7 +46,7 @@ export function ListingStartPage() {
           <div className="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-0">
             <StartLinkCard
               title="새 매물 등록하기"
-              description="주소, 가격, 사진, 방문일정을 처음부터 등록"
+              description="주소, 가격, 사진을 처음부터 등록"
               href={ROUTES.listing.checklist}
               illustration={
                 <img
