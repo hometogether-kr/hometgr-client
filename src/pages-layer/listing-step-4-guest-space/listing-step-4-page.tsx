@@ -4,9 +4,7 @@ import { useState } from "react";
 
 import {
   PRIVATE_ROOM_OPTION_OPTIONS,
-  PRIVATE_ROOM_SIZE_OPTIONS,
   type PrivateRoomOption,
-  type PrivateRoomSize,
   RENTAL_SPACE_TYPE_OPTIONS,
   type RentalSpaceType,
 } from "@/domains/listing-draft";
@@ -31,21 +29,18 @@ function FieldError({ message }: { message?: string }) {
 export interface ListingStep4Values {
   rentalSpaceType: RentalSpaceType;
   rentalSpaceTypeOther: string;
-  privateRoomSize: PrivateRoomSize;
   privateRoomOptions: PrivateRoomOption[];
 }
 
 export interface ListingStep4InitialValues {
   rentalSpaceType: RentalSpaceType | null;
   rentalSpaceTypeOther: string;
-  privateRoomSize: PrivateRoomSize | null;
   privateRoomOptions: PrivateRoomOption[];
 }
 
 const EMPTY_VALUES: ListingStep4InitialValues = {
   rentalSpaceType: null,
   rentalSpaceTypeOther: "",
-  privateRoomSize: null,
   privateRoomOptions: [],
 };
 
@@ -70,14 +65,12 @@ export function ListingStep4Page({
 }: ListingStep4PageProps) {
   const [usage, setUsage] = useState<RentalSpaceType | null>(initialValues.rentalSpaceType);
   const [usageEtc, setUsageEtc] = useState(initialValues.rentalSpaceTypeOther);
-  const [roomSize, setRoomSize] = useState<PrivateRoomSize | null>(initialValues.privateRoomSize);
   const [options, setOptions] = useState<PrivateRoomOption[]>(initialValues.privateRoomOptions);
   const [submitted, setSubmitted] = useState(false);
   const { showToast } = useToast();
 
   const errors = {
     usage: !usage || (usage === "other" && usageEtc.trim() === "") ? REQUIRED_MESSAGE : undefined,
-    roomSize: !roomSize ? REQUIRED_MESSAGE : undefined,
     options: options.length === 0 ? OPTIONS_MESSAGE : undefined,
   };
   const hasError = Object.values(errors).some(Boolean);
@@ -85,7 +78,7 @@ export function ListingStep4Page({
 
   const handleNext = () => {
     setSubmitted(true);
-    if (hasError || !usage || !roomSize) {
+    if (hasError || !usage) {
       showToast("필수항목을 모두 입력해주세요.", { variant: "error" });
       return;
     }
@@ -93,7 +86,6 @@ export function ListingStep4Page({
     onNext?.({
       rentalSpaceType: usage,
       rentalSpaceTypeOther: usageEtc.trim(),
-      privateRoomSize: roomSize,
       privateRoomOptions: options,
     });
   };
@@ -148,13 +140,6 @@ export function ListingStep4Page({
           </div>
           <FieldError message={show("usage")} />
         </div>
-        <ChipField
-          label="입주자 방 크기"
-          options={PRIVATE_ROOM_SIZE_OPTIONS}
-          value={roomSize}
-          onChange={setRoomSize}
-          error={show("roomSize")}
-        />
         {/* 복수 선택은 props 유니온 때문에 값 타입이 추론되지 않아 명시합니다. */}
         <ChipField<PrivateRoomOption>
           label="방 옵션 (복수선택 가능)"

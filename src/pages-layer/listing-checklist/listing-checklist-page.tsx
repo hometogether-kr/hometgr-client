@@ -34,7 +34,8 @@ const CHECKLIST = [
         예상 소요시간 <span className="text-primary-500">3</span>분
       </>
     ),
-    description: "주소, 거래조건, 방 사진을 미리 준비하시면 더 빠르게 완료됩니다.",
+    description:
+      "주소와 거래조건, 방 사진을 최소 6장 준비해주세요. 사진은 최대 20장까지 등록할 수 있어요.",
   },
   {
     icon: FIGMA_TEMP_IC_REVIEW,
