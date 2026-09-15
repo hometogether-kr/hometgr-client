@@ -1,112 +1,132 @@
 import { cn } from "@/shared/lib/cn";
 
-const DARK_LOGO_L = "/images/logos/logo-dark-l.svg";
-const DARK_LOGO_M = "/images/logos/logo-dark-m.svg";
-const IC_INSTAGRAM = "/icons/ic-insta.svg";
-const IC_KAKAO = "/icons/ic-kakao.svg";
+import { FooterPolicyLinks } from "./footer-policy-links";
+
+const SOCIAL_LINKS = [
+  {
+    label: "홈투게더 네이버 블로그",
+    href: "https://blog.naver.com/home_together_",
+    icon: "/icons/ic-blog.svg",
+  },
+  {
+    label: "홈투게더 인스타그램",
+    href: "https://www.instagram.com/home.tgr/",
+    icon: "/icons/ic-insta.svg",
+  },
+  {
+    label: "홈투게더 유튜브",
+    href: "https://www.youtube.com/channel/UCQSrpG0h3wmvGLgrBC8SFpw",
+    icon: "/icons/ic-youtube.svg",
+  },
+];
 
 /* eslint-disable @next/next/no-img-element -- SVG 에셋을 원본 그대로 렌더링합니다 */
 
-function FooterLogo({ size }: { size: "l" | "m" }) {
-  const logo =
-    size === "l"
-      ? { src: DARK_LOGO_L, width: 176, height: 32, className: "h-8 w-[176px]" }
-      : { src: DARK_LOGO_M, width: 155, height: 28, className: "h-7 w-[155px]" };
-
+function FooterCustomerService() {
   return (
-    <img
-      alt="Home Together"
-      src={logo.src}
-      width={logo.width}
-      height={logo.height}
-      className={cn("block max-w-none", logo.className)}
-    />
-  );
-}
-
-function FooterContact() {
-  return (
-    <div className="text-sm leading-[1.5] font-normal text-grayscale-600 md:text-[15px] md:leading-[1.6]">
+    <section className="text-sm leading-[1.7] text-grayscale-600">
+      <h2 className="mb-3 text-base font-semibold text-grayscale-900">고객센터</h2>
+      <p>운영시간: 평일 10:00~18:00</p>
       <p>
-        E-mail : <a href="mailto:hometo.kr@gmail.com">hometo.kr@gmail.com</a>
+        전화:{" "}
+        <a
+          href="tel:01045879428"
+          className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
+        >
+          010-4587-9428
+        </a>
       </p>
-      <p>Tel : 010.4587.9428</p>
-      <p>Instagram: @home.tgr</p>
-    </div>
-  );
-}
-
-function FooterSocial() {
-  return (
-    <div className="flex items-center gap-[9px]">
+      <p>
+        이메일:{" "}
+        <a
+          href="mailto:contact@hometogether.kr"
+          className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
+        >
+          contact@hometogether.kr
+        </a>
+      </p>
+      <p className="mt-3 break-keep">
+        운영시간 외 및 주말·공휴일에는 카카오톡 문의하기 채널을 이용해 주세요.
+      </p>
       <a
-        href="https://www.instagram.com/home.tgr"
+        href="https://pf.kakao.com/_BKlhX/chat"
         target="_blank"
-        rel="noreferrer"
-        aria-label="Instagram"
-        className="flex h-13.5 w-13.5 items-center justify-center rounded-full bg-grayscale-500"
+        rel="noopener noreferrer"
+        className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-grayscale-300 bg-white px-4 py-2 text-sm font-medium text-grayscale-800 transition-colors hover:bg-grayscale-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
       >
-        <img alt="" src={IC_INSTAGRAM} className="block size-7 max-w-none" />
+        <img
+          src="/icons/ic-kakao.svg"
+          alt=""
+          width={20}
+          height={20}
+          className="size-5 brightness-0"
+        />
+        카카오톡 문의하기
       </a>
-      {/* TODO: 채팅 채널 링크가 정해지면 href를 교체하세요. */}
-      <a
-        href="http://pf.kakao.com/_BKlhX"
-        aria-label="채팅 문의"
-        className="flex h-13.5 w-13.5 items-center justify-center rounded-full bg-grayscale-500"
-      >
-        <img alt="" src={IC_KAKAO} className="block size-7 max-w-none" />
-      </a>
-    </div>
-  );
-}
-
-function FooterCopyright() {
-  return (
-    <p className="text-sm leading-[1.5] font-normal whitespace-nowrap text-grayscale-600">
-      © 2026 Home Together. All rights reserved.
-    </p>
+    </section>
   );
 }
 
 function FooterBusinessInfo() {
   return (
-    <p className="mt-5 border-t border-grayscale-300 pt-4 text-sm leading-[1.6] font-normal text-grayscale-600 md:mt-6">
-      주식회사 핀타 · 사업자등록번호 481-87-04211 · 인천광역시 연수구 갯벌로 12, 511호(송도동,
-      미추홀타워 별관A동)
-    </p>
+    <section className="text-sm leading-[1.7] text-grayscale-600">
+      <h2 className="mb-3 text-base font-semibold text-grayscale-900">사업자정보</h2>
+      <p className="font-medium text-grayscale-800">주식회사 핀타 · 홈투게더</p>
+      <p className="mt-1">사업자등록번호: 481-87-04211</p>
+      <p className="mt-1 break-keep">
+        주소: 인천광역시 연수구 갯벌로 12, 511호(송도동, 미추홀타워 별관A동)
+      </p>
+      <FooterPolicyLinks />
+    </section>
   );
 }
-/**
- * 푸터 (Figma: Footer 153:929 · Footer_mobile 541:20757)
- *
- * - bg grayscale-70, 데스크톱 px-200 py-24 / 모바일 px-16 py-24
- * - md 미만: 세로 스택(로고→연락처→저작권→소셜 중앙)
- * - md 이상: 좌(로고+연락처) · 우(소셜+저작권) 양끝 정렬, 높이 152px
- */
+
+function FooterSocial() {
+  return (
+    <nav aria-label="홈투게더 소셜 미디어" className="flex items-center gap-3">
+      {SOCIAL_LINKS.map(({ label, href, icon }) => (
+        <a
+          key={href}
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${label} (새 탭)`}
+          title={label}
+          className="flex size-11 items-center justify-center rounded-full bg-grayscale-600 transition-colors hover:bg-grayscale-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
+        >
+          <img alt="" src={icon} width={24} height={24} className="block size-6" />
+        </a>
+      ))}
+    </nav>
+  );
+}
+
 export function Footer({ className }: { className?: string }) {
   return (
-    <footer className={cn("w-full bg-grayscale-70 px-4 py-6 md:px-[200px]", className)}>
-      <div className="hidden h-[152px] w-full items-start justify-between md:flex">
-        <div className="flex h-full w-[260px] flex-col items-start justify-between">
-          <FooterLogo size="l" />
-          <FooterContact />
+    <footer
+      className={cn("w-full bg-grayscale-70 px-4 py-8 md:px-8 md:py-10 xl:px-[200px]", className)}
+    >
+      <div className="mx-auto w-full max-w-[1520px]">
+        <img
+          alt="Home Together"
+          src="/images/logos/logo-dark-l.svg"
+          width={176}
+          height={32}
+          className="block h-7 w-auto md:h-8"
+        />
+        <div className="mt-7 grid gap-8 md:grid-cols-[minmax(0,1fr)_320px] md:gap-12">
+          <div className="md:order-2">
+            <FooterCustomerService />
+          </div>
+          <FooterBusinessInfo />
         </div>
-        <div className="flex h-full flex-col items-end justify-between">
+        <div className="mt-8 flex flex-col gap-5 border-t border-grayscale-300 pt-5 sm:flex-row sm:items-center sm:justify-between">
           <FooterSocial />
-          <FooterCopyright />
+          <p className="text-xs leading-relaxed text-grayscale-600 sm:text-sm">
+            © 2026 Home Together. All rights reserved.
+          </p>
         </div>
       </div>
-      <div className="flex flex-col gap-7 md:hidden">
-        <div className="flex flex-col items-start gap-5 px-2">
-          <FooterLogo size="m" />
-          <FooterContact />
-          <FooterCopyright />
-        </div>
-        <div className="flex w-full justify-center">
-          <FooterSocial />
-        </div>
-      </div>
-      <FooterBusinessInfo />
     </footer>
   );
 }

@@ -17,3 +17,11 @@ export function formatKoreanPhone(input: string): string | null {
 
   return `+82${subscriberNumber}`;
 }
+
+/** 입력 중인 국내 휴대전화 번호를 010-1234-5678 형식으로 표시합니다. */
+export function formatKoreanPhoneInput(input: string): string {
+  let digits = input.replace(/\D/g, "");
+  if (digits.startsWith("82")) digits = `0${digits.slice(2)}`;
+  digits = digits.slice(0, 11);
+  return [digits.slice(0, 3), digits.slice(3, 7), digits.slice(7)].filter(Boolean).join("-");
+}

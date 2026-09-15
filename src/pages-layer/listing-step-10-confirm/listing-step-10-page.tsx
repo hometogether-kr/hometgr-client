@@ -8,6 +8,7 @@ import {
   type PreferredContactMethod,
   type PreferredContactTime,
 } from "@/domains/listing-draft";
+import { formatKoreanPhoneInput } from "@/shared/lib/korean-phone";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { ChipField } from "@/shared/ui/chip-field";
 import { InfoBox } from "@/shared/ui/info-box";
@@ -79,7 +80,7 @@ export function ListingStep10Page({
   validatePhone = () => true,
 }: ListingStep10PageProps) {
   const [name, setName] = useState(initialValues.contactName);
-  const [phone, setPhone] = useState(initialValues.contactPhone);
+  const [phone, setPhone] = useState(() => formatKoreanPhoneInput(initialValues.contactPhone));
   const [contactTime, setContactTime] = useState<PreferredContactTime | null>(
     initialValues.preferredContactTime,
   );
@@ -156,7 +157,7 @@ export function ListingStep10Page({
               className="flex-1"
               inputMode="tel"
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(formatKoreanPhoneInput(e.target.value))}
               error={show("phone")}
             />
           </div>

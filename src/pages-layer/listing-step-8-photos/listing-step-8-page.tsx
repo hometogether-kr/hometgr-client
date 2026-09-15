@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
 
 import { MAX_LISTING_PHOTOS, MIN_LISTING_PHOTOS } from "@/features/save-listing-draft";
@@ -39,6 +40,9 @@ export interface ListingStep8PageProps {
   /** 표시 순서대로 정렬된 저장 완료 사진 */
   photos?: readonly ListingStep8Photo[];
   onAddFiles?: (files: File[]) => void;
+  onDeletePhoto?: (mediaId: string) => void;
+  isDeleting?: boolean;
+  isLoading?: boolean;
   onPrev?: () => void;
   /** 정렬된 사진 ID — 첫 번째가 대표 사진입니다. */
   onNext?: (orderedPhotoIds: string[]) => void;
@@ -74,6 +78,9 @@ function isAcceptedPhotoMimeType(type: string): type is AcceptedPhotoMimeType {
 export function ListingStep8Page({
   photos: savedPhotos = [],
   onAddFiles,
+  onDeletePhoto,
+  isDeleting = false,
+  isLoading = false,
   onPrev,
   onNext,
   isUploading = false,
@@ -91,9 +98,11 @@ export function ListingStep8Page({
     [orderedPhotoIds, savedPhotos],
   );
 
+  const isBusy = isUploading || isSaving || isDeleting || isLoading;
   const hasError = photos.length < MIN_PHOTOS;
 
   const handleNext = () => {
+    if (isBusy) return;
     setSubmitted(true);
     if (hasError) {
       showToast(MIN_PHOTOS_MESSAGE, { variant: "error" });
@@ -103,7 +112,7 @@ export function ListingStep8Page({
   };
 
   const addFiles = (fileList: FileList | null) => {
-    if (!fileList) return;
+    if (!fileList || isBusy) return;
 
     const selectedFiles = Array.from(fileList);
     const files = selectedFiles
@@ -116,6 +125,7 @@ export function ListingStep8Page({
   };
 
   const reorder = (from: number, to: number) => {
+    if (isBusy) return;
     setOrderedPhotoIds(() => {
       const next = photos.map((photo) => photo.id);
       const [moved] = next.splice(from, 1);
@@ -129,10 +139,12 @@ export function ListingStep8Page({
       step={8}
       title="사용할 공간의 사진과 영상을 업로드해주세요"
       description="방의 분위기가 잘 보이는 사진일수록 입주자가 더 안심하고 선택할 수 있어요."
-      onPrev={onPrev}
+      onPrev={() => {
+        if (!isBusy) onPrev?.();
+      }}
       onNext={handleNext}
-      nextDisabled={isUploading || isSaving}
-      autoSaving={isUploading || isSaving}
+      nextDisabled={isBusy}
+      autoSaving={isUploading || isSaving || isDeleting}
     >
       {submitted && hasError && (
         <p className="w-full pb-1 text-[13px] leading-[1.4] font-medium text-system-error">
@@ -151,7 +163,7 @@ export function ListingStep8Page({
                 variant="stroke"
                 size="xs"
                 className="w-full"
-                disabled={isUploading}
+                disabled={isBusy}
                 onClick={() => inputRef.current?.click()}
               >
                 사진 업로드
@@ -163,7 +175,7 @@ export function ListingStep8Page({
             {photos.map((photo, index) => (
               <li
                 key={photo.id}
-                draggable
+                draggable={!isBusy}
                 onDragStart={() => {
                   dragIndex.current = index;
                 }}
@@ -180,6 +192,23 @@ export function ListingStep8Page({
                   src={photo.url}
                   className="size-full object-cover"
                 />
+                <button
+                  type="button"
+                  aria-label={"매물 사진 " + (index + 1) + " 삭제"}
+                  disabled={isBusy || !onDeletePhoto}
+                  draggable={false}
+                  onClick={() => onDeletePhoto?.(photo.id)}
+                  className="absolute top-0 right-0 flex size-11 items-center justify-center rounded-full p-2 transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-primary-500 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <Image
+                    src="/icons/ic-photo-delete.svg"
+                    alt=""
+                    width={28}
+                    height={28}
+                    className="size-7"
+                    draggable={false}
+                  />
+                </button>
                 {index === 0 && (
                   <span className="absolute inset-x-0 bottom-0 flex items-center justify-center bg-primary-500 py-2 text-base leading-[1.5] font-bold text-white">
                     대표 사진
@@ -189,7 +218,12 @@ export function ListingStep8Page({
             ))}
             {photos.length < MAX_PHOTOS && (
               <li className="flex aspect-square w-full items-center justify-center rounded-[10px] border border-dashed border-grayscale-400 md:size-[180px]">
-                <BtnCta variant="stroke" size="xs" onClick={() => inputRef.current?.click()}>
+                <BtnCta
+                  variant="stroke"
+                  size="xs"
+                  disabled={isBusy}
+                  onClick={() => inputRef.current?.click()}
+                >
                   사진 추가
                 </BtnCta>
               </li>
@@ -201,6 +235,7 @@ export function ListingStep8Page({
           type="file"
           accept={ACCEPTED_PHOTO_MIME_TYPES.join(",")}
           multiple
+          disabled={isBusy}
           className="sr-only"
           onChange={(e) => {
             addFiles(e.target.files);
