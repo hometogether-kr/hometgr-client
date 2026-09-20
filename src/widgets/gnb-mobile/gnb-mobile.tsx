@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
+import { AccountModeSwitch } from "@/features/switch-account-mode";
 import { cn } from "@/shared/lib/cn";
 import { Icon } from "@/shared/ui/icons";
 import { SidebarMobile } from "@/widgets/sidebar-mobile";
@@ -83,16 +84,19 @@ export function GnbMobile(props: GnbMobileProps) {
             {/* eslint-disable-next-line @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */}
             <img src={LOGO} alt="Home Together" width={113} height={20} className="block" />
           </Link>
-          <button
-            type="button"
-            aria-label="메뉴 열기"
-            onClick={onMenuClick ?? (() => setMenuOpen(true))}
-            className="flex items-center"
-          >
-            <span className="flex size-6 items-center justify-center">
-              {props.menuIcon ?? <Icon name="menu" size={24} />}
-            </span>
-          </button>
+          <div className="flex items-center gap-2">
+            <AccountModeSwitch />
+            <button
+              type="button"
+              aria-label="메뉴 열기"
+              onClick={onMenuClick ?? (() => setMenuOpen(true))}
+              className="flex items-center"
+            >
+              <span className="flex size-6 items-center justify-center">
+                {props.menuIcon ?? <Icon name="menu" size={24} />}
+              </span>
+            </button>
+          </div>
         </header>
         {!onMenuClick && <SidebarMobile open={menuOpen} onClose={() => setMenuOpen(false)} />}
       </>

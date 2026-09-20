@@ -28,5 +28,7 @@ export { MEMBER_ROLE_LABELS, MEMBER_ROLE_OPTIONS } from "./model/member-role";
 export { toMemberRole, toUserRole } from "./model/role-mapping";
 export type { SessionHintProviderProps } from "./model/session-hint";
 export { SessionHintProvider, useSessionHint } from "./model/session-hint";
+export type { AccountMode } from "./model/use-account-mode";
+export { ACCOUNT_MODE_LABELS, useAccountMode } from "./model/use-account-mode";
 export type { UseSessionResult } from "./model/use-session";
 export { useSession } from "./model/use-session";
