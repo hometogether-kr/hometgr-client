@@ -25,12 +25,12 @@ const SWITCH_LABEL: Record<MemberRole, string> = {
 
 const SECTION_TITLE: Record<MemberRole, string> = {
   host: "집주인 정보",
-  guest: "입주자 정보",
+  guest: "게스트 정보",
 };
 
 const INTRODUCTION_LABEL: Record<MemberRole, string> = {
-  host: "집주인 소개",
-  guest: "입주자 소개",
+  host: "집주인 소개 (선택)",
+  guest: "게스트 소개 (선택)",
 };
 
 /**

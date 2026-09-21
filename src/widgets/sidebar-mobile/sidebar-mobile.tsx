@@ -5,7 +5,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
 
-import { logout, MEMBER_ROLE_LABELS, userQueryKeys, useSession } from "@/domains/user";
+import {
+  ACCOUNT_MODE_LABELS,
+  logout,
+  useAccountMode,
+  userQueryKeys,
+  useSession,
+} from "@/domains/user";
 import { ROUTES } from "@/shared/config";
 import { cn } from "@/shared/lib/cn";
 import { Divider } from "@/shared/ui/divider";
@@ -74,6 +80,7 @@ export interface SidebarMobileProps {
  */
 export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
   const router = useRouter();
+  const { mode } = useAccountMode();
   const queryClient = useQueryClient();
   const { isAuthenticated, session } = useSession();
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
@@ -128,7 +135,7 @@ export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
               </Link>
               {memberRole && (
                 <p className="py-1.5 text-label-1 font-medium text-grayscale-500">
-                  {MEMBER_ROLE_LABELS[memberRole]}
+                  {ACCOUNT_MODE_LABELS[mode]}
                 </p>
               )}
             </>
