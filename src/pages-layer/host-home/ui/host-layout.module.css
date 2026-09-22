@@ -1,0 +1,607 @@
+/* Shared typography comes from globals.css. Landing-specific sizes and line
+ * heights remain explicit where the Figma frame differs from Basic System. */
+.hero {
+  overflow: hidden;
+  background: var(--color-grayscale-0);
+  padding: 64px 0;
+}
+.heroContent {
+  display: grid;
+  gap: 32px;
+}
+.heroCopy {
+  position: relative;
+  z-index: 1;
+}
+.heroCopy h1 {
+  font-size: clamp(27px, 4.5vw, 48px);
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+  color: var(--color-grayscale-900);
+}
+.heroCopy strong {
+  font-weight: 700;
+}
+.heroCopy > p {
+  margin-top: 28px;
+  font-size: var(--text-heading-2);
+  line-height: var(--text-heading-2--line-height);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-grayscale-500);
+}
+.heroCta {
+  margin-top: 40px;
+}
+.heroArt {
+  position: relative;
+  width: 100%;
+  max-width: 591px;
+  aspect-ratio: 837 / 730;
+  margin: 0 auto;
+}
+/* Export includes shadow bounds outside Figma's 591×515 layout frame. */
+.heroArt > img {
+  position: absolute;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  left: 0;
+  top: 0;
+}
+.benefits {
+  background: var(--color-grayscale-50);
+  padding: 64px 0 40px;
+}
+.goalLabel {
+  color: var(--color-primary-500);
+  font-size: var(--text-heading-2);
+  line-height: 29px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.goal {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 24px;
+}
+.goal h2 {
+  font-size: var(--text-title-2);
+  line-height: 1.45;
+  font-weight: 300;
+  color: rgb(0 0 0 / 0.68);
+  letter-spacing: -0.015em;
+}
+.goal strong {
+  font-weight: 700;
+  color: rgb(0 0 0 / 0.88);
+}
+.goal > img {
+  width: min(100%, 403.25px);
+  height: auto;
+}
+.benefitGrid {
+  display: grid;
+  gap: 16px;
+  margin-top: 40px;
+}
+.benefitCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 28px;
+  background: var(--color-grayscale-0);
+}
+.benefitCard > img {
+  width: 56px;
+  height: 56px;
+  flex: none;
+}
+.benefitCard h3 {
+  margin-bottom: 16px;
+  font-size: var(--text-heading-2);
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+}
+.benefitCard p {
+  font-size: var(--text-body-1);
+  font-weight: 500;
+  line-height: var(--text-body-1--line-height);
+  letter-spacing: -0.03em;
+  white-space: pre-line;
+  color: var(--color-grayscale-600);
+}
+.steps {
+  background: var(--color-grayscale-50);
+  padding: 64px 0;
+}
+.stepList {
+  display: grid;
+  gap: 24px;
+}
+.stepCard {
+  position: relative;
+  padding: 20px 28px;
+  background: var(--color-grayscale-0);
+  border-radius: 28px;
+}
+.stepNumber {
+  color: var(--color-primary-500);
+  font-size: var(--text-body-2);
+  font-weight: 700;
+  line-height: 32px;
+}
+.stepCard h3 {
+  word-break: keep-all;
+  margin-top: 6px;
+  font-size: var(--text-title-3);
+  line-height: 31px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.stepBody {
+  margin-top: 20px;
+  font-size: var(--text-headline-1);
+  font-weight: 500;
+  line-height: 1.45;
+  white-space: pre-line;
+  letter-spacing: -0.015em;
+  color: var(--color-grayscale-600);
+}
+.stepNote {
+  position: absolute;
+  width: 183px;
+  height: 62px;
+  right: 16px;
+  top: 24px;
+}
+.stepNote p {
+  position: relative;
+  padding-top: 12px;
+  padding-left: 28px;
+  text-align: center;
+  font-size: var(--text-label-1);
+  line-height: 1.54;
+  font-weight: 700;
+  color: var(--color-primary-400);
+  letter-spacing: -0.01em;
+}
+.stepArrow {
+  justify-self: center;
+  transform: rotate(90deg);
+}
+.community {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--color-grayscale-50);
+  padding: 64px 0;
+}
+.communityIntro {
+  position: relative;
+}
+.communityTitle {
+  position: relative;
+  z-index: 1;
+}
+.communityTitle header {
+  margin-bottom: 0;
+}
+.communityTitle header > p:last-child {
+  font-size: var(--text-heading-2);
+}
+.map {
+  position: relative;
+  height: 350px;
+  margin: 0 -24px;
+}
+.map > img {
+  position: absolute;
+  width: 1100px;
+  max-width: none;
+  height: auto;
+  left: calc(50% - 820px);
+  top: -55px;
+}
+.houseCount {
+  position: absolute;
+  right: 0;
+  bottom: 260px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 200px;
+  height: 76px;
+  padding: 16px 20px;
+  border-radius: 24px;
+  background: var(--color-grayscale-50);
+  box-shadow: 0 0 35.5px rgb(28 107 227 / 0.07);
+}
+.houseCount strong {
+  font-size: 44px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--color-grayscale-800);
+}
+.houseCount small {
+  display: block;
+  font-size: var(--text-caption-1);
+  color: var(--color-grayscale-400);
+}
+.houseCount span {
+  font-size: var(--text-headline-1);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.mapConnector {
+  display: none;
+}
+.reviews {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 12px;
+}
+.review {
+  padding: 32px;
+  border-radius: 28px;
+  background: linear-gradient(white 54%, rgb(255 255 255 / 0));
+}
+.review blockquote {
+  font-size: var(--text-title-3);
+  line-height: var(--text-title-3--line-height);
+  font-weight: 700;
+  white-space: pre-line;
+  letter-spacing: -0.05em;
+}
+.review figcaption {
+  margin-top: 12px;
+  font-size: var(--text-label-1);
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--color-grayscale-400);
+}
+.review > p {
+  margin-top: 28px;
+  font-size: var(--text-heading-2);
+  line-height: var(--text-heading-2--line-height);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--color-grayscale-800);
+}
+.guide {
+  background: var(--color-grayscale-0);
+  padding: 64px 0;
+}
+.guideGrid {
+  display: grid;
+  gap: 24px;
+}
+.guideCard {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 28px;
+  background: var(--color-grayscale-0);
+}
+.guideCard:hover {
+  border-color: var(--color-primary-400);
+}
+.guideCard:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 4px;
+}
+.guideCard > img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 384 / 200;
+  object-fit: cover;
+  background: var(--color-grayscale-100);
+}
+.guideText {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.guideCategory {
+  font-size: var(--text-label-1);
+  line-height: 21px;
+  font-weight: 700;
+  color: var(--color-primary-500);
+}
+.guideText h3 {
+  font-size: var(--text-heading-2);
+  line-height: var(--text-heading-2--line-height);
+  letter-spacing: var(--text-heading-2--letter-spacing);
+  font-weight: 700;
+  color: var(--color-grayscale-900);
+  word-break: keep-all;
+}
+.guideDescription {
+  font-size: var(--text-body-1);
+  line-height: var(--text-body-1--line-height);
+  color: var(--color-grayscale-600);
+}
+.band {
+  padding: 64px 0;
+  background: var(--color-grayscale-900);
+  text-align: center;
+}
+.bandContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.bandContent > p {
+  font-size: var(--text-headline-1);
+  line-height: 33px;
+  font-weight: 500;
+  color: var(--color-grayscale-400);
+}
+.bandContent h2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 30px;
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-grayscale-0);
+}
+.bandContent h2 span:first-child {
+  color: var(--color-primary-400);
+}
+.bandContent > a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(300px, 100%);
+  height: 58px;
+  border: 1px solid var(--color-grayscale-0);
+  border-radius: 999px;
+  font-size: var(--text-headline-2);
+  font-weight: 700;
+  color: var(--color-grayscale-0);
+}
+.bandContent > a:hover {
+  background: rgb(255 255 255 / 0.08);
+}
+@media (min-width: 768px) {
+  .goal {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .goal > img {
+    width: 34%;
+  }
+  .benefitGrid,
+  .guideGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .reviews {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .review {
+    padding: 24px;
+  }
+  .review blockquote {
+    font-size: var(--text-heading-2);
+  }
+  .review > p {
+    font-size: var(--text-headline-2);
+  }
+}
+@media (min-width: 1280px) {
+  .hero {
+    padding: 120px 0;
+  }
+  .heroContent {
+    grid-template-columns: 625px 591px;
+    gap: 24px;
+    align-items: end;
+  }
+  .heroCopy {
+    position: relative;
+    height: 515px;
+  }
+  .heroCopy h1 {
+    position: absolute;
+    top: 0;
+    width: 648px;
+    font-size: 57px;
+    line-height: 1.4;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+  }
+  .heroCopy > p {
+    position: absolute;
+    top: 237.5px;
+    margin: 0;
+    width: 648px;
+    font-size: var(--text-title-3);
+  }
+  .heroCta {
+    position: absolute;
+    bottom: 0;
+    margin: 0;
+    width: 490px;
+  }
+  .heroArt {
+    width: 591px;
+    height: 515px;
+  }
+  .heroArt > img {
+    width: 141.62%;
+    left: -17.91%;
+    top: -11.41%;
+  }
+  .benefits {
+    padding-top: 80px;
+  }
+  .goal {
+    margin-top: 0;
+    height: 166px;
+  }
+  .goal h2 {
+    font-size: var(--text-display-3);
+    line-height: 52px;
+  }
+  .goal > img {
+    width: 403.25px;
+  }
+  .benefitCard {
+    padding: 32px;
+    gap: 24px;
+  }
+  .benefitCard > img {
+    width: 81px;
+    height: 81px;
+  }
+  .benefitCard h3 {
+    font-size: var(--text-heading-1);
+    line-height: 33px;
+    margin-bottom: 20px;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+  }
+  .benefitCard p {
+    font-size: var(--text-heading-2);
+    line-height: 30px;
+    text-box-trim: trim-both;
+    text-box-edge: cap alphabetic;
+  }
+  .steps {
+    padding: 80px 0 73px;
+  }
+  .steps header {
+    margin-bottom: 57px;
+  }
+  .steps header > p {
+    font-size: var(--text-heading-2);
+    line-height: 29px;
+  }
+  .steps h2 {
+    line-height: 68px;
+    letter-spacing: -0.01em;
+  }
+  .stepList {
+    grid-template-columns: 331px 24px 449px 24px 266px;
+    gap: 26.5px;
+  }
+  .stepCard {
+    height: 188px;
+    padding: 10px 28px 20px;
+  }
+  .stepNumber {
+    line-height: 42px;
+  }
+  .stepCard h3 {
+    font-size: var(--text-title-2);
+    white-space: nowrap;
+  }
+  .stepBody {
+    font-size: var(--text-heading-2);
+    white-space: pre;
+  }
+  .stepNote {
+    right: 24px;
+  }
+  .stepArrow {
+    transform: none;
+    padding-top: 59px;
+  }
+  .community {
+    height: 877px;
+    padding: 90px 0 70px;
+  }
+  .communityIntro {
+    height: 371px;
+  }
+  .communityTitle header > p:last-child {
+    margin-top: 24px;
+    font-size: var(--text-title-2);
+    line-height: 30px;
+  }
+  .map {
+    position: absolute;
+    inset: -90px auto auto -360px;
+    width: 1658px;
+    height: 877px;
+    margin: 0;
+    z-index: -1;
+  }
+  .map > img {
+    inset: 0;
+    width: 1658px;
+    height: 877px;
+  }
+  .houseCount {
+    bottom: auto;
+    right: -60px;
+    top: 69px;
+    width: 242px;
+    height: 83px;
+    padding: 18px 23px;
+    gap: 18px;
+  }
+  .houseCount strong {
+    font-size: 55px;
+  }
+  .houseCount span {
+    font-size: var(--text-title-3);
+  }
+  .mapConnector {
+    display: block;
+    position: absolute;
+    width: 131px;
+    height: 79px;
+    right: 126px;
+    top: 162px;
+  }
+  .review {
+    padding: 32px;
+    min-height: 346px;
+  }
+  .review blockquote {
+    font-size: var(--text-title-3);
+  }
+  .review > p {
+    font-size: var(--text-heading-2);
+  }
+  .guide {
+    padding: 120px 0;
+  }
+  .guideGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .band {
+    padding: 100px 0;
+  }
+  .bandContent > p {
+    font-size: var(--text-heading-1);
+  }
+  .bandContent h2 {
+    font-size: 48px;
+    line-height: 62px;
+  }
+}
+@media (max-width: 389px) {
+  .benefitCard {
+    flex-direction: column;
+  }
+  .stepNote {
+    width: 165px;
+    right: 12px;
+  }
+  .stepNote p {
+    font-size: var(--text-caption-1);
+  }
+}

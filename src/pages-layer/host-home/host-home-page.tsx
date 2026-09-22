@@ -5,10 +5,14 @@ import { SiteLayout } from "@/widgets/site-layout";
 
 import { HostBenefits, HostSteps } from "./ui/host-benefits";
 import { HostCommunity } from "./ui/host-community";
+import { HostGuide } from "./ui/host-guide";
 import { HostHero } from "./ui/host-hero";
-import { HostHistory, HostPartners } from "./ui/host-history";
+import { HostHistory } from "./ui/host-history";
+import { HostPartners } from "./ui/host-partners";
 import { HostQuestions } from "./ui/host-questions";
 import { hostContainer } from "./ui/section-heading";
+
+import styles from "./ui/host-layout.module.css";
 
 export function HostHomePage() {
   return (
@@ -20,20 +24,15 @@ export function HostHomePage() {
         <HostCommunity />
         <HostHistory />
         <HostPartners />
-        <section className="bg-primary-50 py-16 text-center md:py-24">
-          <div className={hostContainer}>
-            <p className="mb-5 text-lg font-semibold text-primary-500">홈투게더에 방을 등록하면</p>
-            <h2 className="text-[30px] leading-relaxed font-bold text-grayscale-900 md:text-[44px]">
-              <span className="text-primary-500">1:1 전담 매니저가</span>
-              <br />
-              노하우를 안내해 드립니다
+        <HostGuide />
+        <section className={styles.band}>
+          <div className={`${hostContainer} ${styles.bandContent}`}>
+            <p>홈투게더에 방을 등록하면</p>
+            <h2>
+              <span>1:1 전담 매니저가</span>
+              <span>노하우를 안내해 드립니다</span>
             </h2>
-            <Link
-              href={ROUTES.listing.start}
-              className="mt-8 inline-flex min-h-[58px] items-center justify-center rounded-full bg-primary-500 px-12 py-4 text-lg font-bold text-white transition-opacity hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
-            >
-              + 방 등록하기
-            </Link>
+            <Link href={ROUTES.listing.start}>+ 방 등록하기</Link>
           </div>
         </section>
         <HostQuestions />

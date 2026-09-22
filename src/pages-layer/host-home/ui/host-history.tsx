@@ -2,6 +2,8 @@ import Image from "next/image";
 
 import { hostContainer, SectionHeading } from "./section-heading";
 
+import styles from "./host-history.module.css";
+
 const achievements = [
   "카카오뱅크, 한국핀테크협회 핀테크 AI분야 서울권역 1위",
   "한국사회적기업 진흥원, 소셜캠퍼스 온 서울 입주기업 선정",
@@ -47,13 +49,21 @@ const history = [
     body: "홈투게더 서비스 운영법인 설립",
   },
 ];
-function AchievementCard({ title, items }: { title: string; items: string[] }) {
+interface AchievementCardProps {
+  title: string;
+  items: string[];
+  className: string;
+}
+function AchievementCard({ title, items, className }: AchievementCardProps) {
   return (
-    <article className="rounded-tl-[28px] bg-white p-7 shadow-[-12px_-12px_40px_0_rgba(34,125,255,0.04)] md:p-8">
-      <h3 className="mb-6 text-xl font-semibold text-primary-500">{title}</h3>
-      <ul className="space-y-3 text-base leading-relaxed text-grayscale-600">
+    <article className={`${styles.achievement} ${className}`}>
+      <h3>
+        <Image src="/images/host-landing/history-dot.svg" alt="" width={22} height={22} />
+        {title}
+      </h3>
+      <ul>
         {items.map((item, index) => (
-          <li key={item} className={index === 0 ? "font-medium text-grayscale-900" : undefined}>
+          <li key={item} className={index === 0 ? styles.first : undefined}>
             {item}
           </li>
         ))}
@@ -63,80 +73,105 @@ function AchievementCard({ title, items }: { title: string; items: string[] }) {
 }
 export function HostHistory() {
   return (
-    <section className="bg-white py-16 md:py-[120px]">
+    <section className={styles.section}>
       <div className={hostContainer}>
         <SectionHeading label="연혁">
           지역 현장에서 시작해,
           <br />
           사업과 협력의 기반을 넓혀왔습니다.
         </SectionHeading>
-        <div className="grid items-center gap-12 lg:grid-cols-2">
-          <ol className="space-y-10 border-l-2 border-primary-400 pl-6 md:ml-32">
-            {history.map((item) => (
-              <li key={item.date} className="relative">
-                <span
-                  className="absolute top-2 -left-[31px] size-3 rounded-full border-2 border-primary-500 bg-white"
-                  aria-hidden="true"
-                />
-                <time className="mb-3 block text-sm font-semibold text-grayscale-600 md:absolute md:top-0 md:-left-36">
-                  {item.date}
-                </time>
-                <h3 className="text-lg font-bold text-grayscale-900">{item.title}</h3>
-                <p className="mt-2 text-base leading-relaxed text-grayscale-500">{item.body}</p>
+        <div className={styles.canvas}>
+          <ol className={styles.timeline}>
+            {history.map((item, index) => (
+              <li key={item.date}>
+                <time>{item.date}</time>
+                <span className={styles.dot} aria-hidden="true" />
+                <div>
+                  {index === 0 && (
+                    <Image
+                      className={styles.school}
+                      src="/images/host-landing/history-school.png"
+                      alt="서울과학기술대학교 창업지원단"
+                      width={343}
+                      height={53}
+                    />
+                  )}
+                  <h3>{item.title}</h3>
+                  <p>{item.body}</p>
+                </div>
               </li>
             ))}
           </ol>
-          <div className="relative mx-auto grid w-full max-w-[500px] grid-cols-2 items-center gap-3 py-6">
+          <div className={styles.firstPhotos}>
             <Image
-              src="/images/host-landing/history-1.png"
+              className={styles.portrait}
+              src="/images/host-landing/history-portrait.png"
               alt="지역 어르신과 함께하는 활동"
-              width={344}
-              height={444}
-              className="h-auto w-full rounded-lg"
+              width={279}
+              height={379}
             />
             <Image
-              src="/images/host-landing/history-2.png"
+              className={styles.agreement}
+              src="/images/host-landing/history-agreement.png"
               alt="홈투게더 협약 체결"
-              width={421}
-              height={495}
-              className="mt-16 h-auto w-full rounded-lg"
+              width={279}
+              height={379}
+            />
+            <Image
+              className={styles.badge}
+              src="/images/host-landing/history-badge.svg"
+              alt=""
+              width={211}
+              height={211}
             />
           </div>
-          <AchievementCard title="주요 선정·성과" items={achievements} />
-          <Image
-            src="/images/host-landing/history-3.png"
-            alt="지역사회와 함께하는 홈투게더 활동"
-            width={419}
-            height={295}
-            className="mx-auto h-auto w-full max-w-[480px] rounded-lg"
+          <AchievementCard title="주요 선정·성과" items={achievements} className={styles.awards} />
+          <div className={styles.secondPhotos}>
+            <div className={styles.classPhoto}>
+              <Image
+                src="/images/host-landing/history-class.png"
+                alt="지역사회 시니어 디지털 교육"
+                fill
+                sizes="350px"
+              />
+            </div>
+            <div className={styles.outdoorPhoto}>
+              <Image
+                src="/images/host-landing/history-outdoor.png"
+                alt="지역 현장에서 진행한 홈투게더 상담"
+                fill
+                sizes="400px"
+              />
+            </div>
+            <Image
+              className={styles.clipLeft}
+              src="/images/host-landing/history-clip-left.svg"
+              alt=""
+              width={114}
+              height={39}
+            />
+            <Image
+              className={styles.clipRight}
+              src="/images/host-landing/history-clip-right.svg"
+              alt=""
+              width={84}
+              height={39}
+            />
+            <Image
+              className={styles.triangle}
+              src="/images/host-landing/history-triangle.svg"
+              alt=""
+              width={154}
+              height={147}
+            />
+          </div>
+          <AchievementCard
+            title="기관·기업 협업"
+            items={partnerships}
+            className={styles.partnerships}
           />
-          <AchievementCard title="기관·기업 협업" items={partnerships} />
-          <AchievementCard title="지역사회 활동" items={activities} />
+          <AchievementCard title="지역사회 활동" items={activities} className={styles.activities} />
         </div>
-      </div>
-    </section>
-  );
-}
-
-export function HostPartners() {
-  return (
-    <section className="overflow-hidden bg-white py-12" aria-labelledby="host-partners-heading">
-      <div className={hostContainer}>
-        <h2
-          id="host-partners-heading"
-          className="text-[28px] font-bold tracking-tight text-grayscale-900 md:text-[38px]"
-        >
-          홈투게더와 함께한 기업들
-        </h2>
-      </div>
-      <div className="mx-auto mt-10 max-w-[1472px] overflow-x-auto px-6 pb-4">
-        <Image
-          src="/images/host-landing/partners.png"
-          alt="홈투게더 협력 기업과 기관 로고"
-          width={1472}
-          height={88}
-          className="h-[88px] w-[1472px] max-w-none"
-        />
       </div>
     </section>
   );
