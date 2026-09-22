@@ -1,0 +1,40 @@
+.viewport {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+}
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 60s linear infinite;
+}
+.group {
+  flex: none;
+  width: 2369px;
+  padding-right: 52px;
+}
+.logo {
+  display: block;
+  width: 2317px;
+  height: 55px;
+  max-width: none;
+}
+.viewport:hover .track {
+  animation-play-state: paused;
+}
+@keyframes scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+  .viewport {
+    overflow-x: auto;
+    mask-image: none;
+  }
+  .duplicate {
+    display: none;
+  }
+}
