@@ -6,6 +6,7 @@ import { BtnCta } from "@/shared/ui/btn-cta";
 import { Modal } from "@/shared/ui/modal";
 
 import { HostConsultationForm } from "./host-consultation-form";
+
 import styles from "./host-consultation.module.css";
 
 export function HostConsultationButton() {
