@@ -582,6 +582,24 @@
   .guideGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+  .guideCard {
+    display: grid;
+    grid-template-rows: 200px 155px;
+    height: 355px;
+    border: 0;
+    outline: 1px solid var(--color-grayscale-200);
+    outline-offset: -1px;
+  }
+  .guideCard:hover {
+    outline-color: var(--color-primary-400);
+  }
+  .guideCard:focus-visible {
+    outline: 3px solid var(--color-primary-500);
+    outline-offset: 4px;
+  }
+  .guideCard > img {
+    height: 200px;
+  }
   .band {
     padding: 100px 0;
   }
