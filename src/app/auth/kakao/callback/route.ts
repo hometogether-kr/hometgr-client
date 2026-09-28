@@ -1,6 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-import { authOwnerResponseDtoSchema } from "@/domains/user";
+import {
+  ACCOUNT_MODE_HOME,
+  AUTH_MODE_COOKIE,
+  authOwnerResponseDtoSchema,
+  resolveAccountMode,
+} from "@/domains/user";
 import {
   backendFetch,
   clearOAuthStateCookieFromResponse,
@@ -58,8 +63,13 @@ export async function GET(request: NextRequest) {
 
   const { accessToken, refreshToken, onboardingRequired } = parsed.data;
 
-  const nextPath = onboardingRequired ? ROUTES.auth.terms : ROUTES.home;
+  const mode = resolveAccountMode({
+    pageMode: null,
+    savedMode: request.cookies.get(AUTH_MODE_COOKIE)?.value,
+  });
+  const nextPath = onboardingRequired ? ROUTES.auth.terms : ACCOUNT_MODE_HOME[mode];
   const redirectResponse = NextResponse.redirect(new URL(nextPath, APP_BASE_URL));
+  if (!onboardingRequired) redirectResponse.cookies.delete(AUTH_MODE_COOKIE);
   writeSessionTokensToResponse(redirectResponse, { accessToken, refreshToken });
   clearOAuthStateCookieFromResponse(redirectResponse);
 

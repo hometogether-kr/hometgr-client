@@ -1,11 +1,7 @@
-import type { Metadata } from "next";
+import { permanentRedirect } from "next/navigation";
 
-import { IntroPage } from "@/pages-layer/intro";
-
-export const metadata: Metadata = {
-  title: "세입자 서비스 소개",
-};
+import { ROUTES } from "@/shared/config";
 
 export default function IntroGuest() {
-  return <IntroPage audience="guest" />;
+  permanentRedirect(ROUTES.intro.guest);
 }

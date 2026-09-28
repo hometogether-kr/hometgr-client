@@ -1,5 +1,5 @@
-import { HomePage } from "@/pages-layer/home";
+import { IntroPage } from "@/pages-layer/intro";
 
 export default function Home() {
-  return <HomePage />;
+  return <IntroPage audience="guest" />;
 }

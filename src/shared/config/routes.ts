@@ -5,13 +5,13 @@
  */
 export const ROUTES = {
   home: "/",
-  /** 서비스 소개 — 홈에서 Host/Guest를 고르면 각 상세 소개로 들어갑니다. */
+  /** 게스트 메인은 루트, 집주인 메인은 별도 경로를 사용합니다. */
   intro: {
     root: "/",
     /** 집주인용 서비스 소개 */
     host: "/intro/host",
     /** 세입자용 서비스 소개 */
-    guest: "/intro/guest",
+    guest: "/",
   },
   support: "/support",
   auth: {
@@ -30,8 +30,8 @@ export const ROUTES = {
     account: "/api/auth/account",
     /** 약관 동의 (카카오 인증 직후) */
     terms: "/onboarding/terms",
-    /** 회원 유형 선택 */
-    role: "/onboarding/role",
+    /** 가입 기본 정보 */
+    profile: "/onboarding/profile",
   },
   listing: {
     /** 매물 등록 시작 (새 등록 / 임시저장 이어쓰기 선택) */

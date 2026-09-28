@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { useSession } from "@/domains/user";
+import { useAccountMode, useSession } from "@/domains/user";
 import { AccountModeSwitch } from "@/features/switch-account-mode";
 import { ROUTES } from "@/shared/config";
 import { cn } from "@/shared/lib/cn";
@@ -109,23 +109,30 @@ export function Navigation() {
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, session } = useSession();
+  const { mode, homeHref, isModeReady } = useAccountMode();
   const [openMenu, setOpenMenu] = useState<"listing" | "finding" | null>(null);
-  const open = openMenu !== null;
+  const open = isModeReady && openMenu === (mode === "host" ? "listing" : "finding");
   const activeItem = toActiveMenu(pathname);
 
   return (
-    <header className="relative w-full bg-white" onMouseLeave={() => setOpenMenu(null)}>
+    <header
+      className="relative w-full bg-white"
+      onMouseLeave={() => setOpenMenu(null)}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") setOpenMenu(null);
+      }}
+    >
       <div className="flex h-[52px] items-center justify-center border-b border-grayscale-100 px-4 xl:px-12 2xl:px-[200px]">
         <div className="flex min-w-0 flex-1 items-center justify-between px-5 py-1">
           <div className="flex items-center gap-4 xl:gap-12">
-            <Link href="/" className="flex items-center py-2" aria-label="Home Together">
+            <Link href={homeHref} className="flex items-center py-2" aria-label="Home Together">
               {/* eslint-disable-next-line @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */}
               <img src={LOGO} alt="Home Together" width={113} height={20} className="block" />
             </Link>
             <nav className="flex items-center gap-2 xl:gap-8">
               <div className="p-2.5">
                 <Link
-                  href={MENU.intro.href}
+                  href={homeHref}
                   className={cn(
                     "text-sm leading-5",
                     activeItem === "intro"
@@ -136,28 +143,34 @@ export function Navigation() {
                   {MENU.intro.label}
                 </Link>
               </div>
-              <div className="relative p-2.5" onMouseEnter={() => setOpenMenu("listing")}>
-                <BtnText
-                  size="14"
-                  selected={activeItem === "listing"}
-                  rightIcon={<ArrowIcon open={openMenu === "listing"} />}
-                  aria-expanded={openMenu === "listing"}
-                >
-                  {MENU.listing.label}
-                </BtnText>
-                {openMenu === "listing" && <SubMenu items={MENU.listing.items} />}
-              </div>
-              <div className="relative p-2.5" onMouseEnter={() => setOpenMenu("finding")}>
-                <BtnText
-                  size="14"
-                  selected={activeItem === "finding"}
-                  rightIcon={<ArrowIcon open={openMenu === "finding"} />}
-                  aria-expanded={openMenu === "finding"}
-                >
-                  {MENU.finding.label}
-                </BtnText>
-                {openMenu === "finding" && <SubMenu items={MENU.finding.items} />}
-              </div>
+              {isModeReady && mode === "host" && (
+                <div className="relative p-2.5" onMouseEnter={() => setOpenMenu("listing")}>
+                  <BtnText
+                    size="14"
+                    selected={activeItem === "listing"}
+                    rightIcon={<ArrowIcon open={openMenu === "listing"} />}
+                    aria-expanded={openMenu === "listing"}
+                    onClick={() => setOpenMenu(openMenu === "listing" ? null : "listing")}
+                  >
+                    {MENU.listing.label}
+                  </BtnText>
+                  {openMenu === "listing" && <SubMenu items={MENU.listing.items} />}
+                </div>
+              )}
+              {isModeReady && mode === "guest" && (
+                <div className="relative p-2.5" onMouseEnter={() => setOpenMenu("finding")}>
+                  <BtnText
+                    size="14"
+                    selected={activeItem === "finding"}
+                    rightIcon={<ArrowIcon open={openMenu === "finding"} />}
+                    aria-expanded={openMenu === "finding"}
+                    onClick={() => setOpenMenu(openMenu === "finding" ? null : "finding")}
+                  >
+                    {MENU.finding.label}
+                  </BtnText>
+                  {openMenu === "finding" && <SubMenu items={MENU.finding.items} />}
+                </div>
+              )}
             </nav>
           </div>
           <div className="flex items-center gap-4">
@@ -180,9 +193,9 @@ export function Navigation() {
               흔들리지 않게 합니다.
             */}
             <div className="flex h-8 items-center gap-4">
+              <AccountModeSwitch />
               {isAuthenticated ? (
                 <>
-                  <AccountModeSwitch />
                   <span className="h-4 w-px bg-grayscale-200" aria-hidden="true" />
                   <Link
                     href={ROUTES.myPage}

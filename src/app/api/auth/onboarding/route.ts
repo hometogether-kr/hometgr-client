@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-import { meResponseDtoSchema, putMeResponseDtoSchema } from "@/domains/user";
+import { AUTH_MODE_COOKIE, meResponseDtoSchema, putMeResponseDtoSchema } from "@/domains/user";
 import {
   backendFetch,
   clearSessionTokensFromResponse,
@@ -29,7 +29,6 @@ const currentConsentKeys = [
 ] as const;
 
 const onboardingRequestSchema = z.object({
-  role: z.enum(["student", "host"]),
   name: z.string().trim().min(1).max(100),
   email: z.email().max(320),
   phone: z.string().trim().min(1),
@@ -127,6 +126,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
   const nextResponse = NextResponse.json(meResponseDtoSchema.parse(session), {
     headers: { "Cache-Control": "no-store", Pragma: "no-cache" },
   });
+  nextResponse.cookies.delete(AUTH_MODE_COOKIE);
   writeSessionTokensToResponse(nextResponse, {
     accessToken: nextAccessToken,
     refreshToken: nextRefreshToken,
