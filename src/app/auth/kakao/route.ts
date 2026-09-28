@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
+import { AUTH_MODE_COOKIE, resolveAccountMode } from "@/domains/user";
 import {
   backendFetch,
   toCookieHeaderValue,
@@ -17,7 +18,7 @@ import { getServerEnv } from "@/shared/config/env.server";
  *
  * 이렇게 해야 콜백을 우리 origin에서 받아 토큰을 브라우저에 노출하지 않을 수 있습니다.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   const { APP_BASE_URL } = getServerEnv();
   const loginUrl = new URL(ROUTES.auth.login, APP_BASE_URL);
 
@@ -37,6 +38,17 @@ export async function GET() {
   }
 
   const redirectResponse = NextResponse.redirect(authorizeUrl);
+  const mode = resolveAccountMode({
+    pageMode: null,
+    savedMode: request.nextUrl.searchParams.get("mode"),
+  });
+  redirectResponse.cookies.set(AUTH_MODE_COOKIE, mode, {
+    httpOnly: true,
+    secure: new URL(APP_BASE_URL).protocol === "https:",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 1800,
+  });
   const stateCookie = toCookieHeaderValue(response.headers.getSetCookie());
   if (stateCookie) writeOAuthStateCookieToResponse(redirectResponse, stateCookie);
 

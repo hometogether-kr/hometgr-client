@@ -80,7 +80,7 @@ export interface SidebarMobileProps {
  */
 export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
   const router = useRouter();
-  const { mode } = useAccountMode();
+  const { mode, homeHref, isModeReady } = useAccountMode();
   const queryClient = useQueryClient();
   const { isAuthenticated, session } = useSession();
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
@@ -94,7 +94,11 @@ export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
     router.push(ROUTES.home);
   };
 
-  const memberRole = session.user?.memberRole;
+  const visibleMenu = MENU.filter((group) => {
+    if (group.key === "listing") return isModeReady && mode === "host";
+    if (group.key === "finding") return isModeReady && mode === "guest";
+    return true;
+  });
 
   return (
     <div
@@ -133,7 +137,7 @@ export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
                   />
                 </span>
               </Link>
-              {memberRole && (
+              {isModeReady && (
                 <p className="py-1.5 text-label-1 font-medium text-grayscale-500">
                   {ACCOUNT_MODE_LABELS[mode]}
                 </p>
@@ -160,13 +164,17 @@ export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
         </div>
 
         <nav className="flex w-full flex-col gap-2 pb-6">
-          {MENU.map((group) => {
+          {visibleMenu.map((group) => {
             const expanded = expandedKey === group.key;
 
             return (
               <Fragment key={group.key}>
                 {group.href ? (
-                  <Link href={group.href} onClick={onClose} className={ROW}>
+                  <Link
+                    href={group.key === "intro" ? homeHref : group.href}
+                    onClick={onClose}
+                    className={ROW}
+                  >
                     {group.label}
                   </Link>
                 ) : (

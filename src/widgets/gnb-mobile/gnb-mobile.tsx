@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
+import { useAccountMode } from "@/domains/user";
 import { AccountModeSwitch } from "@/features/switch-account-mode";
 import { cn } from "@/shared/lib/cn";
 import { Icon } from "@/shared/ui/icons";
@@ -68,6 +69,7 @@ function BackButton({ onBack, backIcon }: { onBack?: () => void; backIcon?: Reac
  */
 export function GnbMobile(props: GnbMobileProps) {
   const { className } = props;
+  const { homeHref } = useAccountMode();
   const [menuOpen, setMenuOpen] = useState(false);
 
   if (props.variant === "logo") {
@@ -80,7 +82,7 @@ export function GnbMobile(props: GnbMobileProps) {
             className,
           )}
         >
-          <Link href="/" className="flex items-center py-2" aria-label="Home Together">
+          <Link href={homeHref} className="flex items-center py-2" aria-label="Home Together">
             {/* eslint-disable-next-line @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */}
             <img src={LOGO} alt="Home Together" width={113} height={20} className="block" />
           </Link>

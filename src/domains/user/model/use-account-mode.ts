@@ -1,17 +1,19 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-import { z } from "zod";
+import { usePathname } from "next/navigation";
+import { useEffect, useSyncExternalStore } from "react";
 
+import {
+  ACCOUNT_MODE_HOME,
+  type AccountMode,
+  accountModeSchema,
+  getPageAccountMode,
+  resolveAccountMode,
+} from "./account-mode";
 import { useSession } from "./use-session";
 
-const accountModeSchema = z.enum(["host", "guest"]);
-export type AccountMode = z.infer<typeof accountModeSchema>;
-export const ACCOUNT_MODE_LABELS: Record<AccountMode, string> = {
-  host: "집주인 모드",
-  guest: "게스트 모드",
-};
 const MODE_CHANGE_EVENT = "hometgr:account-mode";
+const VISITOR_KEY = "hometgr:account-mode:visitor";
 const memoryModes = new Map<string, AccountMode>();
 
 function subscribe(onChange: () => void) {
@@ -24,6 +26,8 @@ function subscribe(onChange: () => void) {
 }
 
 function readMode(key: string): AccountMode | null {
+  const memoryMode = memoryModes.get(key);
+  if (memoryMode) return memoryMode;
   try {
     const parsed = accountModeSchema.safeParse(window.localStorage.getItem(key));
     return parsed.success ? parsed.data : (memoryModes.get(key) ?? null);
@@ -32,28 +36,44 @@ function readMode(key: string): AccountMode | null {
   }
 }
 
-// 화면 모드는 서버 권한과 별개이며, 계정별로 마지막 선택을 기억합니다.
+function writeMode(key: string, mode: AccountMode) {
+  if (readMode(key) === mode) return;
+  try {
+    window.localStorage.setItem(key, mode);
+    memoryModes.delete(key);
+  } catch {
+    // 저장소가 차단되어도 현재 탭에서의 탐색은 유지합니다.
+    memoryModes.set(key, mode);
+  }
+  window.dispatchEvent(new Event(MODE_CHANGE_EVENT));
+}
+
 export function useAccountMode() {
-  const { session } = useSession();
-  const user = session.user;
-  const key = user ? `hometgr:account-mode:${user.id}` : null;
+  const pathname = usePathname();
+  const { session, isAuthenticated } = useSession();
+  const userId = session.user?.id;
+  const key = userId ? `hometgr:account-mode:${userId}` : VISITOR_KEY;
   const savedMode = useSyncExternalStore(
     subscribe,
-    () => (key ? readMode(key) : null),
-    () => null,
+    () => readMode(key),
+    () => undefined,
   );
-  const mode = savedMode ?? user?.memberRole ?? "guest";
+  const pageMode = getPageAccountMode(pathname);
+  const mode = resolveAccountMode({ pageMode, savedMode });
 
-  const setMode = (nextMode: AccountMode) => {
-    if (!key) return;
-    memoryModes.set(key, nextMode);
-    try {
-      window.localStorage.setItem(key, nextMode);
-    } catch {
-      // 저장소가 차단되어도 현재 탭에서는 모드를 전환할 수 있습니다.
-    }
-    window.dispatchEvent(new Event(MODE_CHANGE_EVENT));
+  // URL을 통해 선택한 모드를 저장소와 동기화하여 공통 화면에서도 유지합니다.
+  useEffect(() => {
+    if (pageMode && (!isAuthenticated || userId)) writeMode(key, pageMode);
+  }, [key, pageMode, isAuthenticated, userId]);
+
+  const setMode = (nextMode: AccountMode) => writeMode(key, nextMode);
+
+  return {
+    mode,
+    setMode,
+    homeHref: ACCOUNT_MODE_HOME[mode],
+    canSwitchMode: pageMode !== null,
+    isModeReady:
+      pageMode !== null || (savedMode !== undefined && (!isAuthenticated || Boolean(userId))),
   };
-
-  return { mode, setMode, canSwitchMode: Boolean(user) };
 }

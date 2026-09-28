@@ -1,5 +1,4 @@
-export type { CompleteOnboardingInput } from "./api/me.api";
-export { completeOnboarding, fetchSession, logout } from "./api/me.api";
+export { fetchSession, logout } from "./api/me.api";
 export type {
   AuthOwnerResponseDto,
   ConsentKeyDto,
@@ -17,6 +16,14 @@ export {
 } from "./api/user.dto";
 export { toCurrentUser, toSession } from "./api/user.mapper";
 export { userQueryKeys } from "./api/user-query-keys";
+export type { AccountMode } from "./model/account-mode";
+export {
+  ACCOUNT_MODE_HOME,
+  ACCOUNT_MODE_LABELS,
+  AUTH_MODE_COOKIE,
+  getPageAccountMode,
+  resolveAccountMode,
+} from "./model/account-mode";
 export type { ConsentKey, ConsentStateItem, UserConsents } from "./model/consent";
 export { CONSENT_KEYS } from "./model/consent";
 export type { CurrentUser, Session, UserRole } from "./model/current-user";
@@ -28,7 +35,6 @@ export { MEMBER_ROLE_LABELS, MEMBER_ROLE_OPTIONS } from "./model/member-role";
 export { toMemberRole, toUserRole } from "./model/role-mapping";
 export type { SessionHintProviderProps } from "./model/session-hint";
 export { SessionHintProvider, useSessionHint } from "./model/session-hint";
-export type { AccountMode } from "./model/use-account-mode";
-export { ACCOUNT_MODE_LABELS, useAccountMode } from "./model/use-account-mode";
+export { useAccountMode } from "./model/use-account-mode";
 export type { UseSessionResult } from "./model/use-session";
 export { useSession } from "./model/use-session";

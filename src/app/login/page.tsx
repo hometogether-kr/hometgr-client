@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 
+import { useAccountMode } from "@/domains/user";
 import { LoginPage } from "@/pages-layer/login";
 import { ROUTES } from "@/shared/config";
 import { useToast } from "@/shared/ui/toast";
@@ -47,13 +48,14 @@ function KakaoResultToast() {
 
 export default function Page() {
   const router = useRouter();
+  const { mode, homeHref } = useAccountMode();
 
   /*
    * 카카오 인증은 외부 origin으로 나갔다 돌아오는 흐름이라 클라이언트 라우터 이동이
    * 아니라 브라우저 전체 이동이 필요합니다.
    */
   const handleKakaoLogin = () => {
-    window.location.assign(ROUTES.auth.kakaoStart);
+    window.location.assign(ROUTES.auth.kakaoStart + "?mode=" + mode);
   };
 
   return (
@@ -61,7 +63,7 @@ export default function Page() {
       <Suspense fallback={null}>
         <KakaoResultToast />
       </Suspense>
-      <LoginPage onKakaoLogin={handleKakaoLogin} onExplore={() => router.push(ROUTES.home)} />
+      <LoginPage onKakaoLogin={handleKakaoLogin} onExplore={() => router.push(homeHref)} />
     </>
   );
 }

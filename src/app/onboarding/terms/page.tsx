@@ -13,7 +13,7 @@ export default function Page() {
     <OnboardingTermsPage
       onSubmit={(agreedIds) => {
         saveOnboardingTermsAgreement(agreedIds);
-        router.push(ROUTES.auth.role);
+        router.push(ROUTES.auth.profile);
       }}
       onBack={() => router.push(ROUTES.auth.login)}
     />
