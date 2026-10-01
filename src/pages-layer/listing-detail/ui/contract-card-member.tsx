@@ -3,7 +3,16 @@ import type { RoomDetail } from "@/domains/listing";
 import { DetailSection } from "./detail-section";
 
 export interface ContractCardMemberProps {
-  room: Pick<RoomDetail, "buildingTypeLabel" | "roomSizeLabel" | "floor" | "price">;
+  room: Pick<
+    RoomDetail,
+    | "buildingTypeLabel"
+    | "roomSizeLabel"
+    | "floor"
+    | "price"
+    | "household"
+    | "capacityLabel"
+    | "minStayMonths"
+  >;
 }
 
 interface Stat {
@@ -29,14 +38,21 @@ function StatTile({ label, value }: Stat) {
 export function ContractCardMember({ room }: ContractCardMemberProps) {
   const stats: Stat[] = [
     { label: "매물 형태", value: room.buildingTypeLabel },
-    { label: "방 크기", value: room.roomSizeLabel },
+    { label: "집 전체 전용면적", value: room.roomSizeLabel },
+    ...(room.household
+      ? [{ label: "현재 거주 인원", value: `${room.household.residentCount}명` }]
+      : []),
+    ...(room.capacityLabel ? [{ label: "입주 가능 인원", value: room.capacityLabel }] : []),
+    ...(room.minStayMonths != null
+      ? [{ label: "최소 거주 기간", value: `${room.minStayMonths}개월` }]
+      : []),
     ...(room.floor !== undefined ? [{ label: "해당 층", value: `${room.floor}층` }] : []),
     { label: "관리비", value: `월 ${Math.round(room.price.maintenanceFeeKrw / 10_000)}만원` },
   ];
 
   return (
     <DetailSection title="가격 및 계약 조건">
-      <div className="flex flex-col gap-4 md:flex-row">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {stats.map((stat) => (
           <StatTile key={stat.label} {...stat} />
         ))}

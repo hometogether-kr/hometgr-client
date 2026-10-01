@@ -1,10 +1,11 @@
 import {
+  AREA_RANGE_LABEL,
   BUILDING_TYPE_LABEL,
   PARKING_TYPE_OPTIONS,
   PRIVATE_ROOM_OPTION_LABEL,
-  PRIVATE_ROOM_SIZE_LABEL,
   RESIDENT_GENDER_COMPOSITION_LABEL,
   RESIDENT_TYPE_LABEL,
+  ROOM_CAPACITY_LABEL,
 } from "@/domains/listing-draft";
 
 import type { RoomDetail, RoomHost, RoomPhoto } from "../model/room";
@@ -211,13 +212,18 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
       maintenanceFeeKrw: pricing.maintenanceFeeKrw,
     },
     buildingTypeLabel,
-    roomSizeLabel: PRIVATE_ROOM_SIZE_LABEL[privateSpace.privateRoomSize],
+    roomSizeLabel:
+      household.areaRange === "unknown" ? "면적 확인 필요" : AREA_RANGE_LABEL[household.areaRange],
+    capacityLabel: ROOM_CAPACITY_LABEL[preferences.roomCapacity],
+    minStayMonths: pricing.minStayMonths,
     // v2 등록 플로우는 층수를 입력받지 않는다 — floor는 항상 비어 있다.
     floor: undefined,
     moveInLabel: toMoveInLabel(pricing.moveInAvailableAt),
     parkingLabel,
     petPolicyLabel: preferences.petAllowed ? "가능" : "불가",
     description: descriptions.roomDescription ?? "",
+    currentResidentsDescription: descriptions.currentResidentsDescription ?? "",
+    precautions: descriptions.precautions ?? "",
     amenities,
     photos: toPhotos(dto.media, title),
     locationNote: LOCATION_NOTE,

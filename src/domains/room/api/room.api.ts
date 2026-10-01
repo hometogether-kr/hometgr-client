@@ -19,6 +19,8 @@ import { toRoomListResult } from "./room.mapper";
  * 호출합니다. 모든 필터 필드는 선택적이며, 미지정은 undefined입니다.
  */
 export interface RoomListQuery {
+  /** 기존 API의 공개 지역 문자열 부분 일치 필터 */
+  region?: string;
   /** 조회할 페이지 (1부터) */
   page: number;
   /** 정렬 — 미지정 시 추천순 */
@@ -106,6 +108,7 @@ export async function fetchRooms(
     schema: roomListResponseSchema,
     signal,
     searchParams: {
+      region: query.region,
       page,
       limit: PAGE_SIZE,
       sortBy: sortParam.sortBy,

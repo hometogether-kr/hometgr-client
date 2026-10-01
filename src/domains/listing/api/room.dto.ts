@@ -1,12 +1,14 @@
 import { z } from "zod";
 
 import {
+  AREA_RANGES,
   BUILDING_TYPES,
   PARKING_TYPES,
   PRIVATE_ROOM_OPTIONS_VALUES,
   PRIVATE_ROOM_SIZES,
   RESIDENT_GENDER_COMPOSITIONS,
   RESIDENT_TYPES,
+  ROOM_CAPACITIES,
 } from "@/domains/listing-draft";
 
 /**
@@ -145,6 +147,7 @@ const registrationLocationDataSchema = z.object({
 });
 
 const registrationHouseholdDataSchema = z.object({
+  areaRange: z.enum(AREA_RANGES),
   residentCount: z.number().int(),
   residentType: z.enum(RESIDENT_TYPES),
   residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS),
@@ -160,6 +163,7 @@ const registrationPrivateSpaceDataSchema = z.object({
 });
 
 const registrationPreferencesDataSchema = z.object({
+  roomCapacity: z.enum(ROOM_CAPACITIES),
   petAllowed: z.boolean(),
 });
 
@@ -173,6 +177,8 @@ const registrationPricingDataSchema = z.object({
 
 const registrationDescriptionsDataSchema = z.object({
   roomDescription: z.string().nullish(),
+  currentResidentsDescription: z.string().nullish(),
+  precautions: z.string().nullish(),
 });
 
 export const registrationFullDetailSchema = commonDtoSchema.extend({

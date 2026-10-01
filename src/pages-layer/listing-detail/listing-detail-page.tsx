@@ -90,6 +90,8 @@ export function ListingDetailPage({ room }: ListingDetailPageProps) {
                 <ContractCardMember room={room} />
                 <DescriptionCard
                   description={room.description}
+                  currentResidentsDescription={room.currentResidentsDescription}
+                  precautions={room.precautions}
                   moveInLabel={room.moveInLabel}
                   parkingLabel={room.parkingLabel}
                   petPolicyLabel={room.petPolicyLabel}
