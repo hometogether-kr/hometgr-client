@@ -1,8 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { BtnIc } from "@/shared/ui/btn-ic";
-
 const IC_DIAGONAL_ARROW = "/icons/ic-diagonal-arrow.svg";
 
 /* eslint-disable @next/next/no-img-element -- 임시 Figma 에셋, 커밋된 SVG로 교체 예정 */
@@ -26,7 +24,7 @@ function CardBody({
 }: StartCardBaseProps) {
   return (
     <div className="flex w-full flex-col items-start gap-4 md:gap-16">
-      <div className="flex flex-col items-start gap-2 md:whitespace-nowrap">
+      <div className="flex flex-col items-start gap-2">
         <h2 className="text-lg leading-[1.4] font-semibold text-grayscale-900 md:text-[32px] md:leading-[52px] md:font-bold">
           {title}
         </h2>
@@ -36,9 +34,12 @@ function CardBody({
       </div>
       <div className="flex w-full items-end justify-end md:justify-between">
         <span className="hidden items-center gap-5 md:flex">
-          <BtnIc size="64" label={`${title} 시작하기`} className="pointer-events-none">
-            <img alt="" src={IC_DIAGONAL_ARROW} className="block size-[18.6px] max-w-none" />
-          </BtnIc>
+          <span
+            aria-hidden="true"
+            className="flex size-16 shrink-0 items-center justify-center rounded-full bg-grayscale-100"
+          >
+            <img alt="" src={IC_DIAGONAL_ARROW} className="block size-7 max-w-none" />
+          </span>
           <span className="text-2xl leading-[1.54] font-medium whitespace-nowrap text-grayscale-600">
             {actionLabel}
           </span>

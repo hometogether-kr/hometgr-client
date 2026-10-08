@@ -3,7 +3,6 @@ import { z } from "zod";
 import {
   AREA_RANGES,
   BATHROOM_USAGE_TYPES,
-  BUILDING_TYPES,
   INTERACTION_PREFERENCES,
   KITCHEN_USAGE_POLICIES,
   LIVING_ROOM_USAGE_POLICIES,
@@ -12,7 +11,7 @@ import {
   PREFERRED_CONTACT_TIMES,
   PREFERRED_GENDERS,
   PRIVATE_ROOM_OPTIONS_VALUES,
-  PRIVATE_ROOM_SIZES,
+  READABLE_BUILDING_TYPES,
   REGISTRANT_RELATIONSHIPS,
   RENTAL_SPACE_TYPES,
   RESIDENT_GENDER_COMPOSITIONS,
@@ -31,14 +30,23 @@ export const draftRegistrantDataSchema = z.object({
 });
 
 /**
- * 정확 주소 3종은 대략적 위치만으로 저장한 초안에서 비어 있습니다.
- * 서버가 세 필드를 nullable로 내려주므로 화면도 없는 상태를 정상으로 다룹니다.
+ * 도로명·지번·대략적 위치 중 하나로 접수하며 나머지 주소 필드는 비어 있을 수 있습니다.
  */
 export const draftLocationDataSchema = z.object({
   addressRoad: z.string().nullish(),
+  addressJibun: z.string().nullish(),
+  legalDongCode: z
+    .string()
+    .regex(/^\d{10}$/)
+    .nullish(),
+  legalDongName: z.string().nullish(),
+  sido: z.string().nullish(),
+  sigungu: z.string().nullish(),
+  buildingDong: z.string().nullish(),
+  unitNumber: z.string().nullish(),
   addressDetail: z.string().nullish(),
   addressRegion: z.string().nullish(),
-  buildingType: z.enum(BUILDING_TYPES),
+  buildingType: z.enum(READABLE_BUILDING_TYPES),
   buildingTypeOther: z.string().nullish(),
   approximateLocation: z.string().nullish(),
 });
@@ -46,9 +54,9 @@ export const draftLocationDataSchema = z.object({
 export const draftHouseholdDataSchema = z.object({
   areaRange: z.enum(AREA_RANGES),
   totalRoomCount: z.number().int(),
-  residentCount: z.number().int(),
-  residentType: z.enum(RESIDENT_TYPES),
-  residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS),
+  residentCount: z.number().int().min(0).max(100),
+  residentType: z.enum(RESIDENT_TYPES).nullable(),
+  residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS).nullable(),
   elevatorAvailable: z.boolean(),
   parkingAvailable: z.boolean(),
   parkingType: z.enum(PARKING_TYPES).nullish(),
@@ -58,7 +66,6 @@ export const draftHouseholdDataSchema = z.object({
 export const draftPrivateSpaceDataSchema = z.object({
   rentalSpaceType: z.enum(RENTAL_SPACE_TYPES),
   rentalSpaceTypeOther: z.string().nullish(),
-  privateRoomSize: z.enum(PRIVATE_ROOM_SIZES),
   privateRoomOptions: z.array(z.enum(PRIVATE_ROOM_OPTIONS_VALUES)),
 });
 

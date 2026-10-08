@@ -8,6 +8,11 @@ import {
   RENTAL_SPACE_TYPE_OPTIONS,
   type RentalSpaceType,
 } from "@/domains/listing-draft";
+import {
+  type PrivateSpaceForm,
+  privateSpaceFormSchema,
+  useDraftFormValues,
+} from "@/features/save-listing-draft";
 import { ChipField } from "@/shared/ui/chip-field";
 import { Radio } from "@/shared/ui/radio";
 import { TextField } from "@/shared/ui/text-field";
@@ -32,23 +37,16 @@ export interface ListingStep4Values {
   privateRoomOptions: PrivateRoomOption[];
 }
 
-export interface ListingStep4InitialValues {
-  rentalSpaceType: RentalSpaceType | null;
-  rentalSpaceTypeOther: string;
-  privateRoomOptions: PrivateRoomOption[];
-}
-
-const EMPTY_VALUES: ListingStep4InitialValues = {
-  rentalSpaceType: null,
-  rentalSpaceTypeOther: "",
-  privateRoomOptions: [],
-};
+export type ListingStep4InitialValues = PrivateSpaceForm;
+const EMPTY_VALUES = privateSpaceFormSchema.parse({});
 
 export interface ListingStep4PageProps {
   initialValues?: ListingStep4InitialValues;
   onPrev?: () => void;
   onNext?: (values: ListingStep4Values) => void;
   isSaving?: boolean;
+  onChange?: (values: PrivateSpaceForm) => void;
+  notice?: React.ReactNode;
 }
 
 /**
@@ -62,10 +60,15 @@ export function ListingStep4Page({
   onPrev,
   onNext,
   isSaving = false,
+  onChange,
+  notice,
 }: ListingStep4PageProps) {
-  const [usage, setUsage] = useState<RentalSpaceType | null>(initialValues.rentalSpaceType);
-  const [usageEtc, setUsageEtc] = useState(initialValues.rentalSpaceTypeOther);
-  const [options, setOptions] = useState<PrivateRoomOption[]>(initialValues.privateRoomOptions);
+  const { values, update } = useDraftFormValues(initialValues, onChange);
+  const {
+    rentalSpaceType: usage,
+    rentalSpaceTypeOther: usageEtc,
+    privateRoomOptions: options,
+  } = values;
   const [submitted, setSubmitted] = useState(false);
   const { showToast } = useToast();
 
@@ -101,21 +104,33 @@ export function ListingStep4Page({
       nextDisabled={isSaving}
       autoSaving={isSaving}
     >
-      <div className="flex w-full flex-col gap-9">
+      <fieldset disabled={isSaving} className="flex w-full min-w-0 flex-col gap-9">
+        {notice}
         <div className="flex w-full flex-col">
           <div className="flex w-full flex-col gap-3">
             <p className="w-full text-sm leading-[1.4] font-medium text-grayscale-600">이용 형태</p>
             <div className="flex flex-col gap-3">
               {RENTAL_SPACE_TYPE_OPTIONS.map((option) => (
-                <label key={option.value} className="flex cursor-pointer items-center gap-3">
+                <div key={option.value} className="flex items-center gap-3">
                   <Radio
+                    id={`usage-${option.value}`}
+                    aria-label={option.label}
+                    className="focus-within:rounded-full focus-within:outline-2 focus-within:outline-primary-500"
                     size="24"
                     name="usage"
                     value={option.value}
                     checked={usage === option.value}
-                    onChange={() => setUsage(option.value)}
+                    onChange={() =>
+                      update({
+                        rentalSpaceType: option.value,
+                        rentalSpaceTypeOther: option.value === "other" ? usageEtc : "",
+                      })
+                    }
                   />
-                  <span className="flex items-center gap-2.5 whitespace-nowrap">
+                  <label
+                    htmlFor={`usage-${option.value}`}
+                    className="flex cursor-pointer flex-wrap items-center gap-2.5"
+                  >
                     <span className="text-base leading-[1.4] font-semibold text-grayscale-700">
                       {option.label}
                     </span>
@@ -124,16 +139,18 @@ export function ListingStep4Page({
                         {option.description}
                       </span>
                     )}
-                  </span>
-                </label>
+                  </label>
+                </div>
               ))}
               {usage === "other" && (
                 <TextField
+                  label="이용 형태 직접 입력"
+                  maxLength={100}
                   placeholder="입력해주세요"
                   size="L"
                   className="w-full"
                   value={usageEtc}
-                  onChange={(e) => setUsageEtc(e.target.value)}
+                  onChange={(e) => update({ rentalSpaceTypeOther: e.target.value })}
                 />
               )}
             </div>
@@ -147,10 +164,10 @@ export function ListingStep4Page({
           multiple
           exclusiveOption="none"
           value={options}
-          onChange={setOptions}
+          onChange={(value) => update({ privateRoomOptions: value })}
           error={show("options")}
         />
-      </div>
+      </fieldset>
     </ListingStepLayout>
   );
 }

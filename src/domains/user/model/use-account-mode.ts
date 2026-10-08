@@ -8,6 +8,7 @@ import {
   type AccountMode,
   accountModeSchema,
   getPageAccountMode,
+  isAccountModeHome,
   resolveAccountMode,
 } from "./account-mode";
 import { useSession } from "./use-session";
@@ -72,8 +73,8 @@ export function useAccountMode() {
     mode,
     setMode,
     homeHref: ACCOUNT_MODE_HOME[mode],
-    canSwitchMode: pageMode !== null,
-    isModeReady:
-      pageMode !== null || (savedMode !== undefined && (!isAuthenticated || Boolean(userId))),
+    canSwitchMode: isAccountModeHome(pathname),
+    // 탐색 메뉴는 세션 조회 실패·지연과 관계없이 사용할 수 있어야 합니다.
+    isModeReady: pageMode !== null || savedMode !== undefined,
   };
 }

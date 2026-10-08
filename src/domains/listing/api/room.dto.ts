@@ -2,10 +2,9 @@ import { z } from "zod";
 
 import {
   AREA_RANGES,
-  BUILDING_TYPES,
   PARKING_TYPES,
   PRIVATE_ROOM_OPTIONS_VALUES,
-  PRIVATE_ROOM_SIZES,
+  READABLE_BUILDING_TYPES,
   RESIDENT_GENDER_COMPOSITIONS,
   RESIDENT_TYPES,
   ROOM_CAPACITIES,
@@ -139,9 +138,8 @@ const legacyFullDetailSchema = commonDtoSchema.extend({
 
 const registrationLocationDataSchema = z.object({
   addressRoad: z.string().nullish(),
-  addressDetail: z.string().nullish(),
   addressRegion: z.string().nullable(),
-  buildingType: z.enum(BUILDING_TYPES),
+  buildingType: z.enum(READABLE_BUILDING_TYPES),
   buildingTypeOther: z.string().nullable(),
   approximateLocation: z.string().nullable(),
 });
@@ -149,8 +147,8 @@ const registrationLocationDataSchema = z.object({
 const registrationHouseholdDataSchema = z.object({
   areaRange: z.enum(AREA_RANGES),
   residentCount: z.number().int(),
-  residentType: z.enum(RESIDENT_TYPES),
-  residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS),
+  residentType: z.enum(RESIDENT_TYPES).nullable(),
+  residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS).nullable(),
   elevatorAvailable: z.boolean(),
   parkingAvailable: z.boolean(),
   parkingType: z.enum(PARKING_TYPES).nullable(),
@@ -158,7 +156,6 @@ const registrationHouseholdDataSchema = z.object({
 });
 
 const registrationPrivateSpaceDataSchema = z.object({
-  privateRoomSize: z.enum(PRIVATE_ROOM_SIZES),
   privateRoomOptions: z.array(z.enum(PRIVATE_ROOM_OPTIONS_VALUES)),
 });
 

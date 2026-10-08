@@ -6,6 +6,7 @@ import { useDraftPhotos, useDraftStepFlow } from "@/features/save-listing-draft"
 import { ListingStep8Page } from "@/pages-layer/listing-step-8-photos";
 import { ApiError } from "@/shared/api";
 import { useToast } from "@/shared/ui/toast";
+import { ListingDraftState } from "@/widgets/listing-step-layout";
 
 function Step8() {
   const { draftId, draft, isLoading, isSaving, saveAndGoNext, goPrev } = useDraftStepFlow(9);
@@ -82,7 +83,7 @@ function Step8() {
 
 export default function Page() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<ListingDraftState status="loading" />}>
       <Step8 />
     </Suspense>
   );

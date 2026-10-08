@@ -37,12 +37,22 @@ export const REGISTRANT_RELATIONSHIP_OPTIONS = [
 
 /* 3단계 · 장소 기본 정보 (API step 3) */
 
-export const BUILDING_TYPES = ["villa", "apartment", "detachedHouse", "other"] as const;
+export const BUILDING_TYPES = [
+  "apartment",
+  "officetel",
+  "shareHouse",
+  "detachedHouse",
+  "other",
+] as const;
 export type BuildingType = (typeof BUILDING_TYPES)[number];
+export const READABLE_BUILDING_TYPES = [...BUILDING_TYPES, "villa"] as const;
+export type ReadableBuildingType = (typeof READABLE_BUILDING_TYPES)[number];
 
-export const BUILDING_TYPE_LABEL: Record<BuildingType, string> = {
+export const BUILDING_TYPE_LABEL: Record<ReadableBuildingType, string> = {
   villa: "빌라",
   apartment: "아파트",
+  officetel: "오피스텔",
+  shareHouse: "셰어하우스",
   detachedHouse: "단독주택",
   other: "기타",
 };
@@ -132,18 +142,6 @@ export const RENTAL_SPACE_TYPE_OPTIONS = [
   },
   { value: "other", label: "기타(직접 입력하기)", description: "" },
 ] as const satisfies readonly (SelectOption<RentalSpaceType> & { description: string })[];
-
-export const PRIVATE_ROOM_SIZES = ["small", "medium", "large", "unknown"] as const;
-export type PrivateRoomSize = (typeof PRIVATE_ROOM_SIZES)[number];
-
-export const PRIVATE_ROOM_SIZE_LABEL: Record<PrivateRoomSize, string> = {
-  small: "작은 방",
-  medium: "보통 방",
-  large: "큰 방",
-  unknown: "잘 모르겠어요",
-};
-
-export const PRIVATE_ROOM_SIZE_OPTIONS = toOptions(PRIVATE_ROOM_SIZES, PRIVATE_ROOM_SIZE_LABEL);
 
 export const PRIVATE_ROOM_OPTIONS_VALUES = [
   "bed",

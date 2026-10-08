@@ -229,9 +229,18 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
     locationNote: LOCATION_NOTE,
     household: {
       residentCount: household.residentCount,
-      residentTypeLabel: RESIDENT_TYPE_LABEL[household.residentType],
+      residentTypeLabel:
+        household.residentCount === 0
+          ? "현재 거주자 없음"
+          : household.residentType
+            ? RESIDENT_TYPE_LABEL[household.residentType]
+            : "확인 필요",
       genderCompositionLabel:
-        RESIDENT_GENDER_COMPOSITION_LABEL[household.residentGenderComposition],
+        household.residentCount === 0
+          ? "해당 없음"
+          : household.residentGenderComposition
+            ? RESIDENT_GENDER_COMPOSITION_LABEL[household.residentGenderComposition]
+            : "확인 필요",
     },
     host: toHost(dto.host),
     latestReservation: dto.latestReservation,

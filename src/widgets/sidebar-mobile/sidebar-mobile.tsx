@@ -3,7 +3,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 import {
   ACCOUNT_MODE_LABELS,
@@ -14,6 +14,7 @@ import {
 } from "@/domains/user";
 import { ROUTES } from "@/shared/config";
 import { cn } from "@/shared/lib/cn";
+import { useDialogBehavior } from "@/shared/lib/hooks";
 import { Divider } from "@/shared/ui/divider";
 
 /* eslint-disable @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */
@@ -84,6 +85,19 @@ export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
   const queryClient = useQueryClient();
   const { isAuthenticated, session } = useSession();
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  useDialogBehavior(open, onClose, panelRef);
+
+  useEffect(() => {
+    if (!open) return;
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) onClose();
+    };
+    closeOnDesktop();
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -102,6 +116,7 @@ export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
 
   return (
     <div
+      ref={panelRef}
       className="fixed inset-0 z-50 flex flex-col bg-white pt-11 md:hidden"
       role="dialog"
       aria-modal="true"
