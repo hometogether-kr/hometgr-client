@@ -47,26 +47,13 @@ export interface RoomListResult {
   hasNext: boolean;
 }
 
-/**
- * 정렬 값 (설계 §3.5)
- *
- * `recommended`가 기본값이라 URL·쿼리 키에는 생략합니다. 라벨 맵을 `Record`로 두어
- * 옵션을 추가하면 라벨 누락이 컴파일 에러로 잡히게 합니다.
- *
- * ⚠️ 실제 API에는 "추천" 정렬이 없습니다(`sortBy`: createdAt·monthlyRentKrw·depositKrw·
- * availableFrom). `recommended`는 API 기본값(createdAt DESC)으로 매핑되어 현재는 `latest`와
- * 결과가 같습니다 — 서버 추천 정렬이 생기면 매퍼만 바꿉니다. (room.api.ts `SORT_PARAM`)
- */
-export const ROOM_SORTS = ["recommended", "latest", "rentAsc", "depositAsc", "moveInAsc"] as const;
+/** API가 실제로 지원하는 정렬만 제공합니다. */
+export const ROOM_SORTS = ["latest", "rentAsc", "depositAsc", "moveInAsc"] as const;
 export type RoomSort = (typeof ROOM_SORTS)[number];
-
 export const ROOM_SORT_LABEL: Record<RoomSort, string> = {
-  recommended: "추천순",
   latest: "최신순",
   rentAsc: "월세 저렴한순",
   depositAsc: "보증금 저렴한순",
   moveInAsc: "입주 가능일 빠른순",
 };
-
-/** 정렬 기본값 — URL·쿼리 키에서 생략되는 캐노니컬 값 */
-export const DEFAULT_ROOM_SORT: RoomSort = "recommended";
+export const DEFAULT_ROOM_SORT: RoomSort = "latest";

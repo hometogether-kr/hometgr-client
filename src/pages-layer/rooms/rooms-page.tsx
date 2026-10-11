@@ -6,6 +6,7 @@ import { SiteLayout } from "@/widgets/site-layout";
 
 interface RoomsPageProps {
   filter: RoomFilter;
+  issues: string[];
 }
 
 /**
@@ -19,13 +20,28 @@ interface RoomsPageProps {
  * 가능한 값이라 Server→Client 경계를 그대로 넘어갑니다(§6.0c). 페이지 제목(`<h1>`)은 히어로
  * 검색바가 담당하므로 별도 sr-only 제목을 두지 않습니다.
  */
-export function RoomsPage({ filter }: RoomsPageProps) {
+export function RoomsPage({ filter, issues }: RoomsPageProps) {
   return (
     <SiteLayout>
       <div className="mx-auto w-full max-w-[1600px] px-5 py-8 lg:px-10">
-        <RoomSearchHero filter={filter} />
+        <RoomSearchHero
+          key={JSON.stringify([filter.keyword, filter.sido, filter.sigungu])}
+          filter={filter}
+        />
         <RoomFilterBar filter={filter} />
-        <RoomList filter={filter} />
+        {issues.length ? (
+          <div
+            role="alert"
+            className="flex min-h-64 flex-col gap-3 rounded-xl bg-white p-6 text-grayscale-700"
+          >
+            {issues.map((issue) => (
+              <p key={issue}>{issue}</p>
+            ))}
+            <p>검색창이나 필터에서 조건을 다시 선택해주세요.</p>
+          </div>
+        ) : (
+          <RoomList filter={filter} />
+        )}
       </div>
     </SiteLayout>
   );
