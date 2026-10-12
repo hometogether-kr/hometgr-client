@@ -10,6 +10,8 @@ import {
   toRoomListQuery,
   useRoomFilter,
 } from "@/features/filter-rooms";
+import type { MockRoomSource, MockRoomSourceOptions } from "@/features/preview-rooms";
+import { previewRoomQueryKeys } from "@/features/preview-rooms";
 import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
 
@@ -20,22 +22,38 @@ import { RoomListToolbar } from "./room-list-toolbar";
 /** 첫 행(그리드 최대 4열) 카드에만 priority를 줍니다 */
 const PRIORITY_CARD_COUNT = 4;
 
-function buildRoomsUrl(filter: RoomFilter): string {
-  const query = serializeRoomFilter(filter);
+function buildRoomsUrl(filter: RoomFilter, preview: boolean): string {
+  const params = new URLSearchParams(serializeRoomFilter(filter));
+  if (preview) params.set("preview", "rooms");
+  const query = params.toString();
   return query ? `${ROUTES.rooms}?${query}` : ROUTES.rooms;
 }
 
-export function RoomListQueryContent({ filter }: { filter: RoomFilter }) {
-  const { setSort, resetFilter } = useRoomFilter(filter);
+export function RoomListQueryContent({
+  filter,
+  previewOptions,
+  previewSource,
+}: {
+  filter: RoomFilter;
+  previewOptions?: MockRoomSourceOptions;
+  previewSource?: MockRoomSource;
+}) {
+  const { setSort, resetFilter } = useRoomFilter(filter, { preview: Boolean(previewOptions) });
   const listQuery = toRoomListQuery(filter);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isFetchNextPageError } =
     useSuspenseInfiniteQuery({
       // 정규화된 필터 문자열을 키로 씁니다 — 같은 조건이 항상 같은 캐시로 갑니다(설계 §2-6).
       // 공유 URL의 시작 페이지도 캐시를 구분합니다.
-      queryKey: roomQueryKeys.list(serializeRoomFilter(filter)),
-      queryFn: ({ pageParam, signal }) => fetchRooms({ ...listQuery, page: pageParam }, signal),
+      queryKey: previewOptions
+        ? previewRoomQueryKeys.list(previewOptions, serializeRoomFilter(filter))
+        : roomQueryKeys.list(serializeRoomFilter(filter)),
+      queryFn: ({ pageParam, signal }) =>
+        previewSource
+          ? previewSource.listRooms({ ...listQuery, page: pageParam })
+          : fetchRooms({ ...listQuery, page: pageParam }, signal),
       initialPageParam: filter.page,
+      ...(previewSource ? { retry: false } : {}),
       getNextPageParam: (lastPage) => (lastPage.hasNext ? lastPage.page + 1 : undefined),
     });
 
@@ -56,12 +74,21 @@ export function RoomListQueryContent({ filter }: { filter: RoomFilter }) {
     if (result.isError) return;
     const nextPage = result.data?.pages.at(-1)?.page;
     if (nextPage)
-      window.history.replaceState(null, "", buildRoomsUrl({ ...filter, page: nextPage }));
+      window.history.replaceState(
+        null,
+        "",
+        buildRoomsUrl({ ...filter, page: nextPage }, Boolean(previewOptions)),
+      );
   };
 
   return (
     <section>
       <h2 className="sr-only">매물 목록</h2>
+      {previewOptions && (
+        <p className="mb-3 text-sm text-grayscale-600">
+          모의 매물입니다. 상세 화면도 가상 정보로 표시됩니다.
+        </p>
+      )}
       {filter.page > 1 && (
         <p className="mb-3 text-sm text-grayscale-600">{filter.page}페이지부터 표시합니다.</p>
       )}
@@ -71,7 +98,17 @@ export function RoomListQueryContent({ filter }: { filter: RoomFilter }) {
           <RoomCard
             key={room.id}
             room={room}
-            href={`${ROUTES.rooms}/${room.id}`}
+            href={
+              previewOptions
+                ? `${ROUTES.rooms}/${room.id}?${new URLSearchParams({
+                    preview: "rooms",
+                    returnTo: buildRoomsUrl(
+                      { ...filter, page: data.pages.at(-1)?.page ?? filter.page },
+                      true,
+                    ),
+                  }).toString()}`
+                : `${ROUTES.rooms}/${room.id}`
+            }
             priority={index < PRIORITY_CARD_COUNT}
           />
         ))}

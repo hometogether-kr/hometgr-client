@@ -1,9 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 import type { RoomFilter } from "@/features/filter-rooms";
+import { serializeRoomFilter } from "@/features/filter-rooms";
+import type { MockRoomSourceOptions } from "@/features/preview-rooms";
+import { createMockRoomSource } from "@/features/preview-rooms";
 import { QueryErrorBoundary } from "@/shared/ui/error-boundary";
 
 import { RoomListError } from "./room-list-error";
@@ -15,11 +18,29 @@ const RoomListQueryContent = dynamic(
   { ssr: false, loading: () => <RoomListSkeleton /> },
 );
 
-export function RoomList({ filter }: { filter: RoomFilter }) {
+export function RoomList({
+  filter,
+  previewOptions,
+}: {
+  filter: RoomFilter;
+  previewOptions?: MockRoomSourceOptions;
+}) {
+  // 오류 경계가 목록을 다시 마운트해도 모의 응답의 첫 실패 기록을 보존한다.
+  const [previewSource] = useState(() =>
+    previewOptions ? createMockRoomSource(previewOptions) : undefined,
+  );
+
   return (
-    <QueryErrorBoundary fallback={({ reset }) => <RoomListError reset={reset} />}>
+    <QueryErrorBoundary
+      key={serializeRoomFilter(filter)}
+      fallback={({ reset }) => <RoomListError reset={reset} />}
+    >
       <Suspense fallback={<RoomListSkeleton />}>
-        <RoomListQueryContent filter={filter} />
+        <RoomListQueryContent
+          filter={filter}
+          previewOptions={previewOptions}
+          previewSource={previewSource}
+        />
       </Suspense>
     </QueryErrorBoundary>
   );

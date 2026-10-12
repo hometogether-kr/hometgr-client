@@ -1,12 +1,17 @@
 import Image from "next/image";
 
+import type { MockRoomSourceOptions } from "@/features/preview-rooms";
+
 import { GuestRoomSearch } from "./guest-room-search";
 
 import styles from "./guest-home.module.css";
 
-export function GuestHero() {
+export function GuestHero({ previewOptions }: { previewOptions?: MockRoomSourceOptions }) {
   return (
-    <section className={styles.hero} aria-labelledby="guest-title">
+    <section
+      className={`${styles.hero} ${previewOptions ? styles.previewHero : ""}`}
+      aria-labelledby="guest-title"
+    >
       <div className={`${styles.container} ${styles.heroInner}`}>
         <div className={styles.heroCopy}>
           <p>함께 살아 더 안전한 홈투게더</p>
@@ -17,7 +22,7 @@ export function GuestHero() {
             <br />
             월세는 <em>가볍게</em>
           </h1>
-          <GuestRoomSearch />
+          <GuestRoomSearch previewOptions={previewOptions} />
         </div>
         <div className={styles.heroArt}>
           <Image

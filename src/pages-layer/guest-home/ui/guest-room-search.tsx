@@ -4,15 +4,41 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
 
+import { findSearchRegion } from "@/domains/region";
+import type { MockRoomSourceOptions } from "@/features/preview-rooms";
 import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { TextField } from "@/shared/ui/text-field";
+import { RoomRegionSearch } from "@/widgets/room-region-search";
 
 import styles from "./guest-home.module.css";
 
 const guestSearchSchema = z.string().trim().min(1, "동네나 학교 이름을 입력해 주세요.").max(100);
 
-export function GuestRoomSearch() {
+export function GuestRoomSearch({ previewOptions }: { previewOptions?: MockRoomSourceOptions }) {
+  const router = useRouter();
+  if (!previewOptions) return <LegacyGuestRoomSearch />;
+  return (
+    <div className={styles.searchForm}>
+      <RoomRegionSearch
+        layout="main"
+        previewOptions={previewOptions}
+        onSearch={(value) => {
+          const region = value ? findSearchRegion(value) : undefined;
+          if (!region) return;
+          const params = new URLSearchParams({
+            preview: "rooms",
+            sido: region.sido,
+            sigungu: region.sigungu,
+          });
+          router.push(`${ROUTES.rooms}?${params}`);
+        }}
+      />
+    </div>
+  );
+}
+
+function LegacyGuestRoomSearch() {
   const router = useRouter();
   const [keyword, setKeyword] = useState("");
   const [error, setError] = useState("");

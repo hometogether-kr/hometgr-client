@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import type { MockRoomSourceOptions } from "@/features/preview-rooms";
 import { GuestRegionForm } from "@/features/request-guest-region";
 import { StartHostListingLink } from "@/features/start-host-listing";
 import { SiteLayout } from "@/widgets/site-layout";
@@ -12,7 +13,7 @@ import { GuestReviews } from "./ui/guest-reviews";
 
 import styles from "./ui/guest-home.module.css";
 
-export function GuestHomePage() {
+export function GuestHomePage({ previewOptions }: { previewOptions?: MockRoomSourceOptions }) {
   return (
     <SiteLayout background="white">
       {/* eslint-disable-next-line @next/next/no-page-custom-font -- Figma의 Noto Sans KR는 입주자 페이지에만 적용합니다. */}
@@ -20,8 +21,14 @@ export function GuestHomePage() {
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
       />
-      <GuestHero />
-      <GuestProperties />
+      <GuestHero previewOptions={previewOptions} />
+      {previewOptions ? (
+        <p className="mx-auto max-w-[1200px] px-5 py-8 text-sm text-grayscale-600">
+          모의 검색 미리보기 · 지역별 추천 매물과 상세 화면 연결은 후속 단계에서 확인합니다.
+        </p>
+      ) : (
+        <GuestProperties />
+      )}
       <GuestBenefits />
       <section className={styles.hostBand} aria-labelledby="guest-host-title">
         <div className={`${styles.container} ${styles.hostBandInner}`}>
