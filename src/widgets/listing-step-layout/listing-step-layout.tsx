@@ -48,7 +48,12 @@ export function ListingStepLayout({
   return (
     <div className="min-h-screen bg-white md:bg-grayscale-50">
       <ResponsiveHeader
-        mobile={{ variant: "title", title: LISTING_STEPS[step - 1], onBack: onPrev }}
+        mobile={{
+          variant: "title",
+          title: LISTING_STEPS[step - 1],
+          onBack: onPrev,
+          showMenu: true,
+        }}
       />
 
       <main className="flex justify-center px-5 pt-4 pb-[104px] md:px-4 md:pt-[100px] md:pb-[152px]">

@@ -10,9 +10,11 @@ const SECTIONS = [
   {
     key: "room",
     title: "1. 입주자가 사용할 방",
-    description: "입주자가 사용할 방의 분위기와 장단점을 알려주세요.",
+    description:
+      "학생들에게 보여지는 설명입니다. 방의 특징, 제공 시설, 주변 환경을 자세히 적어주세요. 실제 제공하는 내용만 작성해주세요.",
     tags: ["#조용해요", "#햇빛이 잘 들어요", "#깨끗해요", "#공부·업무하기 좋아요"],
-    placeholder: "예) 조용하고 깨끗한 방입니다.",
+    placeholder:
+      "예) 방에는 침대와 책상, 옷장이 있으며 창문으로 오전 햇빛이 들어옵니다. 주방과 세탁기는 함께 사용할 수 있고 집 근처에는 편의점과 마트가 있습니다. 공부하기 좋은 시간대와 제공하는 가구, 이용 가능한 공간을 자세히 소개해주세요.",
   },
   {
     key: "residents",
@@ -89,7 +91,8 @@ export function ListingStep9Page({
     setTexts((prev) => {
       const current = prev[field];
       if (current.includes(tag)) return prev;
-      return { ...prev, [field]: current ? `${current} ${tag}` : tag };
+      const next = current ? `${current} ${tag}` : tag;
+      return next.length > 2000 ? prev : { ...prev, [field]: next };
     });
   };
 
@@ -129,6 +132,9 @@ export function ListingStep9Page({
               </div>
               <TextArea
                 size="l"
+                aria-label={section.title}
+                maxLength={2000}
+                showCount
                 className="w-full"
                 placeholder={section.placeholder}
                 value={texts[SECTION_FIELD[section.key]]}

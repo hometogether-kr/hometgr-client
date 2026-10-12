@@ -42,7 +42,7 @@ export interface RoomDetail {
   locationSummary: string;
   price: RoomPrice;
   buildingTypeLabel: string;
-  /** 정확한 평수 대신 서버가 주는 방 크기 구간("작은 방" 등)을 그대로 노출한다 */
+  /** 집 전체 전용면적. v2는 등록된 평수 범위를 표시한다. */
   roomSizeLabel: string;
   /** 신규 등록(v2) 매물은 층수를 수집하지 않아 값이 없을 수 있다 */
   floor?: number;
@@ -50,6 +50,10 @@ export interface RoomDetail {
   parkingLabel: string;
   petPolicyLabel: string;
   description: string;
+  currentResidentsDescription?: string;
+  precautions?: string;
+  capacityLabel?: string;
+  minStayMonths?: number;
   amenities: string[];
   photos: RoomPhoto[];
   locationNote: string;

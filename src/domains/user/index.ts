@@ -22,6 +22,7 @@ export {
   ACCOUNT_MODE_LABELS,
   AUTH_MODE_COOKIE,
   getPageAccountMode,
+  isAccountModeHome,
   resolveAccountMode,
 } from "./model/account-mode";
 export type { ConsentKey, ConsentStateItem, UserConsents } from "./model/consent";

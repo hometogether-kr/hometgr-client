@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 /**
  * Kakao 우편번호 서비스 로더
  *
@@ -7,33 +9,10 @@
 const SCRIPT_SRC = "https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
 const SCRIPT_ID = "kakao-postcode-script";
 
-/** oncomplete 콜백이 넘겨주는 값 중 이 앱에서 쓰는 필드 (모든 값은 문자열이며 없으면 공백) */
-export interface KakaoPostcodeResult {
-  /** 국가기초구역번호 (새 우편번호) */
-  zonecode: string;
-  /** 검색어 타입에 따라 달라지는 기본 주소 */
-  address: string;
-  /** 도로명 주소. 지번:도로명이 1:N이면 공백일 수 있습니다. */
-  roadAddress: string;
-  /** 지번 주소. 도로명:지번이 1:N이면 공백일 수 있습니다. */
-  jibunAddress: string;
-  /** roadAddress가 공백일 때 채워지는 대표 도로명 주소 */
-  autoRoadAddress: string;
-  /** jibunAddress가 공백일 때 채워지는 대표 지번 주소 */
-  autoJibunAddress: string;
-  /** 사용자가 선택한 주소 타입: R(도로명) · J(지번) */
-  userSelectedType: "R" | "J";
-  /** 도/시 이름 */
-  sido: string;
-  /** 시/군/구 이름 */
-  sigungu: string;
-  /** 법정동/법정리 이름 */
-  bname: string;
-  buildingName: string;
-}
+export type KakaoPostcodeResult = z.infer<typeof kakaoPostcodeResultSchema>;
 
 export interface KakaoPostcodeOptions {
-  oncomplete: (result: KakaoPostcodeResult) => void;
+  oncomplete: (result: unknown) => void;
   onclose?: (state: "FORCE_CLOSE" | "COMPLETE_CLOSE") => void;
   onresize?: (size: { width: number; height: number }) => void;
   /** 시·도 축약 표기 (기본 true). false면 "서울특별시"처럼 전체 이름이 내려옵니다. */
@@ -116,22 +95,53 @@ export interface SelectedAddress {
   region: string;
   zonecode: string;
   buildingName: string;
+  roadAddress: string;
+  jibunAddress: string;
+  legalDongCode: string;
+  legalDongName: string;
+  sido: string;
+  sigungu: string;
 }
+
+const kakaoPostcodeResultSchema = z.object({
+  zonecode: z.string(),
+  address: z.string(),
+  roadAddress: z.string(),
+  jibunAddress: z.string(),
+  userSelectedType: z.enum(["R", "J"]),
+  sido: z.string(),
+  sigungu: z.string(),
+  bcode: z.string().regex(/^\d{10}$/),
+  bname: z.string(),
+  buildingName: z.string(),
+});
 
 /**
  * 검색 결과를 앱에서 쓰는 형태로 정리합니다.
  *
- * 지번:도로명이 1:N인 경우 선택한 타입의 주소가 공백으로 내려올 수 있어,
- * 문서 권장대로 auto* 값으로 대체합니다.
+ * 예상 주소(auto*)는 확정 주소와 구분하고, 선택한 주소의 구조를 보존합니다.
  */
-export function toSelectedAddress(result: KakaoPostcodeResult): SelectedAddress {
-  const roadAddress = result.roadAddress || result.autoRoadAddress;
-  const jibunAddress = result.jibunAddress || result.autoJibunAddress;
+export function toSelectedAddress(input: unknown): SelectedAddress {
+  const parsed = kakaoPostcodeResultSchema.safeParse(input);
+  if (!parsed.success) throw new Error("주소 검색 결과를 확인할 수 없습니다. 다시 검색해주세요.");
+  const result = parsed.data;
+  // auto* fields are estimates when the user declines to select an address.
+  const roadAddress = result.roadAddress || (result.userSelectedType === "R" ? result.address : "");
+  const jibunAddress =
+    result.jibunAddress || (result.userSelectedType === "J" ? result.address : "");
+  if (!roadAddress && !jibunAddress)
+    throw new Error("선택한 주소가 비어 있습니다. 다시 검색해주세요.");
 
   return {
     address: roadAddress || jibunAddress || result.address,
     region: [result.sido, result.sigungu].filter(Boolean).join(" "),
     zonecode: result.zonecode,
     buildingName: result.buildingName,
+    roadAddress,
+    jibunAddress,
+    legalDongCode: result.bcode,
+    legalDongName: result.bname,
+    sido: result.sido,
+    sigungu: result.sigungu,
   };
 }

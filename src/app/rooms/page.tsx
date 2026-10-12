@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-import { parseRoomFilter } from "@/features/filter-rooms";
+import { getRoomFilterIssues, parseRoomFilter } from "@/features/filter-rooms";
+import { getRoomPreviewOptions } from "@/features/preview-rooms";
 import { RoomsPage } from "@/pages-layer/rooms";
 
 export const metadata: Metadata = {
@@ -17,6 +18,13 @@ export default async function Page({
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-  const filter = parseRoomFilter(await searchParams);
-  return <RoomsPage filter={filter} />;
+  const params = await searchParams;
+  const filter = parseRoomFilter(params);
+  return (
+    <RoomsPage
+      filter={filter}
+      issues={getRoomFilterIssues(params, filter)}
+      previewOptions={getRoomPreviewOptions(params)}
+    />
+  );
 }

@@ -40,6 +40,7 @@ export function toListingDraft(dto: DraftDetailDto): ListingDraft {
     lastSavedAt: new Date(dto.lastSavedAt),
     expiresAt: new Date(dto.expiresAt),
     data: dto.data,
+    autosaves: dto.autosaves,
     photos: [...dto.media].sort((a, b) => a.displayOrder - b.displayOrder).map(toDraftPhoto),
   };
 }

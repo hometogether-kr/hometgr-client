@@ -115,65 +115,7 @@
   white-space: pre-line;
   color: var(--color-grayscale-600);
 }
-.steps {
-  background: var(--color-grayscale-50);
-  padding: 64px 0;
-}
-.stepList {
-  display: grid;
-  gap: 24px;
-}
-.stepCard {
-  position: relative;
-  padding: 20px 28px;
-  background: var(--color-grayscale-0);
-  border-radius: 28px;
-}
-.stepNumber {
-  color: var(--color-primary-500);
-  font-size: var(--text-body-2);
-  font-weight: 700;
-  line-height: 32px;
-}
-.stepCard h3 {
-  word-break: keep-all;
-  margin-top: 6px;
-  font-size: var(--text-title-3);
-  line-height: 31px;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-}
-.stepBody {
-  margin-top: 20px;
-  font-size: var(--text-headline-1);
-  font-weight: 500;
-  line-height: 1.45;
-  white-space: pre-line;
-  letter-spacing: -0.015em;
-  color: var(--color-grayscale-600);
-}
-.stepNote {
-  position: absolute;
-  width: 183px;
-  height: 62px;
-  right: 16px;
-  top: 24px;
-}
-.stepNote p {
-  position: relative;
-  padding-top: 12px;
-  padding-left: 28px;
-  text-align: center;
-  font-size: var(--text-label-1);
-  line-height: 1.54;
-  font-weight: 700;
-  color: var(--color-primary-400);
-  letter-spacing: -0.01em;
-}
-.stepArrow {
-  justify-self: center;
-  transform: rotate(90deg);
-}
+
 .community {
   position: relative;
   isolation: isolate;
@@ -478,46 +420,7 @@
     text-box-trim: trim-both;
     text-box-edge: cap alphabetic;
   }
-  .steps {
-    padding: 80px 0 73px;
-  }
-  .steps header {
-    margin-bottom: 57px;
-  }
-  .steps header > p {
-    font-size: var(--text-heading-2);
-    line-height: 29px;
-  }
-  .steps h2 {
-    line-height: 68px;
-    letter-spacing: -0.01em;
-  }
-  .stepList {
-    grid-template-columns: 331px 24px 449px 24px 266px;
-    gap: 26.5px;
-  }
-  .stepCard {
-    height: 188px;
-    padding: 10px 28px 20px;
-  }
-  .stepNumber {
-    line-height: 42px;
-  }
-  .stepCard h3 {
-    font-size: var(--text-title-2);
-    white-space: nowrap;
-  }
-  .stepBody {
-    font-size: var(--text-heading-2);
-    white-space: pre;
-  }
-  .stepNote {
-    right: 24px;
-  }
-  .stepArrow {
-    transform: none;
-    padding-top: 59px;
-  }
+
   .community {
     height: 877px;
     padding: 90px 0 70px;
@@ -614,12 +517,5 @@
 @media (max-width: 389px) {
   .benefitCard {
     flex-direction: column;
-  }
-  .stepNote {
-    width: 165px;
-    right: 12px;
-  }
-  .stepNote p {
-    font-size: var(--text-caption-1);
   }
 }

@@ -7,6 +7,7 @@ import {
   ListingStep5Page,
   type ListingStep5Values,
 } from "@/pages-layer/listing-step-5-shared-space";
+import { ListingDraftState } from "@/widgets/listing-step-layout";
 
 function Step5() {
   const { draft, isSaving, saveAndGoNext, goPrev } = useDraftStepFlow(6);
@@ -37,7 +38,7 @@ function Step5() {
 
 export default function Page() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<ListingDraftState status="loading" />}>
       <Step5 />
     </Suspense>
   );

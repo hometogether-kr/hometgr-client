@@ -1,5 +1,10 @@
-import { IntroPage } from "@/pages-layer/intro";
+import { getRoomPreviewOptions } from "@/features/preview-rooms";
+import { GuestHomePage } from "@/pages-layer/guest-home";
 
-export default function Home() {
-  return <IntroPage audience="guest" />;
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  return <GuestHomePage previewOptions={getRoomPreviewOptions(await searchParams)} />;
 }

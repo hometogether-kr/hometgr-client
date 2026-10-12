@@ -1,4 +1,9 @@
-import { ACCOUNT_MODE_HOME, getPageAccountMode, resolveAccountMode } from "@/domains/user";
+import {
+  ACCOUNT_MODE_HOME,
+  getPageAccountMode,
+  isAccountModeHome,
+  resolveAccountMode,
+} from "@/domains/user";
 
 interface AccountModeNavigationInput {
   pathname: string;
@@ -12,7 +17,7 @@ export function getAccountModeNavigation({ pathname, savedMode }: AccountModeNav
   return {
     mode,
     homeHref: ACCOUNT_MODE_HOME[mode],
-    canShowModeSwitch: pageMode !== null,
+    canShowModeSwitch: isAccountModeHome(pathname),
     nextMode,
     nextHomeHref: ACCOUNT_MODE_HOME[nextMode],
   };

@@ -3,6 +3,7 @@
 import type { KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from "react";
 
+import type { SEARCH_REGIONS } from "@/domains/region";
 import { cn } from "@/shared/lib/cn";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { Modal } from "@/shared/ui/modal";
@@ -44,6 +45,10 @@ const SECTIONS: Record<FilterTab, SectionComponent> = {
 };
 
 interface RoomFilterModalProps {
+  regionOptions?: typeof SEARCH_REGIONS;
+  regionLoading?: boolean;
+  regionError?: boolean;
+  onRegionRetry?: () => void;
   /** 어느 칩으로 열었는지에 따른 초기 활성 탭 */
   initialTab: FilterTab;
   /** 현재 URL 필터 — 초안 스냅샷의 원본 */
@@ -64,7 +69,16 @@ interface RoomFilterModalProps {
  * 각 탭 패널에는 해당 섹션을 그려 초안(`draft`)을 편집합니다. "완료"는 초안이 현재
  * 필터와 다르고(isDirty) 금액 범위 에러가 없을 때만 활성입니다(§9).
  */
-export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFilterModalProps) {
+export function RoomFilterModal({
+  initialTab,
+  filter,
+  onClose,
+  onApply,
+  regionOptions,
+  regionLoading,
+  regionError,
+  onRegionRetry,
+}: RoomFilterModalProps) {
   const { draft, patchDraft, isDirty } = useFilterDraft(filter);
   const [activeTab, setActiveTab] = useState<FilterTab>(initialTab);
   const baseId = useId();
@@ -162,7 +176,19 @@ export function RoomFilterModal({ initialTab, filter, onClose, onApply }: RoomFi
                 aria-labelledby={tabId(tab.id)}
                 hidden={tab.id !== activeTab}
               >
-                {tab.id === activeTab && <Section draft={draft} patch={patchDraft} />}
+                {tab.id === activeTab &&
+                  (tab.id === "region" ? (
+                    <RegionSection
+                      draft={draft}
+                      patch={patchDraft}
+                      regions={regionOptions}
+                      loading={regionLoading}
+                      error={regionError}
+                      onRetry={onRegionRetry}
+                    />
+                  ) : (
+                    <Section draft={draft} patch={patchDraft} />
+                  ))}
               </div>
             );
           })}

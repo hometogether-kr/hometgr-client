@@ -24,16 +24,14 @@ export function RoomTypeSection({ draft, patch }: SectionProps) {
   const titleId = useId();
 
   const toggle = (value: RoomType) => {
-    const next = draft.roomTypes.includes(value)
-      ? draft.roomTypes.filter((item) => item !== value)
-      : [...draft.roomTypes, value];
+    const next = draft.roomTypes.includes(value) ? [] : [value];
     patch({ roomTypes: next });
   };
 
   return (
     <div>
       <SectionHeader
-        title="매물 유형"
+        title="건물 유형 (하나 선택)"
         titleId={titleId}
         canReset={draft.roomTypes.length > 0}
         onReset={() => patch({ roomTypes: [] })}

@@ -4,6 +4,8 @@ import { DetailSection } from "./detail-section";
 
 export interface DescriptionCardProps {
   description: string;
+  currentResidentsDescription?: string;
+  precautions?: string;
   moveInLabel: string;
   parkingLabel: string;
   petPolicyLabel: string;
@@ -72,6 +74,8 @@ function DescriptionRow({ icon, label, value }: { icon: ReactNode; label: string
  */
 export function DescriptionCard({
   description,
+  currentResidentsDescription,
+  precautions,
   moveInLabel,
   parkingLabel,
   petPolicyLabel,
@@ -79,9 +83,20 @@ export function DescriptionCard({
   return (
     <DetailSection title="상세 설명">
       <div className="flex flex-col gap-7">
-        <p className="text-body-1 leading-[1.4] whitespace-pre-line text-grayscale-600">
-          {description}
+        <p className="text-body-1 leading-[1.4] break-words whitespace-pre-line text-grayscale-600">
+          {description || "등록된 방 소개가 없습니다."}
         </p>
+        {[
+          { label: "현재 거주원 소개", value: currentResidentsDescription },
+          { label: "생활 시 주의사항", value: precautions },
+        ]
+          .filter((item) => item.value)
+          .map((item) => (
+            <div key={item.label}>
+              <h3 className="mb-2 font-semibold">{item.label}</h3>
+              <p className="break-words whitespace-pre-line text-grayscale-600">{item.value}</p>
+            </div>
+          ))}
         <div className="flex flex-col gap-4 rounded-xl bg-grayscale-50 px-8 py-6">
           <DescriptionRow icon={<CalendarIcon />} label="입주 가능일" value={moveInLabel} />
           <DescriptionRow icon={<CarIcon />} label="주차" value={parkingLabel} />

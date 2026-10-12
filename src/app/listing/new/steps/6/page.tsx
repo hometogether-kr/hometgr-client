@@ -7,6 +7,7 @@ import {
   ListingStep6Page,
   type ListingStep6Values,
 } from "@/pages-layer/listing-step-6-house-rules";
+import { ListingDraftState } from "@/widgets/listing-step-layout";
 
 function Step6() {
   const { draft, isSaving, saveAndGoNext, goPrev } = useDraftStepFlow(7);
@@ -39,7 +40,7 @@ function Step6() {
 
 export default function Page() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<ListingDraftState status="loading" />}>
       <Step6 />
     </Suspense>
   );

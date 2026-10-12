@@ -1,11 +1,16 @@
 import type { RoomFilter } from "@/features/filter-rooms";
+import type { MockRoomSourceOptions } from "@/features/preview-rooms";
 import { RoomFilterBar } from "@/widgets/room-filter-bar";
 import { RoomList } from "@/widgets/room-list";
 import { RoomSearchHero } from "@/widgets/room-search-hero";
 import { SiteLayout } from "@/widgets/site-layout";
 
+import { PreviewRoomSearchHero } from "./ui/preview-room-search-hero";
+
 interface RoomsPageProps {
   filter: RoomFilter;
+  issues: string[];
+  previewOptions?: MockRoomSourceOptions;
 }
 
 /**
@@ -19,13 +24,40 @@ interface RoomsPageProps {
  * 가능한 값이라 Server→Client 경계를 그대로 넘어갑니다(§6.0c). 페이지 제목(`<h1>`)은 히어로
  * 검색바가 담당하므로 별도 sr-only 제목을 두지 않습니다.
  */
-export function RoomsPage({ filter }: RoomsPageProps) {
+export function RoomsPage({ filter, issues, previewOptions }: RoomsPageProps) {
   return (
     <SiteLayout>
       <div className="mx-auto w-full max-w-[1600px] px-5 py-8 lg:px-10">
-        <RoomSearchHero filter={filter} />
-        <RoomFilterBar filter={filter} />
-        <RoomList filter={filter} />
+        {previewOptions ? (
+          <PreviewRoomSearchHero filter={filter} previewOptions={previewOptions} />
+        ) : (
+          <RoomSearchHero
+            key={JSON.stringify([filter.keyword, filter.sido, filter.sigungu])}
+            filter={filter}
+          />
+        )}
+        <RoomFilterBar
+          key={JSON.stringify(previewOptions) ?? "live"}
+          filter={filter}
+          previewOptions={previewOptions}
+        />
+        {issues.length ? (
+          <div
+            role="alert"
+            className="flex min-h-64 flex-col gap-3 rounded-xl bg-white p-6 text-grayscale-700"
+          >
+            {issues.map((issue) => (
+              <p key={issue}>{issue}</p>
+            ))}
+            <p>검색창이나 필터에서 조건을 다시 선택해주세요.</p>
+          </div>
+        ) : (
+          <RoomList
+            key={JSON.stringify(previewOptions) ?? "live"}
+            filter={filter}
+            previewOptions={previewOptions}
+          />
+        )}
       </div>
     </SiteLayout>
   );

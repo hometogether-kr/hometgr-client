@@ -3,6 +3,7 @@
 import type { FormEvent, KeyboardEvent } from "react";
 import { useId, useRef, useState } from "react";
 
+import { findSearchRegion, SEARCH_REGIONS } from "@/domains/region";
 import type { RoomFilter } from "@/features/filter-rooms";
 import { useRecentKeywords, useRoomSearch } from "@/features/search-rooms";
 import { useOutsideClick } from "@/shared/lib/hooks";
@@ -26,8 +27,19 @@ interface RoomSearchHeroProps {
  * 하이라이트된 최근 검색어가 있으면 그것을, 없으면 입력값을 커밋합니다.
  */
 export function RoomSearchHero({ filter }: RoomSearchHeroProps) {
-  const { value, setValue, commit } = useRoomSearch(filter);
-  const { keywords, addKeyword, removeKeyword, clearKeywords } = useRecentKeywords();
+  const { value, setValue, commit, error } = useRoomSearch(filter);
+  const {
+    keywords: recentKeywords,
+    addKeyword,
+    removeKeyword,
+    clearKeywords,
+  } = useRecentKeywords();
+  const isSearching = value.trim().length > 0;
+  const keywords = isSearching
+    ? SEARCH_REGIONS.filter((region) => region.label.includes(value.trim())).map(
+        (region) => region.label,
+      )
+    : recentKeywords.filter((keyword) => findSearchRegion(keyword));
 
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -84,7 +96,7 @@ export function RoomSearchHero({ filter }: RoomSearchHeroProps) {
       case "Enter":
         // 하이라이트된 최근 검색어가 있으면 그걸 선택(폼 제출을 막음).
         // 없으면 preventDefault 하지 않고 폼 onSubmit이 입력값을 커밋하게 둡니다.
-        if (expanded && activeIndex >= 0) {
+        if (expanded && activeIndex >= 0 && activeIndex < keywords.length) {
           event.preventDefault();
           selectKeyword(keywords[activeIndex]);
         }
@@ -117,7 +129,13 @@ export function RoomSearchHero({ filter }: RoomSearchHeroProps) {
               aria-expanded={expanded}
               aria-controls={listId}
               aria-autocomplete="list"
-              aria-activedescendant={activeIndex >= 0 ? optionId(activeIndex) : undefined}
+              aria-activedescendant={
+                expanded && activeIndex >= 0 && activeIndex < keywords.length
+                  ? optionId(activeIndex)
+                  : undefined
+              }
+              aria-invalid={Boolean(error)}
+              aria-describedby={`${baseId}-help`}
               value={value}
               onChange={(event) => {
                 setValue(event.target.value);
@@ -126,7 +144,7 @@ export function RoomSearchHero({ filter }: RoomSearchHeroProps) {
               }}
               onFocus={() => setOpen(true)}
               onKeyDown={handleKeyDown}
-              placeholder="지역, 동, 지하철역 등으로 검색해보세요"
+              placeholder="서울 자치구를 검색하고 선택해주세요 (예: 마포구)"
               className="min-w-0 flex-1 bg-transparent text-body-1 font-medium text-grayscale-900 placeholder:text-grayscale-300 focus:outline-none"
             />
             <button
@@ -138,16 +156,24 @@ export function RoomSearchHero({ filter }: RoomSearchHeroProps) {
             </button>
           </div>
         </form>
+        <p
+          id={`${baseId}-help`}
+          role={error ? "alert" : undefined}
+          className="mt-3 min-h-5 text-sm text-grayscale-600"
+        >
+          {error ?? "현재 서울 자치구 선택 검색을 지원합니다. 동·지하철역 검색은 준비 중입니다."}
+        </p>
 
         {expanded && (
           <RecentKeywordPanel
+            title={isSearching ? "검색 가능한 지역" : "최근 검색 지역"}
             keywords={keywords}
             activeIndex={activeIndex}
             listId={listId}
             optionId={optionId}
             onSelect={selectKeyword}
-            onRemove={removeKeyword}
-            onClearAll={clearKeywords}
+            onRemove={isSearching ? undefined : removeKeyword}
+            onClearAll={isSearching ? undefined : clearKeywords}
             onActiveIndexChange={setActiveIndex}
           />
         )}

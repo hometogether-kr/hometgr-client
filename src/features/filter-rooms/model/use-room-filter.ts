@@ -23,11 +23,13 @@ import { EMPTY_ROOM_FILTER, serializeRoomFilter } from "./room-filter";
  * "더 보기"는 서버 재요청이 없어야 하므로 이 훅이 아니라 `window.history.replaceState`로
  * 처리합니다(§2-2, 위젯에서).
  */
-export function useRoomFilter(current: RoomFilter) {
+export function useRoomFilter(current: RoomFilter, options: { preview?: boolean } = {}) {
   const router = useRouter();
 
   const toUrl = (filter: RoomFilter) => {
-    const query = serializeRoomFilter(filter);
+    const params = new URLSearchParams(serializeRoomFilter(filter));
+    if (options.preview) params.set("preview", "rooms");
+    const query = params.toString();
     return query ? `${ROUTES.rooms}?${query}` : ROUTES.rooms;
   };
 

@@ -3,12 +3,13 @@ import Link from "next/link";
 import { ROUTES } from "@/shared/config";
 import { SiteLayout } from "@/widgets/site-layout";
 
-import { HostBenefits, HostSteps } from "./ui/host-benefits";
+import { HostBenefits } from "./ui/host-benefits";
 import { HostCommunity } from "./ui/host-community";
 import { HostGuide } from "./ui/host-guide";
 import { HostHero } from "./ui/host-hero";
 import { HostHistory } from "./ui/host-history";
 import { HostPartners } from "./ui/host-partners";
+import { HostProcess } from "./ui/host-process";
 import { HostQuestions } from "./ui/host-questions";
 import { hostContainer } from "./ui/section-heading";
 
@@ -20,7 +21,7 @@ export function HostHomePage() {
       <SiteLayout background="white">
         <HostHero />
         <HostBenefits />
-        <HostSteps />
+        <HostProcess />
         <HostCommunity />
         <HostHistory />
         <HostPartners />

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import { useAccountMode } from "@/domains/user";
 import { AccountModeSwitch } from "@/features/switch-account-mode";
@@ -41,6 +41,7 @@ interface GnbMobileTitle extends GnbMobileBase {
   title: string;
   onBack?: () => void;
   backIcon?: ReactNode;
+  showMenu?: boolean;
 }
 
 export type GnbMobileProps = GnbMobileLogo | GnbMobileBack | GnbMobileTitle;
@@ -71,6 +72,7 @@ export function GnbMobile(props: GnbMobileProps) {
   const { className } = props;
   const { homeHref } = useAccountMode();
   const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   if (props.variant === "logo") {
     const { onMenuClick } = props;
@@ -100,19 +102,35 @@ export function GnbMobile(props: GnbMobileProps) {
             </button>
           </div>
         </header>
-        {!onMenuClick && <SidebarMobile open={menuOpen} onClose={() => setMenuOpen(false)} />}
+        {!onMenuClick && <SidebarMobile open={menuOpen} onClose={closeMenu} />}
       </>
     );
   }
 
   return (
-    <header className={cn("relative h-[52px] w-full overflow-clip bg-white", className)}>
-      <BackButton onBack={props.onBack} backIcon={props.backIcon} />
-      {props.variant === "title" && (
-        <p className="absolute top-1/2 left-[38px] -translate-y-1/2 text-lg leading-[1.4] font-semibold tracking-[-0.18px] whitespace-nowrap text-grayscale-900">
-          {props.title}
-        </p>
+    <>
+      <header className={cn("relative h-[52px] w-full overflow-clip bg-white", className)}>
+        <BackButton onBack={props.onBack} backIcon={props.backIcon} />
+        {props.variant === "title" && (
+          <p className="absolute top-1/2 right-14 left-[38px] -translate-y-1/2 truncate text-lg leading-[1.4] font-semibold tracking-[-0.18px] text-grayscale-900">
+            {props.title}
+          </p>
+        )}
+        {props.variant === "title" && props.showMenu && (
+          <button
+            type="button"
+            aria-label="메뉴 열기"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(true)}
+            className="absolute top-1 right-2 rounded p-2 focus-visible:outline-2 focus-visible:outline-primary-500"
+          >
+            <Icon name="menu" size={24} />
+          </button>
+        )}
+      </header>
+      {props.variant === "title" && props.showMenu && (
+        <SidebarMobile open={menuOpen} onClose={closeMenu} />
       )}
-    </header>
+    </>
   );
 }

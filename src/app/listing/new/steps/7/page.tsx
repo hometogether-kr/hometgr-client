@@ -11,6 +11,7 @@ import {
 } from "@/features/save-listing-draft";
 import { ListingStep7Page, type ListingStep7Values } from "@/pages-layer/listing-step-7-contract";
 import { useToast } from "@/shared/ui/toast";
+import { ListingDraftState } from "@/widgets/listing-step-layout";
 
 function Step7() {
   const { draft, isSaving, saveAndGoNext, goPrev } = useDraftStepFlow(8);
@@ -50,7 +51,7 @@ function Step7() {
 
 export default function Page() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<ListingDraftState status="loading" />}>
       <Step7 />
     </Suspense>
   );

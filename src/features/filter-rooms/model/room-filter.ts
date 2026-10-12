@@ -118,19 +118,24 @@ export function serializeRoomFilter(filter: RoomFilter): string {
  * null·빈 배열은 undefined로 접어 "미지정"으로 넘깁니다.
  */
 export function toRoomListQuery(filter: RoomFilter): RoomListQuery {
+  if (filter.keyword || filter.roomTypes.length > 1) {
+    throw new Error("지원되지 않는 검색 조건입니다. 지역과 건물 유형을 다시 선택해주세요.");
+  }
+  const region = getSelectedRegion(filter.sido, filter.sigungu);
+  if ((filter.sido || filter.sigungu) && !region) {
+    throw new Error("지역은 지원되는 자치구를 선택해주세요.");
+  }
   return {
+    region: region?.label,
     page: filter.page,
     sort: filter.sort,
-    keyword: filter.keyword ?? undefined,
-    sido: filter.sido ?? undefined,
-    sigungu: filter.sigungu ?? undefined,
     moveInDate: filter.moveInDate ?? undefined,
     minTerm: filter.minTerm ?? undefined,
     depositMin: filter.depositMin ?? undefined,
     depositMax: filter.depositMax ?? undefined,
     rentMin: filter.rentMin ?? undefined,
     rentMax: filter.rentMax ?? undefined,
-    roomTypes: filter.roomTypes.length > 0 ? filter.roomTypes : undefined,
+    buildingType: filter.roomTypes[0],
     people: filter.people ?? undefined,
     gender: filter.gender ?? undefined,
   };
@@ -162,3 +167,4 @@ export function hasRoomFilterError(filter: RoomFilter): boolean {
   const errors = getRoomFilterErrors(filter);
   return errors.deposit !== null || errors.rent !== null;
 }
+import { getSelectedRegion } from "@/domains/region";

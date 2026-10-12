@@ -12,6 +12,11 @@ import {
   type ResidentGenderComposition,
   type ResidentType,
 } from "@/domains/listing-draft";
+import {
+  type HouseholdForm,
+  householdFormSchema,
+  useDraftFormValues,
+} from "@/features/save-listing-draft";
 import { ChipField } from "@/shared/ui/chip-field";
 import { Counter } from "@/shared/ui/counter";
 import { Radio } from "@/shared/ui/radio";
@@ -33,7 +38,7 @@ const PARKING_OPTIONS = [
 type YesNo = "yes" | "no";
 
 const REQUIRED_MESSAGE = "필수 항목입니다.";
-const COUNT_MESSAGE = "집 전체 방 개수, 거주 중인 인원(집주인 포함)은 1이상으로 선택해야합니다.";
+const COUNT_MESSAGE = "방은 1~100개, 거주 인원은 0~100명으로 선택해주세요.";
 
 function FieldError({ message }: { message?: string }) {
   if (!message) return null;
@@ -46,8 +51,8 @@ export interface ListingStep3Values {
   areaRange: AreaRange;
   totalRoomCount: number;
   residentCount: number;
-  residentType: ResidentType;
-  residentGenderComposition: ResidentGenderComposition;
+  residentType: ResidentType | null;
+  residentGenderComposition: ResidentGenderComposition | null;
   elevatorAvailable: boolean;
   parkingAvailable: boolean;
   /** 주차 가능일 때만 채웁니다. */
@@ -56,35 +61,16 @@ export interface ListingStep3Values {
   parkingDescription: string | null;
 }
 
-export interface ListingStep3InitialValues {
-  areaRange: AreaRange | null;
-  totalRoomCount: number;
-  residentCount: number;
-  residentType: ResidentType | null;
-  residentGenderComposition: ResidentGenderComposition | null;
-  elevatorAvailable: boolean | null;
-  parkingAvailable: boolean | null;
-  parkingType: ParkingType | null;
-  parkingDescription: string;
-}
-
-const EMPTY_VALUES: ListingStep3InitialValues = {
-  areaRange: null,
-  totalRoomCount: 0,
-  residentCount: 0,
-  residentType: null,
-  residentGenderComposition: null,
-  elevatorAvailable: null,
-  parkingAvailable: null,
-  parkingType: null,
-  parkingDescription: "",
-};
+export type ListingStep3InitialValues = HouseholdForm;
+const EMPTY_VALUES = householdFormSchema.parse({});
 
 export interface ListingStep3PageProps {
   initialValues?: ListingStep3InitialValues;
   onPrev?: () => void;
   onNext?: (values: ListingStep3Values) => void;
   isSaving?: boolean;
+  onChange?: (values: HouseholdForm) => void;
+  notice?: React.ReactNode;
 }
 
 function toYesNo(value: boolean | null): YesNo | null {
@@ -102,18 +88,21 @@ export function ListingStep3Page({
   onPrev,
   onNext,
   isSaving = false,
+  onChange,
+  notice,
 }: ListingStep3PageProps) {
-  const [areaRange, setAreaRange] = useState<AreaRange | null>(initialValues.areaRange);
-  const [rooms, setRooms] = useState(initialValues.totalRoomCount);
-  const [residents, setResidents] = useState(initialValues.residentCount);
-  const [residentType, setResidentType] = useState<ResidentType | null>(initialValues.residentType);
-  const [genderComposition, setGenderComposition] = useState<ResidentGenderComposition | null>(
-    initialValues.residentGenderComposition,
-  );
-  const [elevator, setElevator] = useState<YesNo | null>(toYesNo(initialValues.elevatorAvailable));
-  const [parking, setParking] = useState<YesNo | null>(toYesNo(initialValues.parkingAvailable));
-  const [parkingKind, setParkingKind] = useState<ParkingType | null>(initialValues.parkingType);
-  const [parkingNote, setParkingNote] = useState(initialValues.parkingDescription);
+  const { values, update } = useDraftFormValues(initialValues, onChange);
+  const {
+    areaRange,
+    totalRoomCount: rooms,
+    residentCount: residents,
+    residentType,
+    residentGenderComposition: genderComposition,
+    parkingType: parkingKind,
+    parkingDescription: parkingNote,
+  } = values;
+  const elevator = toYesNo(values.elevatorAvailable);
+  const parking = toYesNo(values.parkingAvailable);
   const [submitted, setSubmitted] = useState(false);
   const { showToast } = useToast();
 
@@ -121,9 +110,14 @@ export function ListingStep3Page({
 
   const errors = {
     areaRange: !areaRange ? REQUIRED_MESSAGE : undefined,
-    counts: rooms < 1 || residents < 1 ? COUNT_MESSAGE : undefined,
-    residentType: !residentType ? REQUIRED_MESSAGE : undefined,
-    genderComposition: !genderComposition ? REQUIRED_MESSAGE : undefined,
+    counts:
+      rooms < 1 || rooms > 100 || residents === null || residents < 0 || residents > 100
+        ? COUNT_MESSAGE
+        : undefined,
+    residentType:
+      residents !== null && residents > 0 && !residentType ? REQUIRED_MESSAGE : undefined,
+    genderComposition:
+      residents !== null && residents > 0 && !genderComposition ? REQUIRED_MESSAGE : undefined,
     elevator: !elevator ? REQUIRED_MESSAGE : undefined,
     parking: !parking ? REQUIRED_MESSAGE : undefined,
     parkingKind: parkingAvailable && !parkingKind ? REQUIRED_MESSAGE : undefined,
@@ -139,7 +133,7 @@ export function ListingStep3Page({
     }
 
     // 위 검증을 통과하면 필수 값이 모두 채워져 있지만, 타입 좁히기를 위해 한 번 더 확인합니다.
-    if (!areaRange || !residentType || !genderComposition || !elevator || !parking) return;
+    if (!areaRange || residents === null || !elevator || !parking) return;
 
     const note = parkingNote.trim();
 
@@ -147,8 +141,8 @@ export function ListingStep3Page({
       areaRange,
       totalRoomCount: rooms,
       residentCount: residents,
-      residentType,
-      residentGenderComposition: genderComposition,
+      residentType: residents === 0 ? null : residentType,
+      residentGenderComposition: residents === 0 ? null : genderComposition,
       elevatorAvailable: elevator === "yes",
       parkingAvailable,
       // 주차가 불가능하면 서버가 두 필드를 아예 받지 않습니다.
@@ -167,44 +161,71 @@ export function ListingStep3Page({
       nextDisabled={isSaving}
       autoSaving={isSaving}
     >
-      <div className="flex w-full flex-col gap-9">
+      <fieldset disabled={isSaving} className="flex w-full min-w-0 flex-col gap-9">
+        {notice}
         <ChipField
           label="집 평수"
           options={AREA_RANGE_OPTIONS}
           value={areaRange}
-          onChange={setAreaRange}
+          onChange={(value) => update({ areaRange: value })}
           error={show("areaRange")}
         />
         <div className="flex w-full flex-col">
           <div className="flex flex-wrap items-start gap-8 md:gap-12">
-            <Counter label="집 전체 방 개수" value={rooms} onChange={setRooms} />
+            <Counter
+              label="집 전체 방 개수"
+              value={rooms}
+              max={100}
+              onChange={(value) => update({ totalRoomCount: value })}
+            />
             <Counter
               label="거주 중인 인원(집주인 포함)"
-              value={residents}
-              onChange={setResidents}
+              value={residents ?? 0}
+              max={100}
+              onChange={(value) =>
+                update({
+                  residentCount: value,
+                  ...(value === 0 ? { residentType: null, residentGenderComposition: null } : {}),
+                })
+              }
             />
           </div>
+          {residents === null && (
+            <button
+              type="button"
+              className="mt-3 text-left text-sm underline"
+              onClick={() =>
+                update({ residentCount: 0, residentType: null, residentGenderComposition: null })
+              }
+            >
+              현재 거주자 없음 (0명) 선택
+            </button>
+          )}
           <FieldError message={show("counts")} />
         </div>
-        <ChipField
-          label="현재 거주 형태"
-          options={RESIDENT_TYPE_OPTIONS}
-          value={residentType}
-          onChange={setResidentType}
-          error={show("residentType")}
-        />
-        <ChipField
-          label="거주 중인 인원 성별"
-          options={RESIDENT_GENDER_COMPOSITION_OPTIONS}
-          value={genderComposition}
-          onChange={setGenderComposition}
-          error={show("genderComposition")}
-        />
+        {residents !== null && residents > 0 && (
+          <>
+            <ChipField
+              label="현재 거주 형태"
+              options={RESIDENT_TYPE_OPTIONS}
+              value={residentType}
+              onChange={(value) => update({ residentType: value })}
+              error={show("residentType")}
+            />
+            <ChipField
+              label="거주 중인 인원 성별"
+              options={RESIDENT_GENDER_COMPOSITION_OPTIONS}
+              value={genderComposition}
+              onChange={(value) => update({ residentGenderComposition: value })}
+              error={show("genderComposition")}
+            />
+          </>
+        )}
         <ChipField
           label="엘리베이터"
           options={YES_NO_OPTIONS}
           value={elevator}
-          onChange={setElevator}
+          onChange={(value) => update({ elevatorAvailable: value === "yes" })}
           error={show("elevator")}
         />
         <div className="flex w-full flex-col gap-4">
@@ -212,29 +233,40 @@ export function ListingStep3Page({
             label="주차"
             options={PARKING_OPTIONS}
             value={parking}
-            onChange={setParking}
+            onChange={(value) =>
+              update({
+                parkingAvailable: value === "yes",
+                ...(value === "no" ? { parkingType: null, parkingDescription: "" } : {}),
+              })
+            }
             error={show("parking")}
           />
           {parkingAvailable && (
             <div className="flex flex-col gap-4">
               {PARKING_TYPE_OPTIONS.map((option) => (
-                <label key={option.value} className="flex cursor-pointer items-center gap-3">
+                <div key={option.value} className="flex items-center gap-3">
                   <Radio
+                    id={`parking-${option.value}`}
+                    aria-label={option.label}
+                    className="focus-within:rounded-full focus-within:outline-2 focus-within:outline-primary-500"
                     size="24"
                     name="parkingKind"
                     value={option.value}
                     checked={parkingKind === option.value}
-                    onChange={() => setParkingKind(option.value)}
+                    onChange={() => update({ parkingType: option.value })}
                   />
-                  <span className="flex flex-col justify-center gap-1 whitespace-nowrap">
+                  <label
+                    htmlFor={`parking-${option.value}`}
+                    className="flex cursor-pointer flex-col justify-center gap-1"
+                  >
                     <span className="text-base leading-[1.6] font-semibold text-grayscale-700">
                       {option.label}
                     </span>
                     <span className="text-[13px] leading-[1.5] font-medium text-grayscale-500">
                       {option.description}
                     </span>
-                  </span>
-                </label>
+                  </label>
+                </div>
               ))}
               <FieldError message={show("parkingKind")} />
               <TextArea
@@ -245,12 +277,13 @@ export function ListingStep3Page({
                   "주차 관련 안내 사항을 입력해 주세요.\n예) 1일 주차요금은 15,000원입니다 · 최대 2대 주차 가능하며, 사전 등록이 필요합니다."
                 }
                 value={parkingNote}
-                onChange={(e) => setParkingNote(e.target.value)}
+                maxLength={500}
+                onChange={(e) => update({ parkingDescription: e.target.value })}
               />
             </div>
           )}
         </div>
-      </div>
+      </fieldset>
     </ListingStepLayout>
   );
 }

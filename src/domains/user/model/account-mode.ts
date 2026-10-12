@@ -14,7 +14,17 @@ export function getPageAccountMode(pathname: string): AccountMode | null {
   const path = pathname.replace(/\/+$/, "") || "/";
   if (path === ACCOUNT_MODE_HOME.guest) return "guest";
   if (path === ACCOUNT_MODE_HOME.host) return "host";
+  const matches = (prefix: string) => path === prefix || path.startsWith(`${prefix}/`);
+  if (matches("/listing") || matches(ROUTES.hostReservations)) return "host";
+  if ([ROUTES.rooms, ROUTES.reservations, ROUTES.favorites, "/faq/guest"].some(matches)) {
+    return "guest";
+  }
   return null;
+}
+
+export function isAccountModeHome(pathname: string): boolean {
+  const path = pathname.replace(/\/+$/, "") || "/";
+  return Object.values(ACCOUNT_MODE_HOME).some((href) => href === path);
 }
 
 export const AUTH_MODE_COOKIE = "hometgr_auth_mode";
@@ -30,7 +40,7 @@ interface ResolveAccountModeInput {
   savedMode: unknown;
 }
 
-/** 메인 URL의 명시적 선택이 저장값보다 우선하며, 서버 권한은 화면 모드에 관여하지 않습니다. */
+/** 화면의 용도가 저장값보다 우선하며, 서버 권한은 화면 모드에 관여하지 않습니다. */
 export function resolveAccountMode({ pageMode, savedMode }: ResolveAccountModeInput): AccountMode {
   if (pageMode) return pageMode;
   const parsed = accountModeSchema.safeParse(savedMode);

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { findSearchRegion, getSelectedRegion } from "@/domains/region";
 import type { RoomFilter } from "@/features/filter-rooms";
 import { useRoomFilter } from "@/features/filter-rooms";
 
@@ -18,7 +19,10 @@ import { useRoomFilter } from "@/features/filter-rooms";
  */
 export function useRoomSearch(filter: RoomFilter) {
   const { patchFilter } = useRoomFilter(filter);
-  const [value, setValue] = useState(filter.keyword ?? "");
+  const [value, setValue] = useState(
+    filter.keyword ?? getSelectedRegion(filter.sido, filter.sigungu)?.label ?? "",
+  );
+  const [error, setError] = useState<string | null>(null);
 
   /**
    * 검색어를 URL에 커밋합니다. `override`를 주면(최근 검색어 항목 클릭) 그 값을, 없으면
@@ -28,10 +32,16 @@ export function useRoomSearch(filter: RoomFilter) {
   const commit = (override?: string): string | null => {
     const raw = override ?? value;
     const trimmed = raw.trim();
-    setValue(trimmed);
-    patchFilter({ keyword: trimmed || null });
-    return trimmed || null;
+    const region = findSearchRegion(trimmed);
+    if (trimmed && !region) {
+      setError("목록에서 서울 자치구를 선택해주세요. 동·지하철역 검색은 아직 지원하지 않습니다.");
+      return null;
+    }
+    setError(null);
+    setValue(region?.label ?? "");
+    patchFilter({ keyword: null, sido: region?.sido ?? null, sigungu: region?.sigungu ?? null });
+    return region?.label ?? null;
   };
 
-  return { value, setValue, commit };
+  return { value, setValue, commit, error };
 }

@@ -10,6 +10,7 @@
  */
 export const roomQueryKeys = {
   all: ["room"] as const,
+  home: (region?: string) => ["room", "home", region ?? "all"] as const,
   lists: () => [...roomQueryKeys.all, "list"] as const,
   list: (normalizedFilter: string) => [...roomQueryKeys.lists(), normalizedFilter] as const,
 };

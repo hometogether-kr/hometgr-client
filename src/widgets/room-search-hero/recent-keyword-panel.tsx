@@ -6,14 +6,15 @@ import { Divider } from "@/shared/ui/divider";
 import { Icon } from "@/shared/ui/icons";
 
 interface RecentKeywordPanelProps {
+  title?: string;
   keywords: string[];
   /** 키보드로 하이라이트된 항목 인덱스. -1이면 아무것도 선택 안 됨 */
   activeIndex: number;
   listId: string;
   optionId: (index: number) => string;
   onSelect: (keyword: string) => void;
-  onRemove: (keyword: string) => void;
-  onClearAll: () => void;
+  onRemove?: (keyword: string) => void;
+  onClearAll?: () => void;
   onActiveIndexChange: (index: number) => void;
 }
 
@@ -28,6 +29,7 @@ interface RecentKeywordPanelProps {
  * 잃어 패널이 닫히기 전에 동작이 실행됩니다(정렬 드롭다운과 같은 방식).
  */
 export function RecentKeywordPanel({
+  title = "최근 검색어",
   keywords,
   activeIndex,
   listId,
@@ -40,21 +42,23 @@ export function RecentKeywordPanel({
   return (
     <div className="absolute top-full right-0 left-0 z-20 mt-3 overflow-hidden rounded-2xl border border-grayscale-200 bg-white shadow-dropdown">
       <div className="flex items-start justify-between px-7 py-6">
-        <span className="text-heading-2 font-semibold text-grayscale-900">최근 검색어</span>
-        <BtnUnderline
-          size="14"
-          tone="default"
-          className="px-1.5 py-1"
-          onMouseDown={(event) => event.preventDefault()}
-          onClick={onClearAll}
-        >
-          모두 삭제
-        </BtnUnderline>
+        <span className="text-heading-2 font-semibold text-grayscale-900">{title}</span>
+        {onClearAll && (
+          <BtnUnderline
+            size="14"
+            tone="default"
+            className="px-1.5 py-1"
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={onClearAll}
+          >
+            모두 삭제
+          </BtnUnderline>
+        )}
       </div>
       <div className="px-7">
         <Divider />
       </div>
-      <ul id={listId} role="listbox" aria-label="최근 검색어">
+      <ul id={listId} role="listbox" aria-label={title} className="max-h-80 overflow-y-auto">
         {keywords.map((keyword, index) => {
           const isActive = index === activeIndex;
           return (
@@ -78,15 +82,17 @@ export function RecentKeywordPanel({
               >
                 <span className="truncate">{keyword}</span>
               </button>
-              <button
-                type="button"
-                aria-label={`${keyword} 삭제`}
-                onMouseDown={(event) => event.preventDefault()}
-                onClick={() => onRemove(keyword)}
-                className="shrink-0 rounded-full p-2 text-grayscale-800 transition-colors hover:text-grayscale-700 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none"
-              >
-                <Icon name="close" size={16} />
-              </button>
+              {onRemove && (
+                <button
+                  type="button"
+                  aria-label={`${keyword} 삭제`}
+                  onMouseDown={(event) => event.preventDefault()}
+                  onClick={() => onRemove(keyword)}
+                  className="shrink-0 rounded-full p-2 text-grayscale-800 transition-colors hover:text-grayscale-700 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+                >
+                  <Icon name="close" size={16} />
+                </button>
+              )}
             </li>
           );
         })}

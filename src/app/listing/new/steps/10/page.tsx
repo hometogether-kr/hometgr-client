@@ -9,6 +9,7 @@ import { ListingStep10Page, type ListingStep10Values } from "@/pages-layer/listi
 import { ApiError } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { useToast } from "@/shared/ui/toast";
+import { ListingDraftState } from "@/widgets/listing-step-layout";
 
 function Step10() {
   const router = useRouter();
@@ -71,7 +72,7 @@ function Step10() {
 
 export default function Page() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<ListingDraftState status="loading" />}>
       <Step10 />
     </Suspense>
   );

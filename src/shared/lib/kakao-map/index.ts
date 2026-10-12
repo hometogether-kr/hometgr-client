@@ -1,0 +1,1 @@
+export { loadKakaoMaps } from "./sdk";
