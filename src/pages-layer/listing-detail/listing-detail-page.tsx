@@ -68,7 +68,7 @@ export function ListingDetailPage({ room }: ListingDetailPageProps) {
         />
 
         <div className="flex w-full flex-col gap-8 md:flex-row md:items-start md:gap-10">
-          <div className="flex w-full flex-col gap-7 md:flex-1">
+          <div className="flex w-full min-w-0 flex-col gap-7 md:flex-1">
             {canViewMemberDetail ? (
               <>
                 <ContractCardMember room={room} />
@@ -81,7 +81,7 @@ export function ListingDetailPage({ room }: ListingDetailPageProps) {
                   petPolicyLabel={room.petPolicyLabel}
                 />
                 <OptionsCard amenities={room.amenities} />
-                <LocationCardMember locationNote={room.locationNote} />
+                <LocationCardMember buildingAddress={room.buildingAddress} />
               </>
             ) : (
               <>

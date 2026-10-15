@@ -128,6 +128,7 @@ const legacyFullDetailSchema = commonDtoSchema.extend({
   title: z.string().nullish(),
   subtitle: z.string().nullish(),
   addressRegion: z.string().nullish(),
+  buildingAddress: z.string().trim().nullish(),
   depositKrw: z.number().nullable(),
   monthlyRentKrw: z.number().nullable(),
   maintenanceFeeKrw: z.number().nullable(),
@@ -138,12 +139,13 @@ const legacyFullDetailSchema = commonDtoSchema.extend({
   availabilityStatus: z.enum(["immediate", "occupied", "scheduled"]).nullish(),
   description: z.string().nullish(),
   amenities: z.array(z.string()),
-  media: z.array(publicMediaDtoSchema),
+  // 배포된 레거시 명세에는 media가 없으므로 누락 시 사진 없는 상태로 표시합니다.
+  media: z.array(publicMediaDtoSchema).default([]),
 });
 
 const registrationLocationDataSchema = z.object({
-  addressRoad: z.string().nullish(),
-  addressRegion: z.string().nullable(),
+  buildingAddress: z.string().trim().nullish(),
+  addressRegion: z.string().nullish(),
   buildingType: z.enum(READABLE_BUILDING_TYPES),
   buildingTypeOther: z.string().nullable(),
   approximateLocation: z.string().nullable(),
@@ -156,8 +158,8 @@ const registrationHouseholdDataSchema = z.object({
   residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS).nullable(),
   elevatorAvailable: z.boolean(),
   parkingAvailable: z.boolean(),
-  parkingType: z.enum(PARKING_TYPES).nullable(),
-  parkingDescription: z.string().nullable(),
+  parkingType: z.enum(PARKING_TYPES).nullish(),
+  parkingDescription: z.string().nullish(),
 });
 
 const registrationPrivateSpaceDataSchema = z.object({

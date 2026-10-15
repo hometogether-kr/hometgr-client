@@ -38,6 +38,8 @@ export interface RoomDetail {
   /** 관리자가 입력한 선택 부제목. */
   subtitle: string | null;
   addressRegion: string | null;
+  /** 회원 공개용 건물 주소만 사용하며, 비회원 응답에는 항상 null입니다. */
+  buildingAddress: string | null;
   /** 비회원은 로그인 후 건물 위치 확인, 회원은 동·호수 비공개 안내. */
   addressDisclosureNote: string;
   /** 집주인 정보 페이지의 매물 요약 카드용 짧은 위치 표기 */

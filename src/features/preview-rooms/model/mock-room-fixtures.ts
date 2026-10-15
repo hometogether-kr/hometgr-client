@@ -57,6 +57,7 @@ export function createMockListings(): MockListing[] {
           title: buildingName,
           subtitle: "화면 검증용 가상 매물입니다.",
           addressRegion: region,
+          buildingAddress: null,
           addressDisclosureNote: GUEST_LOCATION_DISCLOSURE,
           locationSummary: district,
           price: {

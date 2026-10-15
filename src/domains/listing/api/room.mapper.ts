@@ -88,6 +88,7 @@ function toLegacyPreviewDetail(dto: LegacyPreviewDetailDto): RoomDetail {
     title: preview.title?.trim() || locationSummary || "매물 정보",
     subtitle: preview.subtitle?.trim() || null,
     addressRegion: preview.addressRegion,
+    buildingAddress: null,
     addressDisclosureNote: GUEST_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
@@ -120,6 +121,7 @@ function toRegistrationPreviewDetail(dto: RegistrationPreviewDetailDto): RoomDet
     title: preview.title?.trim() || locationSummary || "매물 정보",
     subtitle: preview.subtitle?.trim() || null,
     addressRegion: preview.addressRegion,
+    buildingAddress: null,
     addressDisclosureNote: GUEST_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
@@ -158,6 +160,7 @@ function toLegacyFullDetail(dto: LegacyFullDetailDto): RoomDetail {
     title,
     subtitle: dto.subtitle?.trim() || null,
     addressRegion: dto.addressRegion ?? null,
+    buildingAddress: dto.buildingAddress || null,
     addressDisclosureNote: MEMBER_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
@@ -212,7 +215,8 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
     viewerAccess: "member",
     title,
     subtitle: dto.subtitle?.trim() || null,
-    addressRegion: location.addressRegion,
+    addressRegion: location.addressRegion ?? null,
+    buildingAddress: location.buildingAddress || null,
     addressDisclosureNote: MEMBER_LOCATION_DISCLOSURE,
     locationSummary,
     price: {

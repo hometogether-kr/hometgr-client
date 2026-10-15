@@ -143,7 +143,11 @@ export function createMockRoomSource(options: MockRoomSourceOptions = {}): MockR
         throw new ApiError("매물을 찾을 수 없어요.", { status: 404, kind: "notFound" });
       }
       return {
-        room: { ...structuredClone(item.detail), viewerAccess: viewer },
+        room: {
+          ...structuredClone(item.detail),
+          viewerAccess: viewer,
+          buildingAddress: viewer === "member" ? item.buildingAddress : null,
+        },
         location:
           viewer === "guest"
             ? { access: "guest" }

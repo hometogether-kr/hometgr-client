@@ -3,15 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 
-import { loadKakaoMaps } from "@/shared/lib/kakao-map";
+import { geocodeAddress, loadKakaoMaps } from "@/shared/lib/kakao-map";
 import { BtnCta } from "@/shared/ui/btn-cta";
 
-interface KakaoMapProps {
-  latitude: number;
-  longitude: number;
+interface KakaoMapPresentationProps {
   javaScriptKey: string;
   label: string;
 }
+
+type KakaoMapProps = KakaoMapPresentationProps &
+  (
+    | { address: string; latitude?: never; longitude?: never }
+    | { address?: never; latitude: number; longitude: number }
+  );
 
 const coordinatesSchema = z.object({
   latitude: z.number().min(-90).max(90),
@@ -19,6 +23,7 @@ const coordinatesSchema = z.object({
 });
 
 function KakaoMapCanvas({
+  address,
   latitude,
   longitude,
   javaScriptKey,
@@ -32,12 +37,17 @@ function KakaoMapCanvas({
     const container = containerRef.current;
     if (!container) return;
     let disposed = false;
+    const controller = new AbortController();
     let release = () => {};
     async function initialize() {
       try {
-        const coordinates = coordinatesSchema.parse({ latitude, longitude });
         const maps = await loadKakaoMaps(javaScriptKey);
         if (disposed || !container) return;
+        const coordinates =
+          address !== undefined
+            ? await geocodeAddress({ address, maps, signal: controller.signal })
+            : coordinatesSchema.parse({ latitude, longitude });
+        if (disposed) return;
         const center = new maps.LatLng(coordinates.latitude, coordinates.longitude);
         const map = new maps.Map(container, { center, level: 3, keyboardShortcuts: true });
         const marker = new maps.Marker({ map, position: center });
@@ -59,12 +69,13 @@ function KakaoMapCanvas({
     void initialize();
     return () => {
       disposed = true;
+      controller.abort();
       release();
     };
-  }, [latitude, longitude, javaScriptKey]);
+  }, [address, latitude, longitude, javaScriptKey]);
 
   return (
-    <div className="relative h-[440px] w-full overflow-hidden bg-grayscale-70">
+    <div className="relative h-[320px] w-full overflow-hidden rounded-xl bg-grayscale-70 md:h-[440px]">
       <div
         ref={containerRef}
         role="region"
@@ -95,7 +106,7 @@ export function KakaoMap(props: KakaoMapProps) {
   const [attempt, setAttempt] = useState(0);
   return (
     <KakaoMapCanvas
-      key={`${props.latitude}:${props.longitude}:${attempt}`}
+      key={`${props.address ?? `${props.latitude}:${props.longitude}`}:${props.javaScriptKey}:${attempt}`}
       {...props}
       onRetry={() => setAttempt((value) => value + 1)}
     />
