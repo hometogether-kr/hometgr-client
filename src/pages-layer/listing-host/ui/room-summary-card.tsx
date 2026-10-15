@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import type { RoomDetail } from "@/domains/listing";
+import { formatManwon, formatMonthlyRent, type RoomDetail } from "@/domains/listing";
 import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { InfoBox } from "@/shared/ui/info-box";
@@ -20,8 +20,6 @@ export interface RoomSummaryCardProps {
  */
 export function RoomSummaryCard({ room }: RoomSummaryCardProps) {
   const router = useRouter();
-  const deposit = Math.round(room.price.depositKrw / 10_000);
-  const rent = Math.round(room.price.monthlyRentKrw / 10_000);
 
   return (
     <section className="flex w-full flex-col gap-6 rounded-2xl border border-grayscale-200 px-6 py-7 md:px-9 md:py-8">
@@ -38,7 +36,8 @@ export function RoomSummaryCard({ room }: RoomSummaryCardProps) {
           <div className="flex flex-col gap-1">
             <p className="text-heading-2 font-normal text-grayscale-700">{room.title}</p>
             <p className="text-title-3 font-semibold text-grayscale-900">
-              월세 {deposit.toLocaleString("ko-KR")}/{rent.toLocaleString("ko-KR")}
+              보증금 {formatManwon(room.price.depositKrw)} / 월세{" "}
+              {formatMonthlyRent(room.price.monthlyRentManwon)}
             </p>
             <p className="text-body-1 font-normal text-grayscale-400">{room.locationSummary}</p>
           </div>

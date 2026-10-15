@@ -36,6 +36,8 @@ export interface MockRoomSource {
 }
 
 const querySchema = z.strictObject({
+  sido: z.string().min(1).optional(),
+  sigungu: z.string().min(1).optional(),
   region: z.string().min(1).optional(),
   page: z.number().int().min(1),
   sort: z.enum(["latest", "rentAsc", "depositAsc", "moveInAsc"]).optional(),
@@ -95,6 +97,8 @@ export function createMockRoomSource(options: MockRoomSourceOptions = {}): MockR
         const rent = (item.room.monthlyRent ?? 0) * 10000;
         return (
           (!query.region || item.region === query.region) &&
+          (!query.sido || item.region.startsWith(`${query.sido} `)) &&
+          (!query.sigungu || item.region.endsWith(` ${query.sigungu}`)) &&
           (!query.buildingType || item.buildingType === query.buildingType) &&
           (!query.people || item.people === query.people) &&
           (!query.gender ||
@@ -139,7 +143,11 @@ export function createMockRoomSource(options: MockRoomSourceOptions = {}): MockR
         throw new ApiError("매물을 찾을 수 없어요.", { status: 404, kind: "notFound" });
       }
       return {
-        room: structuredClone(item.detail),
+        room: {
+          ...structuredClone(item.detail),
+          viewerAccess: viewer,
+          buildingAddress: viewer === "member" ? item.buildingAddress : null,
+        },
         location:
           viewer === "guest"
             ? { access: "guest" }

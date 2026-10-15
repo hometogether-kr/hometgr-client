@@ -8,6 +8,7 @@ import { RoomAvailabilityChip } from "./room-availability-chip";
 interface RoomCardProps {
   room: Room;
   href: string;
+  onNavigate?: () => void;
   /** 첫 행(4장)만 true — LCP 최적화 (설계 §6.1) */
   priority?: boolean;
 }
@@ -21,13 +22,15 @@ interface RoomCardProps {
  * stage-0 데이터가 비어 오는 경우를 대비합니다: 사진이 없으면 회색 박스, 교통 요약이
  * 없으면 위치만 표시합니다(설계 §11 — 디자이너 확인 대기).
  */
-export function RoomCard({ room, href, priority = false }: RoomCardProps) {
+export function RoomCard({ room, href, priority = false, onNavigate }: RoomCardProps) {
   const location = [room.neighborhood, room.transitSummary].filter(Boolean).join(" · ");
 
   return (
-    <li>
+    <li id={`room-card-${room.id}`}>
       <Link
         href={href}
+        onNavigate={onNavigate}
+        prefetch={false}
         className="group block rounded-2xl focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
         <div className="relative h-[255px] w-full overflow-hidden rounded-2xl">
@@ -61,7 +64,12 @@ export function RoomCard({ room, href, priority = false }: RoomCardProps) {
 
         <div className="mt-4 flex flex-col gap-5">
           <div className="flex flex-col gap-1">
-            <h3 className="text-headline-1 text-grayscale-700">{room.buildingName}</h3>
+            <h3 className="text-headline-1 break-words text-grayscale-700">{room.buildingName}</h3>
+            {room.subtitle && (
+              <p className="line-clamp-2 text-body-2 break-words text-grayscale-500">
+                {room.subtitle}
+              </p>
+            )}
             <p className="text-heading-1 font-semibold text-grayscale-900">
               {formatRoomPrice(room.deposit, room.monthlyRent)}
             </p>

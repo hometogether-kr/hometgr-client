@@ -17,9 +17,6 @@
 }
 .hero {
   background: var(--color-grayscale-50);
-  overflow: clip;
-}
-.previewHero {
   overflow-x: clip;
   overflow-y: visible;
 }

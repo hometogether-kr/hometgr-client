@@ -107,7 +107,12 @@ async function proxy(request: NextRequest, context: ProxyContext): Promise<NextR
     return errorResponse(502, "API 서버에 연결하지 못했습니다.", targetPath);
   }
 
-  if (response.status !== 401 || !refreshToken) return toClientResponse(response);
+  if (response.status !== 401) return toClientResponse(response);
+  if (!refreshToken) {
+    const clientResponse = toClientResponse(response);
+    clearSessionTokensFromResponse(clientResponse);
+    return clientResponse;
+  }
 
   const renewed = await refreshTokenPair(refreshToken);
   if (!renewed) {
@@ -124,7 +129,8 @@ async function proxy(request: NextRequest, context: ProxyContext): Promise<NextR
       accessToken: renewed.accessToken,
     });
     const clientResponse = toClientResponse(retried);
-    writeSessionTokensToResponse(clientResponse, renewed);
+    if (retried.status === 401) clearSessionTokensFromResponse(clientResponse);
+    else writeSessionTokensToResponse(clientResponse, renewed);
     return clientResponse;
   } catch {
     return toClientResponse(response);

@@ -49,6 +49,12 @@ export function useDraftPhotos(draftId: string) {
     mutationFn: (input: { expectedVersion: number; files: readonly File[] }) =>
       uploadDraftPhotos({ draftId, ...input }),
     onSuccess: applyResult,
+    // 앞 묶음만 저장됐거나 응답이 유실돼도 다음 요청에는 서버의 최신 version을 씁니다.
+    onError: () =>
+      Promise.all([
+        queryClient.invalidateQueries({ queryKey: detailKey }),
+        queryClient.invalidateQueries({ queryKey: listingDraftQueryKeys.lists() }),
+      ]),
   });
 
   const remove = useMutation({

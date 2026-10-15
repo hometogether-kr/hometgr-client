@@ -21,6 +21,12 @@ interface KakaoMapsSdk {
     options: { center: KakaoLatLng; level: number; keyboardShortcuts: boolean },
   ) => KakaoMapInstance;
   Marker: new (options: { map: KakaoMapInstance; position: KakaoLatLng }) => KakaoMarkerInstance;
+  services: {
+    Geocoder: new () => {
+      addressSearch(address: string, callback: (result: unknown, status: unknown) => void): void;
+    };
+    Status: { OK: string };
+  };
 }
 
 const isFunction = (value: unknown) => typeof value === "function";
@@ -31,6 +37,10 @@ const mapsSdkSchema = z.object({
   LatLng: z.custom<KakaoMapsSdk["LatLng"]>(isFunction),
   Map: z.custom<KakaoMapsSdk["Map"]>(isFunction),
   Marker: z.custom<KakaoMapsSdk["Marker"]>(isFunction),
+  services: z.object({
+    Geocoder: z.custom<KakaoMapsSdk["services"]["Geocoder"]>(isFunction),
+    Status: z.object({ OK: z.string() }),
+  }),
 });
 
 let sdkPromise: Promise<KakaoMapsSdk> | undefined;
@@ -40,7 +50,7 @@ function readMaps(): unknown {
   return typeof kakao === "object" && kakao !== null ? Reflect.get(kakao, "maps") : undefined;
 }
 
-/** 지도 표시 SDK만 요청한다. 주소 검색·좌표 변환용 services 라이브러리는 로드하지 않는다. */
+/** 지도 컴포넌트가 마운트될 때만 지도와 주소 검색 SDK를 요청합니다. */
 export function loadKakaoMaps(javaScriptKey: string): Promise<KakaoMapsSdk> {
   if (sdkPromise) return sdkPromise;
   const request = new Promise<KakaoMapsSdk>((resolve, reject) => {
@@ -80,7 +90,7 @@ export function loadKakaoMaps(javaScriptKey: string): Promise<KakaoMapsSdk> {
       return;
     }
     script.async = true;
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?${new URLSearchParams({ appkey: javaScriptKey, autoload: "false" }).toString()}`;
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?${new URLSearchParams({ appkey: javaScriptKey, autoload: "false", libraries: "services" }).toString()}`;
     script.onload = initialize;
     script.onerror = () => finish();
     document.head.appendChild(script);

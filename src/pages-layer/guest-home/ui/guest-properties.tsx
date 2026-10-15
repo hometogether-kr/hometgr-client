@@ -5,16 +5,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import type { SearchRegion } from "@/domains/region";
 import { fetchRooms, type Room, roomQueryKeys } from "@/domains/room";
+import {
+  EMPTY_ROOM_FILTER,
+  getRoomRegionFilter,
+  serializeRoomFilter,
+  toRoomListQuery,
+  useRoomFilterRegions,
+} from "@/features/filter-rooms";
 import { ROUTES } from "@/shared/config";
 
 import styles from "./guest-home.module.css";
 
-const regions = ["노원구", "동대문구", "신촌", "동작구", "성북구"];
-
 function PropertyCard({ room }: { room: Room }) {
   return (
-    <Link href={`${ROUTES.rooms}/${room.id}`} className={styles.propertyCard}>
+    <Link href={`${ROUTES.rooms}/${room.id}`} prefetch={false} className={styles.propertyCard}>
       <span className={styles.propertyImage}>
         {room.thumbnailUrl ? (
           <Image
@@ -35,10 +41,13 @@ function PropertyCard({ room }: { room: Room }) {
   );
 }
 
-function PropertyResults({ region, limit }: { region?: string; limit: number }) {
+function PropertyResults({ region, limit }: { region?: SearchRegion; limit: number }) {
+  const filter = { ...EMPTY_ROOM_FILTER, ...getRoomRegionFilter(region ?? null) };
   const query = useQuery({
-    queryKey: roomQueryKeys.home(region),
-    queryFn: ({ signal }) => fetchRooms({ page: 1, sort: "latest", region }, signal),
+    queryKey: roomQueryKeys.home(serializeRoomFilter(filter)),
+    queryFn: ({ signal }) => fetchRooms(toRoomListQuery(filter), signal),
+    staleTime: 0,
+    refetchOnMount: "always",
   });
   if (query.isPending)
     return (
@@ -81,7 +90,10 @@ function PropertyResults({ region, limit }: { region?: string; limit: number }) 
 }
 
 export function GuestProperties() {
-  const [region, setRegion] = useState("노원구");
+  const regions = useRoomFilterRegions();
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+  const region =
+    regions.data?.find((item) => item.sigungu === selectedDistrict) ?? regions.data?.[0];
   return (
     <section className={styles.properties} aria-labelledby="guest-properties-title">
       <div className={styles.container}>
@@ -89,18 +101,40 @@ export function GuestProperties() {
           지역별 매물
         </h2>
         <div className={styles.regionTabs} aria-label="매물 지역">
-          {regions.map((item) => (
+          {(regions.data ?? []).map((item) => (
             <button
               type="button"
-              key={item}
-              aria-pressed={region === item}
-              onClick={() => setRegion(item)}
+              key={item.sigungu}
+              aria-pressed={region?.sigungu === item.sigungu}
+              onClick={() => setSelectedDistrict(item.sigungu)}
             >
-              {item}
+              {item.name}
             </button>
           ))}
         </div>
-        <PropertyResults region={region} limit={8} />
+        {regions.isPending ? (
+          <p role="status" className={styles.emptyRegion}>
+            지역 목록을 불러오고 있어요.
+          </p>
+        ) : regions.isError ? (
+          <div role="alert" className={styles.emptyRegion}>
+            <p>지역 목록을 불러오지 못했어요.</p>
+            <button
+              type="button"
+              disabled={regions.isFetching}
+              onClick={() => void regions.refetch()}
+              className="mt-3 underline"
+            >
+              다시 시도
+            </button>
+          </div>
+        ) : region ? (
+          <PropertyResults region={region} limit={8} />
+        ) : (
+          <p role="status" className={styles.emptyRegion}>
+            현재 공개 매물이 있는 지역이 없습니다.
+          </p>
+        )}
         <h3 className={styles.newPropertiesHeading}>신규 등록 매물</h3>
         <PropertyResults limit={4} />
       </div>

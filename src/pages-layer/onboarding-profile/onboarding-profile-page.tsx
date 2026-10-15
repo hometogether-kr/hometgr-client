@@ -27,26 +27,41 @@ import { OnboardingLayout } from "@/widgets/onboarding-layout";
 
 interface OnboardingProfilePageProps {
   returnMode: AccountMode;
+  returnTo?: string | null;
 }
 
-export function OnboardingProfilePage({ returnMode }: OnboardingProfilePageProps) {
+export function OnboardingProfilePage({ returnMode, returnTo }: OnboardingProfilePageProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { session, isAuthenticated, isLoading } = useSession({ mode: "always" });
   const { setMode } = useAccountMode();
   const [formError, setFormError] = useState<string>();
+  const destination = returnTo ?? ACCOUNT_MODE_HOME[returnMode];
+  const termsHref = returnTo
+    ? `${ROUTES.auth.terms}?${new URLSearchParams({ returnTo })}`
+    : ROUTES.auth.terms;
 
   // 세션과 브라우저에 저장된 동의 기록을 확인한 뒤 가입 화면에 머물 수 있습니다.
   useEffect(() => {
     if (isLoading) return;
     if (!isAuthenticated) {
-      router.replace(ROUTES.auth.login + "?error=session_expired");
+      const params = new URLSearchParams({ error: "session_expired" });
+      if (returnTo) params.set("returnTo", returnTo);
+      router.replace(`${ROUTES.auth.login}?${params}`);
     } else if (!session.onboardingRequired) {
-      router.replace(ACCOUNT_MODE_HOME[returnMode]);
+      router.replace(destination);
     } else if (!hasRequiredOnboardingTermsAgreement()) {
-      router.replace(ROUTES.auth.terms);
+      router.replace(termsHref);
     }
-  }, [isLoading, isAuthenticated, session.onboardingRequired, returnMode, router]);
+  }, [
+    isLoading,
+    isAuthenticated,
+    session.onboardingRequired,
+    destination,
+    returnTo,
+    termsHref,
+    router,
+  ]);
 
   const mutation = useMutation({
     mutationFn: completeOnboarding,
@@ -58,7 +73,7 @@ export function OnboardingProfilePage({ returnMode }: OnboardingProfilePageProps
       clearOnboardingTermsAgreement();
       setMode(returnMode);
       queryClient.setQueryData(userQueryKeys.me(), nextSession);
-      router.replace(ACCOUNT_MODE_HOME[returnMode]);
+      router.replace(destination);
     },
     onError: () => setFormError("가입을 완료하지 못했습니다. 잠시 후 다시 시도해주세요."),
   });
@@ -67,7 +82,7 @@ export function OnboardingProfilePage({ returnMode }: OnboardingProfilePageProps
     if (mutation.isPending) return;
     setFormError(undefined);
     if (!hasRequiredOnboardingTermsAgreement()) {
-      router.push(ROUTES.auth.terms);
+      router.push(termsHref);
       return;
     }
     if (!session.user?.email) {
@@ -91,7 +106,7 @@ export function OnboardingProfilePage({ returnMode }: OnboardingProfilePageProps
     <OnboardingLayout
       title="기본 정보를 확인해주세요"
       description="이름과 연락처를 확인하면 가입이 완료됩니다."
-      onBack={() => router.push(ROUTES.auth.terms)}
+      onBack={() => router.push(termsHref)}
     >
       {isLoading || !session.user || !session.onboardingRequired ? (
         <div className="min-h-[340px]" role="status">

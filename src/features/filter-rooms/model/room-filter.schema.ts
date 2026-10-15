@@ -5,7 +5,6 @@ import {
   CONTRACT_TERMS,
   DEFAULT_ROOM_SORT,
   GENDER_PREFERENCES,
-  OCCUPANCY_COUNTS,
   ROOM_SORTS,
   ROOM_TYPES,
 } from "@/domains/room";
@@ -16,21 +15,13 @@ import type { RoomFilter } from "./room-filter";
  * URL searchParams → RoomFilter 파싱
  *
  * 핵심 규칙(설계 §2-4·§3.4): **필드마다 `.catch`**. 객체 스키마의 safeParse는 한 필드가
- * 깨지면 통째로 실패하므로, `?rentMax=abc` 하나가 필터 전체를 날려버립니다. 각 필드에
+ * 깨지면 통째로 실패하므로, 날짜 하나의 오류가 지역까지 날려버립니다. 각 필드에
  * `.catch`를 붙이면 그 필드만 버리고 나머지는 살아남습니다.
  *
  * URL 파라미터명은 짧게(q·moveIn·term·type), RoomFilter 필드명은 서술적으로 두고
  * `parseRoomFilter`에서 매핑합니다. `.trim().min(1)`로 빈 문자열은 미지정 취급합니다.
  */
 const optionalString = z.string().trim().min(1).optional().catch(undefined);
-
-/** 원 단위 정수 금액. 음수·NaN("abc")은 버립니다(zod v4는 NaN을 number로 통과시키지 않음) */
-const optionalAmount = z
-  .preprocess(
-    (value) => (typeof value === "string" && value.trim() === "" ? undefined : value),
-    z.coerce.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER).optional(),
-  )
-  .catch(undefined);
 
 /** 같은 key 반복(type=a&type=b) 또는 단일 문자열을 배열로 정규화 */
 function toStringArray(value: unknown): string[] {
@@ -47,13 +38,8 @@ const roomFilterParamsSchema = z.object({
   sigungu: z.enum(SIGUNGU_CODES).optional().catch(undefined),
   moveIn: z.iso.date().optional().catch(undefined),
   term: z.enum(CONTRACT_TERMS).optional().catch(undefined),
-  depositMin: optionalAmount,
-  depositMax: optionalAmount,
-  rentMin: optionalAmount,
-  rentMax: optionalAmount,
   // 잘못된 유형 값이 하나라도 섞이면 배열 전체를 비웁니다(그 필드만 버림).
   type: z.preprocess(toStringArray, z.array(z.enum(ROOM_TYPES)).max(1)).catch([]),
-  people: z.enum(OCCUPANCY_COUNTS).optional().catch(undefined),
   gender: z.enum(GENDER_PREFERENCES).optional().catch(undefined),
   sort: z.enum(ROOM_SORTS).catch(DEFAULT_ROOM_SORT),
   page: z.coerce.number().int().positive().catch(1),
@@ -77,12 +63,7 @@ export function parseRoomFilter(
     sigungu: data?.sigungu ?? searchedRegion?.sigungu ?? null,
     moveInDate: data?.moveIn ?? null,
     minTerm: data?.term ?? null,
-    depositMin: data?.depositMin ?? null,
-    depositMax: data?.depositMax ?? null,
-    rentMin: data?.rentMin ?? null,
-    rentMax: data?.rentMax ?? null,
     roomTypes: data?.type ?? [],
-    people: data?.people ?? null,
     gender: data?.gender ?? null,
     sort: data?.sort ?? DEFAULT_ROOM_SORT,
     page: data?.page ?? 1,
@@ -117,13 +98,8 @@ export function getRoomFilterIssues(
       "건물 유형은 신규 5종 중 하나를 다시 선택해주세요. 이전 유형과 다중 선택은 지원하지 않습니다.",
     );
   const fields = {
-    depositMin: filter.depositMin,
-    depositMax: filter.depositMax,
-    rentMin: filter.rentMin,
-    rentMax: filter.rentMax,
     moveIn: filter.moveInDate,
     term: filter.minTerm,
-    people: filter.people,
     gender: filter.gender,
   };
   for (const [key, value] of Object.entries(fields)) {
@@ -131,14 +107,6 @@ export function getRoomFilterIssues(
       issues.push(
         "주소에 유효하지 않은 필터 값이 있습니다. 해당 조건을 다시 선택하거나 초기화해주세요.",
       );
-  }
-  if (
-    (filter.depositMin !== null &&
-      filter.depositMax !== null &&
-      filter.depositMin > filter.depositMax) ||
-    (filter.rentMin !== null && filter.rentMax !== null && filter.rentMin > filter.rentMax)
-  ) {
-    issues.push("최소 금액이 최대 금액보다 큽니다. 금액 범위를 다시 입력해주세요.");
   }
   return [...new Set(issues)];
 }

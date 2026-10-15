@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { saveOnboardingTermsAgreement } from "@/features/agree-terms";
 import { OnboardingTermsPage } from "@/pages-layer/onboarding-terms";
 import { ROUTES } from "@/shared/config";
+import { parseAuthReturnPath } from "@/shared/lib/auth-return";
 
 export default function Page() {
   const router = useRouter();
@@ -15,7 +16,14 @@ export default function Page() {
         saveOnboardingTermsAgreement(agreedIds);
         router.push(ROUTES.auth.profile);
       }}
-      onBack={() => router.push(ROUTES.auth.login)}
+      onBack={() => {
+        const returnTo = parseAuthReturnPath(
+          new URLSearchParams(window.location.search).get("returnTo"),
+        );
+        const params = new URLSearchParams();
+        if (returnTo) params.set("returnTo", returnTo);
+        router.push(`${ROUTES.auth.login}${params.size ? `?${params}` : ""}`);
+      }}
     />
   );
 }

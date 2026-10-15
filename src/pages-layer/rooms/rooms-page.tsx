@@ -1,11 +1,11 @@
 import type { RoomFilter } from "@/features/filter-rooms";
+import { serializeRoomFilter } from "@/features/filter-rooms";
 import type { MockRoomSourceOptions } from "@/features/preview-rooms";
 import { RoomFilterBar } from "@/widgets/room-filter-bar";
 import { RoomList } from "@/widgets/room-list";
-import { RoomSearchHero } from "@/widgets/room-search-hero";
 import { SiteLayout } from "@/widgets/site-layout";
 
-import { PreviewRoomSearchHero } from "./ui/preview-room-search-hero";
+import { RoomSearchHero } from "./ui/room-search-hero";
 
 interface RoomsPageProps {
   filter: RoomFilter;
@@ -28,16 +28,9 @@ export function RoomsPage({ filter, issues, previewOptions }: RoomsPageProps) {
   return (
     <SiteLayout>
       <div className="mx-auto w-full max-w-[1600px] px-5 py-8 lg:px-10">
-        {previewOptions ? (
-          <PreviewRoomSearchHero filter={filter} previewOptions={previewOptions} />
-        ) : (
-          <RoomSearchHero
-            key={JSON.stringify([filter.keyword, filter.sido, filter.sigungu])}
-            filter={filter}
-          />
-        )}
+        <RoomSearchHero filter={filter} previewOptions={previewOptions} />
         <RoomFilterBar
-          key={JSON.stringify(previewOptions) ?? "live"}
+          key={`filters:${serializeRoomFilter(filter)}:${JSON.stringify(previewOptions) ?? "live"}`}
           filter={filter}
           previewOptions={previewOptions}
         />
@@ -53,7 +46,7 @@ export function RoomsPage({ filter, issues, previewOptions }: RoomsPageProps) {
           </div>
         ) : (
           <RoomList
-            key={JSON.stringify(previewOptions) ?? "live"}
+            key={`list:${JSON.stringify(previewOptions) ?? "live"}`}
             filter={filter}
             previewOptions={previewOptions}
           />

@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getRoomDetail } from "@/domains/listing/server";
+import { parseRoomListReturnHref } from "@/features/filter-rooms";
 import { getPreviewDetailNavigation, getRoomPreviewOptions } from "@/features/preview-rooms";
 import { ListingDetailPage, PreviewListingDetailPage } from "@/pages-layer/listing-detail";
 
@@ -27,5 +28,5 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   if (room === null) notFound();
 
-  return <ListingDetailPage room={room} />;
+  return <ListingDetailPage room={room} returnHref={parseRoomListReturnHref(query.returnTo)} />;
 }

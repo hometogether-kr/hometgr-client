@@ -15,7 +15,7 @@ interface SectionProps {
 }
 
 /**
- * 매물 유형 (다중 선택)
+ * 매물 유형 (단일 선택)
  *
  * ChipField 대신 SectionHeader + ChipNormal을 직접 조합합니다 — 다른 섹션과 동일하게
  * 헤더에 "초기화"를 두기 위함입니다(ChipField에는 초기화 슬롯이 없음).
@@ -31,8 +31,9 @@ export function RoomTypeSection({ draft, patch }: SectionProps) {
   return (
     <div>
       <SectionHeader
-        title="건물 유형 (하나 선택)"
+        title="매물 유형"
         titleId={titleId}
+        className="mb-1.5"
         canReset={draft.roomTypes.length > 0}
         onReset={() => patch({ roomTypes: [] })}
       />
@@ -42,6 +43,7 @@ export function RoomTypeSection({ draft, patch }: SectionProps) {
             key={option.value}
             shape="round"
             size="m"
+            className="h-9 py-0"
             selected={draft.roomTypes.includes(option.value)}
             onClick={() => toggle(option.value)}
           >

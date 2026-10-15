@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { formatManwon, type RoomDetail } from "@/domains/listing";
+import { formatManwon, formatMonthlyRent, type RoomDetail } from "@/domains/listing";
 import { Icon } from "@/shared/ui/icons";
 
 export interface RoomReservationSummaryProps {
@@ -43,7 +43,7 @@ export function RoomReservationSummary({ room }: RoomReservationSummaryProps) {
           <span className="inline-flex items-center gap-1.5 font-semibold text-grayscale-800">
             <Icon name="payments" size={18} className="text-grayscale-400" />
             보증금 {formatManwon(room.price.depositKrw)} / 월세{" "}
-            {formatManwon(room.price.monthlyRentKrw)}
+            {formatMonthlyRent(room.price.monthlyRentManwon)}
           </span>
         </div>
       </div>
