@@ -9,6 +9,7 @@ import {
   refreshTokenPair,
   writeSessionTokensToResponse,
 } from "@/shared/api/server";
+import { AUTH_RETURN_TO_COOKIE } from "@/shared/lib/auth-return";
 
 const consentItemSchema = z.object({
   key: z.enum([
@@ -127,6 +128,7 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     headers: { "Cache-Control": "no-store", Pragma: "no-cache" },
   });
   nextResponse.cookies.delete(AUTH_MODE_COOKIE);
+  nextResponse.cookies.delete(AUTH_RETURN_TO_COOKIE);
   writeSessionTokensToResponse(nextResponse, {
     accessToken: nextAccessToken,
     refreshToken: nextRefreshToken,

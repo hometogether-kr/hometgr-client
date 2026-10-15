@@ -3,6 +3,7 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
+import { GUEST_LOCATION_DISCLOSURE, MEMBER_LOCATION_DISCLOSURE } from "@/domains/listing";
 import type { MockRoomSource, MockRoomSourceOptions } from "@/features/preview-rooms";
 import { previewRoomQueryKeys } from "@/features/preview-rooms";
 import { getKakaoMapJavaScriptKey } from "@/shared/config";
@@ -46,8 +47,6 @@ export function PreviewDetailContent({
     setNotice(
       "실제 로그인은 실행하지 않습니다. 위의 회원 미리보기에서 공개 정보 차이를 확인할 수 있어요.",
     );
-  const explainReservationPreview = () =>
-    setNotice("미리보기에서는 예약·계약 기능을 실행하지 않습니다.");
   const mapKey = getKakaoMapJavaScriptKey();
 
   return (
@@ -57,7 +56,13 @@ export function PreviewDetailContent({
       ) : (
         <PhotoGalleryGuest photos={room.photos} onRequireLogin={explainLoginPreview} />
       )}
-      <ListingHeader room={room} />
+      <ListingHeader
+        room={{
+          ...room,
+          addressDisclosureNote:
+            viewer === "member" ? MEMBER_LOCATION_DISCLOSURE : GUEST_LOCATION_DISCLOSURE,
+        }}
+      />
       <p role="status" className="min-h-6 text-sm text-grayscale-600">
         {notice || "가상 매물입니다. 실제 예약·계약은 진행되지 않습니다."}
       </p>
@@ -81,9 +86,7 @@ export function PreviewDetailContent({
           )}
           {location.access === "member" ? (
             <DetailSection title="위치">
-              <p className="text-body-1 text-grayscale-500">
-                동·호수 등 상세 위치는 방문 예약 후 확인할 수 있습니다.
-              </p>
+              <p className="text-body-1 text-grayscale-500">{MEMBER_LOCATION_DISCLOSURE}</p>
               <p className="text-body-1 break-words text-grayscale-800">
                 {location.buildingAddress}
               </p>
@@ -110,17 +113,9 @@ export function PreviewDetailContent({
           <HostCard roomId={room.id} host={room.host} href={null} />
         </div>
         {viewer === "member" ? (
-          <PriceSidebarMember
-            price={room.price}
-            canRequestVisit={false}
-            canRequestContract={false}
-            isRequestingContract={false}
-            onRequestContract={explainReservationPreview}
-            onRequestVisit={explainReservationPreview}
-            onViewReservation={explainReservationPreview}
-          />
+          <PriceSidebarMember price={room.price} canRequestVisit={false} />
         ) : (
-          <PriceSidebarGuest price={room.price} onRequireLogin={explainLoginPreview} />
+          <PriceSidebarGuest price={room.price} />
         )}
       </div>
     </>

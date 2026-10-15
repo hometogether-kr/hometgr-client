@@ -8,6 +8,10 @@ import {
   ROOM_CAPACITY_LABEL,
 } from "@/domains/listing-draft";
 
+import {
+  GUEST_LOCATION_DISCLOSURE,
+  MEMBER_LOCATION_DISCLOSURE,
+} from "../model/location-disclosure";
 import type { RoomDetail, RoomHost, RoomPhoto } from "../model/room";
 import type {
   LegacyFullDetailDto,
@@ -19,9 +23,6 @@ import type {
   RegistrationPreviewDetailDto,
 } from "./room.dto";
 
-/** 회원 여부와 무관하게 항상 노출하는 고정 안내 문구 — 서버가 값을 내려주지 않는다 */
-const ADDRESS_DISCLOSURE_NOTE = "상세 주소는 방문 예약 확정 후 공개됩니다";
-const LOCATION_NOTE = "상세 위치는 방문 예약 후 확인할 수 있습니다.";
 const SQUARE_METERS_PER_PYEONG = 3.3058;
 
 function pad2(value: number): string {
@@ -83,10 +84,11 @@ function toLegacyPreviewDetail(dto: LegacyPreviewDetailDto): RoomDetail {
 
   return {
     id: preview.roomId,
+    viewerAccess: "guest",
     title: preview.title?.trim() || locationSummary || "매물 정보",
     subtitle: preview.subtitle?.trim() || null,
     addressRegion: preview.addressRegion,
-    addressDisclosureNote: ADDRESS_DISCLOSURE_NOTE,
+    addressDisclosureNote: GUEST_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
       depositKrw: preview.pricing.depositKrw,
@@ -101,7 +103,7 @@ function toLegacyPreviewDetail(dto: LegacyPreviewDetailDto): RoomDetail {
     description: "",
     amenities: [],
     photos: preview.representativeMedia ? toPhotos([preview.representativeMedia], "매물 사진") : [],
-    locationNote: LOCATION_NOTE,
+    locationNote: GUEST_LOCATION_DISCLOSURE,
     host: toHost(dto.host),
     latestReservation: dto.latestReservation,
     canRequestVisit: dto.canRequestVisit,
@@ -114,10 +116,11 @@ function toRegistrationPreviewDetail(dto: RegistrationPreviewDetailDto): RoomDet
 
   return {
     id: preview.roomId,
+    viewerAccess: "guest",
     title: preview.title?.trim() || locationSummary || "매물 정보",
     subtitle: preview.subtitle?.trim() || null,
     addressRegion: preview.addressRegion,
-    addressDisclosureNote: ADDRESS_DISCLOSURE_NOTE,
+    addressDisclosureNote: GUEST_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
       depositKrw: preview.pricing.depositKrw,
@@ -132,7 +135,7 @@ function toRegistrationPreviewDetail(dto: RegistrationPreviewDetailDto): RoomDet
     description: "",
     amenities: [],
     photos: preview.representativeMedia ? toPhotos([preview.representativeMedia], "매물 사진") : [],
-    locationNote: LOCATION_NOTE,
+    locationNote: GUEST_LOCATION_DISCLOSURE,
     host: toHost(dto.host),
     latestReservation: dto.latestReservation,
     canRequestVisit: dto.canRequestVisit,
@@ -151,10 +154,11 @@ function toLegacyFullDetail(dto: LegacyFullDetailDto): RoomDetail {
 
   return {
     id: dto.id,
+    viewerAccess: "member",
     title,
     subtitle: dto.subtitle?.trim() || null,
     addressRegion: dto.addressRegion ?? null,
-    addressDisclosureNote: ADDRESS_DISCLOSURE_NOTE,
+    addressDisclosureNote: MEMBER_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
       depositKrw: dto.depositKrw,
@@ -171,7 +175,7 @@ function toLegacyFullDetail(dto: LegacyFullDetailDto): RoomDetail {
     description: dto.description ?? "",
     amenities: dto.amenities,
     photos: toPhotos(dto.media, title),
-    locationNote: LOCATION_NOTE,
+    locationNote: MEMBER_LOCATION_DISCLOSURE,
     host: toHost(dto.host),
     latestReservation: dto.latestReservation,
     canRequestVisit: dto.canRequestVisit,
@@ -205,10 +209,11 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
 
   return {
     id: dto.roomId,
+    viewerAccess: "member",
     title,
     subtitle: dto.subtitle?.trim() || null,
     addressRegion: location.addressRegion,
-    addressDisclosureNote: ADDRESS_DISCLOSURE_NOTE,
+    addressDisclosureNote: MEMBER_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
       depositKrw: pricing.depositKrw,
@@ -230,7 +235,7 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
     precautions: descriptions.precautions ?? "",
     amenities,
     photos: toPhotos(dto.media, title),
-    locationNote: LOCATION_NOTE,
+    locationNote: MEMBER_LOCATION_DISCLOSURE,
     household: {
       residentCount: household.residentCount,
       residentTypeLabel:

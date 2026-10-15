@@ -8,6 +8,7 @@ import { useState } from "react";
 import { userQueryKeys } from "@/domains/user";
 import { ApiError } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
+import { parseAuthReturnPath } from "@/shared/lib/auth-return";
 
 const MAX_RETRY_COUNT = 2;
 
@@ -57,7 +58,10 @@ export function QueryProvider({ children }: { children: ReactNode }) {
     created.client = createQueryClient(() => {
       // 헤더가 곧바로 비로그인으로 돌아오도록 세션 캐시를 비웁니다.
       created.client?.removeQueries({ queryKey: userQueryKeys.me() });
-      router.replace(`${ROUTES.auth.login}?error=session_expired`);
+      const params = new URLSearchParams({ error: "session_expired" });
+      const returnTo = parseAuthReturnPath(window.location.pathname + window.location.search);
+      if (returnTo) params.set("returnTo", returnTo);
+      router.replace(`${ROUTES.auth.login}?${params}`);
     });
 
     return created.client;

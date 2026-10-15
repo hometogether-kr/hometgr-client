@@ -30,13 +30,15 @@ export interface RoomHousehold {
 }
 
 export interface RoomDetail {
+  /** 서버가 실제로 반환한 공개 범위. 로그인 쿠키 힌트와 별개입니다. */
+  viewerAccess: "guest" | "member";
   id: string;
   /** 서버에서 생성한 제목. 누락된 레거시 응답만 지역으로 대체합니다. */
   title: string;
   /** 관리자가 입력한 선택 부제목. */
   subtitle: string | null;
   addressRegion: string | null;
-  /** "상세 주소는 방문 예약 확정 후 공개됩니다" — 회원 여부와 무관하게 항상 노출 */
+  /** 비회원은 로그인 후 건물 위치 확인, 회원은 동·호수 비공개 안내. */
   addressDisclosureNote: string;
   /** 집주인 정보 페이지의 매물 요약 카드용 짧은 위치 표기 */
   locationSummary: string;

@@ -1,4 +1,4 @@
-import type { RoomDetail } from "@/domains/listing";
+import { GUEST_LOCATION_DISCLOSURE, type RoomDetail } from "@/domains/listing";
 import type { GenderPreference, OccupancyCount, Room, RoomType } from "@/domains/room";
 
 export interface MockListing {
@@ -52,11 +52,12 @@ export function createMockListings(): MockListing[] {
           availableFrom,
         },
         detail: {
+          viewerAccess: "member",
           id,
           title: buildingName,
           subtitle: "화면 검증용 가상 매물입니다.",
           addressRegion: region,
-          addressDisclosureNote: "건물 위치는 로그인 후 확인할 수 있어요.",
+          addressDisclosureNote: GUEST_LOCATION_DISCLOSURE,
           locationSummary: district,
           price: {
             depositKrw: deposit * 10000,

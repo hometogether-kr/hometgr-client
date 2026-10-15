@@ -1,15 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import type { RoomDetail } from "@/domains/listing";
+import {
+  GUEST_LOCATION_DISCLOSURE,
+  MEMBER_LOCATION_DISCLOSURE,
+  type RoomDetail,
+} from "@/domains/listing";
 import { useSession } from "@/domains/user";
 import { LoginPromptModal } from "@/features/prompt-login";
-import { useRecordContractIntent } from "@/features/record-contract-intent";
-import { ApiError } from "@/shared/api";
-import { ROUTES } from "@/shared/config";
-import { useToast } from "@/shared/ui/toast";
 import { SiteLayout } from "@/widgets/site-layout";
 
 import { ContractCardGuest } from "./ui/contract-card-guest";
@@ -38,54 +38,38 @@ export interface ListingDetailPageProps {
  */
 export function ListingDetailPage({ room }: ListingDetailPageProps) {
   const router = useRouter();
-  const { isAuthenticated } = useSession();
-  const { showToast } = useToast();
-  const { recordContractIntent, isRecordingContractIntent } = useRecordContractIntent();
+  const { isAuthenticated, isLoading } = useSession();
+  const canViewMemberDetail = isAuthenticated && room.viewerAccess === "member";
   const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   const requireLogin = () => setLoginModalOpen(true);
-  const latestReservation = room.latestReservation;
-  const canRequestContract = latestReservation?.status === "visitCompleted";
 
-  const handleContractRequest = async () => {
-    if (!latestReservation || !canRequestContract) return;
-
-    try {
-      await recordContractIntent({
-        reservationId: latestReservation.id,
-        intent: "wantContract",
-      });
-      showToast("계약 의사를 집주인에게 전달했어요.", { variant: "success" });
-      router.push(ROUTES.reservationDetail(latestReservation.id));
-    } catch (error) {
-      showToast(error instanceof ApiError ? error.message : "계약 요청을 처리하지 못했어요.", {
-        variant: "error",
-      });
-    }
-  };
-
-  const handleViewReservation = () => {
-    if (latestReservation) {
-      router.push(ROUTES.reservationDetail(latestReservation.id));
-      return;
-    }
-    router.push(ROUTES.reservations);
-  };
+  // 서버 렌더 중 갱신할 수 없던 토큰을 /me BFF가 복구하면 서버 상세도 다시 조회합니다.
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && room.viewerAccess === "guest") router.refresh();
+  }, [isLoading, isAuthenticated, room.viewerAccess, room.id, router]);
 
   return (
     <SiteLayout background="white">
       <div className="flex w-full flex-col gap-10 px-4 py-8 md:gap-12 md:px-[200px] md:py-[100px]">
-        {isAuthenticated ? (
+        {canViewMemberDetail ? (
           <PhotoGalleryMember photos={room.photos} />
         ) : (
           <PhotoGalleryGuest photos={room.photos} onRequireLogin={requireLogin} />
         )}
 
-        <ListingHeader room={room} />
+        <ListingHeader
+          room={{
+            ...room,
+            addressDisclosureNote: canViewMemberDetail
+              ? MEMBER_LOCATION_DISCLOSURE
+              : GUEST_LOCATION_DISCLOSURE,
+          }}
+        />
 
         <div className="flex w-full flex-col gap-8 md:flex-row md:items-start md:gap-10">
           <div className="flex w-full flex-col gap-7 md:flex-1">
-            {isAuthenticated ? (
+            {canViewMemberDetail ? (
               <>
                 <ContractCardMember room={room} />
                 <DescriptionCard
@@ -108,18 +92,10 @@ export function ListingDetailPage({ room }: ListingDetailPageProps) {
             <HostCard roomId={room.id} host={room.host} />
           </div>
 
-          {isAuthenticated ? (
-            <PriceSidebarMember
-              price={room.price}
-              canRequestVisit={room.canRequestVisit}
-              canRequestContract={canRequestContract}
-              isRequestingContract={isRecordingContractIntent}
-              onRequestContract={() => void handleContractRequest()}
-              onRequestVisit={() => router.push(ROUTES.newRoomReservation(room.id))}
-              onViewReservation={handleViewReservation}
-            />
+          {canViewMemberDetail ? (
+            <PriceSidebarMember price={room.price} canRequestVisit={room.canRequestVisit} />
           ) : (
-            <PriceSidebarGuest price={room.price} onRequireLogin={requireLogin} />
+            <PriceSidebarGuest price={room.price} />
           )}
         </div>
       </div>
