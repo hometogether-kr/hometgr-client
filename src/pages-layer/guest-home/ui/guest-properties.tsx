@@ -20,7 +20,7 @@ import styles from "./guest-home.module.css";
 
 function PropertyCard({ room }: { room: Room }) {
   return (
-    <Link href={`${ROUTES.rooms}/${room.id}`} className={styles.propertyCard}>
+    <Link href={`${ROUTES.rooms}/${room.id}`} prefetch={false} className={styles.propertyCard}>
       <span className={styles.propertyImage}>
         {room.thumbnailUrl ? (
           <Image
@@ -46,6 +46,8 @@ function PropertyResults({ region, limit }: { region?: SearchRegion; limit: numb
   const query = useQuery({
     queryKey: roomQueryKeys.home(serializeRoomFilter(filter)),
     queryFn: ({ signal }) => fetchRooms(toRoomListQuery(filter), signal),
+    staleTime: 0,
+    refetchOnMount: "always",
   });
   if (query.isPending)
     return (

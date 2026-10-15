@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -27,6 +28,7 @@ import { PriceSidebarMember } from "./ui/price-sidebar-member";
 
 export interface ListingDetailPageProps {
   room: RoomDetail;
+  returnHref: string;
 }
 
 /**
@@ -36,7 +38,7 @@ export interface ListingDetailPageProps {
  * 비회원/회원에 따라 계약 조건·위치·사진 갤러리가 다르게 렌더링됩니다. 비회원이
  * 잠긴 정보를 열람하려 하면 로그인 모달을 띄웁니다.
  */
-export function ListingDetailPage({ room }: ListingDetailPageProps) {
+export function ListingDetailPage({ room, returnHref }: ListingDetailPageProps) {
   const router = useRouter();
   const { isAuthenticated, isLoading } = useSession();
   const canViewMemberDetail = isAuthenticated && room.viewerAccess === "member";
@@ -52,6 +54,11 @@ export function ListingDetailPage({ room }: ListingDetailPageProps) {
   return (
     <SiteLayout background="white">
       <div className="flex w-full flex-col gap-10 px-4 py-8 md:gap-12 md:px-[200px] md:py-[100px]">
+        <nav aria-label="목록 복귀">
+          <Link href={returnHref} scroll={false} prefetch={false} className="text-sm underline">
+            검색 결과로 돌아가기
+          </Link>
+        </nav>
         {canViewMemberDetail ? (
           <PhotoGalleryMember photos={room.photos} />
         ) : (

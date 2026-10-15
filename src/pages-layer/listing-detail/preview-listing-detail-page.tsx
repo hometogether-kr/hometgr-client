@@ -50,7 +50,7 @@ export function PreviewListingDetailPage({
     <SiteLayout background="white">
       <div className="mx-auto flex w-full max-w-[1920px] flex-col gap-10 px-4 py-8 md:gap-12 md:px-10 xl:px-[200px] xl:py-[100px]">
         <nav aria-label="상세 미리보기" className="flex flex-wrap items-center gap-4 text-sm">
-          <Link href={returnHref} className="underline">
+          <Link href={returnHref} scroll={false} prefetch={false} className="underline">
             검색 결과로 돌아가기
           </Link>
           <span className="text-grayscale-600">모의 상세 · 실제 로그인 상태와 무관합니다.</span>

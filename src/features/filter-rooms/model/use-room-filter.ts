@@ -6,6 +6,7 @@ import type { RoomSort } from "@/domains/room";
 
 import type { RoomFilter } from "./room-filter";
 import { buildRoomFilterUrl, EMPTY_ROOM_FILTER } from "./room-filter";
+import { clearRoomListPosition } from "./room-list-navigation";
 
 /**
  * 필터·정렬을 URL에 반영하는 쓰기 훅
@@ -29,7 +30,9 @@ export function useRoomFilter(current: RoomFilter, options: { preview?: boolean 
 
   // 필터·정렬 변경은 결과셋을 바꾸므로 page를 항상 1로 되돌립니다(설계 §3.4).
   const patchFilter = (partial: Partial<RoomFilter>) => {
-    router.replace(toUrl({ ...current, ...partial, page: 1 }), { scroll: false });
+    const href = toUrl({ ...current, ...partial, page: 1 });
+    clearRoomListPosition(href);
+    router.replace(href, { scroll: false });
   };
 
   const setSort = (sort: RoomSort) => {
@@ -37,11 +40,13 @@ export function useRoomFilter(current: RoomFilter, options: { preview?: boolean 
   };
 
   const resetFilter = () => {
+    clearRoomListPosition(toUrl(EMPTY_ROOM_FILTER));
     router.replace(toUrl(EMPTY_ROOM_FILTER), { scroll: false });
   };
 
   // 모달 "완료" — 뒤로가기 복원을 위해 push. 새 조건이므로 page는 1부터.
   const commitFilter = (next: RoomFilter) => {
+    clearRoomListPosition(toUrl({ ...next, page: 1 }));
     router.push(toUrl({ ...next, page: 1 }), { scroll: false });
   };
 
