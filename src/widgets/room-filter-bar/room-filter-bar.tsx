@@ -3,20 +3,15 @@
 import { useState } from "react";
 
 import { findSearchRegion } from "@/domains/region";
-import {
-  CONTRACT_TERM_LABEL,
-  GENDER_PREFERENCE_LABEL,
-  OCCUPANCY_COUNT_LABEL,
-  ROOM_TYPE_LABEL,
-} from "@/domains/room";
+import { CONTRACT_TERM_LABEL, GENDER_PREFERENCE_LABEL, ROOM_TYPE_LABEL } from "@/domains/room";
 import type { FilterTab, RoomFilter } from "@/features/filter-rooms";
 import {
-  amountRangeLabel,
   dateChipLabel,
   isRoomFilterActive,
   regionChipLabel,
   RoomFilterModal,
   useRoomFilter,
+  useRoomFilterRegions,
 } from "@/features/filter-rooms";
 import type { MockRoomSourceOptions } from "@/features/preview-rooms";
 import { usePreviewRegions } from "@/features/preview-rooms";
@@ -38,8 +33,7 @@ function roomTypeChipLabel(filter: RoomFilter): string | null {
  * X(해제) 클릭 시 어떤 필드를 비울지(clear).
  *
  * 목록 칩은 피그마 문구대로 둡니다(모달 탭은 "매물 유형", 목록 칩은 "건물 유형" — §11).
- * 보증금·월 이용료는 `price` 탭 하나로, 이용 인원·전용 성별은 `occupancy` 탭 하나로
- * 모입니다. 어느 칩을 눌러도 같은 탭이 열리고 두 조건을 함께 설정합니다(§6.4).
+ * 보증금·월 이용료·이용 인원은 이번 배포의 검색 조건에서 제외합니다.
  */
 const CHIPS: readonly {
   key: string;
@@ -54,7 +48,7 @@ const CHIPS: readonly {
     label: "지역",
     tab: "region",
     summary: (f) => regionChipLabel(f),
-    clear: { sido: null, sigungu: null },
+    clear: { sido: null, sigungu: null, keyword: null },
   },
   {
     key: "moveIn",
@@ -71,20 +65,6 @@ const CHIPS: readonly {
     clear: { minTerm: null },
   },
   {
-    key: "deposit",
-    label: "보증금",
-    tab: "price",
-    summary: (f) => amountRangeLabel(f.depositMin, f.depositMax),
-    clear: { depositMin: null, depositMax: null },
-  },
-  {
-    key: "rent",
-    label: "월 이용료",
-    tab: "price",
-    summary: (f) => amountRangeLabel(f.rentMin, f.rentMax),
-    clear: { rentMin: null, rentMax: null },
-  },
-  {
     key: "type",
     label: "건물 유형",
     tab: "type",
@@ -92,16 +72,9 @@ const CHIPS: readonly {
     clear: { roomTypes: [] },
   },
   {
-    key: "people",
-    label: "이용 인원",
-    tab: "occupancy",
-    summary: (f) => (f.people ? OCCUPANCY_COUNT_LABEL[f.people] : null),
-    clear: { people: null },
-  },
-  {
     key: "gender",
     label: "전용 성별",
-    tab: "occupancy",
+    tab: "gender",
     summary: (f) => (f.gender ? GENDER_PREFERENCE_LABEL[f.gender] : null),
     clear: { gender: null },
   },
@@ -128,12 +101,14 @@ export function RoomFilterBar({
   const [openedChip, setOpenedChip] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<FilterTab>("region");
   const previewRegions = usePreviewRegions(previewOptions, open);
+  const liveRegions = useRoomFilterRegions(!previewOptions && open);
+  const regions = previewOptions ? previewRegions : liveRegions;
   const regionOptions = previewOptions
     ? (previewRegions.data ?? []).flatMap((region) => {
         const match = findSearchRegion(region.value);
         return match ? [match] : [];
       })
-    : undefined;
+    : (liveRegions.data ?? []);
 
   const openModal = (tab: FilterTab, chipKey: string) => {
     setActiveTab(tab);
@@ -186,9 +161,9 @@ export function RoomFilterBar({
       {open && (
         <RoomFilterModal
           regionOptions={regionOptions}
-          regionLoading={Boolean(previewOptions) && previewRegions.isPending}
-          regionError={Boolean(previewOptions) && previewRegions.isError}
-          onRegionRetry={() => void previewRegions.refetch()}
+          regionLoading={regions.isPending}
+          regionError={regions.isError}
+          onRegionRetry={() => void regions.refetch()}
           initialTab={activeTab}
           filter={filter}
           onClose={() => setOpen(false)}

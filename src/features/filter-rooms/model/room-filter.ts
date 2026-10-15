@@ -1,12 +1,14 @@
+import type { SearchRegion } from "@/domains/region";
+import { getSelectedRegion } from "@/domains/region";
 import type {
   ContractTerm,
   GenderPreference,
-  OccupancyCount,
   RoomListQuery,
   RoomSort,
   RoomType,
 } from "@/domains/room";
 import { DEFAULT_ROOM_SORT } from "@/domains/room";
+import { ROUTES } from "@/shared/config";
 
 /**
  * 매물 목록 필터 (사용자 행동 관점)
@@ -24,12 +26,7 @@ export interface RoomFilter {
   sigungu: string | null;
   moveInDate: string | null;
   minTerm: ContractTerm | null;
-  depositMin: number | null;
-  depositMax: number | null;
-  rentMin: number | null;
-  rentMax: number | null;
   roomTypes: RoomType[];
-  people: OccupancyCount | null;
   gender: GenderPreference | null;
   sort: RoomSort;
   page: number;
@@ -42,12 +39,7 @@ export const EMPTY_ROOM_FILTER: RoomFilter = {
   sigungu: null,
   moveInDate: null,
   minTerm: null,
-  depositMin: null,
-  depositMax: null,
-  rentMin: null,
-  rentMax: null,
   roomTypes: [],
-  people: null,
   gender: null,
   sort: DEFAULT_ROOM_SORT,
   page: 1,
@@ -66,12 +58,7 @@ export function isRoomFilterActive(filter: RoomFilter): boolean {
     filter.sigungu !== null ||
     filter.moveInDate !== null ||
     filter.minTerm !== null ||
-    filter.depositMin !== null ||
-    filter.depositMax !== null ||
-    filter.rentMin !== null ||
-    filter.rentMax !== null ||
     filter.roomTypes.length > 0 ||
-    filter.people !== null ||
     filter.gender !== null
   );
 }
@@ -89,26 +76,35 @@ export function serializeRoomFilter(filter: RoomFilter): string {
   const setStr = (key: string, value: string | null) => {
     if (value) params.set(key, value);
   };
-  const setNum = (key: string, value: number | null) => {
-    if (value !== null) params.set(key, String(value));
-  };
 
   setStr("q", filter.keyword);
   setStr("sido", filter.sido);
   setStr("sigungu", filter.sigungu);
   setStr("moveIn", filter.moveInDate);
   setStr("term", filter.minTerm);
-  setNum("depositMin", filter.depositMin);
-  setNum("depositMax", filter.depositMax);
-  setNum("rentMin", filter.rentMin);
-  setNum("rentMax", filter.rentMax);
   for (const type of [...new Set(filter.roomTypes)].sort()) params.append("type", type);
-  setStr("people", filter.people);
   setStr("gender", filter.gender);
   if (filter.sort !== DEFAULT_ROOM_SORT) params.set("sort", filter.sort);
   if (filter.page > 1) params.set("page", String(filter.page));
 
   return params.toString();
+}
+
+/** 홈 검색과 탐색 필터가 같은 지역 상태를 기록합니다. */
+export function getRoomRegionFilter(
+  region: SearchRegion | null,
+): Pick<RoomFilter, "keyword" | "sido" | "sigungu"> {
+  return { keyword: null, sido: region?.sido ?? null, sigungu: region?.sigungu ?? null };
+}
+
+export function buildRoomFilterUrl(
+  filter: RoomFilter,
+  options: { preview?: boolean } = {},
+): string {
+  const params = new URLSearchParams(serializeRoomFilter(filter));
+  if (options.preview) params.set("preview", "rooms");
+  const query = params.toString();
+  return query ? `${ROUTES.rooms}?${query}` : ROUTES.rooms;
 }
 
 /**
@@ -126,45 +122,13 @@ export function toRoomListQuery(filter: RoomFilter): RoomListQuery {
     throw new Error("지역은 지원되는 자치구를 선택해주세요.");
   }
   return {
-    region: region?.label,
+    sido: region?.sidoName,
+    sigungu: region?.name,
     page: filter.page,
     sort: filter.sort,
     moveInDate: filter.moveInDate ?? undefined,
     minTerm: filter.minTerm ?? undefined,
-    depositMin: filter.depositMin ?? undefined,
-    depositMax: filter.depositMax ?? undefined,
-    rentMin: filter.rentMin ?? undefined,
-    rentMax: filter.rentMax ?? undefined,
     buildingType: filter.roomTypes[0],
-    people: filter.people ?? undefined,
     gender: filter.gender ?? undefined,
   };
 }
-
-export interface RoomFilterErrors {
-  deposit: string | null;
-  rent: string | null;
-}
-
-/**
- * 금액 범위 검증 (설계 §9)
- *
- * 최소 > 최대면 해당 쌍에 에러 문구를 냅니다. 가격 섹션은 이 문구를 표시하고, 모달은
- * `hasRoomFilterError`로 "완료"를 비활성화합니다 — 표시와 판단이 draft라는 한 소스에서
- * 파생되도록 여기 모아둡니다.
- */
-export function getRoomFilterErrors(filter: RoomFilter): RoomFilterErrors {
-  const rangeError = (min: number | null, max: number | null) =>
-    min !== null && max !== null && min > max ? "최소 금액이 최대 금액보다 커요" : null;
-
-  return {
-    deposit: rangeError(filter.depositMin, filter.depositMax),
-    rent: rangeError(filter.rentMin, filter.rentMax),
-  };
-}
-
-export function hasRoomFilterError(filter: RoomFilter): boolean {
-  const errors = getRoomFilterErrors(filter);
-  return errors.deposit !== null || errors.rent !== null;
-}
-import { getSelectedRegion } from "@/domains/region";

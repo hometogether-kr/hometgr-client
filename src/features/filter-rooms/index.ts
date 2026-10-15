@@ -1,9 +1,9 @@
-export { amountRangeLabel, dateChipLabel, regionChipLabel } from "./model/chip-summary";
-export type { RoomFilter, RoomFilterErrors } from "./model/room-filter";
+export { dateChipLabel, regionChipLabel } from "./model/chip-summary";
+export type { RoomFilter } from "./model/room-filter";
 export {
+  buildRoomFilterUrl,
   EMPTY_ROOM_FILTER,
-  getRoomFilterErrors,
-  hasRoomFilterError,
+  getRoomRegionFilter,
   isRoomFilterActive,
   serializeRoomFilter,
   toRoomListQuery,
@@ -11,5 +11,6 @@ export {
 export { getRoomFilterIssues, parseRoomFilter } from "./model/room-filter.schema";
 export { useFilterDraft } from "./model/use-filter-draft";
 export { useRoomFilter } from "./model/use-room-filter";
+export { useRoomFilterRegions } from "./model/use-room-filter-regions";
 export type { FilterTab } from "./ui/room-filter-modal";
 export { RoomFilterModal } from "./ui/room-filter-modal";

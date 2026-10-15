@@ -1,4 +1,6 @@
-import { Icon } from "@/shared/ui/icons";
+import Image from "next/image";
+
+import { cn } from "@/shared/lib/cn";
 
 interface SectionHeaderProps {
   title: string;
@@ -14,6 +16,7 @@ interface SectionHeaderProps {
   resetLabel?: string;
   /** 해당 섹션만 초기화 */
   onReset: () => void;
+  className?: string;
 }
 
 /**
@@ -28,18 +31,19 @@ export function SectionHeader({
   titleId,
   resetLabel = "초기화",
   onReset,
+  className,
 }: SectionHeaderProps) {
   return (
-    <div className="mb-5.5 flex items-center justify-between">
-      <p id={titleId} className="text-heading-2 font-medium text-grayscale-800">
+    <div className={cn("flex min-h-[76px] items-center gap-2 py-5", className)}>
+      <p id={titleId} className="min-w-0 flex-1 text-heading-2 font-medium text-grayscale-800">
         {title}
       </p>
       <button
         type="button"
         onClick={onReset}
-        className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-label-1 leading-normal font-medium text-primary-600 transition-colors hover:text-primary-500 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none"
+        className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg px-2 py-1.5 text-label-1 leading-normal font-medium text-primary-600 transition-colors hover:text-primary-500 focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 focus-visible:outline-none"
       >
-        <Icon name="refresh" size={16} aria-hidden />
+        <Image src="/figma/filter-reset.svg" width={16} height={16} alt="" />
         {resetLabel}
       </button>
     </div>

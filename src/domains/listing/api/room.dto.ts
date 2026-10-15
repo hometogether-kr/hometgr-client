@@ -70,7 +70,7 @@ const commonDtoSchema = z.object({
   canRequestVisit: z.boolean(),
 });
 
-/* 비회원 미리보기 — 레거시/v2 공통으로 room 식별자·지역·가격·대표사진만 있다 */
+/* 비회원 미리보기 — 제목·선택 부제목·지역·가격·대표사진. 건물 주소는 포함하지 않는다. */
 
 const legacyPreviewPricingSchema = z.object({
   monthlyRentKrw: z.number().nullable(),
@@ -86,6 +86,8 @@ const registrationPreviewPricingSchema = z.object({
 
 const legacyPreviewPayloadSchema = z.object({
   roomId: z.string(),
+  title: z.string().nullish(),
+  subtitle: z.string().nullish(),
   addressRegion: z.string().nullable(),
   pricing: legacyPreviewPricingSchema,
   representativeMedia: publicMediaDtoSchema.nullable(),
@@ -93,6 +95,8 @@ const legacyPreviewPayloadSchema = z.object({
 
 const registrationPreviewPayloadSchema = z.object({
   roomId: z.string(),
+  title: z.string().nullish(),
+  subtitle: z.string().nullish(),
   addressRegion: z.string().nullable(),
   approximateLocation: z.string().nullable(),
   pricing: registrationPreviewPricingSchema,
@@ -122,6 +126,7 @@ const legacyFullDetailSchema = commonDtoSchema.extend({
   viewerAccess: z.literal("full"),
   id: z.string(),
   title: z.string().nullish(),
+  subtitle: z.string().nullish(),
   addressRegion: z.string().nullish(),
   depositKrw: z.number().nullable(),
   monthlyRentKrw: z.number().nullable(),
@@ -179,6 +184,8 @@ const registrationDescriptionsDataSchema = z.object({
 });
 
 export const registrationFullDetailSchema = commonDtoSchema.extend({
+  title: z.string().nullish(),
+  subtitle: z.string().nullish(),
   registrationContractVersion: z.literal(2),
   viewerAccess: z.literal("full"),
   roomId: z.string(),

@@ -1,4 +1,4 @@
-import type { RoomDetail } from "@/domains/listing";
+import { formatManwon, type RoomDetail } from "@/domains/listing";
 
 import { DetailSection } from "./detail-section";
 
@@ -47,7 +47,13 @@ export function ContractCardMember({ room }: ContractCardMemberProps) {
       ? [{ label: "최소 거주 기간", value: `${room.minStayMonths}개월` }]
       : []),
     ...(room.floor !== undefined ? [{ label: "해당 층", value: `${room.floor}층` }] : []),
-    { label: "관리비", value: `월 ${Math.round(room.price.maintenanceFeeKrw / 10_000)}만원` },
+    {
+      label: "관리비",
+      value:
+        room.price.maintenanceFeeKrw === null
+          ? "가격 문의"
+          : `월 ${formatManwon(room.price.maintenanceFeeKrw)}`,
+    },
   ];
 
   return (

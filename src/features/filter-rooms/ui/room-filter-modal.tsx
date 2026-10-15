@@ -1,33 +1,31 @@
 "use client";
 
+import Image from "next/image";
 import type { KeyboardEvent, ReactNode } from "react";
 import { useEffect, useId, useRef, useState } from "react";
 
-import type { SEARCH_REGIONS } from "@/domains/region";
+import type { SearchRegion } from "@/domains/region";
 import { cn } from "@/shared/lib/cn";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { Modal } from "@/shared/ui/modal";
 
 import type { RoomFilter } from "../model/room-filter";
-import { hasRoomFilterError } from "../model/room-filter";
 import { useFilterDraft } from "../model/use-filter-draft";
+import { GenderSection } from "./sections/gender-section";
 import { MoveInSection } from "./sections/move-in-section";
-import { OccupancySection } from "./sections/occupancy-section";
-import { PriceSection } from "./sections/price-section";
 import { RegionSection } from "./sections/region-section";
 import { RoomTypeSection } from "./sections/room-type-section";
 import { TermSection } from "./sections/term-section";
 
-/** 모달 탭 6개 (칩 8개가 이 6개로 매핑됩니다 — 설계 §6.4·§11) */
-export type FilterTab = "region" | "moveIn" | "term" | "price" | "type" | "occupancy";
+/** 이번 배포의 검색 조건: 지역·입주일·거주 기간·유형·성별. */
+export type FilterTab = "region" | "moveIn" | "term" | "type" | "gender";
 
 const TABS: readonly { id: FilterTab; label: string }[] = [
   { id: "region", label: "지역" },
   { id: "moveIn", label: "입주 희망일" },
   { id: "term", label: "최소 계약 기간" },
-  { id: "price", label: "보증금·월세" },
   { id: "type", label: "매물 유형" },
-  { id: "occupancy", label: "인원·성별" },
+  { id: "gender", label: "성별" },
 ];
 
 type SectionComponent = (props: {
@@ -35,17 +33,15 @@ type SectionComponent = (props: {
   patch: (partial: Partial<RoomFilter>) => void;
 }) => ReactNode;
 
-const SECTIONS: Record<FilterTab, SectionComponent> = {
-  region: RegionSection,
+const SECTIONS: Record<Exclude<FilterTab, "region">, SectionComponent> = {
   moveIn: MoveInSection,
   term: TermSection,
-  price: PriceSection,
   type: RoomTypeSection,
-  occupancy: OccupancySection,
+  gender: GenderSection,
 };
 
 interface RoomFilterModalProps {
-  regionOptions?: typeof SEARCH_REGIONS;
+  regionOptions: SearchRegion[];
   regionLoading?: boolean;
   regionError?: boolean;
   onRegionRetry?: () => void;
@@ -60,14 +56,11 @@ interface RoomFilterModalProps {
 }
 
 /**
- * 필터 모달 (Figma: 1061:39358 · 1067:43383)
- *
- * `shared/ui/modal`을 재사용하되 탭 전용 슬롯이 없어 탭바 + 패널을 하나의 `div`로 묶어
- * children으로 넘깁니다(설계 §6.4). 폭은 Modal 기본값(`w-full md:w-[572px]`)을 그대로
- * 씁니다 — 접두사 없는 `w-[572px]`를 넘기면 tailwind-merge가 `w-full`을 지웁니다.
+ * Figma 매물검색필터(1067:43383): 572×791, px40/py36, gap24, 완료 버튼 h43.
+ * 작은 화면은 카드 높이를 제한하고 본문만 스크롤해 헤더·탭·완료 버튼을 유지합니다.
  *
  * 각 탭 패널에는 해당 섹션을 그려 초안(`draft`)을 편집합니다. "완료"는 초안이 현재
- * 필터와 다르고(isDirty) 금액 범위 에러가 없을 때만 활성입니다(§9).
+ * 필터와 다를 때만 완료 버튼이 활성화됩니다.
  */
 export function RoomFilterModal({
   initialTab,
@@ -114,8 +107,8 @@ export function RoomFilterModal({
   const footer = (
     <BtnCta
       size="xl"
-      className="w-full"
-      disabled={!isDirty || hasRoomFilterError(draft)}
+      className="h-[43px] w-full py-0"
+      disabled={!isDirty}
       onClick={() => onApply(draft)}
     >
       완료
@@ -128,12 +121,24 @@ export function RoomFilterModal({
       onClose={onClose}
       title="필터"
       closeButton="header"
+      closeIcon={<Image src="/figma/filter-close.svg" width={20} height={20} alt="" />}
       footer={footer}
-      classNames={{ panel: "md:h-[791px] max-h-[calc(100dvh-5rem)]" }}
+      classNames={{
+        overlay: "px-4 py-4 md:px-5 md:py-6",
+        dialog: "min-h-0 max-w-[572px]",
+        panel:
+          "h-[791px] max-h-[calc(100dvh-2rem)] min-h-0 gap-6 overflow-hidden px-5 py-6 md:max-h-[calc(100dvh-3rem)] md:px-10 md:py-9",
+        header: "h-11",
+        closeButton: "rounded-lg focus-visible:outline-2 focus-visible:outline-primary-500",
+      }}
     >
       <div className="flex min-h-0 flex-1 flex-col">
         {/* 탭바: 고정 헤더 — 스크롤 영역 밖에 둬 캘린더처럼 큰 탭에서도 사라지지 않습니다(QA C) */}
-        <div role="tablist" aria-label="필터 항목" className="flex shrink-0 gap-4 overflow-x-auto">
+        <div
+          role="tablist"
+          aria-label="필터 항목"
+          className="flex shrink-0 gap-x-4 gap-y-3 overflow-x-auto max-sm:flex-wrap"
+        >
           {TABS.map((tab, index) => {
             const selected = tab.id === activeTab;
             return (
@@ -151,11 +156,11 @@ export function RoomFilterModal({
                 onClick={() => setActiveTab(tab.id)}
                 onKeyDown={(event) => handleTabKeyDown(event, index)}
                 className={cn(
-                  "shrink-0 border-b-[3px] pb-3.5 text-body-2 font-semibold whitespace-nowrap transition-colors",
+                  "relative shrink-0 pb-3.5 text-body-2 font-semibold whitespace-nowrap transition-colors",
                   "focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none",
                   selected
-                    ? "border-grayscale-900 text-grayscale-900"
-                    : "border-transparent text-grayscale-400",
+                    ? "text-grayscale-900 after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-grayscale-900"
+                    : "text-grayscale-400",
                 )}
               >
                 {tab.label}
@@ -164,10 +169,14 @@ export function RoomFilterModal({
           })}
         </div>
 
-        {/* 패널: 여기서만 스크롤. pt-5(20px)가 탭바 ↔ 섹션 제목 간격입니다(QA E 위쪽) */}
-        <div ref={panelRef} className="min-h-0 flex-1 overflow-y-auto pt-5">
+        <div
+          ref={panelRef}
+          className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
+          tabIndex={0}
+          aria-label="필터 선택 내용"
+        >
           {TABS.map((tab) => {
-            const Section = SECTIONS[tab.id];
+            const Section = tab.id === "region" ? null : SECTIONS[tab.id];
             return (
               <div
                 key={tab.id}
@@ -187,7 +196,7 @@ export function RoomFilterModal({
                       onRetry={onRegionRetry}
                     />
                   ) : (
-                    <Section draft={draft} patch={patchDraft} />
+                    Section && <Section draft={draft} patch={patchDraft} />
                   ))}
               </div>
             );

@@ -5,6 +5,7 @@ import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
 import { fetchRooms, RoomCard, roomQueryKeys } from "@/domains/room";
 import type { RoomFilter } from "@/features/filter-rooms";
 import {
+  buildRoomFilterUrl,
   isRoomFilterActive,
   serializeRoomFilter,
   toRoomListQuery,
@@ -21,13 +22,6 @@ import { RoomListToolbar } from "./room-list-toolbar";
 
 /** 첫 행(그리드 최대 4열) 카드에만 priority를 줍니다 */
 const PRIORITY_CARD_COUNT = 4;
-
-function buildRoomsUrl(filter: RoomFilter, preview: boolean): string {
-  const params = new URLSearchParams(serializeRoomFilter(filter));
-  if (preview) params.set("preview", "rooms");
-  const query = params.toString();
-  return query ? `${ROUTES.rooms}?${query}` : ROUTES.rooms;
-}
 
 export function RoomListQueryContent({
   filter,
@@ -77,7 +71,7 @@ export function RoomListQueryContent({
       window.history.replaceState(
         null,
         "",
-        buildRoomsUrl({ ...filter, page: nextPage }, Boolean(previewOptions)),
+        buildRoomFilterUrl({ ...filter, page: nextPage }, { preview: Boolean(previewOptions) }),
       );
   };
 
@@ -102,9 +96,9 @@ export function RoomListQueryContent({
               previewOptions
                 ? `${ROUTES.rooms}/${room.id}?${new URLSearchParams({
                     preview: "rooms",
-                    returnTo: buildRoomsUrl(
+                    returnTo: buildRoomFilterUrl(
                       { ...filter, page: data.pages.at(-1)?.page ?? filter.page },
-                      true,
+                      { preview: true },
                     ),
                   }).toString()}`
                 : `${ROUTES.rooms}/${room.id}`

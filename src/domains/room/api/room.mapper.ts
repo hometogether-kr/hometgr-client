@@ -40,11 +40,11 @@ function toAvailability(status: string | null | undefined): RoomAvailability {
 export function toRoom(dto: RoomDto): Room {
   return {
     id: dto.id,
-    // title이 실데이터에서 비어 옴 → 지역 문자열로 폴백해 카드 제목이 완전히 비지 않게 합니다.
-    // ⚠️ 가정한 값: 폴백 문구는 디자이너 확인 대기(설계 §11).
-    buildingName: dto.title ?? dto.addressRegion ?? "등록된 매물",
+    buildingName: dto.title?.trim() || dto.addressRegion || "등록된 매물",
+    subtitle: dto.subtitle?.trim() || null,
     deposit: toManwon(dto.depositKrw),
-    monthlyRent: toManwon(dto.monthlyRentKrw),
+    // 필드명은 Krw이지만 공개 API의 월세 값은 만원 단위입니다.
+    monthlyRent: dto.monthlyRentKrw,
     neighborhood: dto.addressRegion ?? "",
     // 교통 요약에 대응하는 API 필드가 없습니다. approximateLocation이 있으면 쓰되 대개 null입니다.
     transitSummary: dto.approximateLocation ?? null,

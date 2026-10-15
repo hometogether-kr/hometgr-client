@@ -4,6 +4,8 @@ import Image from "next/image";
 import type { KeyboardEvent } from "react";
 import { useId, useRef, useState } from "react";
 
+import { findSearchRegion } from "@/domains/region";
+import { useRoomFilterRegions } from "@/features/filter-rooms";
 import type { MockRoomSourceOptions } from "@/features/preview-rooms";
 import { usePreviewRegions } from "@/features/preview-rooms";
 import { cn } from "@/shared/lib/cn";
@@ -13,7 +15,7 @@ import { BtnCta } from "@/shared/ui/btn-cta";
 interface RoomRegionSearchProps {
   initialRegion?: string;
   layout: "main" | "explore";
-  previewOptions: MockRoomSourceOptions;
+  previewOptions?: MockRoomSourceOptions;
   onSearch: (region: string | undefined) => void;
 }
 
@@ -31,8 +33,15 @@ export function RoomRegionSearch({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const id = useId();
   const listId = `${id}-regions`;
-  const regions = usePreviewRegions(previewOptions, open);
-  const options = regions.data ?? [];
+  const liveRegions = useRoomFilterRegions(!previewOptions && open);
+  const previewRegions = usePreviewRegions(previewOptions, open);
+  const regions = previewOptions ? previewRegions : liveRegions;
+  const options = previewOptions
+    ? (previewRegions.data ?? []).flatMap((item) => {
+        const region = findSearchRegion(item.value);
+        return region ? [{ value: region.label, label: region.name }] : [];
+      })
+    : (liveRegions.data ?? []).map((region) => ({ value: region.label, label: region.name }));
   const selected = options.find((region) => region.value === selectedRegion);
   const label = selected?.label ?? selectedRegion?.split(" ").at(-1);
 
@@ -109,7 +118,6 @@ export function RoomRegionSearch({
           onSearch(selectedRegion);
         }}
       >
-        <input type="hidden" name="preview" value="rooms" />
         <button
           ref={triggerRef}
           type="button"
@@ -247,7 +255,7 @@ export function RoomRegionSearch({
               <p className="text-sm text-grayscale-600">현재 공개 매물이 있는 지역이 없습니다.</p>
             </div>
           )}
-          <p className="text-xs text-grayscale-500">지역은 가상 예시</p>
+          {previewOptions && <p className="text-xs text-grayscale-500">지역은 가상 예시</p>}
         </div>
       )}
     </div>

@@ -3,10 +3,9 @@
 import { useRouter } from "next/navigation";
 
 import type { RoomSort } from "@/domains/room";
-import { ROUTES } from "@/shared/config";
 
 import type { RoomFilter } from "./room-filter";
-import { EMPTY_ROOM_FILTER, serializeRoomFilter } from "./room-filter";
+import { buildRoomFilterUrl, EMPTY_ROOM_FILTER } from "./room-filter";
 
 /**
  * 필터·정렬을 URL에 반영하는 쓰기 훅
@@ -26,12 +25,7 @@ import { EMPTY_ROOM_FILTER, serializeRoomFilter } from "./room-filter";
 export function useRoomFilter(current: RoomFilter, options: { preview?: boolean } = {}) {
   const router = useRouter();
 
-  const toUrl = (filter: RoomFilter) => {
-    const params = new URLSearchParams(serializeRoomFilter(filter));
-    if (options.preview) params.set("preview", "rooms");
-    const query = params.toString();
-    return query ? `${ROUTES.rooms}?${query}` : ROUTES.rooms;
-  };
+  const toUrl = (filter: RoomFilter) => buildRoomFilterUrl(filter, options);
 
   // 필터·정렬 변경은 결과셋을 바꾸므로 page를 항상 1로 되돌립니다(설계 §3.4).
   const patchFilter = (partial: Partial<RoomFilter>) => {

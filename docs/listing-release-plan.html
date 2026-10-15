@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>홈투게더 · 매물 탐색 배포 계획</title>
+    <style>
+      :root{--ink:#172c36;--muted:#60717a;--line:#dde6e7;--paper:#fff;--bg:#f3f6f5;--accent:#087c70;--tint:#e7f4ef;--amber:#80520b;--amber-bg:#fff5df}
+      *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pretendard","Malgun Gothic",system-ui,sans-serif;font-size:15px;line-height:1.75}button,input{font:inherit}button,a,input{touch-action:manipulation}a{color:var(--accent);text-underline-offset:4px}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #22a792;outline-offset:4px}h1,h2,h3,p{margin:0}h1,h2,h3{line-height:1.4;letter-spacing:-.04em}h1{font-size:clamp(31px,4vw,48px);font-weight:800}h2{font-size:25px}h3{font-size:18px}small{font-size:12px}ul,ol{margin:12px 0;padding-left:21px}.shell{max-width:1390px;margin:auto;padding:34px 32px 72px;display:grid;grid-template-columns:230px minmax(0,1fr);gap:40px}.sidebar{position:sticky;top:28px;align-self:start}.brand{font-size:15px;font-weight:800;letter-spacing:-.03em;display:flex;gap:9px;align-items:center}.brand-mark{display:grid;place-items:center;width:29px;height:29px;border-radius:9px;background:var(--accent);color:white;font-size:16px}.doc-label{margin:18px 0 22px;color:var(--muted);font-size:12px;letter-spacing:.09em}.nav{display:grid;gap:4px}.nav a{color:var(--muted);text-decoration:none;padding:8px 11px;border-radius:8px;font-size:13px}.nav a:hover{background:var(--tint);color:var(--accent)}.side-note{margin-top:26px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.hero{padding:30px 0 28px}.eyebrow{color:var(--accent);font-weight:700;letter-spacing:.13em;font-size:12px;margin-bottom:13px}.hero .intro{margin-top:18px;color:var(--muted);max-width:700px;font-size:16px}.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.pill{border:1px solid var(--line);background:white;border-radius:6px;padding:4px 9px;font-size:12px;color:var(--muted)}.status{color:var(--accent);background:var(--tint);border-color:#cce8dc}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:8px 0 22px;padding:15px 18px;background:white;border:1px solid var(--line);border-radius:12px}.progress-label{font-size:13px;font-weight:700}.progress-track{height:5px;border-radius:8px;background:#e8eeee;margin-top:8px;width:180px;overflow:hidden}.progress-fill{height:100%;width:0;background:var(--accent);transition:width .2s}.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.search{width:215px;border:1px solid var(--line);padding:7px 10px;border-radius:7px;background:#fafcfb;min-width:0}.btn{border:1px solid var(--line);border-radius:7px;background:white;padding:7px 12px;color:var(--ink);font-size:13px}.storage-note{font-size:12px;color:var(--muted);margin-bottom:26px}.section{margin-top:32px}.section-head{display:flex;gap:14px;align-items:baseline;margin-bottom:17px}.section-head span{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.08em}.card{border:1px solid var(--line);border-radius:14px;background:white;overflow:hidden}.summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.summary-item{padding:20px;border:1px solid var(--line);border-radius:12px;background:white}.summary-item small{display:block;color:var(--muted);margin-bottom:8px}.summary-item strong{display:block;font-size:16px}.summary-item p{font-size:13px;color:var(--muted);margin-top:7px}.notice{border-left:3px solid var(--accent);background:var(--tint);padding:16px 20px;border-radius:0 10px 10px 0;margin-top:15px;font-size:13px}.notice.amber{border-color:#d6a441;background:var(--amber-bg);color:var(--amber)}.phase{margin-bottom:16px;break-inside:avoid}.phase-top{padding:20px 23px 16px;border-bottom:1px solid var(--line);display:flex;gap:14px;align-items:flex-start}.number{display:grid;place-items:center;flex:none;width:34px;height:34px;background:var(--tint);border-radius:9px;color:var(--accent);font-weight:800;font-size:14px}.phase-title{flex:1;min-width:0}.phase-title p{color:var(--muted);font-size:13px;margin-top:5px}.phase-count{font-size:12px;white-space:nowrap;color:var(--muted)}.checklist{list-style:none;padding:9px 23px;margin:0}.task{border-bottom:1px solid #edf1f0}.task:last-child{border:0}.task label{display:flex;gap:11px;padding:11px 0;cursor:pointer;align-items:flex-start}.task input{width:17px;height:17px;margin:5px 0 0;accent-color:var(--accent);flex:none}.task-text{flex:1;min-width:0;font-size:14px;overflow-wrap:anywhere}.task input:checked+.task-text{color:var(--muted);text-decoration:line-through;text-decoration-color:#a2b9af}.task small{display:block;font-size:12px;color:var(--muted);text-decoration:none;margin-top:3px}.phase-bottom{padding:12px 23px;background:#f8faf9;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}.phase-bottom b{color:var(--accent);margin-right:7px}.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;text-align:left;min-width:560px;font-size:13px}th{background:#f8faf9;color:var(--muted);font-size:12px;padding:13px 17px;font-weight:600}td{padding:15px 17px;border-top:1px solid var(--line);vertical-align:top}td:first-child{width:130px}td strong{display:block;margin-bottom:4px}td p{color:var(--muted);font-size:12px}.tag{display:inline-block;font-size:11px;padding:3px 7px;background:var(--tint);color:var(--accent);border-radius:5px;white-space:nowrap}.tag.confirm{background:#edf1f9;color:#4d6292}.tag.conditional{background:var(--amber-bg);color:var(--amber)}.backend-check{display:flex;gap:9px;align-items:flex-start}.backend-check input{margin-top:5px;accent-color:var(--accent)}.backend-check label{cursor:pointer}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.scope-box{padding:22px}.scope-box h3{margin-bottom:12px}.scope-box ul{font-size:13px;color:var(--muted)}.flow{display:flex;flex-wrap:wrap;gap:8px;padding:22px}.flow span{padding:8px 11px;background:var(--tint);border-radius:7px;font-size:13px;color:var(--accent);font-weight:600}.flow i{font-style:normal;color:#90a39c;align-self:center}.gate{padding:0 22px 20px;color:var(--muted);font-size:13px}.refs{padding:20px 24px}.refs li{margin:9px 0;font-size:13px}.refs p{color:var(--muted);font-size:12px}.footer{margin-top:36px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}.empty{padding:25px;text-align:center;color:var(--muted)}[hidden]{display:none!important}
+      @media(max-width:1000px){.shell{grid-template-columns:180px minmax(0,1fr);gap:24px;padding:24px}.summary-grid{grid-template-columns:1fr}.summary-item{padding:16px}.summary-item small{margin-bottom:4px}.split{grid-template-columns:1fr}}
+      @media(max-width:720px){.shell{display:block;padding:20px 16px 45px}.sidebar{position:static}.doc-label,.side-note{display:none}.nav{display:flex;overflow-x:auto;margin-top:16px;padding-bottom:4px}.nav a{white-space:nowrap;padding:6px 9px}.hero{padding-top:27px}.toolbar{align-items:stretch;flex-direction:column}.tools{display:flex}.search{flex:1;width:auto}.phase-top{padding:17px 16px}.checklist{padding:7px 16px}.phase-bottom{padding:12px 16px}.phase-count{display:none}.section-head{gap:9px}h2{font-size:22px}}
+      @media print{@page{size:A4;margin:15mm}body{background:white;font-size:11px;color:#000}.shell{display:block;padding:0;max-width:none}.sidebar,.toolbar,.storage-note,.footer .interactive-note{display:none}.hero{padding:0 0 16px}h1{font-size:29px}h2{font-size:20px}h3{font-size:15px}.hero .intro{font-size:12px}.section{margin-top:23px}.summary-grid{grid-template-columns:repeat(3,1fr)}.summary-item{padding:12px}.summary-item strong{font-size:13px}.summary-item p,.task-text{font-size:11px}.phase-top{padding:12px 15px}.checklist{padding:5px 15px}.task label{padding:7px 0}.task small,.phase-bottom{font-size:10px}.phase-bottom{padding:9px 15px}.phase-count{display:block}.card,.summary-item{border-color:#ccc;box-shadow:none}.split{grid-template-columns:1fr 1fr}.table-wrap{overflow:visible}table{min-width:0;font-size:11px}th,td{padding:9px}.tag{white-space:normal}a{color:inherit}.phase[hidden],.task[hidden]{display:block!important}tr{break-inside:avoid}thead{display:table-header-group}input{accent-color:#222}.notice,.flow span{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="sidebar" aria-label="문서 목차">
+        <div class="brand"><span class="brand-mark" aria-hidden="true">H</span>Home Together</div>
+        <p class="doc-label">RELEASE WORK PLAN</p>
+        <nav class="nav">
+          <a href="#overview">계획 개요</a><a href="#execution">실행 순서·진행 기록</a><a href="#frontend">프론트 작업 목록</a><a href="#backend">효재님 확인·요청</a><a href="#scope">배포 범위</a><a href="#acceptance">완료 기준</a><a href="#references">근거와 검증 범위</a>
+        </nav>
+        <p class="side-note">기존 구현을 재사용합니다.<br />새로운 기능과 연결 보완,<br />실제 검증을 구분합니다.</p>
+      </aside>
+      <main>
+        <header class="hero" id="overview">
+          <p class="eyebrow">HOMETOGETHER / RELEASE</p>
+          <h1>매물 탐색<br />배포 실행 계획</h1>
+          <p class="intro">API 계약과 데이터 모델을 맞추고, 검색·상세·로그인 흐름을 완성합니다. 실제 매물의 등록부터 카카오 문의, 운영 변경 반영까지 확인한 뒤 배포합니다.</p>
+          <div class="meta"><span class="pill">확정 기준 · 2026.10.15</span><span class="pill status">계획 확정 · 실행 상태는 별도</span><span class="pill">사용자 프론트 / 관리자·백엔드 분담</span></div>
+        </header>
+        <div class="toolbar" aria-label="계획서 도구">
+          <div><p class="progress-label" id="progress-label" aria-live="polite">진행 상태 불러오는 중</p><div class="progress-track" role="progressbar" aria-label="전체 작업 완료율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div></div>
+          <div class="tools"><label class="sr-label" for="search" hidden>프론트 작업 검색</label><input class="search" id="search" type="search" aria-label="프론트 작업 검색" placeholder="프론트 작업 검색" /><button class="btn" type="button" id="print">인쇄 / PDF 저장</button></div>
+        </div>
+        <p class="storage-note" id="storage-note">체크 상태는 이 브라우저에만 저장됩니다. 저장소·슬랙·서버의 실제 진행 상태와 자동으로 동기화되지 않습니다.</p>
+        <noscript><p class="notice amber">이 계획서의 작업 목록과 체크 기능은 JavaScript가 필요합니다. JavaScript를 허용한 브라우저에서 열어주세요.</p></noscript>
+        <div class="summary-grid">
+          <article class="summary-item"><small>검색</small><strong>구 선택과 검색 실행 분리</strong><p>선택은 이름 표시·패널 닫기까지. 검색 버튼을 눌러야 이동·조회합니다.</p></article>
+          <article class="summary-item"><small>위치</small><strong>회원에게 건물 위치까지</strong><p>비회원은 지역만 공개. 동·호수·자유 상세주소는 일반 상세에서 제외합니다.</p></article>
+          <article class="summary-item"><small>문의</small><strong>예약 버튼 → 카카오 채널</strong><p>계약·방문 예약 기능은 제외하고, 채널 문의 → 소통 → 방문으로 연결합니다.</p></article>
+        </div>
+        <div class="notice">부제목은 선택값입니다. 입력 필수 처리나 승인·게시 차단을 추가하지 않습니다. 이미 구현된 상세 설명 수정·목록 조회·등록 기능은 재개발하지 않고 연결과 배포 반영을 확인합니다.</div>
+        <section class="section" id="execution" aria-labelledby="execution-title">
+          <div class="section-head"><span>WORK ORDER</span><h2 id="execution-title">실행 순서·진행 기록</h2></div>
+          <div class="card table-wrap"><table><thead><tr><th scope="col">순서</th><th scope="col">작업 묶음</th><th scope="col">상태·진행 기준</th></tr></thead><tbody>
+            <tr><td>1</td><td>API 계약·확인사항 정리</td><td>개발 API 공개 조회 확인 완료. 월세는 만원 단위로 사용자 확정. 회원 응답·지번 보완은 후속 확인.</td></tr>
+            <tr><td>2</td><td>지역·제목·부제목 데이터 연결</td><td id="stage-two-status">구현 반영. 구 조회 공통 모듈·지역 변환·제목/선택 부제목·월세 만원 표시·필터 3종 제거. 매핑 검증 통과. 후속 3단계에서 실제 목록·구 선택 화면도 확인.</td></tr>
+            <tr><td>3</td><td>메인·탐색·필터 검색 통일</td><td>구현·핵심 검증 완료. districts 기반 선택 UI, 기존 URL 필터 흐름 재사용, 선택 복원, 홈 지역별 매물 조회 통일. 더 보기·반응형 전체 검증은 8단계에 포함.</td></tr>
+            <tr><td>4</td><td>카카오 문의 전환·제외 기능 정리</td><td>대기. PC·모바일·직접 URL까지 같은 배포 범위 적용.</td></tr>
+            <tr><td>5</td><td>상세·로그인 복귀·인증 처리</td><td>대기. 서버 공개 범위와 로그인 상태를 맞춘 뒤 지도 연결.</td></tr>
+            <tr><td>6</td><td>회원 지도 연결</td><td>대기. 공개용 건물 주소 응답 확인 후 주소→좌표 변환 구현.</td></tr>
+            <tr><td>7</td><td>목록 복귀·캐시·운영 변경 반영</td><td>대기. 검색 조건·누적 목록·스크롤 복원 및 다음 조회 갱신 확인.</td></tr>
+            <tr><td>8</td><td>등록부터 배포까지 통합 검증</td><td>대기. 실매물 전체 흐름·회원/비회원·반응형·기술 검사.</td></tr>
+          </tbody></table></div>
+          <div class="notice"><strong>2026.10.15 / feat/listing-exploration-release</strong><br />현재 1·2번에 이어 3번 검색 UI 통합까지 반영했습니다. 4번 이후는 미착수입니다. 아래 7개 체크리스트는 분야별 작업 묶음이며, 실제 실행은 위 8개 순서를 따릅니다. 체크 상태는 수동 관리이고 이 진행 기록과 자동 연동되지 않습니다.</div>
+          <div class="card refs" style="margin-top:14px"><h3>개발 API 계약 확인</h3><ul>
+            <li>대상: dev-api.hometogether.kr. 공개 GET만 실행했으며 데이터 변경·슬랙 발송은 하지 않았습니다.</li>
+            <li>GET /rooms/districts?sido=서울특별시 → HTTP 200, 중랑구 1개. 각 항목은 sido/sigungu/label 이름 값.</li>
+            <li>GET /rooms → HTTP 200, 공개 매물 1개. 중랑구 조건은 1개, 노원구 조건은 0개로 구분.</li>
+            <li>목록 title/subtitle과 비회원 v2 상세 preview.title/preview.subtitle 일치 확인. 회원 v2는 최상위 title/subtitle을 사용하며 실회원 응답은 후속 검증.</li>
+            <li>이번 구현은 URL 행정 코드를 유지하고 API에는 시도·구 이름을 전달합니다. 구 목록에 없는 유효한 서울 구 URL도 검색 결과 없음으로 처리합니다.</li>
+          </ul><p id="stage-two-verification">검증: 전체 TypeScript 검사·변경 파일 린트·Prettier 검사 통과. 공개 API HTTP 200, 구 조건에 따른 1개/0개 결과와 목록·상세 제목/부제목 일치 확인. 신규·레거시 × 회원·비회원 매핑, 선택 부제목 미입력/공백, 월세 30→30만원, 가격 미입력→가격 문의, 제거한 필터의 기존 URL 무시, 성별·정렬 보존, 잘못된 구 응답 거절, 모의 응답 호환 검증 통과. 브라우저는 webview 연결 실패로 화면 검증 미완료. 실회원 API·운영 배포는 검증하지 않았습니다. 개발 드라이브 여유 3.4GB 확인 후 서버를 중단했으며 활성 캐시는 삭제하지 않았습니다.</p></div>
+          <div class="card refs" style="margin-top:14px"><h3>3단계 검색 UI 통합 검증</h3><p>홈의 구 선택·탐색 검색창·필터 모달이 같은 districts 조회, 지역 필터 변환, URL 생성, 기존 목록 API를 사용합니다. 구 선택은 초안만 바꾸고 검색/완료에서 적용합니다. URL 행정 코드로 검색창·지역 칩·모달 선택을 복원하며, 현재 구 목록에 없어도 유효한 서울 구의 URL 선택은 유지합니다.</p><ul><li>전체 TypeScript·변경 파일 ESLint·Prettier 통과. 실제 UI 콜백 실행으로 서울 25개 구의 홈/검색창/모달 URL·API 요청 일치, URL 복원, 다른 필터·정렬 유지, page=1 초기화 확인.</li><li>실제 개발 API·브라우저: 홈 districts 중랑구 선택 후 검색 → /rooms?sido=11&amp;sigungu=11260. 모달에서 같은 구 선택 후 완료도 같은 URL·매물 1개·동일 매물 ID. 이동 직후 모달의 중랑구 선택 상태 확인.</li><li>새로고침·뒤로가기·앞으로가기의 선택 상태 복원, 전체 목록 초기화 확인. 브라우저 콘솔 오류·경고 없음. 공개 구 조회·목록 BFF HTTP 200.</li><li>브라우저 초기 연결 지연은 개발 서버의 최초 컴파일 이후 해소되었습니다. 실제 구가 1개이므로 구 간 결과 차이·다중 페이지·모바일 전체 회귀는 8단계에서 추가 확인합니다. 디스크 여유가 5GB 미만으로 내려가 .next 사용량을 조사했고 활성 캐시는 삭제하지 않았습니다.</li></ul></div>
+          <div class="card refs" id="filter-design-review" style="margin-top:14px"><h3>필터 창 디자인 보정 · 2026.10.15</h3><p>기준 Frame 2147227174(1067:43381)는 ‘매물 검색 필터링’ 제목입니다. 그 아래 실제 지역·계약 기간·유형·성별·날짜 시안(1067:43383)을 확인해 반영했습니다. 이후 배포 단계는 시작하지 않았습니다.</p><div class="table-wrap"><table><thead><tr><th>요소</th><th>Figma 기준 / 브라우저 확인값</th></tr></thead><tbody><tr><td>모달</td><td>572×791px, 반경 16px, 좌우 40px·상하 36px, 주요 영역 간격 24px</td></tr><tr><td>텍스트</td><td>제목 22px/500/30.8px, 탭 15px/600/22.5px, 섹션 제목 20px/500/28px, 구 선택 18px/500/25.2px</td></tr><tr><td>선택·완료 버튼</td><td>구 선택 246×65px, 서울 헤더 72px, 완료 492×43px·16px/600/24px</td></tr></tbody></table></div><p>원본과 의도적으로 다른 부분: 가격·인원 필터는 제거하고 성별만 유지합니다. 구 목록·건물 유형은 기존 API 선택지를 사용하므로 시안의 예시 지역·서울 전체·원룸·투룸을 추가하지 않습니다. 서울은 현재 지원 범위 안내로 표시하며 시도 변경 드롭다운을 새로 만들지 않습니다. ‘매물이 있는 지역만 선택’ 안내와 목록에 없는 기존 구의 선택 보존 안내를 유지합니다. 날짜 시안은 778px 높이지만 탭 전환 시 버튼 위치가 바뀌지 않도록 전체를 791px로 통일했습니다.</p><p>모바일: 좌우 바깥 16px·안쪽 20px, 안쪽 상하 24px, 화면 높이에 맞춘 카드 제한, 탭 줄바꿈, 본문만 스크롤하는 방식으로 확장했습니다. 1920×1080·390×844·320×480 브라우저에서 가로 넘침 없음, 낮은 화면의 본문 스크롤과 헤더·완료 버튼 고정, 날짜/기간 적용·URL 복원, 날짜만 초기화 시 구·기간 보존, 유형 선택/초기화, 성별 초안 Esc 취소를 확인했습니다. 콘솔 오류·경고 없음. 닫기/초기화/달력 화살표 원본 SVG 4개를 로컬로 저장해 실제 렌더링 크기도 확인했습니다.</p><p>저장공간 정리: 사용자 승인한 과거 npx 실행 캐시와 설치 파일 11개만 삭제해 실제 약 1.0GB 확보. 프로젝트 소스·의존성·빌드 캐시·pnpm 저장소를 유지했습니다. 브라우저 검증 서버는 Node 메모리를 1280MB로 제한하고 기존 캐시를 재사용했습니다.</p></div>
+          <div class="notice"><strong>사용자 확정 — 월세는 만원 단위 / 가격·인원 필터 제외</strong><br />monthlyRentKrw=30은 30만원입니다. 필드 이름과 단위가 다르므로 상세 모델에서는 monthlyRentManwon으로 구분하고 10,000으로 나누지 않습니다. 보증금·관리비는 기존 원 단위 유지. 공개 API의 월세 범위도 30~30 조건에서 매물 1개, 최소 31·최대 29에서 0개로 확인했습니다. 보증금·월 이용료·이용 인원 필터는 버튼·모달·URL 파싱·검색 요청에서 제거하고 성별은 유지합니다. 매물 가격과 인원 정보의 표시는 유지합니다.</div>
+        </section>
+        <section class="section" id="frontend" aria-labelledby="frontend-title">
+          <div class="section-head"><span>01 / EXECUTION</span><h2 id="frontend-title">프론트 실행 계획</h2></div>
+          <div id="phases"></div><p class="empty" id="empty" hidden>검색어에 해당하는 프론트 작업이 없습니다.</p>
+        </section>
+        <section class="section" id="backend" aria-labelledby="backend-title">
+          <div class="section-head"><span>02 / HANDOFF</span><h2 id="backend-title">효재님 확인·요청사항</h2></div>
+          <div class="card table-wrap"><table><thead><tr><th scope="col">구분</th><th scope="col">작업·확인 내용</th><th scope="col">완료 기준</th></tr></thead><tbody id="backend-rows"></tbody></table></div>
+          <p class="notice amber">여기의 “기존 요청”은 합의한 요청 문안입니다. 슬랙 발송이나 작업 완료를 의미하지 않습니다. 추가 개발은 최신 응답을 확인한 뒤 실제 누락이 있을 때만 요청합니다.</p>
+        </section>
+        <section class="section" id="scope" aria-labelledby="scope-title">
+          <div class="section-head"><span>03 / SCOPE</span><h2 id="scope-title">이번 배포의 경계</h2></div>
+          <div class="split">
+            <article class="card scope-box"><h3>반영·유지</h3><ul><li>구 단위 검색·기존 필터·정렬·더 보기</li><li>서버 제목·선택 부제목·상세 설명</li><li>회원 건물 지도·로그인 후 상세 복귀</li><li>회원·비회원 카카오 채널 문의</li><li>가격·입주 가능일·최소 거주 기간 정보</li><li>기존 등록·자동저장 기능의 실제 검증</li><li>희망 지역 요청은 계약·목적 확정 후 연결</li></ul></article>
+            <article class="card scope-box"><h3>제외·추가 요청하지 않음</h3><ul><li>계약하기·방문 예약·저장하기</li><li>대학교·지하철 매물 검색</li><li>탐색 목록 화면의 지도</li><li>호스트 제출 후 수정·재제출</li><li>부제목 필수 처리·게시 차단</li><li>새 검색 API·지도 좌표 저장 API</li><li>예약·계약 백엔드의 전면 삭제</li></ul><p style="font-size:12px;color:var(--muted)">공유하기는 필수 작업 완료 후 간단 구현이 가능한 경우에만 추가합니다.</p></article>
+          </div>
+        </section>
+        <section class="section" id="acceptance" aria-labelledby="acceptance-title">
+          <div class="section-head"><span>04 / RELEASE GATE</span><h2 id="acceptance-title">배포 완료 기준</h2></div>
+          <div class="card"><div class="flow" aria-label="전체 검증 흐름"><span>등록·제출</span><i aria-hidden="true">→</i><span>관리자 게시</span><i aria-hidden="true">→</i><span>메인·구·검색 노출</span><i aria-hidden="true">→</i><span>상세·회원 지도</span><i aria-hidden="true">→</i><span>카카오 문의</span><i aria-hidden="true">→</i><span>수정·비공개 반영</span></div><p class="gate">실제 데이터로 위 흐름을 통과하고, 회원·비회원 및 모바일·데스크톱을 확인합니다. 모의 응답 검증과 실제 API 검증을 구분하고, 희망 지역 폼의 미확정 정책은 완료된 것으로 처리하지 않습니다.</p></div>
+        </section>
+        <section class="section" id="references" aria-labelledby="references-title">
+          <div class="section-head"><span>05 / EVIDENCE</span><h2 id="references-title">근거와 검증 범위</h2></div>
+          <div class="card refs"><p>이 계획서는 2026.10.15 대화에서 최종 합의한 내용을 기준으로 작성했습니다. 기존 문서와 충돌하면 이번 합의를 우선합니다.</p><ul><li><a href="https://hometohq.slack.com/archives/C0C7AD25DQQ/p1791856169212759" target="_blank" rel="noopener noreferrer">71번 채널 · 홈투게더 프론트 후속 작업 정리</a></li><li><a href="https://hometohq.slack.com/archives/C0BTSGN4PHS/p1791979232092019" target="_blank" rel="noopener noreferrer">효재님 회신 · 구 목록·구 검색·지도용 건물 주소</a></li><li><a href="listing-contract-stage-1.md">등록·API 연결 및 모의 검증 기록</a> · <a href="listing-frontend-work-items.md">기존 프론트 작업 목록</a></li><li><a href="guest-region-request-api.md">희망 지역 요청 API 제안 · 합의 전</a></li><li>검토 당시 실제 목록·비회원 상세 확인. 회원 화면·관리자 저장·최신 백엔드 배포 전체는 실행 검증하지 않았습니다. 로컬 백엔드는 10/12 기준으로, 이후 슬랙 회신과 차이가 있었습니다.</li></ul></div>
+        </section>
+        <footer class="footer"><p>Home Together · 매물 탐색 배포 계획 · 2026.10.15</p><p class="interactive-note">외부 라이브러리·서버 연결 없이 동작하는 단일 HTML 문서입니다. 파일을 전달해도 체크 상태는 전달되지 않습니다.</p></footer>
+      </main>
+    </div>
+    <script>
+      const phases = [
+        {title:"API 계약·프론트 모델 정리",description:"다른 화면 작업의 기준을 먼저 통일합니다.",gate:"최신 계약 대조 후 검색·상세 작업 진행",tasks:[
+          ["지역 코드와 API 시도·시군구 이름 변환 통일","URL 상태와 서버 요청값을 명시적으로 구분합니다."],
+          ["메인·탐색·필터 모달의 구 목록 통일","공개 매물 구 목록을 공통 선택지로 사용합니다."],
+          ["지역 URL 검증과 현재 선택지 분리","매물이 없어진 구의 기존 URL은 결과 없음으로 처리합니다."],
+          ["목록·상세 제목·부제목 매핑 정규화","신규·레거시, 회원·비회원 응답 차이를 처리합니다. 부제목은 선택값입니다."],
+          ["공개 범위와 가격 해석 통일","비회원은 지역만, 회원은 건물 위치까지. 보증금·관리비는 원, 월세는 만원 단위입니다. 미입력을 0원으로 바꾸지 않습니다."]]},
+        {title:"확정 검색 UI를 실제 화면에 적용",description:"미리보기의 구 선택 UI를 재사용하고 모의 데이터 의존성을 분리합니다.",gate:"메인·탐색·필터가 동일한 검색 결과를 조회",tasks:[
+          ["구 선택과 검색 실행 분리","선택은 이름 표시·패널 닫기까지. 검색 버튼·아이콘 클릭 시에만 적용합니다."],
+          ["미선택·직접 진입 동작 적용","메인 미선택은 안내, /rooms 직접 진입은 전체 공개 매물을 표시합니다."],
+          ["검색창·모달·지역 칩 상태 동기화","지역 변경은 기존 필터·정렬 유지, 첫 페이지부터 조회합니다."],
+          ["목록 상태와 더 보기 보완","결과 없음·초기화·로딩·오류 재시도·추가 조회 실패 시 기존 목록 유지를 확인합니다."],
+          ["학교·역 입력 안내와 고정 지역 탭 정리","메인 지역별 매물도 같은 구 목록·검색 계약을 사용합니다. 기존 실제 조회 UI는 유지합니다."]]},
+        {title:"상세·로그인·지도 흐름 완성",description:"실제 공개 응답을 기준으로 사용자 접근 범위를 일치시킵니다.",gate:"건물 주소 응답 확인 필요 / 좌표 저장 API 신설 없음",tasks:[
+          ["목록과 상세 제목·부제목 일치","서버 제목을 사용하고 부제목은 값이 있을 때 표시합니다."],
+          ["관리자 상세 설명 수정 반영 확인","기존 저장 기능을 사용해 실제 상세까지 반영되는지 확인합니다."],
+          ["로그인 후 원래 매물 상세 복귀","목록 복귀 경로도 함께 보존하며 안전한 내부 경로만 허용합니다."],
+          ["토큰 만료·공개 범위·캐시 처리","갱신·재조회 또는 재로그인으로 복구하고 viewerAccess와 화면 분기를 맞춥니다."],
+          ["회원 건물 주소를 좌표로 변환해 지도 표시","공개용 buildingAddress만 사용합니다. 로딩·주소 없음·실패·재시도를 처리합니다."],
+          ["비회원 건물 위치와 SDK 차단","비회원은 건물 주소·좌표·지도 SDK를 사용하지 않습니다. 지도 실패 시에도 상세·문의는 유지합니다."],
+          ["위치 안내 문구 적용","비회원: 로그인 후 건물 위치를 확인할 수 있어요 / 회원: 동·호수 등 상세 주소는 공개하지 않습니다"]]},
+        {title:"이번 배포 기능·진입점 정리",description:"사용자 흐름을 카카오 문의로 통일합니다. API 회신 전에도 진행할 수 있습니다.",gate:"PC·모바일·직접 URL까지 동일한 배포 범위 적용",tasks:[
+          ["예약 버튼을 카카오 문의로 교체","회원·비회원 모두 로그인 요구 없이 채널 문의로 연결합니다."],
+          ["예약·계약 진입점과 직접 URL 처리","상세 버튼뿐 아니라 PC 내비게이션·모바일 메뉴도 점검합니다."],
+          ["저장·공유 버튼 정리","저장 제거. 공유는 우선 제거 후 필수 작업 완료 시 간단 구현 여부를 판단합니다."],
+          ["예약 전제 문구 정리","지금 예약 가능·예약 후 주소 공개·청구 안내 수정. 가격·입주 가능일·최소 거주 기간 정보는 유지합니다."]]},
+        {title:"목록 복귀·캐시·공개 상태 반영",description:"필터 보존과 누적 목록 복원을 구분해서 검증합니다.",gate:"다음 실제 조회에서 최신 상태 반영 / 실시간 동기화 추가 없음",tasks:[
+          ["브라우저 뒤로가기 복원","검색 조건·누적 목록·스크롤을 복원합니다."],
+          ["목록 돌아가기·직접 진입 처리","복귀 경로가 있으면 검색 조건 유지. 상세 직접 진입은 기본 목록으로 이동합니다."],
+          ["게시·수정·비공개 결과 갱신","다음 실제 조회에 반영하고 캐시된 비공개 매물 클릭 시 공개 중단 안내·목록 복귀를 제공합니다."],
+          ["React 중복 key 경고 해결","검토에서 확인된 key=live 중복 경고를 제거하고 화면 전환을 확인합니다."]]},
+        {title:"희망 지역 폼 계약 확정·연결",description:"다른 프론트 작업은 계속 진행하되 이 기능은 목적을 확정한 뒤 연결합니다.",gate:"효재님 API 회신 + 수요 접수 / 개인 알림 목적 확정 필요",tasks:[
+          ["기존 접수 API·관리자 조회 확인","집주인 상담 신청과 별개의 게스트 희망 지역 요청입니다."],
+          ["수요 접수와 개인 알림 중 목적 확정","목적에 맞춰 인증·연락 수단·동의와 문구를 결정합니다. 지역명만으로 개인 알림은 불가능합니다."],
+          ["실제 접수와 제출 상태 연결","서버 저장 성공 후에만 완료 표시. 요청 중·실패·재시도·중복 제출을 처리합니다."],
+          ["관리자 접수 확인 및 알림 약속 정리","개인 알림이 없다면 ‘새 매물이 등록되면 가장 먼저 알려드릴게요’ 문구를 수정합니다."]]},
+        {title:"실제 등록·운영 검증 후 배포",description:"기존 등록 기능을 실제 API로 검증합니다. 모의 검증과 구분해 기록합니다.",gate:"실제 데이터 전체 흐름 + 기술 검사 + 운영 설정 확인",tasks:[
+          ["등록·자동저장·사진·제출 검증","자동저장·이어쓰기·충돌·만료·사진 업로드·최종 제출을 확인합니다."],
+          ["관리자 변경과 공개 상태 연계 검증","제목·부제목·설명·가격, 게시·주소 변경·재게시·비공개·삭제 반영을 확인합니다."],
+          ["서로 다른 실매물과 화면 조건 검증","가능하면 실매물 2~3개. 회원·비회원, 모바일·데스크톱 및 공개 응답의 동·호수 제외를 확인합니다."],
+          ["타입·린트·빌드 및 운영 설정 확인","운영 도메인 카카오맵 설정·채널 링크, 모의 데이터와 제외 기능 진입점 잔존 여부를 점검합니다."]]}
+      ];
+      const handoff = [
+        ["existing","기존 요청","관리자 상세 설명 수정·반영","기존 구현이 있으면 재개발하지 않고 최신 배포·저장·공개 상세 반영을 확인합니다."],
+        ["existing","기존 요청","관리자 월세 만원 표시·입력","월세 값 50은 50만원입니다. 관리자에서 만원 단위로 안내하고, 월세 값에 원 단위 변환을 중복 적용하지 않습니다."],
+        ["existing","기존 요청","게스트 희망 지역 접수·관리자 조회","기존 API·확인 위치 공유. 미구현이면 목적·인증·연락 정책을 합의한 범위로 추가합니다."],
+        ["confirm","추가 확인","신규 API 반영 환경·명세","/rooms/districts, sido/sigungu 검색, buildingAddress가 적용된 환경과 응답 예시를 확인합니다."],
+        ["confirm","추가 확인","지번 기반 제목·지번 자동 확보","구·동의 건물 유형 형식 생성과 지번 없는 경우 보완 작업의 현재 완료 여부를 확인합니다."],
+        ["confirm","추가 확인","응답 형태별 필드 위치·빈 값","신규·레거시 × 회원·비회원의 title/subtitle/buildingAddress 위치와 null 가능 여부를 확인합니다."],
+        ["conditional","필요 시 요청","공개 응답 제목·부제목 보완","실제 응답에서 화면에 필요한 값이 누락된 경우에만 보완 요청합니다."],
+        ["conditional","필요 시 요청","건물 위치 공개 처리 보완","회원 주소에 동·호수가 섞이거나 비회원에게 건물 위치가 내려오는 경우에만 서버 수정을 요청합니다."]
+      ];
+      const storageKey = "hometogether-listing-release-plan-2026-10-15-v1";
+      let checks = {};
+      let canStore = true;
+      try {
+        const stored = JSON.parse(localStorage.getItem(storageKey) || "{}");
+        if (stored && typeof stored === "object" && !Array.isArray(stored)) {
+          checks = Object.fromEntries(Object.entries(stored).filter(([key,value]) => /^(front-\d+-\d+|back-\d+)$/.test(key) && value === true));
+        }
+      } catch { canStore = false; }
+      const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+      document.getElementById("phases").innerHTML = phases.map((phase,index) => `
+        <article class="card phase" data-phase="${index}" aria-labelledby="phase-title-${index}">
+          <header class="phase-top"><span class="number">${String(index+1).padStart(2,"0")}</span><div class="phase-title"><h3 id="phase-title-${index}">${escapeHtml(phase.title)}</h3><p>${escapeHtml(phase.description)}</p></div><span class="phase-count" data-phase-count="${index}">0 / ${phase.tasks.length}</span></header>
+          <ul class="checklist">${phase.tasks.map((task,taskIndex) => {const id=`front-${index}-${taskIndex}`;return `<li class="task" data-search="${escapeHtml([phase.title,...task].join(" ").toLocaleLowerCase())}"><label><input type="checkbox" data-task="${id}" ${checks[id] ? "checked" : ""} /><span class="task-text">${escapeHtml(task[0])}<small>${escapeHtml(task[1])}</small></span></label></li>`;}).join("")}</ul>
+          <div class="phase-bottom"><b>진행 기준</b>${escapeHtml(phase.gate)}</div>
+        </article>`).join("");
+      document.getElementById("backend-rows").innerHTML = handoff.map((row,index) => `<tr><td><span class="tag ${row[0]}">${escapeHtml(row[1])}</span></td><td><div class="backend-check"><input id="back-${index}" data-task="back-${index}" type="checkbox" ${checks[`back-${index}`] ? "checked" : ""} /><label for="back-${index}">${escapeHtml(row[2])}</label></div></td><td>${escapeHtml(row[3])}</td></tr>`).join("");
+      function updateProgress() {
+        const inputs = [...document.querySelectorAll("input[data-task]")];
+        const completed = inputs.filter(input => input.checked).length;
+        const percentage = Math.round(completed / inputs.length * 100);
+        document.getElementById("progress-label").textContent = `${completed} / ${inputs.length}개 항목 완료 · ${percentage}%`;
+        document.getElementById("progress-fill").style.width = `${percentage}%`;
+        document.querySelector('[role="progressbar"]').setAttribute("aria-valuenow",String(percentage));
+        phases.forEach((phase,index) => {
+          const done = document.querySelectorAll(`[data-phase="${index}"] input:checked`).length;
+          document.querySelector(`[data-phase-count="${index}"]`).textContent = `${done} / ${phase.tasks.length}`;
+        });
+      }
+      function showStorageFailure() {
+        document.getElementById("storage-note").textContent = "이 환경에서는 체크 상태를 저장할 수 없습니다. 현재 화면에서만 유지되며 파일을 다시 열면 초기화될 수 있습니다.";
+      }
+      document.addEventListener("change",event => {
+        const input = event.target;
+        if (!(input instanceof HTMLInputElement) || !input.dataset.task) return;
+        if (input.checked) checks[input.dataset.task] = true; else delete checks[input.dataset.task];
+        try {localStorage.setItem(storageKey,JSON.stringify(checks));} catch {canStore=false;showStorageFailure();}
+        updateProgress();
+      });
+      document.getElementById("search").addEventListener("input",event => {
+        const query = event.target.value.trim().toLocaleLowerCase();
+        let visiblePhases = 0;
+        document.querySelectorAll(".phase").forEach(phase => {
+          let visibleTasks = 0;
+          phase.querySelectorAll(".task").forEach(task => {task.hidden=!task.dataset.search.includes(query);if(!task.hidden) visibleTasks++;});
+          phase.hidden = visibleTasks===0;
+          if (!phase.hidden) visiblePhases++;
+        });
+        document.getElementById("empty").hidden = visiblePhases>0;
+      });
+      document.getElementById("print").addEventListener("click",() => window.print());
+      window.addEventListener("beforeprint",() => {document.getElementById("search").value="";document.getElementById("search").dispatchEvent(new Event("input"));});
+      if (!canStore) showStorageFailure();
+      updateProgress();
+    </script>
+  </body>
+</html>

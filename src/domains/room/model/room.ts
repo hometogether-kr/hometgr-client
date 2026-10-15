@@ -7,10 +7,8 @@
  * 서버 컴포넌트가 조회해 클라이언트로 props로 내려보낼 수 있어야 하므로, 이 모델은
  * 전부 직렬화 가능한 값만 담습니다. 날짜는 `Date`가 아니라 `"YYYY-MM-DD"` 문자열입니다.
  *
- * ⚠️ 실제 `GET /rooms`는 stage-0 주소 정책이 적용돼 있어 일부 필드가 비어 옵니다:
- * `title`(→buildingName)이 null일 수 있고, 교통 요약에 대응하는 필드가 없으며,
- * 위치는 동이 아니라 구 단위(`"서울시 강남구"`)입니다. 그래서 아래 필드들을 nullable로
- * 둡니다 — 카드는 값이 없을 때 대체 표시합니다. (설계 §11, 디자이너 확인 대기)
+ * 공개 목록의 위치는 구·동 단위 지역 정보입니다. 제목·부제목·사진 등이 없는
+ * 레거시 응답은 매퍼에서 대체 표시하며, 선택 부제목은 null로 보존합니다.
  */
 
 /** 예약 가능 여부 */
@@ -21,11 +19,13 @@ export interface Room {
   id: string;
   /** 건물명 — API `title`. 실데이터에서 null이면 매퍼가 지역 문자열로 폴백 */
   buildingName: string;
+  /** 관리자가 입력한 한 줄 소개. 미입력이면 null입니다. */
+  subtitle: string | null;
   /** 보증금 (만원 단위). 서버가 null이면 "가격 문의" 표시. 예) 1000 */
   deposit: number | null;
   /** 월세 (만원 단위). 예) 80 */
   monthlyRent: number | null;
-  /** 위치 — API `addressRegion`. 구 단위. 예) "서울시 강남구" */
+  /** 위치 — API `addressRegion`. 예) "서울특별시 중랑구 묵동" */
   neighborhood: string;
   /** 교통 요약 — stage-0 정책상 대개 null (대응 API 필드 없음) */
   transitSummary: string | null;

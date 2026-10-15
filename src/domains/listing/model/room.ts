@@ -1,7 +1,8 @@
 export interface RoomPrice {
-  depositKrw: number;
-  monthlyRentKrw: number;
-  maintenanceFeeKrw: number;
+  depositKrw: number | null;
+  /** 공개 API의 monthlyRentKrw 값은 만원 단위이므로 모델에서 이름을 구분합니다. */
+  monthlyRentManwon: number | null;
+  maintenanceFeeKrw: number | null;
 }
 
 export interface RoomPhoto {
@@ -30,11 +31,10 @@ export interface RoomHousehold {
 
 export interface RoomDetail {
   id: string;
-  /**
-   * v2 등록 플로우엔 제목 입력 단계 자체가 없고, 비회원 미리보기 응답에도
-   * 제목이 내려오지 않는다. 그런 경우 건물 유형·위치로 표시용 제목을 만든다.
-   */
+  /** 서버에서 생성한 제목. 누락된 레거시 응답만 지역으로 대체합니다. */
   title: string;
+  /** 관리자가 입력한 선택 부제목. */
+  subtitle: string | null;
   addressRegion: string | null;
   /** "상세 주소는 방문 예약 확정 후 공개됩니다" — 회원 여부와 무관하게 항상 노출 */
   addressDisclosureNote: string;

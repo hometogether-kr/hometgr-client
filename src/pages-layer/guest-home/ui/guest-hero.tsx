@@ -8,10 +8,7 @@ import styles from "./guest-home.module.css";
 
 export function GuestHero({ previewOptions }: { previewOptions?: MockRoomSourceOptions }) {
   return (
-    <section
-      className={`${styles.hero} ${previewOptions ? styles.previewHero : ""}`}
-      aria-labelledby="guest-title"
-    >
+    <section className={styles.hero} aria-labelledby="guest-title">
       <div className={`${styles.container} ${styles.heroInner}`}>
         <div className={styles.heroCopy}>
           <p>함께 살아 더 안전한 홈투게더</p>

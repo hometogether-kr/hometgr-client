@@ -1,4 +1,4 @@
-import { formatManwon, type RoomPrice } from "@/domains/listing";
+import { formatManwon, formatMonthlyRent, type RoomPrice } from "@/domains/listing";
 import { BtnCta } from "@/shared/ui/btn-cta";
 
 export interface PriceSidebarGuestProps {
@@ -15,7 +15,7 @@ export function PriceSidebarGuest({ price, onRequireLogin }: PriceSidebarGuestPr
       <div className="flex flex-col gap-3">
         <p className="text-headline-1 font-medium text-grayscale-500">보증금 / 월세</p>
         <p className="text-title-2 font-semibold text-grayscale-800">
-          {formatManwon(price.depositKrw)} / {formatManwon(price.monthlyRentKrw)}
+          {formatManwon(price.depositKrw)} / {formatMonthlyRent(price.monthlyRentManwon)}
         </p>
       </div>
       <div className="flex flex-col gap-3">

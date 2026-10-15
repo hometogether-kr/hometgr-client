@@ -38,6 +38,8 @@ export interface ModalProps {
   /** 본문 아래 액션 영역 */
   footer?: ReactNode;
   closeButton?: ModalCloseButton;
+  /** 기본 닫기 아이콘을 대체합니다. */
+  closeIcon?: ReactNode;
   classNames?: ModalClassNames;
 }
 
@@ -60,6 +62,7 @@ export function Modal({
   children,
   footer,
   closeButton = "header",
+  closeIcon,
   classNames,
 }: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -69,7 +72,7 @@ export function Modal({
 
   if (!open) return null;
 
-  const closeIcon = (
+  const closeButtonIcon = closeIcon ?? (
     <span className="flex size-5 items-center justify-center overflow-clip rounded-lg">
       <Icon name="close" size={14} />
     </span>
@@ -104,7 +107,7 @@ export function Modal({
               onClick={onClose}
               className="flex items-center p-2.5 text-white transition-opacity hover:opacity-70 md:rounded-lg md:bg-white/50 md:p-3 md:text-grayscale-800"
             >
-              {closeIcon}
+              {closeButtonIcon}
             </button>
           </div>
         )}
@@ -133,7 +136,7 @@ export function Modal({
                     classNames?.closeButton,
                   )}
                 >
-                  {closeIcon}
+                  {closeButtonIcon}
                 </button>
               )}
             </div>

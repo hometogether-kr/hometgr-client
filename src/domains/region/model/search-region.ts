@@ -3,11 +3,14 @@ import { REGIONS } from "./regions.data";
 export const SEARCH_REGIONS = REGIONS.flatMap((sido) =>
   sido.sigungu.map((sigungu) => ({
     sido: sido.code,
+    sidoName: "서울특별시",
     sigungu: sigungu.code,
     label: `서울특별시 ${sigungu.name}`,
     name: sigungu.name,
   })),
 );
+
+export type SearchRegion = (typeof SEARCH_REGIONS)[number];
 
 export function findSearchRegion(value: string) {
   const normalized = value.trim().replace(/\s+/g, " ");

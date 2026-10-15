@@ -42,6 +42,7 @@ export function createMockListings(): MockListing[] {
         room: {
           id,
           buildingName,
+          subtitle: "화면 검증용 가상 매물입니다.",
           deposit,
           monthlyRent,
           neighborhood: district,
@@ -53,12 +54,13 @@ export function createMockListings(): MockListing[] {
         detail: {
           id,
           title: buildingName,
+          subtitle: "화면 검증용 가상 매물입니다.",
           addressRegion: region,
           addressDisclosureNote: "건물 위치는 로그인 후 확인할 수 있어요.",
           locationSummary: district,
           price: {
             depositKrw: deposit * 10000,
-            monthlyRentKrw: monthlyRent * 10000,
+            monthlyRentManwon: monthlyRent,
             maintenanceFeeKrw: 50000,
           },
           buildingTypeLabel: buildingType === "apartment" ? "아파트" : "오피스텔",

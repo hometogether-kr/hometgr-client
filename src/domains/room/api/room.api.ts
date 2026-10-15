@@ -19,6 +19,9 @@ import { toRoomListResult } from "./room.mapper";
  * 호출합니다. 모든 필터 필드는 선택적이며, 미지정은 undefined입니다.
  */
 export interface RoomListQuery {
+  /** 구 단위 조회에 사용하는 이름. 화면 URL의 행정 코드와 구분합니다. */
+  sido?: string;
+  sigungu?: string;
   /** 공개 지역 정확 일치. 공개 지역이 없는 매물은 대략적 위치 부분 일치 */
   region?: string;
   /** 조회할 페이지 (1부터) */
@@ -75,6 +78,8 @@ export async function fetchRooms(
     schema: roomListResponseSchema,
     signal,
     searchParams: {
+      sido: query.sido,
+      sigungu: query.sigungu,
       region: query.region,
       page,
       limit: PAGE_SIZE,
@@ -82,8 +87,9 @@ export async function fetchRooms(
       order: sortParam.order,
       depositMin: query.depositMin,
       depositMax: query.depositMax,
-      monthlyRentMin: query.rentMin,
-      monthlyRentMax: query.rentMax,
+      // 조회 입력은 원 단위, 서버의 월세 조건은 만원 단위입니다.
+      monthlyRentMin: query.rentMin === undefined ? undefined : query.rentMin / 10_000,
+      monthlyRentMax: query.rentMax === undefined ? undefined : query.rentMax / 10_000,
       buildingType: query.buildingType,
       roomCapacity: query.people === "threePlus" ? "threeOrMore" : query.people,
       preferredGender: query.gender,
