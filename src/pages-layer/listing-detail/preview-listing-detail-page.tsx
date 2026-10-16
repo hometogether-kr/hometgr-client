@@ -7,6 +7,7 @@ import { Suspense, useState } from "react";
 import type { MockRoomSourceOptions } from "@/features/preview-rooms";
 import { createMockRoomSource } from "@/features/preview-rooms";
 import { ApiError } from "@/shared/api";
+import { BackLink } from "@/shared/ui/back-link";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { QueryErrorBoundary } from "@/shared/ui/error-boundary";
 import { SiteLayout } from "@/widgets/site-layout";
@@ -50,9 +51,9 @@ export function PreviewListingDetailPage({
     <SiteLayout background="white">
       <div className="mx-auto flex w-full max-w-[1920px] flex-col gap-10 px-4 py-8 md:gap-12 md:px-10 xl:px-[200px] xl:py-[100px]">
         <nav aria-label="상세 미리보기" className="flex flex-wrap items-center gap-4 text-sm">
-          <Link href={returnHref} scroll={false} prefetch={false} className="underline">
+          <BackLink href={returnHref} scroll={false}>
             검색 결과로 돌아가기
-          </Link>
+          </BackLink>
           <span className="text-grayscale-600">모의 상세 · 실제 로그인 상태와 무관합니다.</span>
           <Link
             href={viewerHref("guest")}
@@ -88,9 +89,9 @@ export function PreviewListingDetailPage({
                   다시 시도
                 </BtnCta>
               )}
-              <Link href={returnHref} className="underline">
-                검색 결과 보기
-              </Link>
+              <BackLink href={returnHref} scroll={false}>
+                검색 결과로 돌아가기
+              </BackLink>
             </div>
           )}
         >

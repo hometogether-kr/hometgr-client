@@ -11,6 +11,7 @@ import { usePreviewRegions } from "@/features/preview-rooms";
 import { cn } from "@/shared/lib/cn";
 import { useOutsideClick } from "@/shared/lib/hooks";
 import { BtnCta } from "@/shared/ui/btn-cta";
+import { Icon } from "@/shared/ui/icons";
 
 interface RoomRegionSearchProps {
   initialRegion?: string;
@@ -52,6 +53,17 @@ export function RoomRegionSearch({
 
   useOutsideClick(rootRef, closePanel, open);
 
+  function resetSelection() {
+    setSelectedRegion(undefined);
+    setActiveIndex(-1);
+    setError("");
+  }
+
+  function openPanel() {
+    resetSelection();
+    setOpen(true);
+  }
+
   function selectRegion(value: string) {
     setSelectedRegion(value);
     setError("");
@@ -65,7 +77,7 @@ export function RoomRegionSearch({
       closePanel();
     } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
-      setOpen(true);
+      if (!open) openPanel();
       const direction = event.key === "ArrowDown" ? 1 : -1;
       setActiveIndex((index) => {
         if (!options.length) return -1;
@@ -118,36 +130,54 @@ export function RoomRegionSearch({
           onSearch(selectedRegion);
         }}
       >
-        <button
-          ref={triggerRef}
-          type="button"
-          role="combobox"
-          aria-label={label ? `지역구 선택: ${label}` : "지역구 선택"}
-          aria-expanded={open}
-          aria-controls={open ? listId : undefined}
-          aria-haspopup="listbox"
-          aria-activedescendant={
-            open && options[activeIndex] ? `${id}-option-${activeIndex}` : undefined
-          }
-          aria-describedby={error ? `${id}-error` : undefined}
-          aria-invalid={Boolean(error)}
-          onClick={() => {
-            setOpen(!open);
-            setActiveIndex(-1);
-            setError("");
-          }}
-          onKeyDown={handleKeyDown}
+        <div
           className={cn(
-            "min-w-0 flex-1 rounded-xl text-left text-base focus-visible:outline-2 focus-visible:outline-primary-500",
-            label ? "text-grayscale-900" : "text-grayscale-500",
-            layout === "main"
-              ? "border border-grayscale-300 bg-white px-3 font-bold sm:px-5"
-              : "px-4 font-medium",
+            "flex min-w-0 flex-1 items-stretch rounded-xl",
+            layout === "main" && "border border-grayscale-300 bg-white",
             open && layout === "main" && "border-primary-500 ring-1 ring-primary-500",
           )}
         >
-          <span className="block truncate">{label ?? "지역구를 선택해주세요"}</span>
-        </button>
+          <button
+            ref={triggerRef}
+            type="button"
+            role="combobox"
+            aria-label={label ? `지역구 선택: ${label}` : "지역구 선택"}
+            aria-expanded={open}
+            aria-controls={open ? listId : undefined}
+            aria-haspopup="listbox"
+            aria-activedescendant={
+              open && options[activeIndex] ? `${id}-option-${activeIndex}` : undefined
+            }
+            aria-describedby={error ? `${id}-error` : undefined}
+            aria-invalid={Boolean(error)}
+            onClick={() => {
+              if (open) closePanel();
+              else openPanel();
+            }}
+            onKeyDown={handleKeyDown}
+            className={cn(
+              "min-w-0 flex-1 rounded-xl text-left text-base focus-visible:outline-2 focus-visible:outline-primary-500",
+              label ? "text-grayscale-900" : "text-grayscale-500",
+              layout === "main" ? "px-3 font-bold sm:px-5" : "px-4 font-medium",
+            )}
+          >
+            <span className="block truncate">{label ?? "지역구를 선택해주세요"}</span>
+          </button>
+          {selectedRegion && (
+            <button
+              type="button"
+              aria-label="지역구 선택 초기화"
+              onClick={() => {
+                resetSelection();
+                closePanel();
+                triggerRef.current?.focus();
+              }}
+              className="mr-1 flex size-11 shrink-0 items-center justify-center self-center rounded-lg text-grayscale-600 transition-colors hover:bg-grayscale-200 focus-visible:outline-2 focus-visible:outline-primary-500"
+            >
+              <Icon name="close" size={20} />
+            </button>
+          )}
+        </div>
         {layout === "main" ? (
           <BtnCta
             type="submit"
@@ -206,20 +236,15 @@ export function RoomRegionSearch({
                   tabIndex={-1}
                   aria-selected={region.value === selectedRegion}
                   onMouseDown={(event) => event.preventDefault()}
-                  onMouseEnter={() => setActiveIndex(index)}
+                  onMouseEnter={() => setActiveIndex(-1)}
                   onClick={() => selectRegion(region.value)}
                   className={cn(
-                    "flex h-12 shrink-0 items-center justify-between rounded-lg px-3 text-left text-[15px] text-grayscale-900",
-                    region.value === selectedRegion && "bg-primary-100 font-semibold",
-                    activeIndex === index && "outline-2 -outline-offset-2 outline-primary-500",
+                    "flex h-12 shrink-0 items-center rounded-lg px-3 text-left text-[15px] text-grayscale-900 transition-colors hover:bg-grayscale-200",
+                    activeIndex === index &&
+                      "bg-grayscale-200 outline-2 -outline-offset-2 outline-primary-500",
                   )}
                 >
                   {region.label}
-                  {region.value === selectedRegion && (
-                    <span aria-hidden="true" className="font-bold text-primary-500">
-                      ✓
-                    </span>
-                  )}
                 </button>
               ))}
             {regions.isPending &&

@@ -1,23 +1,18 @@
 "use client";
 
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 import { parseRoomListReturnHref } from "@/features/filter-rooms";
+import { BackLink } from "@/shared/ui/back-link";
 import { SiteLayout } from "@/widgets/site-layout";
 
 function ReturnToList() {
   const params = useSearchParams();
   return (
-    <Link
-      href={parseRoomListReturnHref(params.get("returnTo"))}
-      scroll={false}
-      prefetch={false}
-      className="text-primary-600 underline"
-    >
+    <BackLink href={parseRoomListReturnHref(params.get("returnTo"))} scroll={false}>
       검색 결과로 돌아가기
-    </Link>
+    </BackLink>
   );
 }
 
@@ -29,7 +24,7 @@ export function ListingNotFoundPage() {
         <p className="text-grayscale-600">
           공개가 중단되었거나 삭제된 매물일 수 있어요. 다른 매물을 확인해 주세요.
         </p>
-        <Suspense fallback={<Link href="/rooms">매물 목록 보기</Link>}>
+        <Suspense fallback={<BackLink href="/rooms">매물 목록 보기</BackLink>}>
           <ReturnToList />
         </Suspense>
       </section>

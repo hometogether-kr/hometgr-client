@@ -3,12 +3,12 @@
 import { useRouter } from "next/navigation";
 
 import { formatManwon, formatMonthlyRent, type RoomDetail } from "@/domains/listing";
-import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { InfoBox } from "@/shared/ui/info-box";
 
 export interface RoomSummaryCardProps {
   room: Pick<RoomDetail, "id" | "title" | "price" | "locationSummary" | "photos">;
+  detailHref: string;
 }
 
 /* eslint-disable @next/next/no-img-element -- 원본 매물 사진, next/image 최적화 대상 아님 */
@@ -18,22 +18,22 @@ export interface RoomSummaryCardProps {
  *
  * 집주인 페이지에서 보고 있던 매물로 돌아갈 수 있는 카드입니다.
  */
-export function RoomSummaryCard({ room }: RoomSummaryCardProps) {
+export function RoomSummaryCard({ room, detailHref }: RoomSummaryCardProps) {
   const router = useRouter();
 
   return (
     <section className="flex w-full flex-col gap-6 rounded-2xl border border-grayscale-200 px-6 py-7 md:px-9 md:py-8">
       <h2 className="text-title-3 font-semibold text-grayscale-900">매물 정보</h2>
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-        <div className="h-[125px] w-full shrink-0 overflow-hidden rounded-xl sm:w-[180px]">
+      <div className="flex flex-col gap-5 2xl:flex-row 2xl:items-start">
+        <div className="h-[125px] w-full shrink-0 overflow-hidden rounded-xl 2xl:w-[180px]">
           <img
             alt={room.title}
             src={room.photos[0]?.url}
             className="block size-full object-cover"
           />
         </div>
-        <div className="flex flex-1 items-center justify-between gap-5">
-          <div className="flex flex-col gap-1">
+        <div className="flex min-w-0 flex-1 flex-col items-start gap-5">
+          <div className="flex min-w-0 flex-col gap-1 break-words">
             <p className="text-heading-2 font-normal text-grayscale-700">{room.title}</p>
             <p className="text-title-3 font-semibold text-grayscale-900">
               보증금 {formatManwon(room.price.depositKrw)} / 월세{" "}
@@ -41,7 +41,7 @@ export function RoomSummaryCard({ room }: RoomSummaryCardProps) {
             </p>
             <p className="text-body-1 font-normal text-grayscale-400">{room.locationSummary}</p>
           </div>
-          <BtnCta variant="sub" size="s" onClick={() => router.push(ROUTES.roomDetail(room.id))}>
+          <BtnCta variant="sub" size="s" onClick={() => router.push(detailHref)}>
             매물 정보 보기
           </BtnCta>
         </div>
