@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -11,6 +10,8 @@ import {
 } from "@/domains/listing";
 import { useSession } from "@/domains/user";
 import { LoginPromptModal } from "@/features/prompt-login";
+import { ROUTES } from "@/shared/config";
+import { BackLink } from "@/shared/ui/back-link";
 import { SiteLayout } from "@/widgets/site-layout";
 
 import { ContractCardGuest } from "./ui/contract-card-guest";
@@ -55,9 +56,9 @@ export function ListingDetailPage({ room, returnHref }: ListingDetailPageProps) 
     <SiteLayout background="white">
       <div className="flex w-full flex-col gap-10 px-4 py-8 md:gap-12 md:px-[200px] md:py-[100px]">
         <nav aria-label="목록 복귀">
-          <Link href={returnHref} scroll={false} prefetch={false} className="text-sm underline">
+          <BackLink href={returnHref} scroll={false}>
             검색 결과로 돌아가기
-          </Link>
+          </BackLink>
         </nav>
         {canViewMemberDetail ? (
           <PhotoGalleryMember photos={room.photos} />
@@ -96,7 +97,11 @@ export function ListingDetailPage({ room, returnHref }: ListingDetailPageProps) 
                 <LocationCardGuest onRequireLogin={requireLogin} />
               </>
             )}
-            <HostCard roomId={room.id} host={room.host} />
+            <HostCard
+              roomId={room.id}
+              host={room.host}
+              href={`${ROUTES.roomHost(room.id)}?${new URLSearchParams({ returnTo: returnHref })}`}
+            />
           </div>
 
           {canViewMemberDetail ? (
