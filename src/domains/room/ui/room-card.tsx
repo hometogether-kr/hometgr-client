@@ -14,17 +14,14 @@ interface RoomCardProps {
 }
 
 /**
- * 매물 카드 (Figma `card_매물카드`, 365×375)
+ * 매물 카드 (Figma `card_매물카드`, 기준 너비 365px)
  *
  * 카드 전체가 링크 하나입니다. 카드 안에 별도 인터랙티브 요소(찜하기 등)가 생기면
  * 그때 중첩 인터랙티브를 피하려 마크업을 바꿉니다 — 지금 디자인엔 카드 내 버튼이 없습니다.
  *
- * stage-0 데이터가 비어 오는 경우를 대비합니다: 사진이 없으면 회색 박스, 교통 요약이
- * 없으면 위치만 표시합니다(설계 §11 — 디자이너 확인 대기).
+ * 사진이 없으면 회색 박스로 대체합니다. 하단에는 부제목만 표시해 주소 반복을 피합니다.
  */
 export function RoomCard({ room, href, priority = false, onNavigate }: RoomCardProps) {
-  const location = [room.neighborhood, room.transitSummary].filter(Boolean).join(" · ");
-
   return (
     <li id={`room-card-${room.id}`}>
       <Link
@@ -65,16 +62,15 @@ export function RoomCard({ room, href, priority = false, onNavigate }: RoomCardP
         <div className="mt-4 flex flex-col gap-5">
           <div className="flex flex-col gap-1">
             <h3 className="text-headline-1 break-words text-grayscale-700">{room.buildingName}</h3>
-            {room.subtitle && (
-              <p className="line-clamp-2 text-body-2 break-words text-grayscale-500">
-                {room.subtitle}
-              </p>
-            )}
             <p className="text-heading-1 font-semibold text-grayscale-900">
               {formatRoomPrice(room.deposit, room.monthlyRent)}
             </p>
           </div>
-          {location && <p className="text-body-1 text-grayscale-400">{location}</p>}
+          {room.subtitle && (
+            <p className="line-clamp-2 text-body-2 break-words text-grayscale-500">
+              {room.subtitle}
+            </p>
+          )}
         </div>
       </Link>
     </li>

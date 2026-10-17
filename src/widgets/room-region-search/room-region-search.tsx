@@ -158,7 +158,7 @@ export function RoomRegionSearch({
             className={cn(
               "min-w-0 flex-1 rounded-xl text-left text-base focus-visible:outline-2 focus-visible:outline-primary-500",
               label ? "text-grayscale-900" : "text-grayscale-500",
-              layout === "main" ? "px-3 font-bold sm:px-5" : "px-4 font-medium",
+              layout === "main" ? "px-3 font-bold sm:px-5" : "pr-4 pl-5 font-medium",
             )}
           >
             <span className="block truncate">{label ?? "지역구를 선택해주세요"}</span>
@@ -190,7 +190,7 @@ export function RoomRegionSearch({
           <button
             type="submit"
             aria-label="검색"
-            className="shrink-0 self-center rounded-lg focus-visible:outline-2 focus-visible:outline-primary-500"
+            className="flex size-10 shrink-0 items-center justify-center self-center rounded-lg focus-visible:outline-2 focus-visible:outline-primary-500"
           >
             <Image src="/images/room-search/search.svg" width={24} height={24} alt="" />
           </button>
