@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { AmountField } from "@/shared/ui/amount-field";
 import { DateField } from "@/shared/ui/date-field";
 import { OptionalAmountField } from "@/shared/ui/optional-amount-field";
 import { TextField } from "@/shared/ui/text-field";
@@ -11,7 +12,7 @@ import { ListingStepLayout } from "@/widgets/listing-step-layout";
 type AmountMode = "none" | "custom" | null;
 
 const REQUIRED_MESSAGE = "필수 항목입니다.";
-const AMOUNT_MESSAGE = "금액을 숫자로 입력해주세요. 예) 65만원";
+const AMOUNT_MESSAGE = "금액을 숫자로 입력해주세요. 예) 650,000원";
 const PERIOD_MESSAGE = "거주 기간을 입력해주세요. 예) 6개월, 1년";
 const DATE_REQUIRED_MESSAGE = "필수 항목입니다. 미정이라면 임의로 선택 후 문의 부탁드립니다.";
 
@@ -45,7 +46,7 @@ export interface ListingStep7PageProps {
   onPrev?: () => void;
   onNext?: (values: ListingStep7Values) => void;
   isSaving?: boolean;
-  /** "65만원" 같은 표기를 원 단위 정수로 바꿉니다. 실패하면 null */
+  /** "650,000원" 같은 표기를 원 단위 정수로 바꿉니다. 실패하면 null */
   parseAmount: (input: string) => number | null;
   /** "6개월" 같은 표기를 개월 수로 바꿉니다. 실패하면 null */
   parsePeriod: (input: string) => number | null;
@@ -159,33 +160,33 @@ export function ListingStep7Page({
       autoSaving={isSaving}
     >
       <div className="flex w-full max-w-[580px] flex-col gap-6">
-        <TextField
-          label="월세"
-          placeholder="예) 65만원"
+        <AmountField
+          label="월세 (원)"
+          placeholder="예) 650,000원"
           size="L"
           className="w-full"
           value={rent}
-          onChange={(e) => setRent(e.target.value)}
+          onValueChange={setRent}
           error={show("rent")}
         />
         <OptionalAmountField
-          label="보증금"
+          label="보증금 (원)"
           name="deposit"
           mode={depositMode}
           onModeChange={setDepositMode}
           value={deposit}
           onValueChange={setDeposit}
-          placeholder="예) 500만원"
+          placeholder="예) 5,000,000"
           error={show("deposit")}
         />
         <OptionalAmountField
-          label="관리비"
+          label="관리비 (원)"
           name="maintenance"
           mode={maintenanceMode}
           onModeChange={setMaintenanceMode}
           value={maintenance}
           onValueChange={setMaintenance}
-          placeholder="예) 5만원"
+          placeholder="예) 50,000"
           error={show("maintenance")}
         />
         <div className="flex w-full flex-col">

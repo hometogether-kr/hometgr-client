@@ -93,8 +93,8 @@ export function createMockRoomSource(options: MockRoomSourceOptions = {}): MockR
       await prepare(query.page > 1 ? "nextPage" : "list");
       const termMonths = { months1: 1, months3: 3, months6: 6, year1Plus: 12 };
       const filtered = listings.filter((item) => {
-        const deposit = (item.room.deposit ?? 0) * 10000;
-        const rent = (item.room.monthlyRent ?? 0) * 10000;
+        const deposit = item.room.deposit ?? 0;
+        const rent = item.room.monthlyRent ?? 0;
         return (
           (!query.region || item.region === query.region) &&
           (!query.sido || item.region.startsWith(`${query.sido} `)) &&

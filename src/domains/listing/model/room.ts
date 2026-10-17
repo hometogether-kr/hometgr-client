@@ -1,7 +1,7 @@
 export interface RoomPrice {
   depositKrw: number | null;
-  /** 공개 API의 monthlyRentKrw 값은 만원 단위이므로 모델에서 이름을 구분합니다. */
-  monthlyRentManwon: number | null;
+  /** API와 동일한 원 단위 정수입니다. */
+  monthlyRentKrw: number | null;
   maintenanceFeeKrw: number | null;
 }
 

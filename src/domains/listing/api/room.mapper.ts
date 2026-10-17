@@ -93,7 +93,7 @@ function toLegacyPreviewDetail(dto: LegacyPreviewDetailDto): RoomDetail {
     locationSummary,
     price: {
       depositKrw: preview.pricing.depositKrw,
-      monthlyRentManwon: preview.pricing.monthlyRentKrw,
+      monthlyRentKrw: preview.pricing.monthlyRentKrw,
       maintenanceFeeKrw: preview.pricing.maintenanceFeeKrw,
     },
     buildingTypeLabel: "",
@@ -126,7 +126,7 @@ function toRegistrationPreviewDetail(dto: RegistrationPreviewDetailDto): RoomDet
     locationSummary,
     price: {
       depositKrw: preview.pricing.depositKrw,
-      monthlyRentManwon: preview.pricing.monthlyRentKrw,
+      monthlyRentKrw: preview.pricing.monthlyRentKrw,
       maintenanceFeeKrw: preview.pricing.maintenanceFeeKrw,
     },
     buildingTypeLabel: "",
@@ -165,7 +165,7 @@ function toLegacyFullDetail(dto: LegacyFullDetailDto): RoomDetail {
     locationSummary,
     price: {
       depositKrw: dto.depositKrw,
-      monthlyRentManwon: dto.monthlyRentKrw,
+      monthlyRentKrw: dto.monthlyRentKrw,
       maintenanceFeeKrw: dto.maintenanceFeeKrw ?? null,
     },
     // 레거시 매물의 건물 유형(PropertyType)은 아직 화면 라벨로 매핑하지 않았다.
@@ -221,7 +221,7 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
     locationSummary,
     price: {
       depositKrw: pricing.depositKrw,
-      monthlyRentManwon: pricing.monthlyRentKrw,
+      monthlyRentKrw: pricing.monthlyRentKrw,
       maintenanceFeeKrw: pricing.maintenanceFeeKrw,
     },
     buildingTypeLabel,

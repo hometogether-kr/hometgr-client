@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { formatManwon, formatMonthlyRent, type RoomDetail } from "@/domains/listing";
+import { formatMonthlyRent, formatPriceKrw, type RoomDetail } from "@/domains/listing";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { InfoBox } from "@/shared/ui/info-box";
 
@@ -36,8 +36,8 @@ export function RoomSummaryCard({ room, detailHref }: RoomSummaryCardProps) {
           <div className="flex min-w-0 flex-col gap-1 break-words">
             <p className="text-heading-2 font-normal text-grayscale-700">{room.title}</p>
             <p className="text-title-3 font-semibold text-grayscale-900">
-              보증금 {formatManwon(room.price.depositKrw)} / 월세{" "}
-              {formatMonthlyRent(room.price.monthlyRentManwon)}
+              보증금 {formatPriceKrw(room.price.depositKrw)} / 월세{" "}
+              {formatMonthlyRent(room.price.monthlyRentKrw)}
             </p>
             <p className="text-body-1 font-normal text-grayscale-400">{room.locationSummary}</p>
           </div>
