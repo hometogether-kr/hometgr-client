@@ -1,4 +1,4 @@
-import { formatManwon, type RoomDetail } from "@/domains/listing";
+import { formatPriceKrw, type RoomDetail } from "@/domains/listing";
 
 import { DetailSection } from "./detail-section";
 
@@ -52,7 +52,7 @@ export function ContractCardMember({ room }: ContractCardMemberProps) {
       value:
         room.price.maintenanceFeeKrw === null
           ? "가격 문의"
-          : `월 ${formatManwon(room.price.maintenanceFeeKrw)}`,
+          : `월 ${formatPriceKrw(room.price.maintenanceFeeKrw)}`,
     },
   ];
 

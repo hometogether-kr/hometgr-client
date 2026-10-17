@@ -32,3 +32,8 @@ export function formatManwon(krw: number): string {
   if (krw < KRW_PER_MANWON) return `${formatAmount(krw)}원`;
   return `${formatAmount(Math.round(krw / KRW_PER_MANWON))}만원`;
 }
+/** 숫자 문자열을 유지해 정밀도 손실 없이 천 단위 쉼표를 추가합니다. */
+export function formatAmountInput(raw: string): string {
+  const digits = raw.replace(/[^0-9]/g, "").replace(/^0+(?=\d)/, "");
+  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

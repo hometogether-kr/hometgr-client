@@ -62,8 +62,8 @@ export function RoomCard({ room, href, priority = false, onNavigate }: RoomCardP
         <div className="mt-4 flex flex-col gap-5">
           <div className="flex flex-col gap-1">
             <h3 className="text-headline-1 break-words text-grayscale-700">{room.buildingName}</h3>
-            <p className="text-heading-1 font-semibold text-grayscale-900">
-              {formatRoomPrice(room.deposit, room.monthlyRent)}
+            <p className="text-heading-1 font-semibold break-words text-grayscale-900">
+              {formatRoomPrice(room.monthlyRent)}
             </p>
           </div>
           {room.subtitle && (

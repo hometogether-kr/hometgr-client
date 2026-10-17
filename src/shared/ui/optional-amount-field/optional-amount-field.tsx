@@ -2,8 +2,8 @@
 
 import { cn } from "@/shared/lib/cn";
 
+import { AmountField } from "../amount-field";
 import { Radio } from "../radio";
-import { TextField } from "../text-field";
 
 export interface OptionalAmountFieldProps {
   label: string;
@@ -62,12 +62,13 @@ export function OptionalAmountField({
           </span>
         </label>
         {mode === "custom" && (
-          <TextField
+          <AmountField
             size="L"
             className="w-full"
             placeholder={placeholder}
+            aria-label={label}
             value={value}
-            onChange={(e) => onValueChange(e.target.value)}
+            onValueChange={onValueChange}
           />
         )}
       </div>

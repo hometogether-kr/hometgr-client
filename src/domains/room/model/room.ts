@@ -21,9 +21,9 @@ export interface Room {
   buildingName: string;
   /** 관리자가 입력한 한 줄 소개. 미입력이면 null입니다. */
   subtitle: string | null;
-  /** 보증금 (만원 단위). 서버가 null이면 "가격 문의" 표시. 예) 1000 */
+  /** 보증금 (원 단위). 서버가 null이면 "가격 문의" 표시. 예) 10_000_000 */
   deposit: number | null;
-  /** 월세 (만원 단위). 예) 80 */
+  /** 월세 (원 단위). 예) 800_000 */
   monthlyRent: number | null;
   /** 위치 — API `addressRegion`. 예) "서울특별시 중랑구 묵동" */
   neighborhood: string;
