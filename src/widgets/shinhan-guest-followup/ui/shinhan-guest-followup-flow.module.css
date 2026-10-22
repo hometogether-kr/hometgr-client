@@ -1,0 +1,369 @@
+.container {
+  width: min(1120px, calc(100% - 40px));
+  margin: 32px auto 80px;
+  outline: none;
+}
+.pathLabel {
+  margin-bottom: 24px;
+  color: var(--color-grayscale-600);
+  font-size: 14px;
+}
+.heading {
+  margin-bottom: 32px;
+}
+.heading h1 {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -1px;
+  word-break: keep-all;
+}
+.heading h1 em {
+  color: var(--color-primary-500);
+  font-style: normal;
+}
+.heading p {
+  margin-top: 12px;
+  color: var(--color-grayscale-600);
+  font-size: 18px;
+  line-height: 28px;
+  word-break: keep-all;
+}
+.concerns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 32px;
+  border: 0;
+  padding: 0;
+}
+.concern {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 116px;
+  padding: 24px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 18px;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+}
+.concern[aria-pressed="true"] {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-50);
+}
+.concern strong {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  word-break: keep-all;
+}
+.concernDescription {
+  display: block;
+  margin-top: 8px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-grayscale-600);
+  word-break: keep-all;
+}
+.checkMark {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-grayscale-300);
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  color: white;
+}
+.concern[aria-pressed="true"] .checkMark {
+  background: var(--color-primary-500);
+  border-color: var(--color-primary-500);
+}
+.consent {
+  margin: 28px 0 12px;
+}
+.consentLine {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.consentLine > label:last-child {
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 24px;
+}
+.consentLine > label:first-child:focus-within {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.help {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-grayscale-500);
+  overflow-wrap: anywhere;
+}
+.error {
+  min-height: 44px;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-system-error);
+}
+.centerHelp {
+  text-align: center;
+  color: var(--color-grayscale-600);
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 20px;
+}
+.concernActions {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+.primaryButton {
+  width: 100%;
+  min-height: 60px;
+  height: auto;
+  padding: 16px 20px;
+  font-size: 18px;
+}
+.secondaryButton {
+  width: 320px;
+  min-height: 60px;
+  height: auto;
+  padding: 16px 20px;
+  font-size: 18px;
+}
+.concernActions .primaryButton {
+  max-width: 544px;
+}
+.guideMode {
+  font-size: 14px;
+  line-height: 22px;
+  margin: -12px 0 24px;
+  color: var(--color-grayscale-600);
+}
+.guideGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 32px;
+}
+.guideGrid > div {
+  min-width: 0;
+}
+.guideActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  margin: 40px auto 0;
+  max-width: 544px;
+}
+.guideActions > p:first-child {
+  font-size: 18px;
+  line-height: 28px;
+}
+.textButton {
+  color: var(--color-grayscale-600);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 12px 0;
+  min-height: 48px;
+}
+.noSelection {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  border-radius: 18px;
+  background: white;
+  padding: 32px;
+  line-height: 26px;
+  text-align: center;
+}
+.receiptLayout {
+  display: grid;
+  grid-template-columns: 456px 600px;
+  gap: 64px;
+  align-items: start;
+}
+.receiptCard {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px;
+  background: white;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 24px;
+}
+.badge {
+  align-self: start;
+  border-radius: 6px;
+  background: var(--color-primary-50);
+  color: var(--color-primary-500);
+  padding: 8px 12px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.cardTitle {
+  font-size: 24px;
+  line-height: 34px;
+  font-weight: 700;
+}
+.summary {
+  background: var(--color-grayscale-50);
+  border-radius: 14px;
+  padding: 20px;
+}
+.summary,
+.details {
+  display: grid;
+  gap: 16px;
+}
+.summary > div,
+.details > div {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 12px;
+  font-size: 16px;
+  line-height: 24px;
+}
+.summary dt,
+.details dt {
+  color: var(--color-grayscale-600);
+}
+.summary dd,
+.details dd {
+  overflow-wrap: anywhere;
+}
+.privacy {
+  margin-top: 32px;
+  text-align: center;
+}
+.empty {
+  max-width: 640px;
+  margin: 72px auto;
+  padding: 20px;
+  line-height: 28px;
+}
+.empty h1 {
+  font-size: 28px;
+  line-height: 40px;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+.empty a {
+  display: inline-block;
+  margin-top: 24px;
+  text-decoration: underline;
+  color: var(--color-primary-500);
+}
+.container button:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 4px;
+}
+@media (max-width: 1159px) {
+  .receiptLayout {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 32px;
+  }
+  .concern {
+    padding: 20px;
+    gap: 12px;
+  }
+}
+@media (max-width: 767px) {
+  .container {
+    margin-top: 24px;
+    margin-bottom: 48px;
+  }
+  .pathLabel {
+    margin-bottom: 20px;
+  }
+  .heading h1 {
+    font-size: 28px;
+    line-height: 40px;
+    letter-spacing: -0.7px;
+  }
+  .heading p {
+    font-size: 16px;
+    line-height: 26px;
+  }
+  .concerns,
+  .guideGrid,
+  .receiptLayout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .concern {
+    padding: 20px;
+    min-height: 108px;
+    gap: 12px;
+  }
+  .concern strong {
+    font-size: 18px;
+    line-height: 26px;
+  }
+  .concernDescription {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .consentLine {
+    align-items: flex-start;
+  }
+  .consentLine > label:first-child {
+    flex-shrink: 0;
+  }
+  .consentLine > label:last-child {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .concernActions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+    min-height: 52px;
+    font-size: 16px;
+    padding: 12px 16px;
+  }
+  .centerHelp {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .receiptLayout {
+    gap: 32px;
+  }
+  .receiptCard {
+    padding: 24px 20px;
+    gap: 20px;
+  }
+  .cardTitle {
+    font-size: 22px;
+    line-height: 30px;
+  }
+  .summary {
+    padding: 16px;
+  }
+  .summary > div,
+  .details > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .guideActions > p:first-child {
+    font-size: 16px;
+    line-height: 26px;
+  }
+}

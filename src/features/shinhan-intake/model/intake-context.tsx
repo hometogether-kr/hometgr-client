@@ -6,11 +6,13 @@ import { createContext, type ReactNode, useCallback, useContext, useState } from
 import {
   SHINHAN_GUEST_BUDGET_PATH,
   SHINHAN_GUEST_DEMAND_PATH,
+  SHINHAN_GUEST_FOLLOWUP_PATH,
   SHINHAN_HOST_ESTIMATE_PATH,
   SHINHAN_HOST_REGISTRATION_PATH,
   SHINHAN_INTAKE_PREVIEW_PATH,
   type ShinhanDraftPath,
 } from "../config/routes";
+import { createGuestFollowupExample, type GuestFollowupExample } from "./guest-followup";
 import {
   createShinhanDraft,
   type ShinhanApplicationType,
@@ -25,6 +27,9 @@ interface PrivacyReturnTarget {
 interface IntakeContextValue {
   draft: ShinhanIntakeDraft | null;
   privacyReturnTarget: PrivacyReturnTarget | null;
+  guestFollowup: GuestFollowupExample | null;
+  startGuestFollowup: () => boolean;
+  updateGuestFollowup: (update: (example: GuestFollowupExample) => GuestFollowupExample) => void;
   startDraft: (applicationType: ShinhanApplicationType) => void;
   startGuestDraft: (
     applicationType: "GUEST_BUDGET" | "GUEST_DEMAND",
@@ -45,7 +50,9 @@ const IntakeContext = createContext<IntakeContextValue | null>(null);
 
 interface IntakeSession {
   draft: ShinhanIntakeDraft | null;
+  draftPath: ShinhanDraftPath | null;
   privacyReturnTarget: PrivacyReturnTarget | null;
+  guestFollowup: GuestFollowupExample | null;
 }
 
 function createSession(
@@ -60,12 +67,22 @@ function createSession(
   ) {
     draft.values.furniture = { bed: "NONE", desk: "NONE", chair: "NONE", wardrobe: "NONE" };
   }
-  return { draft, privacyReturnTarget: { pathname, applicationType } };
+  return {
+    draft,
+    draftPath: pathname,
+    privacyReturnTarget: { pathname, applicationType },
+    guestFollowup: null,
+  };
 }
 
 export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const [session, setSession] = useState<IntakeSession>({ draft: null, privacyReturnTarget: null });
+  const [session, setSession] = useState<IntakeSession>({
+    draft: null,
+    draftPath: null,
+    privacyReturnTarget: null,
+    guestFollowup: null,
+  });
   let currentSession = session;
   const applicationRoute = applicationRoutes.find((route) => route.pathname === pathname);
 
@@ -73,20 +90,25 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
   // 자식이 이전 유형의 상태로 한 번 렌더링되는 effect 초기화를 피한다.
   if (
     applicationRoute &&
-    (session.privacyReturnTarget?.pathname !== pathname ||
+    (session.draftPath !== pathname ||
       session.draft?.applicationType !== applicationRoute.applicationType)
   ) {
     currentSession = createSession(applicationRoute.applicationType, applicationRoute.pathname);
     setSession(currentSession);
   } else if (
     pathname === SHINHAN_INTAKE_PREVIEW_PATH &&
-    session.privacyReturnTarget &&
-    session.privacyReturnTarget.pathname !== pathname
+    session.draftPath &&
+    session.draftPath !== pathname
   ) {
-    currentSession = { draft: null, privacyReturnTarget: null };
+    currentSession = {
+      draft: null,
+      draftPath: null,
+      privacyReturnTarget: null,
+      guestFollowup: null,
+    };
     setSession(currentSession);
   }
-  const { draft, privacyReturnTarget } = currentSession;
+  const { draft, privacyReturnTarget, guestFollowup } = currentSession;
 
   function startDraft(applicationType: ShinhanApplicationType) {
     setSession(createSession(applicationType, SHINHAN_INTAKE_PREVIEW_PATH));
@@ -115,16 +137,37 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
     );
   }, []);
 
+  function startGuestFollowup() {
+    const example = createGuestFollowupExample(draft);
+    if (!example) return false;
+    setSession((current) => ({ ...current, guestFollowup: example }));
+    return true;
+  }
+
+  const updateGuestFollowup = useCallback(
+    (update: (current: GuestFollowupExample) => GuestFollowupExample) => {
+      setSession((current) =>
+        current.guestFollowup
+          ? { ...current, guestFollowup: update(current.guestFollowup) }
+          : current,
+      );
+    },
+    [],
+  );
+
   function rememberPrivacyReturn() {
-    // 초안 시작 때 복귀 위치를 기록하므로 본문·푸터 진입이 같은 경로를 사용한다.
-    if (!draft || privacyReturnTarget) return;
-    setSession({
-      draft,
+    if (!draft) return;
+    const returnPath =
+      pathname === SHINHAN_GUEST_FOLLOWUP_PATH && guestFollowup
+        ? SHINHAN_GUEST_FOLLOWUP_PATH
+        : (currentSession.draftPath ?? SHINHAN_INTAKE_PREVIEW_PATH);
+    setSession((current) => ({
+      ...current,
       privacyReturnTarget: {
-        pathname: SHINHAN_INTAKE_PREVIEW_PATH,
+        pathname: returnPath,
         applicationType: draft.applicationType,
       },
-    });
+    }));
   }
 
   return (
@@ -132,6 +175,9 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
       value={{
         draft,
         privacyReturnTarget,
+        guestFollowup,
+        startGuestFollowup,
+        updateGuestFollowup,
         startDraft,
         startGuestDraft,
         updateDraft,

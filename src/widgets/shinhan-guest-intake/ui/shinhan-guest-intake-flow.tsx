@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useId, useState } from "react";
 
 import {
+  SHINHAN_GUEST_FOLLOWUP_PATH,
   shinhanContactSchema,
   ShinhanGuestBudgetField,
   ShinhanGuestBudgetRangeField,
@@ -41,7 +43,8 @@ export function ShinhanGuestIntakeFlow({
   introduction,
   examples,
 }: GuestIntakeFlowProps) {
-  const { draft, updateDraft } = useShinhanIntake();
+  const { draft, updateDraft, startGuestFollowup } = useShinhanIntake();
+  const router = useRouter();
   const [conditionsAttempted, setConditionsAttempted] = useState(false);
   const [contactAttempted, setContactAttempted] = useState(false);
   const [verifiedContact, setVerifiedContact] = useState<string | null>(null);
@@ -99,6 +102,19 @@ export function ShinhanGuestIntakeFlow({
   }
 
   function handleEditConditions() {
+    updateDraft((current) => ({ ...current, step: "conditions" }));
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }
+
+  function handleFollowupPreview() {
+    setContactAttempted(true);
+    if (!contactResult.success) return;
+    if (startGuestFollowup()) {
+      router.push(SHINHAN_GUEST_FOLLOWUP_PATH);
+      return;
+    }
+    // 연락처 입력 중 날짜가 바뀌어 입주일이 과거가 되면 조건을 다시 확인한다.
+    setConditionsAttempted(true);
     updateDraft((current) => ({ ...current, step: "conditions" }));
     window.scrollTo({ top: 0, behavior: "instant" });
   }
@@ -161,6 +177,16 @@ export function ShinhanGuestIntakeFlow({
                 ? "입력 형식을 확인했어요. 아직 접수되지는 않았습니다."
                 : "입력 형식만 확인하며 신청을 저장하지 않습니다."}
             </p>
+            {process.env.NODE_ENV === "development" && (
+              <BtnCta
+                type="button"
+                variant="stroke"
+                className={styles.checkButton}
+                onClick={handleFollowupPreview}
+              >
+                신청 후 화면 미리보기 (개발용)
+              </BtnCta>
+            )}
           </form>
           <button type="button" className={styles.back} onClick={handleEditConditions}>
             ← {isBudget ? "예산과 희망 지역 다시 입력하기" : "위치·월세·성별 다시 입력하기"}

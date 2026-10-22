@@ -1,1 +1,1 @@
-export { ShinhanGuestIntake } from "./ui/shinhan-guest-intake";
+export { ShinhanGuestIntake, ShinhanGuestSpaceExamples } from "./ui/shinhan-guest-intake";
