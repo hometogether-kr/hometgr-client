@@ -1,0 +1,274 @@
+.section {
+  background: var(--color-grayscale-50);
+  color: var(--color-grayscale-900);
+  padding: 32px 20px 72px;
+}
+.container {
+  max-width: 1120px;
+  margin-inline: auto;
+  display: grid;
+  gap: 36px;
+}
+.progress {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  list-style: none;
+}
+.progress li {
+  border-top: 3px solid var(--color-grayscale-200);
+  padding-top: 12px;
+  min-height: 52px;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-grayscale-600);
+}
+.progress li[aria-current="step"] {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-500);
+  font-weight: 700;
+}
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 480fr) minmax(0, 560fr);
+  gap: 80px;
+  align-items: start;
+}
+.introduction {
+  display: grid;
+  gap: 24px;
+  padding-top: 24px;
+  min-width: 0;
+}
+.eyebrow {
+  color: var(--color-primary-500);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 23px;
+}
+.introduction h1 {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 61px;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.description {
+  color: var(--color-grayscale-700);
+  font-size: 18px;
+  line-height: 26px;
+  word-break: keep-all;
+}
+.illustration {
+  display: grid;
+  place-items: center;
+  height: 280px;
+  background: var(--color-primary-100);
+  border-radius: 32px;
+}
+.illustration img {
+  width: 260px;
+  height: 260px;
+  object-fit: contain;
+}
+.caption {
+  color: var(--color-grayscale-700);
+  font-size: 15px;
+  line-height: 22px;
+}
+.form {
+  display: grid;
+  gap: 28px;
+  min-width: 0;
+  padding: 32px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 24px;
+  background: white;
+  box-shadow: 0 8px 24px rgb(20 33 56 / 4%);
+}
+.formHeading {
+  display: grid;
+  gap: 8px;
+}
+.formHeading h2 {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 38px;
+}
+.formHeading p {
+  color: var(--color-grayscale-700);
+  font-size: 16px;
+  line-height: 23px;
+}
+.ownership {
+  min-width: 0;
+}
+.ownership legend,
+.locationField > label {
+  color: var(--color-grayscale-900);
+  font-size: 19px;
+  line-height: 28px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.choice {
+  min-height: 64px;
+  font-size: 18px;
+  line-height: 26px;
+}
+.choice[aria-pressed="false"] {
+  color: var(--color-grayscale-900);
+}
+.location {
+  display: grid;
+  gap: 12px;
+}
+.locationField {
+  gap: 0;
+}
+.locationField > div > div {
+  min-height: 64px;
+  border-radius: 12px;
+  padding-inline: 20px;
+}
+.locationField input {
+  font-size: 18px;
+}
+.hint {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-grayscale-700);
+}
+.error {
+  color: var(--color-system-error);
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 22px;
+}
+.actions {
+  display: grid;
+  gap: 12px;
+  text-align: center;
+}
+.nextButton {
+  width: 100%;
+  min-height: 64px;
+  border-radius: 14px;
+  font-size: 20px;
+  font-weight: 700;
+}
+.validation {
+  display: grid;
+  gap: 12px;
+  border-top: 1px solid var(--color-grayscale-200);
+  padding-top: 20px;
+  color: var(--color-grayscale-700);
+  font-size: 14px;
+  line-height: 22px;
+}
+.validateButton {
+  min-height: 48px;
+  height: auto;
+  padding-block: 12px;
+}
+.validateButton > span {
+  white-space: normal;
+}
+.validationMessage {
+  min-height: 44px;
+}
+.backLink {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-grayscale-700);
+  font-size: 16px;
+  line-height: 23px;
+}
+.backLink:focus-visible,
+.choice:focus-visible,
+.validateButton:focus-visible {
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 4px;
+}
+@media (max-width: 1100px) {
+  .columns {
+    gap: 32px;
+  }
+  .introduction h1 {
+    font-size: 36px;
+    line-height: 1.45;
+  }
+}
+@media (max-width: 767px) {
+  .section {
+    padding-block: 24px 40px;
+  }
+  .container {
+    gap: 24px;
+  }
+  .progress {
+    gap: 16px;
+  }
+  .progress li {
+    font-size: 14px;
+  }
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .introduction {
+    gap: 16px;
+    padding-top: 0;
+  }
+  .introduction h1 {
+    font-size: 30px;
+    line-height: 42px;
+  }
+  .description {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .illustration {
+    height: 220px;
+    border-radius: 24px;
+  }
+  .illustration img {
+    width: 200px;
+    height: 200px;
+  }
+  .form {
+    padding: 24px 16px;
+    gap: 24px;
+  }
+  .formHeading h2 {
+    font-size: 24px;
+    line-height: 34px;
+  }
+  .ownership legend,
+  .locationField > label {
+    font-size: 18px;
+  }
+  .choice {
+    min-height: 56px;
+    padding-inline: 10px;
+    font-size: 16px;
+  }
+  .locationField > div > div {
+    min-height: 56px;
+    padding-inline: 16px;
+  }
+  .locationField input {
+    font-size: 16px;
+  }
+  .nextButton {
+    min-height: 56px;
+    font-size: 18px;
+  }
+}

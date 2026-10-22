@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { BtnCta } from "@/shared/ui/btn-cta";
+import { ShinhanHostFormButton } from "@/features/shinhan-intake";
 
 import styles from "./host-introduction.module.css";
 
@@ -61,8 +61,8 @@ export function ShinhanHostHero() {
               홈투게더가 함께합니다.
             </p>
             <div className={styles.registration}>
-              <BtnCta
-                disabled
+              <ShinhanHostFormButton
+                flow="registration"
                 size="pill"
                 shape="rect"
                 className={styles.registrationButton}
@@ -77,9 +77,11 @@ export function ShinhanHostHero() {
                 }
               >
                 홈투게더로 방 등록하기
-              </BtnCta>
+              </ShinhanHostFormButton>
               <p id="shinhan-registration-status" className={styles.preparing}>
-                방 등록 신청은 준비 중이에요.
+                {process.env.NODE_ENV === "development"
+                  ? "개발 확인용 · 실제 접수되지 않습니다."
+                  : "방 등록 신청은 준비 중이에요."}
               </p>
             </div>
           </div>
@@ -215,18 +217,20 @@ export function ShinhanHostEstimateBand() {
           <br />
           얼마 받을 수 있을까요?
         </h2>
-        <BtnCta
+        <ShinhanHostFormButton
           data-shinhan-estimate-cta
-          disabled
+          flow="estimate"
           variant="stroke"
           size="pill"
           className={styles.estimateButton}
           aria-describedby="shinhan-estimate-status"
         >
           빈방 예상 월세 알아보기
-        </BtnCta>
+        </ShinhanHostFormButton>
         <p id="shinhan-estimate-status" className={styles.preparing}>
-          예상 월세 진단은 준비 중이에요.
+          {process.env.NODE_ENV === "development"
+            ? "개발 확인용 · 실제 접수되지 않습니다."
+            : "예상 월세 진단은 준비 중이에요."}
         </p>
       </div>
     </section>
