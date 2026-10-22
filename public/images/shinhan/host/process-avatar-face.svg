@@ -1,0 +1,33 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="46.8864" height="46.0481" viewBox="0 0 46.8864 46.0481" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 86">
+<g id="Group 88">
+<circle id="Ellipse 131" cx="3.76743" cy="21.3485" r="3.76743" fill="url(#paint0_linear_0_23)"/>
+<circle id="Ellipse 132" cx="43.119" cy="21.3485" r="3.76743" fill="url(#paint1_linear_0_23)"/>
+<path id="Rectangle 545" d="M20.9316 36.8389H26.7921V43.1179C26.7921 44.7362 25.4802 46.0481 23.8619 46.0481V46.0481C22.2435 46.0481 20.9316 44.7362 20.9316 43.1179V36.8389Z" fill="url(#paint2_linear_0_23)"/>
+<circle id="Ellipse 130" cx="23.4426" cy="19.2571" r="19.2571" fill="url(#paint3_radial_0_23)"/>
+<path id="Vector 413" d="M18.084 30.8105C21.4328 33.1547 26.4561 33.1547 29.47 30.8105" stroke-width="0.669811" stroke-linecap="round" stroke="#FFC296"/>
+</g>
+<path id="Intersect" d="M23.4443 0C32.7444 0 40.5045 6.59263 42.3066 15.3594C40.9814 15.7405 39.5816 15.9462 38.1338 15.9463C29.8104 15.9463 23.0625 9.19835 23.0625 0.875C23.0625 0.582605 23.0715 0.292187 23.0879 0.00390625C23.2065 0.00175255 23.3253 1.47735e-06 23.4443 0Z" fill="#454545"/>
+<path id="Intersect_2" d="M23.4424 0C23.4419 10.9877 15.0063 20.003 4.25781 20.9268C4.21055 20.3765 4.18555 19.8194 4.18555 19.2568C4.18568 8.62164 12.8072 0.00013195 23.4424 0Z" fill="#454545"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_23" x1="3.76743" y1="17.5811" x2="3.76743" y2="25.1159" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFE8CE"/>
+<stop offset="1" stop-color="#FFCFB1"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_23" x1="43.119" y1="17.5811" x2="43.119" y2="25.1159" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFE8CE"/>
+<stop offset="1" stop-color="#FFCFB1"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_23" x1="23.8619" y1="36.8389" x2="23.8619" y2="46.0481" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFCFB1"/>
+<stop offset="1" stop-color="#FFE8CE"/>
+</linearGradient>
+<radialGradient id="paint3_radial_0_23" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(42.1974 26.4576) rotate(-169.274) scale(38.6878)">
+<stop stop-color="#FFCFB1"/>
+<stop offset="0.427885" stop-color="#FFE8CE"/>
+<stop offset="0.692308" stop-color="#FFE8CE"/>
+<stop offset="1" stop-color="#FFCFB1"/>
+</radialGradient>
+</defs>
+</svg>
