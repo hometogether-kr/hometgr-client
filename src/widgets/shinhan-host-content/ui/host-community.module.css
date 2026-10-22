@@ -1,0 +1,332 @@
+.container {
+  position: relative;
+  width: min(1200px, calc(100% - 40px));
+  margin-inline: auto;
+}
+.community {
+  padding: 90px 0 70px;
+  overflow: clip;
+  background: var(--color-grayscale-50);
+}
+.intro {
+  position: relative;
+  min-height: 371px;
+}
+.heading {
+  position: relative;
+  z-index: 1;
+}
+.heading > p:first-child {
+  font-size: 22px;
+  line-height: 33px;
+  color: var(--color-primary-500);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.heading h2 {
+  font-size: 48px;
+  line-height: 62px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.heading em {
+  color: var(--color-primary-500);
+  font-style: normal;
+}
+.heading .description {
+  font-size: 28px;
+  line-height: 1.4;
+  color: var(--color-grayscale-600);
+  margin-top: 24px;
+}
+.mapWrap {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.map {
+  position: absolute;
+  left: -240px;
+  top: -80px;
+  width: 1658px;
+  max-width: none;
+  height: auto;
+}
+.connector {
+  position: absolute;
+  right: 125px;
+  top: 153px;
+  width: 134px;
+  height: auto;
+}
+.count {
+  position: absolute;
+  right: -60px;
+  top: 69px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 14px 24px;
+  border-radius: 24px;
+  background: var(--color-grayscale-50);
+  box-shadow: 0 0 35px rgb(28 107 227 / 0.07);
+  white-space: nowrap;
+}
+.count strong {
+  font-size: 55px;
+  line-height: 1;
+  color: var(--color-grayscale-800);
+}
+.count span {
+  font-size: 24px;
+  font-weight: 700;
+}
+.count small {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-grayscale-400);
+}
+.reviews {
+  position: relative;
+  display: grid;
+  gap: 20px;
+  z-index: 1;
+}
+.review {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  padding: 32px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 24px;
+  background: white;
+}
+.label {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--color-primary-500);
+  margin-bottom: 12px;
+}
+.review blockquote {
+  font-size: 24px;
+  line-height: 36px;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  white-space: pre-line;
+}
+.reviewName {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-grayscale-600);
+  margin-top: 12px;
+}
+.reviewBody {
+  font-size: 22px;
+  line-height: 36px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--color-grayscale-800);
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.reviewBody p + p {
+  margin-top: 8px;
+}
+.news {
+  padding: 96px 0;
+  background: #f7fafe;
+}
+.newsContent {
+  display: grid;
+  grid-template-columns: minmax(0, 504fr) minmax(0, 632fr);
+  align-items: center;
+  gap: 64px;
+}
+.newsCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+.newsLabel {
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+  color: var(--color-primary-500);
+}
+.newsCopy h2 {
+  font-size: 42px;
+  line-height: 58px;
+  font-weight: 700;
+}
+.newsCopy > p:not(.newsLabel) {
+  font-size: 22px;
+  line-height: 34px;
+}
+.newsButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(236px, 100%);
+  min-height: 60px;
+  padding: 12px 24px;
+  margin-top: 16px;
+  border-radius: 12px;
+  color: white;
+  background: var(--color-primary-500);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.newsButton:hover {
+  background: var(--color-primary-600);
+}
+.thumbnail {
+  position: relative;
+  display: block;
+  aspect-ratio: 632/346;
+  border: 1px solid rgb(21 29 37 / 0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 12px 32px -8px rgb(31 46 71 / 0.12);
+}
+.thumbnail img {
+  object-fit: cover;
+}
+.newsButton:focus-visible,
+.thumbnail:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 4px;
+}
+@media (min-width: 768px) and (max-width: 1439px) {
+  .count {
+    right: 0;
+  }
+  .heading h2 {
+    font-size: 36px;
+    line-height: 1.4;
+  }
+  .heading .description {
+    font-size: 22px;
+  }
+  .review {
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 24px;
+  }
+  .reviewBody {
+    font-size: 20px;
+    line-height: 1.6;
+  }
+  .map {
+    left: -360px;
+  }
+  .newsContent {
+    gap: 32px;
+  }
+  .newsCopy h2 {
+    font-size: 32px;
+    line-height: 1.4;
+  }
+}
+@media (max-width: 767px) {
+  .community,
+  .news {
+    padding: 48px 0;
+  }
+  .intro {
+    min-height: 0;
+  }
+  .heading > p:first-child {
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 12px;
+  }
+  .heading h2 {
+    font-size: 28px;
+    line-height: 1.4;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  .heading .description {
+    font-size: 16px;
+    line-height: 26px;
+    margin-top: 16px;
+  }
+  .mapWrap {
+    position: relative;
+    height: 230px;
+    margin-top: 24px;
+    overflow: hidden;
+  }
+  .map {
+    width: 700px;
+    left: calc(50% - 510px);
+    top: -20px;
+  }
+  .connector {
+    right: 70px;
+    top: 105px;
+    width: 88px;
+    height: auto;
+  }
+  .count {
+    right: 0;
+    top: 44px;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 16px;
+  }
+  .count strong {
+    font-size: 36px;
+  }
+  .count span {
+    font-size: 16px;
+  }
+  .count small {
+    font-size: 10px;
+  }
+  .reviews {
+    gap: 16px;
+  }
+  .review {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+  .review blockquote {
+    font-size: 22px;
+    line-height: 32px;
+  }
+  .reviewName {
+    font-size: 14px;
+  }
+  .reviewBody {
+    font-size: 16px;
+    line-height: 26px;
+  }
+  .newsContent {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .newsCopy h2 {
+    font-size: 28px;
+    line-height: 40px;
+  }
+  .newsLabel {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .newsCopy > p:not(.newsLabel) {
+    font-size: 16px;
+    line-height: 26px;
+  }
+  .newsButton {
+    min-height: 48px;
+    font-size: 16px;
+    margin-top: 8px;
+  }
+}
