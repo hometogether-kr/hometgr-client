@@ -1,0 +1,83 @@
+.contactFields {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 496px;
+  margin-inline: auto;
+}
+.phone > label {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  color: var(--color-grayscale-900);
+}
+.phone > div > div {
+  min-height: 64px;
+  padding-inline: 20px;
+  border-radius: 12px;
+}
+.consentRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 24px;
+}
+.consentRow > label:not(.checkbox) {
+  cursor: pointer;
+  flex: 1;
+  min-width: 180px;
+}
+.checkbox {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 8px;
+}
+.checkbox:focus-within {
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 2px;
+}
+.privacyLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--color-primary-600);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.returnLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 20px;
+  border: 1px solid var(--color-primary-500);
+  border-radius: 12px;
+  color: var(--color-primary-600);
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
+}
+.privacyLink:focus-visible,
+.returnLink:focus-visible {
+  outline: 2px solid var(--color-primary-600);
+  outline-offset: 4px;
+}
+.error {
+  color: var(--color-system-error);
+  font-size: 14px;
+  line-height: 22px;
+}
+@media (max-width: 767px) {
+  .phone > label {
+    font-size: 18px;
+  }
+  .phone > div > div {
+    min-height: 56px;
+    padding-inline: 16px;
+  }
+  .returnLink {
+    width: 100%;
+  }
+}

@@ -6,16 +6,23 @@ import { ShinhanServiceMenu } from "./shinhan-service-menu";
 import styles from "./shinhan-service-header.module.css";
 
 interface ShinhanServiceHeaderProps {
-  mode: "host" | "guest";
+  mode?: "host" | "guest";
+  skipTarget?: string;
+  skipLabel?: string;
 }
 
-export function ShinhanServiceHeader({ mode }: ShinhanServiceHeaderProps) {
-  const serviceName = mode === "host" ? "호스트 서비스" : "게스트 서비스";
-  const introductionHref = `/shinhan/${mode}#service-introduction`;
+export function ShinhanServiceHeader({
+  mode,
+  skipTarget = "#service-introduction",
+  skipLabel,
+}: ShinhanServiceHeaderProps) {
+  const serviceName = mode ? (mode === "host" ? "호스트 서비스" : "게스트 서비스") : "홈투게더";
+  const introductionHref = mode ? `/shinhan/${mode}#service-introduction` : "/shinhan";
+  const introductionLabel = mode ? "서비스 소개" : "역할 선택";
   return (
     <header className={styles.header}>
-      <a href="#service-introduction" className={styles.skipLink}>
-        {serviceName} 소개로 건너뛰기
+      <a href={skipTarget} className={styles.skipLink}>
+        {skipLabel ?? `${serviceName} 소개로 건너뛰기`}
       </a>
       <div className={styles.content}>
         <div className={styles.primaryNavigation}>
@@ -29,7 +36,7 @@ export function ShinhanServiceHeader({ mode }: ShinhanServiceHeaderProps) {
           </Link>
           <nav aria-label={serviceName} className={styles.desktopNavigation}>
             <Link href={introductionHref} className={styles.currentPage}>
-              서비스 소개
+              {introductionLabel}
             </Link>
           </nav>
         </div>
@@ -42,7 +49,11 @@ export function ShinhanServiceHeader({ mode }: ShinhanServiceHeaderProps) {
           고객센터<span className="sr-only"> (새 창)</span>
         </a>
         <div className={styles.mobileMenu}>
-          <ShinhanServiceMenu introductionHref={introductionHref} serviceName={serviceName} />
+          <ShinhanServiceMenu
+            introductionHref={introductionHref}
+            introductionLabel={introductionLabel}
+            serviceName={serviceName}
+          />
         </div>
       </div>
     </header>
