@@ -1,0 +1,161 @@
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--color-grayscale-0);
+}
+
+.card {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-width: 0;
+  min-height: clamp(640px, 46.6667vw, 896px);
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 52px clamp(32px, 4.5833vw, 88px) 56px;
+  background: var(--color-grayscale-900);
+  color: var(--color-grayscale-0);
+}
+
+.photo {
+  z-index: -2;
+  object-fit: cover;
+  object-position: center;
+}
+
+.overlay {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgb(9 17 28 / 37%) 0%,
+    rgb(9 17 28 / 8%) 30%,
+    rgb(9 17 28 / 49%) 57%,
+    rgb(9 17 28 / 94%) 100%
+  );
+}
+
+.roleLabel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.05em;
+}
+
+.index {
+  width: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.62;
+}
+
+.rule {
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+
+.message {
+  margin-top: 120px;
+}
+
+.question {
+  margin-bottom: 16px;
+  font-size: clamp(22px, 1.9271vw, 37px);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  word-break: keep-all;
+}
+
+.title {
+  font-size: clamp(32px, 3.3333vw, 64px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.highlight {
+  color: var(--color-primary-300);
+}
+
+.action {
+  display: flex;
+  min-height: 88px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+  border-top: 1px solid var(--color-grayscale-0);
+  padding-top: 16px;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+}
+
+.arrow {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+}
+
+.action:hover {
+  color: var(--color-primary-300);
+}
+
+.action:focus-visible {
+  border-radius: 4px;
+  outline: 3px solid var(--color-primary-300);
+  outline-offset: 8px;
+}
+
+@media (max-width: 767px) {
+  .options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .card {
+    min-height: 480px;
+    padding: 24px 20px;
+  }
+
+  .roleLabel {
+    gap: 12px;
+    font-size: 13px;
+  }
+
+  .message {
+    margin-top: 160px;
+  }
+
+  .question {
+    margin-bottom: 12px;
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .title {
+    font-size: clamp(28px, 8.2051vw, 32px);
+    line-height: 1.3;
+  }
+
+  .action {
+    min-height: 64px;
+    margin-top: 20px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .arrow {
+    width: 48px;
+    height: 48px;
+  }
+}
