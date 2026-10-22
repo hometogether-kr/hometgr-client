@@ -5,9 +5,14 @@ import { useCallback, useId, useState } from "react";
 
 import { Modal } from "@/shared/ui/modal";
 
-import styles from "./shinhan-host-header.module.css";
+import styles from "./shinhan-service-header.module.css";
 
-export function ShinhanHostMenu() {
+interface ShinhanServiceMenuProps {
+  introductionHref: string;
+  serviceName: string;
+}
+
+export function ShinhanServiceMenu({ introductionHref, serviceName }: ShinhanServiceMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuId = useId();
   const handleMenuClose = useCallback(() => setIsOpen(false), []);
@@ -36,12 +41,8 @@ export function ShinhanHostMenu() {
             "min-h-12 rounded-lg text-grayscale-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600",
         }}
       >
-        <nav id={menuId} aria-label="호스트 서비스" className={styles.menuList}>
-          <Link
-            href="/shinhan/host#service-introduction"
-            onClick={handleMenuClose}
-            className={styles.menuItem}
-          >
+        <nav id={menuId} aria-label={serviceName} className={styles.menuList}>
+          <Link href={introductionHref} onClick={handleMenuClose} className={styles.menuItem}>
             서비스 소개
           </Link>
           <a

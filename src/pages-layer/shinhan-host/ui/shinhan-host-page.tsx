@@ -9,12 +9,12 @@ import {
   ShinhanHostProcess,
   ShinhanHostStory,
 } from "@/widgets/shinhan-host-content";
-import { ShinhanHostHeader, ShinhanRoleFooter } from "@/widgets/shinhan-shell";
+import { ShinhanRoleFooter, ShinhanServiceHeader } from "@/widgets/shinhan-shell";
 
 export function ShinhanHostPage() {
   return (
     <div className="bg-white pb-[calc(104px+env(safe-area-inset-bottom))] text-grayscale-900 min-[1848px]:pb-0">
-      <ShinhanHostHeader />
+      <ShinhanServiceHeader mode="host" />
       <main id="service-introduction" aria-label="홈투게더 호스트 서비스 소개">
         <ShinhanHostHero />
         <ShinhanHostBenefits />

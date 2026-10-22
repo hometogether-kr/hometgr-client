@@ -1,15 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { ShinhanHostMenu } from "./shinhan-host-menu";
+import { ShinhanServiceMenu } from "./shinhan-service-menu";
 
-import styles from "./shinhan-host-header.module.css";
+import styles from "./shinhan-service-header.module.css";
 
-export function ShinhanHostHeader() {
+interface ShinhanServiceHeaderProps {
+  mode: "host" | "guest";
+}
+
+export function ShinhanServiceHeader({ mode }: ShinhanServiceHeaderProps) {
+  const serviceName = mode === "host" ? "호스트 서비스" : "게스트 서비스";
+  const introductionHref = `/shinhan/${mode}#service-introduction`;
   return (
     <header className={styles.header}>
       <a href="#service-introduction" className={styles.skipLink}>
-        호스트 서비스 소개로 건너뛰기
+        {serviceName} 소개로 건너뛰기
       </a>
       <div className={styles.content}>
         <div className={styles.primaryNavigation}>
@@ -21,8 +27,8 @@ export function ShinhanHostHeader() {
               alt="Home Together"
             />
           </Link>
-          <nav aria-label="호스트 서비스" className={styles.desktopNavigation}>
-            <Link href="/shinhan/host#service-introduction" className={styles.currentPage}>
+          <nav aria-label={serviceName} className={styles.desktopNavigation}>
+            <Link href={introductionHref} className={styles.currentPage}>
               서비스 소개
             </Link>
           </nav>
@@ -36,7 +42,7 @@ export function ShinhanHostHeader() {
           고객센터<span className="sr-only"> (새 창)</span>
         </a>
         <div className={styles.mobileMenu}>
-          <ShinhanHostMenu />
+          <ShinhanServiceMenu introductionHref={introductionHref} serviceName={serviceName} />
         </div>
       </div>
     </header>
