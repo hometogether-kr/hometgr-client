@@ -82,7 +82,7 @@ function GuestIntroduction({ applicationType }: ShinhanGuestIntakeProps) {
   );
 }
 
-function GuestExamples() {
+export function ShinhanGuestSpaceExamples() {
   return (
     <div className={styles.examples}>
       <div className={styles.gallery}>
@@ -118,7 +118,7 @@ export function ShinhanGuestIntake({ applicationType }: ShinhanGuestIntakeProps)
       <ShinhanGuestIntakeFlow
         applicationType={applicationType}
         introduction={<GuestIntroduction applicationType={applicationType} />}
-        examples={<GuestExamples />}
+        examples={<ShinhanGuestSpaceExamples />}
       />
     </section>
   );
