@@ -1,0 +1,200 @@
+.progress {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  list-style: none;
+  margin: 0 0 36px;
+  padding: 0;
+  color: var(--color-grayscale-500);
+}
+.progress li {
+  border-top: 3px solid var(--color-grayscale-200);
+  padding-top: 12px;
+  font-size: 15px;
+  line-height: 24px;
+}
+.progress li[aria-current="step"] {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-500);
+  font-weight: 700;
+}
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 480px) minmax(0, 560px);
+  gap: 80px;
+  align-items: start;
+}
+.form {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px;
+  background: white;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 28px;
+  box-shadow: 0 8px 24px rgb(20 45 75 / 4%);
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cta {
+  width: 100%;
+  min-height: 60px;
+  font-size: 18px;
+}
+.notice {
+  color: var(--color-grayscale-600);
+  font-size: 13px;
+  line-height: 22px;
+  margin: 0;
+  text-align: center;
+}
+.termField {
+  min-width: 0;
+}
+.termField label,
+.genderField legend {
+  display: block;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.termField select {
+  width: 100%;
+  min-width: 0;
+  min-height: 56px;
+  padding: 12px;
+  background: white;
+  color: var(--color-grayscale-800);
+  border: 1px solid var(--color-grayscale-300);
+  border-radius: 12px;
+  font-size: 16px;
+}
+.termField select:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 3px;
+}
+.genderField {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.genderChoices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.genderChoice {
+  min-height: 56px;
+  justify-content: center;
+  border-radius: 12px;
+}
+.error {
+  color: var(--color-system-error);
+  font-size: 13px;
+  line-height: 20px;
+  margin: 8px 0 0;
+}
+.contactHeading {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.contactHeading h1 {
+  font-size: 38px;
+  line-height: 52px;
+  font-weight: 700;
+  margin: 0 0 16px;
+  word-break: keep-all;
+}
+.contactHeading h1 em {
+  font-style: normal;
+  color: var(--color-primary-500);
+}
+.contactHeading p {
+  color: var(--color-grayscale-600);
+  font-size: 17px;
+  line-height: 28px;
+  margin: 0;
+  word-break: keep-all;
+}
+.contactForm {
+  max-width: 496px;
+  margin: 40px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.checkButton {
+  min-height: 48px;
+  width: 100%;
+  font-size: 15px;
+}
+.back {
+  display: block;
+  color: var(--color-grayscale-600);
+  font-size: 15px;
+  line-height: 24px;
+  min-height: 48px;
+  margin: 24px auto 0;
+  padding: 8px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.back:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 4px;
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+  .columns {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.17fr);
+    gap: 40px;
+  }
+  .form {
+    padding: 24px;
+  }
+}
+@media (max-width: 767px) {
+  .progress {
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .progress li {
+    font-size: 13px;
+  }
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+  .form {
+    padding: 20px 16px;
+    gap: 20px;
+    border-radius: 24px;
+  }
+  .cta {
+    min-height: 56px;
+    font-size: 16px;
+  }
+  .termField label,
+  .genderField legend {
+    font-size: 17px;
+  }
+  .contactHeading {
+    margin-bottom: 24px;
+  }
+  .contactHeading h1 {
+    font-size: 28px;
+    line-height: 40px;
+  }
+  .contactHeading p {
+    font-size: 16px;
+    line-height: 26px;
+  }
+  .contactForm {
+    margin-top: 24px;
+  }
+}

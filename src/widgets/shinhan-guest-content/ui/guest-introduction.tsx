@@ -1,7 +1,6 @@
 import Image from "next/image";
 
-import { BtnCta } from "@/shared/ui/btn-cta";
-import { TextField } from "@/shared/ui/text-field";
+import { ShinhanGuestDemandSearch, ShinhanGuestFormButton } from "@/features/shinhan-intake";
 
 import styles from "./guest-introduction.module.css";
 
@@ -53,26 +52,14 @@ export function ShinhanGuestHero() {
             월세는 <em>가볍게</em>
           </h1>
           <div className={styles.location}>
-            <TextField
-              disabled
-              aria-label="희망하는 대학 또는 지역"
-              placeholder="예) 서울과학기술대학교, 공릉역"
-              aria-describedby="shinhan-guest-demand-status"
-              className={styles.locationField}
-              action={
-                <BtnCta
-                  type="button"
-                  disabled
-                  variant="stroke"
-                  size="l"
-                  className={styles.searchButton}
-                >
-                  검색
-                </BtnCta>
-              }
+            <ShinhanGuestDemandSearch
+              fieldClassName={styles.locationField}
+              buttonClassName={styles.searchButton}
             />
             <p id="shinhan-guest-demand-status" className={styles.notice}>
-              위치·예산 수요조사 신청을 준비하고 있어요.
+              {process.env.NODE_ENV === "development"
+                ? "개발용 조건 입력으로 이동하며, 아직 접수되지는 않습니다."
+                : "위치·예산 수요조사 신청을 준비하고 있어요."}
             </p>
           </div>
         </div>
@@ -104,18 +91,20 @@ export function ShinhanGuestBudgetBanner() {
             원룸 예산으로 아파트 생활을 시작해볼까요?
             <br />내 예산에 맞는 방을 확인해보세요.
           </p>
-          <BtnCta
+          <ShinhanGuestFormButton
+            flow="budget"
             type="button"
-            disabled
             size="l"
             className={styles.budgetButton}
             aria-describedby="shinhan-guest-budget-status"
             data-shinhan-guest-budget-cta
           >
             내 예산에 맞는 방 보기&nbsp; →
-          </BtnCta>
+          </ShinhanGuestFormButton>
           <p id="shinhan-guest-budget-status" className={styles.notice}>
-            예산으로 찾기 신청을 준비하고 있어요.
+            {process.env.NODE_ENV === "development"
+              ? "개발용 예산 입력을 확인할 수 있어요. 실제 접수는 준비 중입니다."
+              : "예산으로 찾기 신청을 준비하고 있어요."}
           </p>
         </div>
         <div className={styles.bannerArt}>

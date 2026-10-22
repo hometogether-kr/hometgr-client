@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import { createContext, type ReactNode, useCallback, useContext, useState } from "react";
 
 import {
+  SHINHAN_GUEST_BUDGET_PATH,
+  SHINHAN_GUEST_DEMAND_PATH,
   SHINHAN_HOST_ESTIMATE_PATH,
   SHINHAN_HOST_REGISTRATION_PATH,
   SHINHAN_INTAKE_PREVIEW_PATH,
@@ -24,9 +26,20 @@ interface IntakeContextValue {
   draft: ShinhanIntakeDraft | null;
   privacyReturnTarget: PrivacyReturnTarget | null;
   startDraft: (applicationType: ShinhanApplicationType) => void;
+  startGuestDraft: (
+    applicationType: "GUEST_BUDGET" | "GUEST_DEMAND",
+    desiredRegionRaw?: string,
+  ) => void;
   updateDraft: (update: (draft: ShinhanIntakeDraft) => ShinhanIntakeDraft) => void;
   rememberPrivacyReturn: () => void;
 }
+
+const applicationRoutes = [
+  { pathname: SHINHAN_HOST_ESTIMATE_PATH, applicationType: "HOST_ESTIMATE" },
+  { pathname: SHINHAN_HOST_REGISTRATION_PATH, applicationType: "HOST_REGISTRATION" },
+  { pathname: SHINHAN_GUEST_BUDGET_PATH, applicationType: "GUEST_BUDGET" },
+  { pathname: SHINHAN_GUEST_DEMAND_PATH, applicationType: "GUEST_DEMAND" },
+] as const;
 
 const IntakeContext = createContext<IntakeContextValue | null>(null);
 
@@ -54,26 +67,16 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [session, setSession] = useState<IntakeSession>({ draft: null, privacyReturnTarget: null });
   let currentSession = session;
-  const applicationType =
-    pathname === SHINHAN_HOST_ESTIMATE_PATH
-      ? "HOST_ESTIMATE"
-      : pathname === SHINHAN_HOST_REGISTRATION_PATH
-        ? "HOST_REGISTRATION"
-        : null;
+  const applicationRoute = applicationRoutes.find((route) => route.pathname === pathname);
 
   // 같은 layout의 전문 왕복은 유지하고, 다른 작성 화면에 진입할 때만 새 초안을 만든다.
   // 자식이 이전 유형의 상태로 한 번 렌더링되는 effect 초기화를 피한다.
   if (
-    applicationType &&
+    applicationRoute &&
     (session.privacyReturnTarget?.pathname !== pathname ||
-      session.draft?.applicationType !== applicationType)
+      session.draft?.applicationType !== applicationRoute.applicationType)
   ) {
-    currentSession = createSession(
-      applicationType,
-      applicationType === "HOST_ESTIMATE"
-        ? SHINHAN_HOST_ESTIMATE_PATH
-        : SHINHAN_HOST_REGISTRATION_PATH,
-    );
+    currentSession = createSession(applicationRoute.applicationType, applicationRoute.pathname);
     setSession(currentSession);
   } else if (
     pathname === SHINHAN_INTAKE_PREVIEW_PATH &&
@@ -87,6 +90,23 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
 
   function startDraft(applicationType: ShinhanApplicationType) {
     setSession(createSession(applicationType, SHINHAN_INTAKE_PREVIEW_PATH));
+  }
+
+  function startGuestDraft(
+    applicationType: "GUEST_BUDGET" | "GUEST_DEMAND",
+    desiredRegionRaw = "",
+  ) {
+    const nextSession = createSession(
+      applicationType,
+      applicationType === "GUEST_BUDGET" ? SHINHAN_GUEST_BUDGET_PATH : SHINHAN_GUEST_DEMAND_PATH,
+    );
+    if (
+      nextSession.draft?.applicationType === "GUEST_BUDGET" ||
+      nextSession.draft?.applicationType === "GUEST_DEMAND"
+    ) {
+      nextSession.draft.values.desiredRegionRaw = desiredRegionRaw;
+    }
+    setSession(nextSession);
   }
 
   const updateDraft = useCallback((update: (current: ShinhanIntakeDraft) => ShinhanIntakeDraft) => {
@@ -109,7 +129,14 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
 
   return (
     <IntakeContext
-      value={{ draft, privacyReturnTarget, startDraft, updateDraft, rememberPrivacyReturn }}
+      value={{
+        draft,
+        privacyReturnTarget,
+        startDraft,
+        startGuestDraft,
+        updateDraft,
+        rememberPrivacyReturn,
+      }}
     >
       {children}
     </IntakeContext>
