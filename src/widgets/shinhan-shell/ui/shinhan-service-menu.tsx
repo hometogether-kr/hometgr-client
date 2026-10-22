@@ -9,10 +9,15 @@ import styles from "./shinhan-service-header.module.css";
 
 interface ShinhanServiceMenuProps {
   introductionHref: string;
+  introductionLabel?: string;
   serviceName: string;
 }
 
-export function ShinhanServiceMenu({ introductionHref, serviceName }: ShinhanServiceMenuProps) {
+export function ShinhanServiceMenu({
+  introductionHref,
+  introductionLabel = "서비스 소개",
+  serviceName,
+}: ShinhanServiceMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const menuId = useId();
   const handleMenuClose = useCallback(() => setIsOpen(false), []);
@@ -43,7 +48,7 @@ export function ShinhanServiceMenu({ introductionHref, serviceName }: ShinhanSer
       >
         <nav id={menuId} aria-label={serviceName} className={styles.menuList}>
           <Link href={introductionHref} onClick={handleMenuClose} className={styles.menuItem}>
-            서비스 소개
+            {introductionLabel}
           </Link>
           <a
             href="https://pf.kakao.com/_BKlhX/chat"
