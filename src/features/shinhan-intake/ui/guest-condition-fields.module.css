@@ -1,0 +1,82 @@
+.region,
+.dateField {
+  width: 100%;
+  min-width: 0;
+}
+.region > div > div {
+  min-height: 52px;
+  border-radius: 12px;
+  padding-inline: 16px;
+}
+.dateField {
+  display: grid;
+  gap: 8px;
+}
+.label {
+  color: var(--color-grayscale-600);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+.dateButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: 12px 16px;
+  border: 1px solid var(--color-grayscale-300);
+  border-radius: 12px;
+  color: var(--color-grayscale-800);
+  background: white;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  cursor: pointer;
+}
+.dateButton[data-error] {
+  border-color: var(--color-system-error);
+}
+.dateButton:focus-visible,
+.closeButton:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 3px;
+}
+.placeholder {
+  color: var(--color-grayscale-400);
+}
+.calendarIcon {
+  flex: 0 0 20px;
+  color: var(--color-grayscale-600);
+}
+.calendarPanel {
+  width: 100%;
+  max-width: 384px;
+  min-width: 0;
+  padding-bottom: 8px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 12px;
+  background: white;
+}
+.closeButton {
+  display: block;
+  min-height: 48px;
+  margin: 0 auto;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 8px;
+  color: var(--color-primary-600);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.error {
+  padding-inline: 4px;
+  color: var(--color-system-error);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 20px;
+}

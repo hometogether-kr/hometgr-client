@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 
-import { BtnCta } from "@/shared/ui/btn-cta";
+import { ShinhanGuestFormButton } from "@/features/shinhan-intake";
 
 import styles from "./guest-budget-prompt.module.css";
 
@@ -74,11 +74,18 @@ export function ShinhanGuestBudgetPrompt() {
             <Image src="/images/shinhan/guest/budget-close.svg" alt="" width={18} height={18} />
           </button>
         </div>
-        <BtnCta type="button" disabled className={styles.action} aria-describedby={noticeId}>
+        <ShinhanGuestFormButton
+          flow="budget"
+          type="button"
+          className={styles.action}
+          aria-describedby={noticeId}
+        >
           내 조건에 맞는 방 찾기
-        </BtnCta>
+        </ShinhanGuestFormButton>
         <p className={styles.notice} id={noticeId}>
-          예산으로 찾기 신청을 준비하고 있어요.
+          {process.env.NODE_ENV === "development"
+            ? "개발용 입력 화면입니다. 실제 접수는 준비 중이에요."
+            : "예산으로 찾기 신청을 준비하고 있어요."}
         </p>
       </div>
       <button

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { BtnCta } from "@/shared/ui/btn-cta";
+import { ShinhanGuestFormButton, ShinhanGuestRegionButton } from "@/features/shinhan-intake";
 
 import styles from "./guest-spaces.module.css";
 
@@ -60,16 +60,18 @@ export function ShinhanGuestSpaces() {
           ))}
         </div>
         <div className={styles.actions}>
-          <BtnCta
-            disabled
+          <ShinhanGuestFormButton
+            flow="demand"
             className={styles.spaceAction}
             aria-describedby="shinhan-guest-space-notice"
           >
             우리 학교 근처 방 보기
-          </BtnCta>
+          </ShinhanGuestFormButton>
           <p className={styles.counseling}>자세한 비용과 생활 조건은 상담으로 안내해드려요.</p>
           <p id="shinhan-guest-space-notice" className={styles.notice}>
-            공간 사진은 예시이며, 입주 조건 확인은 준비 중이에요.
+            {process.env.NODE_ENV === "development"
+              ? "공간 사진은 예시입니다. 개발용 조건 입력으로 이동해요."
+              : "공간 사진은 예시이며, 입주 조건 확인은 준비 중이에요."}
           </p>
         </div>
       </div>
@@ -87,9 +89,9 @@ export function ShinhanGuestRegions() {
         <ul className={styles.regionList}>
           {regions.map((region) => (
             <li key={region.name}>
-              <button
+              <ShinhanGuestRegionButton
+                region={region.name}
                 type="button"
-                disabled
                 className={styles.regionCard}
                 aria-describedby="shinhan-guest-region-notice"
               >
@@ -102,12 +104,14 @@ export function ShinhanGuestRegions() {
                   />
                 </span>
                 <span className={styles.regionName}>{region.name}</span>
-              </button>
+              </ShinhanGuestRegionButton>
             </li>
           ))}
         </ul>
         <p id="shinhan-guest-region-notice" className={styles.regionNotice}>
-          공간 예시 사진입니다. 지역별 입주 조건 확인은 준비 중이에요.
+          {process.env.NODE_ENV === "development"
+            ? "공간 예시 사진입니다. 선택한 지역으로 개발용 조건 입력을 시작해요."
+            : "공간 예시 사진입니다. 지역별 입주 조건 확인은 준비 중이에요."}
         </p>
       </div>
     </section>
