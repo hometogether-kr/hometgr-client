@@ -1,0 +1,424 @@
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+  color: var(--color-grayscale-900);
+}
+.progress {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+  list-style: none;
+  padding: 0;
+}
+.progress li {
+  border-top: 3px solid var(--color-grayscale-200);
+  padding-top: 12px;
+  color: var(--color-grayscale-600);
+  font-size: 16px;
+  line-height: 24px;
+}
+.progress li[aria-current] {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-500);
+  font-weight: 700;
+}
+.progress span {
+  margin-right: 8px;
+}
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 480px) minmax(0, 560px);
+  gap: 80px;
+  align-items: start;
+}
+.introduction {
+  display: grid;
+  gap: 20px;
+  padding-top: 24px;
+}
+.eyebrow {
+  color: var(--color-primary-600);
+  font-weight: 600;
+  font-size: 16px;
+}
+.introduction h1 {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 56px;
+  word-break: keep-all;
+}
+.introduction > p:not(.eyebrow) {
+  color: var(--color-grayscale-700);
+  font-size: 18px;
+  line-height: 28px;
+}
+.illustration {
+  position: relative;
+  aspect-ratio: 480 / 300;
+  border-radius: 32px;
+  background: var(--color-primary-100);
+  overflow: hidden;
+}
+.character {
+  position: absolute;
+  width: 52.5%;
+  height: 84%;
+  object-fit: contain;
+  left: 38.33%;
+  top: 10.66%;
+}
+.locationChip,
+.incomeChip {
+  position: absolute;
+  left: 5.4%;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  border-radius: 16px;
+  background: white;
+  color: var(--color-primary-600);
+  font-size: 16px;
+  font-weight: 600;
+}
+.locationChip {
+  top: 16%;
+}
+.incomeChip {
+  top: 45.33%;
+}
+.form {
+  display: grid;
+  gap: 24px;
+  padding: 32px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 24px;
+  background: white;
+  box-shadow: 0 8px 24px #1a335c0d;
+}
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.fieldGroup h2,
+.fieldGroup legend {
+  font-size: 19px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.fieldGroup legend {
+  margin-bottom: 8px;
+}
+.optional {
+  font-size: 14px;
+  color: var(--color-grayscale-600);
+  font-weight: 400;
+}
+.addressButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  width: 100%;
+  padding: 12px 20px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 12px;
+  text-align: left;
+  color: var(--color-grayscale-700);
+  font-size: 16px;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.addressAction {
+  flex-shrink: 0;
+  color: var(--color-primary-600);
+  font-weight: 600;
+}
+.addressDetail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.textField > div > div {
+  min-height: 56px;
+  border-radius: 12px;
+  padding-inline: 20px;
+}
+.furnitureRow {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+}
+.furnitureLabel {
+  font-size: 16px;
+  font-weight: 600;
+}
+.segmented {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--color-primary-100);
+}
+.segmented .segment {
+  min-width: 0;
+  min-height: 44px;
+  padding: 4px 6px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-grayscale-700);
+  font-size: 14px;
+  line-height: 21px;
+}
+.segmented .segment[aria-pressed="true"] {
+  background: var(--color-primary-600);
+  color: white;
+}
+.hint {
+  color: var(--color-grayscale-700);
+  font-size: 14px;
+  line-height: 22px;
+  overflow-wrap: anywhere;
+}
+.actions {
+  display: grid;
+  gap: 12px;
+  text-align: center;
+}
+.cta {
+  width: 100%;
+  min-height: 60px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.error {
+  color: var(--color-system-error);
+  font-size: 14px;
+  line-height: 22px;
+}
+.container button:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 3px;
+}
+.contactStep {
+  display: grid;
+  gap: 32px;
+}
+.contactHeading h1 {
+  font-size: 40px;
+  line-height: 54px;
+  font-weight: 700;
+  word-break: keep-all;
+}
+.contactHeading > p {
+  margin-top: 12px;
+  font-size: 20px;
+  line-height: 30px;
+  color: var(--color-grayscale-700);
+}
+.incomePreview {
+  display: grid;
+  grid-template-columns: minmax(0, 640px) 280px;
+  align-items: center;
+  gap: 32px;
+  padding: 40px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 28px;
+  background: white;
+}
+.incomePreview > div {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+.incomeLabel {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-grayscale-700);
+}
+.maskedIncome {
+  font-size: clamp(36px, 5.3vw, 76px);
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--color-primary-500);
+  letter-spacing: -0.01em;
+}
+.incomeDetail {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--color-grayscale-70);
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 500;
+}
+.roomImage {
+  width: 280px;
+  height: 280px;
+  object-fit: contain;
+}
+.contactForm {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+}
+.contactForm h2 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 32px;
+  text-align: center;
+}
+.contactForm > div {
+  width: 100%;
+}
+.notice {
+  color: var(--color-grayscale-700);
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+}
+.back {
+  justify-self: start;
+  min-height: 44px;
+  color: var(--color-grayscale-700);
+  cursor: pointer;
+}
+@media (max-width: 1100px) {
+  .columns {
+    gap: 32px;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  }
+  .form {
+    padding: 24px;
+  }
+  .furnitureRow {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .introduction h1 {
+    font-size: 34px;
+    line-height: 46px;
+  }
+  .locationChip,
+  .incomeChip {
+    padding: 12px;
+    font-size: 14px;
+  }
+  .incomePreview {
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+  .roomImage {
+    width: 220px;
+    height: 220px;
+  }
+}
+@media (max-width: 767px) {
+  .container {
+    padding-top: 24px;
+  }
+  .progress {
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .progress li {
+    font-size: 12px;
+    line-height: 18px;
+    padding-top: 8px;
+  }
+  .progress span {
+    display: block;
+    margin: 0;
+  }
+  .columns {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .introduction {
+    padding: 0;
+    gap: 12px;
+  }
+  .introduction h1 {
+    font-size: 28px;
+    line-height: 38px;
+  }
+  .introduction > p:not(.eyebrow) {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .illustration {
+    max-width: 480px;
+  }
+  .form {
+    padding: 20px 16px;
+    gap: 24px;
+    border-radius: 20px;
+  }
+  .fieldGroup h2,
+  .fieldGroup legend {
+    font-size: 17px;
+    line-height: 26px;
+  }
+  .textField > div > div {
+    padding-inline: 12px;
+  }
+  .addressButton {
+    padding-inline: 12px;
+  }
+  .furnitureRow {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .segmented .segment {
+    min-height: 48px;
+  }
+  .cta {
+    font-size: 16px;
+    min-height: 56px;
+    padding-inline: 8px;
+  }
+  .contactHeading h1 {
+    font-size: 28px;
+    line-height: 38px;
+  }
+  .contactHeading > p {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .incomePreview {
+    grid-template-columns: 1fr;
+    padding: 24px 20px;
+    gap: 20px;
+  }
+  .maskedIncome {
+    font-size: 38px;
+  }
+  .incomeDetail {
+    font-size: 17px;
+    line-height: 26px;
+  }
+  .incomeLabel {
+    font-size: 17px;
+  }
+  .roomImage {
+    width: 180px;
+    height: 180px;
+    justify-self: center;
+  }
+  .contactForm h2 {
+    font-size: 20px;
+  }
+}

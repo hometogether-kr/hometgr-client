@@ -1,17 +1,22 @@
 "use client";
 
-import { createContext, type ReactNode, useContext, useState } from "react";
+import { usePathname } from "next/navigation";
+import { createContext, type ReactNode, useCallback, useContext, useState } from "react";
 
+import {
+  SHINHAN_HOST_ESTIMATE_PATH,
+  SHINHAN_HOST_REGISTRATION_PATH,
+  SHINHAN_INTAKE_PREVIEW_PATH,
+  type ShinhanDraftPath,
+} from "../config/routes";
 import {
   createShinhanDraft,
   type ShinhanApplicationType,
   type ShinhanIntakeDraft,
 } from "./intake-draft";
 
-export const SHINHAN_INTAKE_PREVIEW_PATH = "/shinhan/dev/intake";
-
 interface PrivacyReturnTarget {
-  pathname: typeof SHINHAN_INTAKE_PREVIEW_PATH;
+  pathname: ShinhanDraftPath;
   applicationType: ShinhanApplicationType;
 }
 
@@ -25,25 +30,80 @@ interface IntakeContextValue {
 
 const IntakeContext = createContext<IntakeContextValue | null>(null);
 
+interface IntakeSession {
+  draft: ShinhanIntakeDraft | null;
+  privacyReturnTarget: PrivacyReturnTarget | null;
+}
+
+function createSession(
+  applicationType: ShinhanApplicationType,
+  pathname: ShinhanDraftPath,
+): IntakeSession {
+  const draft = createShinhanDraft(applicationType);
+  if (
+    applicationType === "HOST_ESTIMATE" &&
+    draft.applicationType === "HOST_ESTIMATE" &&
+    pathname === SHINHAN_HOST_ESTIMATE_PATH
+  ) {
+    draft.values.furniture = { bed: "NONE", desk: "NONE", chair: "NONE", wardrobe: "NONE" };
+  }
+  return { draft, privacyReturnTarget: { pathname, applicationType } };
+}
+
 export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
-  const [draft, setDraft] = useState<ShinhanIntakeDraft | null>(null);
-  const [privacyReturnTarget, setPrivacyReturnTarget] = useState<PrivacyReturnTarget | null>(null);
+  const pathname = usePathname();
+  const [session, setSession] = useState<IntakeSession>({ draft: null, privacyReturnTarget: null });
+  let currentSession = session;
+  const applicationType =
+    pathname === SHINHAN_HOST_ESTIMATE_PATH
+      ? "HOST_ESTIMATE"
+      : pathname === SHINHAN_HOST_REGISTRATION_PATH
+        ? "HOST_REGISTRATION"
+        : null;
+
+  // 같은 layout의 전문 왕복은 유지하고, 다른 작성 화면에 진입할 때만 새 초안을 만든다.
+  // 자식이 이전 유형의 상태로 한 번 렌더링되는 effect 초기화를 피한다.
+  if (
+    applicationType &&
+    (session.privacyReturnTarget?.pathname !== pathname ||
+      session.draft?.applicationType !== applicationType)
+  ) {
+    currentSession = createSession(
+      applicationType,
+      applicationType === "HOST_ESTIMATE"
+        ? SHINHAN_HOST_ESTIMATE_PATH
+        : SHINHAN_HOST_REGISTRATION_PATH,
+    );
+    setSession(currentSession);
+  } else if (
+    pathname === SHINHAN_INTAKE_PREVIEW_PATH &&
+    session.privacyReturnTarget &&
+    session.privacyReturnTarget.pathname !== pathname
+  ) {
+    currentSession = { draft: null, privacyReturnTarget: null };
+    setSession(currentSession);
+  }
+  const { draft, privacyReturnTarget } = currentSession;
 
   function startDraft(applicationType: ShinhanApplicationType) {
-    setDraft(createShinhanDraft(applicationType));
-    // 푸터처럼 전문 보기 액션을 거치지 않는 진입도 현재 초안으로 복귀한다.
-    setPrivacyReturnTarget({ pathname: SHINHAN_INTAKE_PREVIEW_PATH, applicationType });
+    setSession(createSession(applicationType, SHINHAN_INTAKE_PREVIEW_PATH));
   }
 
-  function updateDraft(update: (current: ShinhanIntakeDraft) => ShinhanIntakeDraft) {
-    setDraft((current) => (current ? update(current) : current));
-  }
+  const updateDraft = useCallback((update: (current: ShinhanIntakeDraft) => ShinhanIntakeDraft) => {
+    setSession((current) =>
+      current.draft ? { ...current, draft: update(current.draft) } : current,
+    );
+  }, []);
 
   function rememberPrivacyReturn() {
-    if (!draft) return;
-    setPrivacyReturnTarget({
-      pathname: SHINHAN_INTAKE_PREVIEW_PATH,
-      applicationType: draft.applicationType,
+    // 초안 시작 때 복귀 위치를 기록하므로 본문·푸터 진입이 같은 경로를 사용한다.
+    if (!draft || privacyReturnTarget) return;
+    setSession({
+      draft,
+      privacyReturnTarget: {
+        pathname: SHINHAN_INTAKE_PREVIEW_PATH,
+        applicationType: draft.applicationType,
+      },
     });
   }
 

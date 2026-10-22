@@ -15,41 +15,67 @@ interface ContactFieldsProps {
 }
 
 export function ShinhanContactFields({ errors = {} }: ContactFieldsProps) {
+  return (
+    <div className={styles.contactFields}>
+      <ShinhanPhoneField error={errors.phone} />
+      <ShinhanRequiredConsentFields error={errors.requiredConsent} />
+    </div>
+  );
+}
+
+export function ShinhanPhoneField({
+  error,
+  label = "휴대폰 번호",
+}: {
+  error?: string;
+  label?: string;
+}) {
+  const { draft, updateDraft } = useShinhanIntake();
+  if (!draft) return null;
+  return (
+    <TextField
+      label={label}
+      type="tel"
+      autoComplete="tel-national"
+      inputMode="tel"
+      placeholder="010-0000-0000"
+      value={draft.phone}
+      maxLength={20}
+      onChange={(event) => {
+        const phone = event.target.value;
+        updateDraft((current) => ({ ...current, phone }));
+      }}
+      error={error}
+      className={styles.phone}
+    />
+  );
+}
+
+export function ShinhanRequiredConsentFields({ error }: { error?: string }) {
   const { draft, updateDraft } = useShinhanIntake();
   const consentId = useId();
   if (!draft) return null;
   return (
-    <div className={styles.contactFields}>
-      <TextField
-        label="휴대폰 번호"
-        type="tel"
-        autoComplete="tel-national"
-        inputMode="tel"
-        placeholder="010-0000-0000"
-        value={draft.phone}
-        maxLength={20}
-        onChange={(event) => updateDraft((current) => ({ ...current, phone: event.target.value }))}
-        error={errors.phone}
-        className={styles.phone}
-      />
+    <div>
       <div className={styles.consentRow}>
         <Checkbox
           id={consentId}
           size="24"
           checked={draft.requiredConsent}
-          onChange={(event) =>
-            updateDraft((current) => ({ ...current, requiredConsent: event.target.checked }))
-          }
-          aria-invalid={Boolean(errors.requiredConsent) || undefined}
-          aria-describedby={errors.requiredConsent ? `${consentId}-error` : undefined}
+          onChange={(event) => {
+            const requiredConsent = event.target.checked;
+            updateDraft((current) => ({ ...current, requiredConsent }));
+          }}
+          aria-invalid={Boolean(error) || undefined}
+          aria-describedby={error ? `${consentId}-error` : undefined}
           className={styles.checkbox}
         />
         <label htmlFor={consentId}>개인정보 수집·이용 동의 (필수)</label>
         <ShinhanPrivacyLink />
       </div>
-      {errors.requiredConsent && (
+      {error && (
         <p id={`${consentId}-error`} className={styles.error}>
-          {errors.requiredConsent}
+          {error}
         </p>
       )}
     </div>
