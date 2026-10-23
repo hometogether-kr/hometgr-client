@@ -116,6 +116,8 @@ export interface SelectedAddress {
   region: string;
   zonecode: string;
   buildingName: string;
+  sido: string;
+  sigungu: string;
 }
 
 /**
@@ -133,5 +135,7 @@ export function toSelectedAddress(result: KakaoPostcodeResult): SelectedAddress 
     region: [result.sido, result.sigungu].filter(Boolean).join(" "),
     zonecode: result.zonecode,
     buildingName: result.buildingName,
+    sido: result.sido,
+    sigungu: result.sigungu,
   };
 }

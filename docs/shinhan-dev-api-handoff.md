@@ -14,13 +14,13 @@
 
 ## 준비된 고객 코드
 
-| 위치 | 역할 |
-| --- | --- |
-| `src/app/api/shinhan/[...path]/route.ts` | 얇은 동일 출처 BFF route |
-| `src/features/shinhan-bridge/` | 서버 전용 키, HttpOnly 세션, Origin·CSRF·16KiB·경로/메서드 제한, Zod·계약 버전·환경 검증 |
-| `src/domains/shinhan-application/` | 동의·신청 읽기, 응답 DTO, 조회/저장 오류 안내 구분 |
-| `src/features/shinhan-intake/` | 동의 준비, 세션 생성, 초안 보존, 요청 DTO와 멱등 키, 실패·재시도 |
-| `src/widgets/shinhan-host-registration/` | OWNED/RENTED, 자유 위치, 전화번호·동의, 필드 오류, 실제 성공 후 완료 |
+| 위치                                     | 역할                                                                                     |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `src/app/api/shinhan/[...path]/route.ts` | 얇은 동일 출처 BFF route                                                                 |
+| `src/features/shinhan-bridge/`           | 서버 전용 키, HttpOnly 세션, Origin·CSRF·16KiB·경로/메서드 제한, Zod·계약 버전·환경 검증 |
+| `src/domains/shinhan-application/`       | 동의·신청 읽기, 응답 DTO, 조회/저장 오류 안내 구분                                       |
+| `src/features/shinhan-intake/`           | 동의 준비, 세션 생성, 초안 보존, 요청 DTO와 멱등 키, 실패·재시도                         |
+| `src/widgets/shinhan-host-registration/` | OWNED/RENTED, 자유 위치, 전화번호·동의, 필드 오류, 실제 성공 후 완료                     |
 
 세션 토큰은 응답 JSON·브라우저 저장소·URL·로그에 노출하지 않는다. 제출마다 행동 키를 만들고 결과가 불명확한 재시도는 같은 키·본문·세션을 유지한다. 서버 저장 성공과 알림 전달·시트 반영은 구분한다. 전문 조회 실패를 예시 전문으로 대체하지 않으며 개인정보 왕복과 오류에서 입력을 보존한다.
 

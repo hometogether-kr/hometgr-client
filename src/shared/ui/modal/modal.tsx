@@ -18,6 +18,7 @@ import { Icon } from "@/shared/ui/icons";
 export type ModalCloseButton = "header" | "outside" | "none";
 
 export interface ModalClassNames {
+  closeButton?: string;
   /** 카드를 감싸는 다이얼로그 영역 — 폭을 지정합니다. */
   dialog?: string;
   /** 흰 카드 — 여백과 자식 간 간격을 지정합니다. */
@@ -35,6 +36,7 @@ export interface ModalProps {
   /** 본문 아래 액션 영역 */
   footer?: ReactNode;
   closeButton?: ModalCloseButton;
+  closeIcon?: ReactNode;
   classNames?: ModalClassNames;
 }
 
@@ -57,6 +59,7 @@ export function Modal({
   children,
   footer,
   closeButton = "header",
+  closeIcon,
   classNames,
 }: ModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -66,7 +69,7 @@ export function Modal({
 
   if (!open) return null;
 
-  const closeIcon = (
+  const closeButtonIcon = closeIcon ?? (
     <span className="flex size-5 items-center justify-center overflow-clip rounded-lg">
       <Icon name="close" size={14} />
     </span>
@@ -98,7 +101,7 @@ export function Modal({
               onClick={onClose}
               className="flex items-center p-2.5 text-white transition-opacity hover:opacity-70 md:rounded-lg md:bg-white/50 md:p-3 md:text-grayscale-800"
             >
-              {closeIcon}
+              {closeButtonIcon}
             </button>
           </div>
         )}
@@ -122,9 +125,12 @@ export function Modal({
                   type="button"
                   aria-label="닫기"
                   onClick={onClose}
-                  className="flex items-center p-3 transition-opacity hover:opacity-70"
+                  className={cn(
+                    "flex items-center p-3 transition-opacity hover:opacity-70",
+                    classNames?.closeButton,
+                  )}
                 >
-                  {closeIcon}
+                  {closeButtonIcon}
                 </button>
               )}
             </div>
