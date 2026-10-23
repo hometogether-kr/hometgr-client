@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import { ShinhanHostProgress } from "@/features/shinhan-intake";
+
 import { ShinhanHostEstimateFlow } from "./shinhan-host-estimate-flow";
 
 import styles from "./shinhan-host-estimate.module.css";
@@ -7,13 +9,7 @@ import styles from "./shinhan-host-estimate.module.css";
 export function ShinhanHostEstimate() {
   return (
     <section className={styles.container} aria-label="빈방 예상 월세 진단">
-      <ol className={styles.progress} aria-label="호스트 신청 순서">
-        {["월세 알아보기", "걱정 확인", "소개서 안내", "알림 신청"].map((label, index) => (
-          <li key={label} aria-current={index === 0 ? "step" : undefined}>
-            <span>0{index + 1}</span> {label}
-          </li>
-        ))}
-      </ol>
+      <ShinhanHostProgress currentStep="result" />
       <ShinhanHostEstimateFlow
         introduction={
           <div className={styles.introduction}>
