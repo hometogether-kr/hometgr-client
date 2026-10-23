@@ -11,6 +11,7 @@ import {
   SHINHAN_HOST_FOLLOWUP_PATH,
   SHINHAN_HOST_REGISTRATION_PATH,
   SHINHAN_INTAKE_PREVIEW_PATH,
+  SHINHAN_SAVED_APPLICATION_PATH,
   type ShinhanDraftPath,
 } from "../config/routes";
 import { createGuestFollowupExample, type GuestFollowupExample } from "./guest-followup";
@@ -27,6 +28,7 @@ interface PrivacyReturnTarget {
 }
 
 interface IntakeContextValue {
+  draftGeneration: number;
   draft: ShinhanIntakeDraft | null;
   privacyReturnTarget: PrivacyReturnTarget | null;
   guestFollowup: GuestFollowupExample | null;
@@ -54,6 +56,7 @@ const applicationRoutes = [
 const IntakeContext = createContext<IntakeContextValue | null>(null);
 
 interface IntakeSession {
+  draftGeneration: number;
   draft: ShinhanIntakeDraft | null;
   draftPath: ShinhanDraftPath | null;
   privacyReturnTarget: PrivacyReturnTarget | null;
@@ -64,6 +67,7 @@ interface IntakeSession {
 function createSession(
   applicationType: ShinhanApplicationType,
   pathname: ShinhanDraftPath,
+  draftGeneration: number,
 ): IntakeSession {
   const draft = createShinhanDraft(applicationType);
   if (
@@ -74,6 +78,7 @@ function createSession(
     draft.values.furniture = { bed: "NONE", desk: "NONE", chair: "NONE", wardrobe: "NONE" };
   }
   return {
+    draftGeneration,
     draft,
     draftPath: pathname,
     privacyReturnTarget: { pathname, applicationType },
@@ -85,6 +90,7 @@ function createSession(
 export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [session, setSession] = useState<IntakeSession>({
+    draftGeneration: 0,
     draft: null,
     draftPath: null,
     privacyReturnTarget: null,
@@ -101,7 +107,11 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
     (session.draftPath !== pathname ||
       session.draft?.applicationType !== applicationRoute.applicationType)
   ) {
-    currentSession = createSession(applicationRoute.applicationType, applicationRoute.pathname);
+    currentSession = createSession(
+      applicationRoute.applicationType,
+      applicationRoute.pathname,
+      session.draftGeneration + 1,
+    );
     setSession(currentSession);
   } else if (
     pathname === SHINHAN_INTAKE_PREVIEW_PATH &&
@@ -109,6 +119,7 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
     session.draftPath !== pathname
   ) {
     currentSession = {
+      draftGeneration: session.draftGeneration + 1,
       draft: null,
       draftPath: null,
       privacyReturnTarget: null,
@@ -120,7 +131,13 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
   const { draft, privacyReturnTarget, guestFollowup, hostFollowup } = currentSession;
 
   function startDraft(applicationType: ShinhanApplicationType) {
-    setSession(createSession(applicationType, SHINHAN_INTAKE_PREVIEW_PATH));
+    setSession(
+      createSession(
+        applicationType,
+        SHINHAN_INTAKE_PREVIEW_PATH,
+        currentSession.draftGeneration + 1,
+      ),
+    );
   }
 
   function startGuestDraft(
@@ -130,6 +147,7 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
     const nextSession = createSession(
       applicationType,
       applicationType === "GUEST_BUDGET" ? SHINHAN_GUEST_BUDGET_PATH : SHINHAN_GUEST_DEMAND_PATH,
+      currentSession.draftGeneration + 1,
     );
     if (
       nextSession.draft?.applicationType === "GUEST_BUDGET" ||
@@ -171,6 +189,7 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
       returnPath = SHINHAN_GUEST_FOLLOWUP_PATH;
     if (pathname === SHINHAN_HOST_FOLLOWUP_PATH && hostFollowup)
       returnPath = SHINHAN_HOST_FOLLOWUP_PATH;
+    if (pathname === SHINHAN_SAVED_APPLICATION_PATH) returnPath = SHINHAN_SAVED_APPLICATION_PATH;
     setSession((current) => ({
       ...current,
       privacyReturnTarget: {
@@ -199,6 +218,7 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
   return (
     <IntakeContext
       value={{
+        draftGeneration: currentSession.draftGeneration,
         draft,
         privacyReturnTarget,
         guestFollowup,

@@ -5,9 +5,12 @@ import { type FormEvent, useId, useState } from "react";
 import {
   shinhanContactSchema,
   shinhanHostRegistrationSchema,
+  ShinhanLiveSubmit,
   ShinhanPhoneField,
   ShinhanRequiredConsentFields,
+  ShinhanSavedApplicationNotice,
   useShinhanIntake,
+  useShinhanStorage,
 } from "@/features/shinhan-intake";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { SelectTile } from "@/shared/ui/select-tile";
@@ -17,10 +20,14 @@ import styles from "./shinhan-host-registration.module.css";
 
 export function HostRegistrationForm() {
   const { draft, updateDraft } = useShinhanIntake();
+  const storage = useShinhanStorage();
   const [validationAttempted, setValidationAttempted] = useState(false);
   const [validatedSnapshot, setValidatedSnapshot] = useState<string | null>(null);
   const fieldId = useId();
   if (draft?.applicationType !== "HOST_REGISTRATION") return null;
+  if (storage.application?.applicationType === "HOST_REGISTRATION")
+    return <ShinhanSavedApplicationNotice />;
+  const locked = storage.pending || storage.attempt !== null || storage.preparing;
 
   const contactResult = shinhanContactSchema.safeParse(draft);
   const conditionsResult = shinhanHostRegistrationSchema.safeParse(draft.values);
@@ -38,6 +45,7 @@ export function HostRegistrationForm() {
 
   function handleValidation(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (locked) return;
     setValidationAttempted(true);
     setValidatedSnapshot(
       contactResult.success && conditionsResult.success ? currentSnapshot : null,
@@ -71,6 +79,7 @@ export function HostRegistrationForm() {
         <legend>2. 집이 자가인가요?</legend>
         <div className={styles.choices}>
           <SelectTile
+            disabled={locked}
             className={styles.choice}
             selected={draft.values.ownership === "OWNED"}
             onClick={() => handleOwnershipChange("OWNED")}
@@ -78,6 +87,7 @@ export function HostRegistrationForm() {
             자가예요
           </SelectTile>
           <SelectTile
+            disabled={locked}
             className={styles.choice}
             selected={draft.values.ownership === "RENTED"}
             onClick={() => handleOwnershipChange("RENTED")}
@@ -98,6 +108,7 @@ export function HostRegistrationForm() {
           placeholder="예: 서울시 마포구 연남동"
           value={draft.values.areaRaw}
           maxLength={200}
+          disabled={locked}
           aria-describedby={`${fieldId}-location-help`}
           error={conditionErrors.areaRaw?.[0]}
           onChange={(event) => {
@@ -115,20 +126,16 @@ export function HostRegistrationForm() {
       </div>
       <ShinhanRequiredConsentFields error={contactErrors.requiredConsent?.[0]} />
       <div className={styles.actions}>
-        <BtnCta
-          className={styles.nextButton}
-          disabled
-          aria-describedby={`${fieldId}-submission-status`}
-        >
-          다음
-        </BtnCta>
+        <ShinhanLiveSubmit className={styles.nextButton}>
+          방 등록 신청 저장 (개발용)
+        </ShinhanLiveSubmit>
         <p className={styles.hint}>입력하신 정보를 검토한 뒤, 심사 결과를 연락드려요.</p>
       </div>
       <div className={styles.validation}>
         <p id={`${fieldId}-submission-status`}>
-          개발 확인 중입니다. 실제 접수는 API 연결 후 가능해요.
+          아래 버튼은 입력 형식만 확인하며 서버에 저장하지 않습니다.
         </p>
-        <BtnCta variant="stroke" type="submit" className={styles.validateButton}>
+        <BtnCta variant="stroke" type="submit" className={styles.validateButton} disabled={locked}>
           입력 내용 확인 (개발용)
         </BtnCta>
         <p className={styles.validationMessage} role="status">
