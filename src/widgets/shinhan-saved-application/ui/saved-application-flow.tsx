@@ -5,6 +5,7 @@ import { type FormEvent, type ReactNode, useEffect, useId, useRef } from "react"
 
 import {
   ShinhanHostProgress,
+  ShinhanLivePreparation,
   ShinhanPrivacyLink,
   useShinhanStorage,
 } from "@/features/shinhan-intake";
@@ -43,6 +44,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
     step,
     setStep,
     pending,
+    preparing,
     attempt,
     consents,
     concernCodes,
@@ -80,7 +82,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
   const isGuest =
     application.applicationType === "GUEST_BUDGET" ||
     application.applicationType === "GUEST_DEMAND";
-  const blocked = pending || Boolean(attempt);
+  const blocked = pending || preparing || Boolean(attempt);
   const concerns = isHostEstimate ? props.hostConcerns : props.guestConcerns;
   const visibleCards =
     guideMode === "all"
@@ -126,6 +128,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
         </ol>
       )}
       <SavedMutationError />
+      {!consents && <ShinhanLivePreparation />}
       {step === "complete" &&
         (application.applicationType === "HOST_REGISTRATION"
           ? props.hostRegistration
@@ -331,7 +334,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
         <BtnCta
           variant="stroke"
           loading={refreshing}
-          disabled={pending || refreshing}
+          disabled={pending || preparing || refreshing}
           onClick={() => void refresh()}
         >
           저장 상태 다시 확인
@@ -340,9 +343,13 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
           현재 신청을 조회합니다. 새 접수·걱정 응답·소개서 신청은 전송하지 않습니다.
         </p>
         {queryError && (
-          <p role="alert" className={styles.fieldError}>
-            {queryError.message}
-          </p>
+          <div role="alert" className={styles.fieldError}>
+            <p>{queryError.message}</p>
+            <p>
+              마지막으로 확인한 신청 내역을 표시하고 있습니다. 조회 실패로 접수가 취소되거나 다시
+              제출되지는 않습니다.
+            </p>
+          </div>
         )}
       </section>
       <div className={styles.privacy}>

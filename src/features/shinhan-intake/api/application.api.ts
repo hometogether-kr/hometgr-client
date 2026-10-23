@@ -24,6 +24,7 @@ export type ShinhanSession = z.infer<typeof shinhanSessionResponseSchema>["data"
 export async function createShinhanSession(csrfToken: string): Promise<ShinhanSession> {
   const response = await shinhanRequest({
     path: "/sessions",
+    purpose: "sessionPreparation",
     method: "POST",
     body: {},
     csrfToken,

@@ -47,6 +47,7 @@ type StorageAttempt =
 
 interface StorageContextValue {
   consents: ShinhanConsents | null;
+  consentPreparationStarted: boolean;
   application: ShinhanApplication | undefined;
   preparing: boolean;
   pending: boolean;
@@ -141,6 +142,7 @@ function StorageSession({ children }: { children: ReactNode }) {
   const consents = consentsQuery.data ?? null;
   const application = applicationQuery.data;
   const [preparing, setPreparing] = useState(false);
+  const [consentPreparationStarted, setConsentPreparationStarted] = useState(false);
   const [pending, setPending] = useState(false);
   const busy = useRef(false);
   const retainedAttempt = useRef<StorageAttempt | null>(null);
@@ -185,6 +187,7 @@ function StorageSession({ children }: { children: ReactNode }) {
       return;
     busy.current = true;
     setPreparing(true);
+    setConsentPreparationStarted(true);
     setError(null);
     try {
       const initialize = async () => {
@@ -348,6 +351,7 @@ function StorageSession({ children }: { children: ReactNode }) {
     <StorageContext
       value={{
         consents,
+        consentPreparationStarted,
         application,
         preparing,
         pending,

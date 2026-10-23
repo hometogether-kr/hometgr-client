@@ -7,6 +7,7 @@ import { shinhanRequest } from "./request";
 export async function getShinhanConsents(signal?: AbortSignal): Promise<ShinhanConsents> {
   const response = await shinhanRequest({
     path: "/consents",
+    purpose: "consentRead",
     schema: shinhanConsentsResponseSchema,
     expectedStatus: 200,
     signal,
@@ -21,6 +22,7 @@ export async function getShinhanApplication(
   const id = shinhanApplicationIdSchema.parse(applicationId);
   const response = await shinhanRequest({
     path: `/applications/${id}/current`,
+    purpose: "applicationRead",
     schema: shinhanApplicationResponseSchema,
     expectedStatus: 200,
     signal,
