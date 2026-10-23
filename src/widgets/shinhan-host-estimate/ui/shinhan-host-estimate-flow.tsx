@@ -1,8 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useCallback, useState } from "react";
 
 import {
+  SHINHAN_HOST_FOLLOWUP_PATH,
   ShinhanContactFields,
   shinhanContactSchema,
   shinhanHostEstimateSchema,
@@ -37,7 +39,8 @@ const furnitureStates = [
 ] as const;
 
 export function ShinhanHostEstimateFlow({ introduction, incomePreview }: EstimateFlowProps) {
-  const { draft, updateDraft } = useShinhanIntake();
+  const { draft, updateDraft, startHostFollowup } = useShinhanIntake();
+  const router = useRouter();
   const [addressOpen, setAddressOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [verifiedContact, setVerifiedContact] = useState<string | null>(null);
@@ -131,6 +134,21 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
     setVerifiedContact(contactSnapshot);
   }
 
+  function handleFollowupPreview() {
+    if (!draft) return;
+    setContactErrorValues({ phone: draft.phone, requiredConsent: draft.requiredConsent });
+    const parsed = shinhanContactSchema.safeParse(draft);
+    if (!parsed.success) {
+      setErrors(
+        Object.fromEntries(
+          parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
+        ),
+      );
+      return;
+    }
+    if (startHostFollowup()) router.push(SHINHAN_HOST_FOLLOWUP_PATH);
+  }
+
   if (draft.step === "contact") {
     return (
       <div className={styles.contactStep}>
@@ -164,6 +182,11 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
           <p className={styles.notice}>
             접수 연결 준비 중이에요. 실제 저장이 완료된 뒤 예상 수익을 공개합니다.
           </p>
+          {process.env.NODE_ENV === "development" && (
+            <BtnCta variant="stroke" className={styles.cta} onClick={handleFollowupPreview}>
+              결과 화면 미리보기 (개발용)
+            </BtnCta>
+          )}
         </form>
         <button type="button" onClick={showConditions} className={styles.back}>
           ← 입력 정보 수정

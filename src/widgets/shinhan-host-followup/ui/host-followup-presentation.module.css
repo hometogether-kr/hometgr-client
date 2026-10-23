@@ -1,0 +1,369 @@
+.frame {
+  display: grid;
+  gap: 32px;
+  min-width: 0;
+}
+
+.resultHeading {
+  display: grid;
+  gap: 12px;
+}
+
+.resultHeading h1,
+.introductionHeading h1 {
+  color: var(--color-grayscale-900);
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 54px;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.resultHeading > p {
+  color: var(--color-grayscale-700);
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.incomeCard {
+  display: grid;
+  grid-template-columns: minmax(0, 640px) 280px;
+  align-items: center;
+  gap: 32px;
+  padding: 40px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 28px;
+  background: white;
+}
+
+.incomeContent {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.incomeDescription {
+  color: var(--color-grayscale-600);
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.incomeDescription span,
+.introductionHeading h1 span,
+.introductionDescription span {
+  display: block;
+}
+
+.roomImage {
+  width: 280px;
+  height: 280px;
+  object-fit: contain;
+}
+
+.disclaimer {
+  color: var(--color-grayscale-600);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.introductionLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 500px) minmax(0, 564px);
+  align-items: start;
+  gap: 56px;
+}
+
+.introductionHeading {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+}
+
+.eyebrow {
+  color: var(--color-primary-500);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.introductionDescription {
+  display: grid;
+  gap: 32px;
+  color: var(--color-grayscale-700);
+  font-size: 20px;
+  line-height: 32px;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.introductionCard {
+  display: grid;
+  gap: 24px;
+  min-width: 0;
+  padding: 32px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 24px;
+  background: white;
+}
+
+.cardHeading {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+
+.characterBackground {
+  display: grid;
+  flex: 0 0 80px;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: var(--color-primary-100);
+}
+
+.character {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+}
+
+.cardTitle {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.cardTitle h2 {
+  color: var(--color-grayscale-900);
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: -0.01em;
+}
+
+.cardTitle p {
+  color: var(--color-grayscale-600);
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.informationList {
+  display: grid;
+  gap: 24px;
+  margin: 0;
+  padding: 24px 0 0;
+  border-top: 1px solid var(--color-grayscale-200);
+  list-style: none;
+}
+
+.informationList li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-items: start;
+  gap: 16px;
+}
+
+.itemNumber {
+  color: var(--color-primary-500);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 26px;
+}
+
+.informationList li > div {
+  display: grid;
+  gap: 4px;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.informationList h3 {
+  color: var(--color-grayscale-900);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.informationList p {
+  color: var(--color-grayscale-600);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.reassurance {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 23px 24px;
+  border-radius: 16px;
+  background: var(--color-primary-100);
+}
+
+.reassuranceCheck {
+  display: grid;
+  flex: 0 0 32px;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary-500);
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.reassurance p {
+  color: var(--color-grayscale-900);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1100px) {
+  .incomeCard {
+    grid-template-columns: minmax(0, 1fr) 220px;
+  }
+
+  .roomImage {
+    width: 220px;
+    height: 220px;
+  }
+
+  .introductionLayout {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .introductionCard {
+    padding: 24px;
+  }
+
+  .cardHeading {
+    gap: 16px;
+  }
+
+  .cardTitle h2 {
+    font-size: 22px;
+    line-height: 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  .frame {
+    gap: 24px;
+  }
+
+  .resultHeading h1,
+  .introductionHeading h1 {
+    font-size: 28px;
+    line-height: 38px;
+  }
+
+  .resultHeading > p,
+  .introductionDescription {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .incomeCard {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px 20px;
+    border-radius: 24px;
+  }
+
+  .incomeDescription {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .incomeDescription span {
+    display: inline;
+  }
+
+  .incomeDescription span + span::before {
+    content: " ";
+  }
+
+  .roomImage {
+    justify-self: center;
+    width: 180px;
+    height: 180px;
+  }
+
+  .disclaimer {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .introductionLayout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .introductionHeading {
+    gap: 16px;
+  }
+
+  .eyebrow {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .introductionDescription {
+    gap: 24px;
+  }
+
+  .introductionCard {
+    gap: 20px;
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+
+  .cardHeading {
+    align-items: start;
+    gap: 12px;
+  }
+
+  .cardTitle h2 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .cardTitle p {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .informationList {
+    gap: 20px;
+    padding-top: 20px;
+  }
+
+  .informationList li {
+    gap: 8px;
+  }
+
+  .informationList h3 {
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  .reassurance {
+    align-items: start;
+    padding: 20px 16px;
+    gap: 12px;
+  }
+
+  .reassurance p {
+    font-size: 16px;
+    line-height: 26px;
+  }
+}

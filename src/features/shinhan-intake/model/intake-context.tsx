@@ -8,11 +8,13 @@ import {
   SHINHAN_GUEST_DEMAND_PATH,
   SHINHAN_GUEST_FOLLOWUP_PATH,
   SHINHAN_HOST_ESTIMATE_PATH,
+  SHINHAN_HOST_FOLLOWUP_PATH,
   SHINHAN_HOST_REGISTRATION_PATH,
   SHINHAN_INTAKE_PREVIEW_PATH,
   type ShinhanDraftPath,
 } from "../config/routes";
 import { createGuestFollowupExample, type GuestFollowupExample } from "./guest-followup";
+import { createHostFollowupExample, type HostFollowupExample } from "./host-followup";
 import {
   createShinhanDraft,
   type ShinhanApplicationType,
@@ -30,6 +32,9 @@ interface IntakeContextValue {
   guestFollowup: GuestFollowupExample | null;
   startGuestFollowup: () => boolean;
   updateGuestFollowup: (update: (example: GuestFollowupExample) => GuestFollowupExample) => void;
+  hostFollowup: HostFollowupExample | null;
+  startHostFollowup: () => boolean;
+  updateHostFollowup: (update: (example: HostFollowupExample) => HostFollowupExample) => void;
   startDraft: (applicationType: ShinhanApplicationType) => void;
   startGuestDraft: (
     applicationType: "GUEST_BUDGET" | "GUEST_DEMAND",
@@ -53,6 +58,7 @@ interface IntakeSession {
   draftPath: ShinhanDraftPath | null;
   privacyReturnTarget: PrivacyReturnTarget | null;
   guestFollowup: GuestFollowupExample | null;
+  hostFollowup: HostFollowupExample | null;
 }
 
 function createSession(
@@ -72,6 +78,7 @@ function createSession(
     draftPath: pathname,
     privacyReturnTarget: { pathname, applicationType },
     guestFollowup: null,
+    hostFollowup: null,
   };
 }
 
@@ -82,6 +89,7 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
     draftPath: null,
     privacyReturnTarget: null,
     guestFollowup: null,
+    hostFollowup: null,
   });
   let currentSession = session;
   const applicationRoute = applicationRoutes.find((route) => route.pathname === pathname);
@@ -105,10 +113,11 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
       draftPath: null,
       privacyReturnTarget: null,
       guestFollowup: null,
+      hostFollowup: null,
     };
     setSession(currentSession);
   }
-  const { draft, privacyReturnTarget, guestFollowup } = currentSession;
+  const { draft, privacyReturnTarget, guestFollowup, hostFollowup } = currentSession;
 
   function startDraft(applicationType: ShinhanApplicationType) {
     setSession(createSession(applicationType, SHINHAN_INTAKE_PREVIEW_PATH));
@@ -157,10 +166,11 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
 
   function rememberPrivacyReturn() {
     if (!draft) return;
-    const returnPath =
-      pathname === SHINHAN_GUEST_FOLLOWUP_PATH && guestFollowup
-        ? SHINHAN_GUEST_FOLLOWUP_PATH
-        : (currentSession.draftPath ?? SHINHAN_INTAKE_PREVIEW_PATH);
+    let returnPath = currentSession.draftPath ?? SHINHAN_INTAKE_PREVIEW_PATH;
+    if (pathname === SHINHAN_GUEST_FOLLOWUP_PATH && guestFollowup)
+      returnPath = SHINHAN_GUEST_FOLLOWUP_PATH;
+    if (pathname === SHINHAN_HOST_FOLLOWUP_PATH && hostFollowup)
+      returnPath = SHINHAN_HOST_FOLLOWUP_PATH;
     setSession((current) => ({
       ...current,
       privacyReturnTarget: {
@@ -170,6 +180,22 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
     }));
   }
 
+  function startHostFollowup() {
+    const example = createHostFollowupExample(draft);
+    if (!example) return false;
+    setSession((current) => ({ ...current, hostFollowup: example }));
+    return true;
+  }
+
+  const updateHostFollowup = useCallback(
+    (update: (current: HostFollowupExample) => HostFollowupExample) => {
+      setSession((current) =>
+        current.hostFollowup ? { ...current, hostFollowup: update(current.hostFollowup) } : current,
+      );
+    },
+    [],
+  );
+
   return (
     <IntakeContext
       value={{
@@ -178,6 +204,9 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
         guestFollowup,
         startGuestFollowup,
         updateGuestFollowup,
+        hostFollowup,
+        startHostFollowup,
+        updateHostFollowup,
         startDraft,
         startGuestDraft,
         updateDraft,

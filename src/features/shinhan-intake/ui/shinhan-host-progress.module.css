@@ -1,0 +1,48 @@
+.progress {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0 0 32px;
+  list-style: none;
+  padding: 0;
+}
+
+.progress li {
+  border-top: 3px solid var(--color-grayscale-200);
+  padding-top: 12px;
+  color: var(--color-grayscale-600);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.progress li[data-complete],
+.progress li[aria-current] {
+  border-color: var(--color-primary-500);
+}
+
+.progress li[aria-current] {
+  color: var(--color-primary-500);
+  font-weight: 700;
+}
+
+.progress span {
+  margin-right: 8px;
+}
+
+@media (max-width: 767px) {
+  .progress {
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .progress li {
+    font-size: 12px;
+    line-height: 18px;
+    padding-top: 8px;
+  }
+
+  .progress span {
+    display: block;
+    margin: 0;
+  }
+}
