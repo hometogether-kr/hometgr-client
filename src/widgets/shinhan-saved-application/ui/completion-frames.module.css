@@ -1,0 +1,535 @@
+.registrationFrame,
+.registrationIntroduction,
+.registrationHeading,
+.contactCard,
+.contactMessage,
+.contactAction,
+.introductionCard,
+.guestFrame,
+.guestMessage,
+.guestConcerns {
+  display: grid;
+  min-width: 0;
+}
+
+.registrationFrame {
+  gap: 32px;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.registrationColumns {
+  display: grid;
+  grid-template-columns: minmax(0, 480fr) minmax(0, 560fr);
+  align-items: start;
+  gap: 80px;
+}
+
+.registrationIntroduction,
+.registrationHeading {
+  gap: 24px;
+}
+
+.registrationIntroduction {
+  padding-top: 24px;
+}
+
+.eyebrow {
+  color: var(--color-primary-500);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 23px;
+}
+
+.registrationHeading h1 {
+  color: var(--color-grayscale-900);
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 61px;
+}
+
+.registrationHeading h1,
+.registrationDescription,
+.contactMessage,
+.introductionCard h1,
+.introductionDescription,
+.introductionCaption,
+.guestMessage,
+.guestConcerns {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.registrationHeading h1 span,
+.registrationDescription span,
+.contactMessage span,
+.introductionDescription span,
+.guestMessage h1 span,
+.guestConcernDescription span {
+  display: block;
+}
+
+.registrationDescription {
+  color: var(--color-grayscale-700);
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.registrationIllustration {
+  display: grid;
+  min-width: 0;
+  min-height: 280px;
+  place-items: center;
+  border-radius: 32px;
+  background: var(--color-primary-100);
+}
+
+.registrationCharacter {
+  width: 252px;
+  height: 252px;
+  object-fit: contain;
+}
+
+.contactCard {
+  gap: 32px;
+  padding: 40px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 24px;
+  background: var(--color-grayscale-0);
+  box-shadow: 0 8px 24px rgb(20 33 56 / 4%);
+}
+
+.contactMessage {
+  gap: 14px;
+}
+
+.contactMessage h2 {
+  color: var(--color-grayscale-900);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 42px;
+  letter-spacing: -0.02em;
+}
+
+.contactMessage p {
+  color: var(--color-grayscale-700);
+  font-size: 17px;
+  line-height: 27px;
+}
+
+.contactAction {
+  gap: 12px;
+}
+
+.kakaoLink {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 12px;
+  background: #ffeb3b;
+  color: var(--color-grayscale-900);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  text-align: center;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.kakaoLink:hover {
+  opacity: 0.8;
+}
+
+.kakaoLink:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 4px;
+}
+
+.contactAction > p {
+  color: var(--color-grayscale-700);
+  font-size: 13px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.registrationActions,
+.introductionActions,
+.guestActions,
+.summarySlot {
+  min-width: 0;
+  width: 100%;
+}
+
+.brand {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 24px;
+}
+
+.solBrand {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-grayscale-900);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+  white-space: nowrap;
+}
+
+.brandSeparator {
+  color: var(--color-grayscale-700);
+  font-size: 26px;
+  line-height: 36px;
+}
+
+.homeBrand,
+.solBrand img {
+  flex-shrink: 0;
+}
+
+.brand[data-size="small"] {
+  gap: 16px;
+}
+
+.brand[data-size="small"] .solBrand {
+  gap: 8px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.brand[data-size="small"] .brandSeparator {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.introductionCard {
+  gap: 28px;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px;
+  border: 1px solid var(--color-grayscale-200);
+  border-radius: 28px;
+  background: var(--color-grayscale-0);
+}
+
+.introductionCard h1 {
+  color: var(--color-grayscale-900);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 44px;
+  letter-spacing: -0.01em;
+}
+
+.introductionDescription {
+  color: var(--color-grayscale-700);
+  font-size: 20px;
+  line-height: 32px;
+  letter-spacing: -0.01em;
+}
+
+.introductionCaption {
+  color: var(--color-grayscale-600);
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 26px;
+  letter-spacing: -0.01em;
+}
+
+.guestFrame {
+  gap: 40px;
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.guestCompletion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 184px;
+  align-items: center;
+  gap: 24px;
+  min-width: 0;
+  padding: 24px 40px;
+}
+
+.guestMessage {
+  gap: 16px;
+}
+
+.guestEyebrow {
+  color: var(--color-primary-600);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.guestMessage h1 {
+  color: #172742;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 52px;
+}
+
+.completionAccent {
+  color: var(--color-primary-600);
+}
+
+.guestDescription {
+  color: #63738a;
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.guestCharacterSlot {
+  display: grid;
+  width: 184px;
+  height: 184px;
+  place-items: center;
+}
+
+.guestCharacter {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+}
+
+.guestConcerns {
+  justify-items: center;
+  gap: 16px;
+  padding: 36px 48px;
+  border-radius: 22px;
+  background: #e8f2ff;
+  text-align: center;
+}
+
+.guestConcernEyebrow {
+  color: var(--color-primary-600);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.guestConcerns h2 {
+  color: #172742;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 40px;
+}
+
+.guestConcernDescription {
+  color: #63738a;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.guestActions {
+  max-width: 496px;
+}
+
+.guestActions button {
+  min-height: 56px;
+}
+
+.guestFrame[data-application-type="GUEST_DEMAND"] .guestActions button {
+  min-height: 60px;
+}
+
+.guestConcernCaption {
+  color: #63738a;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.guestFrame[data-application-type="GUEST_DEMAND"] .guestCompletion {
+  gap: 16px;
+  padding: 32px 40px;
+  border: 1px solid #e3ebf5;
+  border-radius: 22px;
+  background: var(--color-grayscale-0);
+}
+
+.guestFrame[data-application-type="GUEST_DEMAND"] .guestMessage {
+  gap: 12px;
+}
+
+.guestFrame[data-application-type="GUEST_DEMAND"] .guestMessage h1 {
+  font-size: 34px;
+  line-height: 46px;
+}
+
+.guestFrame[data-application-type="GUEST_DEMAND"] .guestEyebrow {
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.guestFrame[data-application-type="GUEST_DEMAND"] .guestDescription {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.guestFrame[data-application-type="GUEST_DEMAND"] .guestCharacterSlot {
+  border-radius: 50%;
+  background: #e8f2ff;
+}
+
+.guestFrame[data-application-type="GUEST_DEMAND"] .guestConcerns {
+  padding-top: 38px;
+  padding-bottom: 40px;
+}
+
+@media (min-width: 768px) and (max-width: 1159px) {
+  .registrationColumns {
+    gap: 32px;
+  }
+
+  .contactCard {
+    padding: 28px;
+  }
+
+  .brand[data-size="small"] {
+    display: grid;
+    grid-template-columns: 20px 155px;
+    gap: 10px;
+  }
+
+  .brand[data-size="small"] .solBrand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .registrationFrame,
+  .registrationColumns,
+  .guestFrame {
+    gap: 32px;
+  }
+
+  .registrationColumns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .registrationIntroduction {
+    padding-top: 0;
+  }
+
+  .registrationHeading {
+    gap: 16px;
+  }
+
+  .registrationHeading h1,
+  .introductionCard h1,
+  .guestMessage h1,
+  .guestFrame[data-application-type="GUEST_DEMAND"] .guestMessage h1 {
+    font-size: 28px;
+    line-height: 40px;
+  }
+
+  .registrationDescription,
+  .contactMessage p,
+  .introductionDescription,
+  .guestDescription,
+  .guestConcernDescription,
+  .guestFrame[data-application-type="GUEST_DEMAND"] .guestDescription {
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .registrationDescription span,
+  .contactMessage p span,
+  .introductionDescription span,
+  .guestConcernDescription span {
+    display: inline;
+  }
+
+  .registrationDescription span + span::before,
+  .contactMessage p span + span::before,
+  .introductionDescription span + span::before,
+  .guestConcernDescription span + span::before {
+    content: " ";
+  }
+
+  .registrationIllustration {
+    min-height: 232px;
+    border-radius: 24px;
+  }
+
+  .registrationCharacter {
+    width: 200px;
+    height: 200px;
+  }
+
+  .contactCard,
+  .introductionCard {
+    gap: 24px;
+    padding: 24px 20px;
+    border-radius: 24px;
+  }
+
+  .contactMessage h2 {
+    font-size: 28px;
+    line-height: 38px;
+  }
+
+  .kakaoLink {
+    min-height: 52px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .contactAction > p,
+  .introductionCaption {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .brand,
+  .brand[data-size="small"] {
+    display: grid;
+    grid-template-columns: 26px 199.286px;
+    gap: 10px;
+  }
+
+  .brand[data-size="small"] {
+    grid-template-columns: 20px 155px;
+  }
+
+  .solBrand {
+    grid-column: 1 / -1;
+  }
+
+  .guestCompletion,
+  .guestFrame[data-application-type="GUEST_DEMAND"] .guestCompletion {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding: 24px 20px;
+  }
+
+  .guestFrame[data-application-type="GUEST_BUDGET"] .guestCompletion {
+    padding: 0;
+  }
+
+  .guestCharacterSlot {
+    justify-self: center;
+  }
+
+  .guestConcerns,
+  .guestFrame[data-application-type="GUEST_DEMAND"] .guestConcerns {
+    padding: 28px 20px;
+  }
+
+  .guestConcerns h2 {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  .guestActions button,
+  .guestFrame[data-application-type="GUEST_DEMAND"] .guestActions button {
+    min-height: 52px;
+  }
+}

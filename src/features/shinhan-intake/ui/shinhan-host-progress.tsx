@@ -1,7 +1,7 @@
 import styles from "./shinhan-host-progress.module.css";
 
 interface ShinhanHostProgressProps {
-  currentStep: "result" | "concerns" | "introduction" | "notification";
+  currentStep: "result" | "concerns" | "introduction" | "notification" | "complete";
 }
 
 const HOST_STEPS = [
@@ -12,7 +12,10 @@ const HOST_STEPS = [
 ] as const;
 
 export function ShinhanHostProgress({ currentStep }: ShinhanHostProgressProps) {
-  const currentIndex = HOST_STEPS.findIndex((step) => step.value === currentStep);
+  const currentIndex =
+    currentStep === "complete"
+      ? HOST_STEPS.length
+      : HOST_STEPS.findIndex((step) => step.value === currentStep);
 
   return (
     <ol className={styles.progress} aria-label="호스트 신청 순서">

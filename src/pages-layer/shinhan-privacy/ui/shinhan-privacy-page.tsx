@@ -1,4 +1,8 @@
-import { ShinhanIntakeRoleSlot, ShinhanPrivacyReturn } from "@/features/shinhan-intake";
+import {
+  ServerConsentDocument,
+  ShinhanIntakeRoleSlot,
+  ShinhanPrivacyReturn,
+} from "@/features/shinhan-intake";
 import { ShinhanPrivacyDocument } from "@/widgets/shinhan-privacy";
 import { ShinhanRoleFooter, ShinhanServiceHeader } from "@/widgets/shinhan-shell";
 
@@ -12,19 +16,23 @@ export function ShinhanPrivacyPage() {
         fallback={<ShinhanServiceHeader {...skipProps} />}
       />
       <main id="shinhan-privacy">
-        <ShinhanPrivacyDocument
-          topNavigation={
-            <div className="flex flex-col gap-4">
-              <p className="rounded-xl bg-primary-50 p-4 text-sm leading-6 text-grayscale-700">
-                개발 확인용 전문입니다. Figma 원문을 표시하며, 운영 동의 승인본이나 서버의 로컬 동의
-                버전과 연결되지 않았습니다. 열람만으로 동의하거나 신청이 접수되지 않습니다.
-              </p>
-              <div>
-                <ShinhanPrivacyReturn />
-              </div>
-            </div>
+        <ServerConsentDocument
+          fallback={
+            <ShinhanPrivacyDocument
+              topNavigation={
+                <div className="flex flex-col gap-4">
+                  <p className="rounded-xl bg-primary-50 p-4 text-sm leading-6 text-grayscale-700">
+                    개발 확인용 전문입니다. Figma 원문을 표시하며, 운영 동의 승인본이나 서버의 로컬
+                    동의 버전과 연결되지 않았습니다. 열람만으로 동의하거나 신청이 접수되지 않습니다.
+                  </p>
+                  <div>
+                    <ShinhanPrivacyReturn />
+                  </div>
+                </div>
+              }
+              bottomNavigation={<ShinhanPrivacyReturn />}
+            />
           }
-          bottomNavigation={<ShinhanPrivacyReturn />}
         />
       </main>
       <ShinhanRoleFooter />

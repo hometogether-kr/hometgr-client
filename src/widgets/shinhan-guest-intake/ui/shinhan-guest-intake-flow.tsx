@@ -13,11 +13,14 @@ import {
   shinhanGuestDemandSchema,
   type ShinhanGuestDemandValues,
   ShinhanGuestRegionField,
+  ShinhanLiveSubmit,
   ShinhanMoveInDateField,
   ShinhanPhoneField,
   ShinhanPrivacyLink,
   ShinhanRequiredConsentFields,
+  ShinhanSavedApplicationNotice,
   useShinhanIntake,
+  useShinhanStorage,
 } from "@/features/shinhan-intake";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { SelectTile } from "@/shared/ui/select-tile";
@@ -44,6 +47,8 @@ export function ShinhanGuestIntakeFlow({
   examples,
 }: GuestIntakeFlowProps) {
   const { draft, updateDraft, startGuestFollowup } = useShinhanIntake();
+  const storage = useShinhanStorage();
+  const locked = storage.pending || storage.attempt !== null || storage.preparing;
   const router = useRouter();
   const [conditionsAttempted, setConditionsAttempted] = useState(false);
   const [contactAttempted, setContactAttempted] = useState(false);
@@ -55,6 +60,8 @@ export function ShinhanGuestIntakeFlow({
     (draft.applicationType !== "GUEST_BUDGET" && draft.applicationType !== "GUEST_DEMAND")
   )
     return null;
+  if (storage.application?.applicationType === applicationType)
+    return <ShinhanSavedApplicationNotice />;
 
   const isBudget = draft.applicationType === "GUEST_BUDGET";
   const conditionsResult = isBudget
@@ -89,6 +96,7 @@ export function ShinhanGuestIntakeFlow({
 
   function handleConditionsSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (locked) return;
     setConditionsAttempted(true);
     if (!conditionsResult.success) return;
     updateDraft((current) => ({ ...current, step: "contact" }));
@@ -97,16 +105,19 @@ export function ShinhanGuestIntakeFlow({
 
   function handleContactCheck(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (locked) return;
     setContactAttempted(true);
     setVerifiedContact(contactResult.success ? contactSnapshot : null);
   }
 
   function handleEditConditions() {
+    if (locked) return;
     updateDraft((current) => ({ ...current, step: "conditions" }));
     window.scrollTo({ top: 0, behavior: "instant" });
   }
 
   function handleFollowupPreview() {
+    if (locked) return;
     setContactAttempted(true);
     if (!contactResult.success) return;
     if (startGuestFollowup()) {
@@ -163,13 +174,10 @@ export function ShinhanGuestIntakeFlow({
               error={contactErrors.phone?.[0]}
             />
             <ShinhanRequiredConsentFields error={contactErrors.requiredConsent?.[0]} />
-            <BtnCta disabled className={styles.cta} aria-describedby={`${id}-submission-status`}>
+            <ShinhanLiveSubmit className={styles.cta}>
               {isBudget ? "상세조건 안내받기" : "입주조건 확인하기"}
-            </BtnCta>
-            <p id={`${id}-submission-status`} className={styles.notice}>
-              개발 확인 중입니다. 실제 접수는 저장 API 연결 후 가능해요.
-            </p>
-            <BtnCta type="submit" variant="stroke" className={styles.checkButton}>
+            </ShinhanLiveSubmit>
+            <BtnCta type="submit" variant="stroke" className={styles.checkButton} disabled={locked}>
               입력 내용 확인 (개발용)
             </BtnCta>
             <p role="status" className={styles.notice}>
@@ -183,12 +191,18 @@ export function ShinhanGuestIntakeFlow({
                 variant="stroke"
                 className={styles.checkButton}
                 onClick={handleFollowupPreview}
+                disabled={locked}
               >
                 신청 후 화면 미리보기 (개발용)
               </BtnCta>
             )}
           </form>
-          <button type="button" className={styles.back} onClick={handleEditConditions}>
+          <button
+            type="button"
+            className={styles.back}
+            onClick={handleEditConditions}
+            disabled={locked}
+          >
             ← {isBudget ? "예산과 희망 지역 다시 입력하기" : "위치·월세·성별 다시 입력하기"}
           </button>
         </div>
@@ -201,108 +215,110 @@ export function ShinhanGuestIntakeFlow({
             onSubmit={handleConditionsSubmit}
             aria-label={isBudget ? "예산 매칭 조건 입력" : "수요조사 조건 입력"}
           >
-            {draft.applicationType === "GUEST_BUDGET" ? (
-              <>
-                <ShinhanGuestBudgetField
-                  value={draft.values.budgetMonthlyKrw}
-                  onChange={(budgetMonthlyKrw) => updateBudget({ budgetMonthlyKrw })}
-                  error={errors.budgetMonthlyKrw}
-                />
-                <ShinhanGuestRegionField
-                  label="2. 희망하는 위치"
-                  value={draft.values.desiredRegionRaw}
-                  onChange={(desiredRegionRaw) => updateBudget({ desiredRegionRaw })}
-                  error={errors.desiredRegionRaw}
-                />
-                <ShinhanMoveInDateField
-                  value={draft.values.moveInDate}
-                  onChange={(moveInDate) => updateBudget({ moveInDate })}
-                  error={errors.moveInDate}
-                />
-              </>
-            ) : (
-              <>
-                <ShinhanGuestRegionField
-                  label="1. 어디에서 살고 싶으세요?"
-                  value={draft.values.desiredRegionRaw}
-                  onChange={(desiredRegionRaw) => updateDemand({ desiredRegionRaw })}
-                  error={errors.desiredRegionRaw}
-                />
-                <ShinhanGuestBudgetRangeField
-                  min={draft.values.budgetMinKrw}
-                  max={draft.values.budgetMaxKrw}
-                  onMinChange={(budgetMinKrw) => updateDemand({ budgetMinKrw })}
-                  onMaxChange={(budgetMaxKrw) => updateDemand({ budgetMaxKrw })}
-                  minError={errors.budgetMinKrw}
-                  maxError={errors.budgetMaxKrw}
-                />
-                <ShinhanMoveInDateField
-                  value={draft.values.moveInDate}
-                  onChange={(moveInDate) => updateDemand({ moveInDate })}
-                  error={errors.moveInDate}
-                />
-                <div className={styles.termField}>
-                  <label htmlFor={`${id}-term`}>4. 얼마나 거주할 예정인가요?</label>
-                  <select
-                    id={`${id}-term`}
-                    value={draft.values.contractTermCode}
-                    onChange={(event) => updateDemand({ contractTermCode: event.target.value })}
-                    aria-invalid={Boolean(errors.contractTermCode) || undefined}
-                    aria-describedby={errors.contractTermCode ? `${id}-term-error` : undefined}
-                  >
-                    <option value="" disabled>
-                      계약기간을 선택해 주세요
-                    </option>
-                    {contractTerms.map((term) => (
-                      <option key={term.value} value={term.value}>
-                        {term.label}
+            <fieldset disabled={locked} className="contents">
+              {draft.applicationType === "GUEST_BUDGET" ? (
+                <>
+                  <ShinhanGuestBudgetField
+                    value={draft.values.budgetMonthlyKrw}
+                    onChange={(budgetMonthlyKrw) => updateBudget({ budgetMonthlyKrw })}
+                    error={errors.budgetMonthlyKrw}
+                  />
+                  <ShinhanGuestRegionField
+                    label="2. 희망하는 위치"
+                    value={draft.values.desiredRegionRaw}
+                    onChange={(desiredRegionRaw) => updateBudget({ desiredRegionRaw })}
+                    error={errors.desiredRegionRaw}
+                  />
+                  <ShinhanMoveInDateField
+                    value={draft.values.moveInDate}
+                    onChange={(moveInDate) => updateBudget({ moveInDate })}
+                    error={errors.moveInDate}
+                  />
+                </>
+              ) : (
+                <>
+                  <ShinhanGuestRegionField
+                    label="1. 어디에서 살고 싶으세요?"
+                    value={draft.values.desiredRegionRaw}
+                    onChange={(desiredRegionRaw) => updateDemand({ desiredRegionRaw })}
+                    error={errors.desiredRegionRaw}
+                  />
+                  <ShinhanGuestBudgetRangeField
+                    min={draft.values.budgetMinKrw}
+                    max={draft.values.budgetMaxKrw}
+                    onMinChange={(budgetMinKrw) => updateDemand({ budgetMinKrw })}
+                    onMaxChange={(budgetMaxKrw) => updateDemand({ budgetMaxKrw })}
+                    minError={errors.budgetMinKrw}
+                    maxError={errors.budgetMaxKrw}
+                  />
+                  <ShinhanMoveInDateField
+                    value={draft.values.moveInDate}
+                    onChange={(moveInDate) => updateDemand({ moveInDate })}
+                    error={errors.moveInDate}
+                  />
+                  <div className={styles.termField}>
+                    <label htmlFor={`${id}-term`}>4. 얼마나 거주할 예정인가요?</label>
+                    <select
+                      id={`${id}-term`}
+                      value={draft.values.contractTermCode}
+                      onChange={(event) => updateDemand({ contractTermCode: event.target.value })}
+                      aria-invalid={Boolean(errors.contractTermCode) || undefined}
+                      aria-describedby={errors.contractTermCode ? `${id}-term-error` : undefined}
+                    >
+                      <option value="" disabled>
+                        계약기간을 선택해 주세요
                       </option>
-                    ))}
-                  </select>
-                  {errors.contractTermCode && (
-                    <p id={`${id}-term-error`} role="alert" className={styles.error}>
-                      {errors.contractTermCode}
-                    </p>
-                  )}
-                </div>
-                <fieldset
-                  className={styles.genderField}
-                  aria-describedby={errors.gender ? `${id}-gender-error` : undefined}
-                >
-                  <legend>5. 성별을 알려 주세요</legend>
-                  <div className={styles.genderChoices}>
-                    <SelectTile
-                      selected={draft.values.gender === "FEMALE"}
-                      onClick={() => updateDemand({ gender: "FEMALE" })}
-                      className={styles.genderChoice}
-                    >
-                      여성
-                    </SelectTile>
-                    <SelectTile
-                      selected={draft.values.gender === "MALE"}
-                      onClick={() => updateDemand({ gender: "MALE" })}
-                      className={styles.genderChoice}
-                    >
-                      남성
-                    </SelectTile>
+                      {contractTerms.map((term) => (
+                        <option key={term.value} value={term.value}>
+                          {term.label}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.contractTermCode && (
+                      <p id={`${id}-term-error`} role="alert" className={styles.error}>
+                        {errors.contractTermCode}
+                      </p>
+                    )}
                   </div>
-                  {errors.gender && (
-                    <p id={`${id}-gender-error`} role="alert" className={styles.error}>
-                      {errors.gender}
-                    </p>
-                  )}
-                </fieldset>
-              </>
-            )}
-            <div className={styles.actions}>
-              <BtnCta type="submit" className={styles.cta}>
-                {isBudget ? "내 예산에 맞는 아파트 찾기" : "내 조건에 맞는 방 둘러보기"}
-              </BtnCta>
-              <p className={styles.notice}>
-                다음 화면에서 공통 공간 예시와 연락처 입력을 확인할 수 있어요.
-              </p>
-              <ShinhanPrivacyLink>개인정보 수집·이용 전문 보기</ShinhanPrivacyLink>
-            </div>
+                  <fieldset
+                    className={styles.genderField}
+                    aria-describedby={errors.gender ? `${id}-gender-error` : undefined}
+                  >
+                    <legend>5. 성별을 알려 주세요</legend>
+                    <div className={styles.genderChoices}>
+                      <SelectTile
+                        selected={draft.values.gender === "FEMALE"}
+                        onClick={() => updateDemand({ gender: "FEMALE" })}
+                        className={styles.genderChoice}
+                      >
+                        여성
+                      </SelectTile>
+                      <SelectTile
+                        selected={draft.values.gender === "MALE"}
+                        onClick={() => updateDemand({ gender: "MALE" })}
+                        className={styles.genderChoice}
+                      >
+                        남성
+                      </SelectTile>
+                    </div>
+                    {errors.gender && (
+                      <p id={`${id}-gender-error`} role="alert" className={styles.error}>
+                        {errors.gender}
+                      </p>
+                    )}
+                  </fieldset>
+                </>
+              )}
+              <div className={styles.actions}>
+                <BtnCta type="submit" className={styles.cta}>
+                  {isBudget ? "내 예산에 맞는 아파트 찾기" : "내 조건에 맞는 방 둘러보기"}
+                </BtnCta>
+                <p className={styles.notice}>
+                  다음 화면에서 공통 공간 예시와 연락처 입력을 확인할 수 있어요.
+                </p>
+                <ShinhanPrivacyLink>개인정보 수집·이용 전문 보기</ShinhanPrivacyLink>
+              </div>
+            </fieldset>
           </form>
         </div>
       )}

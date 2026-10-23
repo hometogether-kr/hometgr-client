@@ -9,8 +9,10 @@ import {
   shinhanContactSchema,
   shinhanHostEstimateSchema,
   type ShinhanHostEstimateValues,
+  ShinhanLiveSubmit,
   ShinhanPrivacyLink,
   useShinhanIntake,
+  useShinhanStorage,
 } from "@/features/shinhan-intake";
 import type { SelectedAddress } from "@/shared/lib/kakao-postcode";
 import { AddressSearchDialog } from "@/shared/ui/address-search-dialog";
@@ -40,6 +42,8 @@ const furnitureStates = [
 
 export function ShinhanHostEstimateFlow({ introduction, incomePreview }: EstimateFlowProps) {
   const { draft, updateDraft, startHostFollowup } = useShinhanIntake();
+  const storage = useShinhanStorage();
+  const locked = storage.pending || storage.attempt !== null || storage.preparing;
   const router = useRouter();
   const [addressOpen, setAddressOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -89,6 +93,7 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
   }
 
   function showConditions() {
+    if (locked) return;
     setErrors({});
     setVerifiedContact(null);
     setContactErrorValues(null);
@@ -98,6 +103,7 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
 
   function handleConditionsSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (locked) return;
     const parsed = shinhanHostEstimateSchema.safeParse(values);
     if (!parsed.success) {
       setErrors(
@@ -118,6 +124,7 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
 
   function handleContactCheck(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (locked) return;
     if (!draft) return;
     setContactErrorValues({ phone: draft.phone, requiredConsent: draft.requiredConsent });
     const parsed = shinhanContactSchema.safeParse(draft);
@@ -135,6 +142,7 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
   }
 
   function handleFollowupPreview() {
+    if (locked) return;
     if (!draft) return;
     setContactErrorValues({ phone: draft.phone, requiredConsent: draft.requiredConsent });
     const parsed = shinhanContactSchema.safeParse(draft);
@@ -168,7 +176,7 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                   : undefined,
             }}
           />
-          <BtnCta type="submit" variant="stroke" className={styles.cta}>
+          <BtnCta type="submit" variant="stroke" className={styles.cta} disabled={locked}>
             입력 형식 확인
           </BtnCta>
           {verifiedContact === contactSnapshot && (
@@ -176,19 +184,19 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
               입력 형식을 확인했어요. 아직 접수되지는 않았습니다.
             </p>
           )}
-          <BtnCta disabled className={styles.cta}>
-            예상 수익 확인하기
-          </BtnCta>
-          <p className={styles.notice}>
-            접수 연결 준비 중이에요. 실제 저장이 완료된 뒤 예상 수익을 공개합니다.
-          </p>
+          <ShinhanLiveSubmit className={styles.cta}>예상 수익 확인하기</ShinhanLiveSubmit>
           {process.env.NODE_ENV === "development" && (
-            <BtnCta variant="stroke" className={styles.cta} onClick={handleFollowupPreview}>
+            <BtnCta
+              variant="stroke"
+              className={styles.cta}
+              onClick={handleFollowupPreview}
+              disabled={locked}
+            >
               결과 화면 미리보기 (개발용)
             </BtnCta>
           )}
         </form>
-        <button type="button" onClick={showConditions} className={styles.back}>
+        <button type="button" onClick={showConditions} className={styles.back} disabled={locked}>
           ← 입력 정보 수정
         </button>
       </div>
@@ -200,136 +208,141 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
       <div className={styles.columns}>
         {introduction}
         <form className={styles.form} onSubmit={handleConditionsSubmit} noValidate>
-          <div className={styles.fieldGroup}>
-            <h2 id="estimate-address-label">1. 집은 어디에 있나요?</h2>
-            <button
-              type="button"
-              className={styles.addressButton}
-              onClick={() => setAddressOpen(true)}
-              aria-labelledby="estimate-address-label estimate-address-value"
-              aria-describedby={errors.address ? "estimate-address-error" : undefined}
-            >
-              <span id="estimate-address-value">
-                {values.address?.addressRaw || "카카오 주소검색으로 주소 선택"}
-              </span>
-              <span className={styles.addressAction}>{values.address ? "변경" : "검색"}</span>
-            </button>
-            {errors.address && (
-              <p id="estimate-address-error" className={styles.error} role="alert">
-                {errors.address}
-              </p>
-            )}
-            <p className={styles.hint}>주소검색 결과에서 기본 주소를 선택해 주세요.</p>
-          </div>
-          <fieldset className={styles.fieldGroup}>
-            <legend>
-              2. 몇 동, 몇 호인가요? <span className={styles.optional}>(선택)</span>
-            </legend>
-            <div className={styles.addressDetail}>
-              <TextField
-                label="동"
-                placeholder="예: 101"
-                value={values.buildingDong}
-                maxLength={40}
-                error={errors.buildingDong}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  updateValues("buildingDong", (current) => ({ ...current, buildingDong: value }));
-                }}
-                className={styles.textField}
-              />
-              <TextField
-                label="호수"
-                placeholder="예: 1002"
-                value={values.unitHo}
-                maxLength={40}
-                error={errors.unitHo}
-                onChange={(event) => {
-                  const value = event.target.value;
-                  updateValues("unitHo", (current) => ({ ...current, unitHo: value }));
-                }}
-                className={styles.textField}
-              />
+          <fieldset disabled={locked} className="contents">
+            <div className={styles.fieldGroup}>
+              <h2 id="estimate-address-label">1. 집은 어디에 있나요?</h2>
+              <button
+                type="button"
+                className={styles.addressButton}
+                onClick={() => setAddressOpen(true)}
+                aria-labelledby="estimate-address-label estimate-address-value"
+                aria-describedby={errors.address ? "estimate-address-error" : undefined}
+              >
+                <span id="estimate-address-value">
+                  {values.address?.addressRaw || "카카오 주소검색으로 주소 선택"}
+                </span>
+                <span className={styles.addressAction}>{values.address ? "변경" : "검색"}</span>
+              </button>
+              {errors.address && (
+                <p id="estimate-address-error" className={styles.error} role="alert">
+                  {errors.address}
+                </p>
+              )}
+              <p className={styles.hint}>주소검색 결과에서 기본 주소를 선택해 주세요.</p>
             </div>
-            <p className={styles.hint}>동이 없는 건물은 호수만 입력해주세요.</p>
-          </fieldset>
-          <fieldset className={styles.fieldGroup}>
-            <legend>3. 빈방에 어떤 가구를 제공하나요?</legend>
-            <p className={styles.hint}>입주 전에 구매할 가구도 포함해주세요.</p>
-            {furnitureItems.map((item) => (
-              <div key={item.key}>
-                <div
-                  className={styles.furnitureRow}
-                  role="group"
-                  aria-labelledby={`estimate-${item.key}`}
-                  aria-describedby={
-                    errors[`furniture.${item.key}`] ? `estimate-${item.key}-error` : undefined
-                  }
-                >
-                  <span id={`estimate-${item.key}`} className={styles.furnitureLabel}>
-                    {item.label}
-                  </span>
-                  <div className={styles.segmented}>
-                    {furnitureStates.map((state) => (
-                      <SelectTile
-                        key={state.value}
-                        selected={values.furniture[item.key] === state.value}
-                        className={styles.segment}
-                        onClick={() =>
-                          updateValues(`furniture.${item.key}`, (current) => ({
-                            ...current,
-                            furniture: { ...current.furniture, [item.key]: state.value },
-                          }))
-                        }
-                      >
-                        {state.label}
-                      </SelectTile>
-                    ))}
-                  </div>
-                </div>
-                {errors[`furniture.${item.key}`] && (
-                  <p id={`estimate-${item.key}-error`} className={styles.error} role="alert">
-                    {errors[`furniture.${item.key}`]}
-                  </p>
-                )}
-              </div>
-            ))}
-          </fieldset>
-          <fieldset
-            className={styles.fieldGroup}
-            aria-describedby={errors.bathroomCount ? "estimate-bathroom-error" : undefined}
-          >
-            <legend>4. 집에 화장실이 몇 개인가요?</legend>
-            <div className={styles.segmented}>
-              {([1, 2] as const).map((count) => (
-                <SelectTile
-                  key={count}
-                  selected={values.bathroomCount === count}
-                  className={styles.segment}
-                  onClick={() =>
-                    updateValues("bathroomCount", (current) => ({
+            <fieldset className={styles.fieldGroup}>
+              <legend>
+                2. 몇 동, 몇 호인가요? <span className={styles.optional}>(선택)</span>
+              </legend>
+              <div className={styles.addressDetail}>
+                <TextField
+                  label="동"
+                  placeholder="예: 101"
+                  value={values.buildingDong}
+                  maxLength={40}
+                  error={errors.buildingDong}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    updateValues("buildingDong", (current) => ({
                       ...current,
-                      bathroomCount: count,
-                    }))
-                  }
-                >
-                  화장실 {count}개
-                </SelectTile>
+                      buildingDong: value,
+                    }));
+                  }}
+                  className={styles.textField}
+                />
+                <TextField
+                  label="호수"
+                  placeholder="예: 1002"
+                  value={values.unitHo}
+                  maxLength={40}
+                  error={errors.unitHo}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    updateValues("unitHo", (current) => ({ ...current, unitHo: value }));
+                  }}
+                  className={styles.textField}
+                />
+              </div>
+              <p className={styles.hint}>동이 없는 건물은 호수만 입력해주세요.</p>
+            </fieldset>
+            <fieldset className={styles.fieldGroup}>
+              <legend>3. 빈방에 어떤 가구를 제공하나요?</legend>
+              <p className={styles.hint}>입주 전에 구매할 가구도 포함해주세요.</p>
+              {furnitureItems.map((item) => (
+                <div key={item.key}>
+                  <div
+                    className={styles.furnitureRow}
+                    role="group"
+                    aria-labelledby={`estimate-${item.key}`}
+                    aria-describedby={
+                      errors[`furniture.${item.key}`] ? `estimate-${item.key}-error` : undefined
+                    }
+                  >
+                    <span id={`estimate-${item.key}`} className={styles.furnitureLabel}>
+                      {item.label}
+                    </span>
+                    <div className={styles.segmented}>
+                      {furnitureStates.map((state) => (
+                        <SelectTile
+                          key={state.value}
+                          selected={values.furniture[item.key] === state.value}
+                          className={styles.segment}
+                          onClick={() =>
+                            updateValues(`furniture.${item.key}`, (current) => ({
+                              ...current,
+                              furniture: { ...current.furniture, [item.key]: state.value },
+                            }))
+                          }
+                        >
+                          {state.label}
+                        </SelectTile>
+                      ))}
+                    </div>
+                  </div>
+                  {errors[`furniture.${item.key}`] && (
+                    <p id={`estimate-${item.key}-error`} className={styles.error} role="alert">
+                      {errors[`furniture.${item.key}`]}
+                    </p>
+                  )}
+                </div>
               ))}
+            </fieldset>
+            <fieldset
+              className={styles.fieldGroup}
+              aria-describedby={errors.bathroomCount ? "estimate-bathroom-error" : undefined}
+            >
+              <legend>4. 집에 화장실이 몇 개인가요?</legend>
+              <div className={styles.segmented}>
+                {([1, 2] as const).map((count) => (
+                  <SelectTile
+                    key={count}
+                    selected={values.bathroomCount === count}
+                    className={styles.segment}
+                    onClick={() =>
+                      updateValues("bathroomCount", (current) => ({
+                        ...current,
+                        bathroomCount: count,
+                      }))
+                    }
+                  >
+                    화장실 {count}개
+                  </SelectTile>
+                ))}
+              </div>
+              {errors.bathroomCount && (
+                <p id="estimate-bathroom-error" className={styles.error} role="alert">
+                  {errors.bathroomCount}
+                </p>
+              )}
+            </fieldset>
+            <div className={styles.actions}>
+              <BtnCta type="submit" className={styles.cta}>
+                빈방 예상 월세 확인하기 →
+              </BtnCta>
+              <p className={styles.hint}>실제 월세는 평면도와 방 상태 확인 후 달라질 수 있어요.</p>
+              <ShinhanPrivacyLink>개인정보 수집·이용 전문 보기</ShinhanPrivacyLink>
             </div>
-            {errors.bathroomCount && (
-              <p id="estimate-bathroom-error" className={styles.error} role="alert">
-                {errors.bathroomCount}
-              </p>
-            )}
           </fieldset>
-          <div className={styles.actions}>
-            <BtnCta type="submit" className={styles.cta}>
-              빈방 예상 월세 확인하기 →
-            </BtnCta>
-            <p className={styles.hint}>실제 월세는 평면도와 방 상태 확인 후 달라질 수 있어요.</p>
-            <ShinhanPrivacyLink>개인정보 수집·이용 전문 보기</ShinhanPrivacyLink>
-          </div>
         </form>
       </div>
       <AddressSearchDialog
