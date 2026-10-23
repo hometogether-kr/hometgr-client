@@ -13,7 +13,11 @@ export function ShinhanLivePreparation() {
   if (process.env.NODE_ENV !== "development") return null;
   return (
     <div className="mb-4 space-y-3 rounded-xl border border-primary-200 bg-primary-50 p-4 text-sm leading-6 text-grayscale-700">
-      <p>로컬 서버 저장 확인용입니다. 서버 동의 전문을 준비한 뒤 필수 동의를 다시 선택해 주세요.</p>
+      <p>
+        {storage.application
+          ? "기존 신청은 유지됩니다. 선택정보를 저장하려면 서버 전문을 준비한 뒤 선택 동의를 다시 확인해 주세요."
+          : "로컬 서버 저장 확인용입니다. 서버 동의 전문을 준비한 뒤 필수 동의를 다시 선택해 주세요."}
+      </p>
       {storage.consents ? (
         <p role="status">서버 동의 전문과 신청 세션을 준비했습니다.</p>
       ) : (

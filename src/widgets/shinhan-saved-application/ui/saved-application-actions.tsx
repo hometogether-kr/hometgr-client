@@ -26,12 +26,12 @@ export function SavedNavigationButton({
   children,
   variant = "primary",
 }: SavedNavigationButtonProps) {
-  const { setStep, pending, attempt } = useShinhanStorage();
+  const { setStep, pending, preparing, attempt } = useShinhanStorage();
   return (
     <BtnCta
       variant={variant === "secondary" ? "stroke" : "default"}
       className={variant === "secondary" ? styles.secondaryButton : styles.primaryButton}
-      disabled={pending || Boolean(attempt)}
+      disabled={pending || preparing || Boolean(attempt)}
       onClick={() => setStep(step)}
     >
       {children}
@@ -75,7 +75,7 @@ export function SavedHostIncome() {
 }
 
 export function SavedHostResultActions() {
-  const { pending, attempt } = useShinhanStorage();
+  const { pending, preparing, attempt } = useShinhanStorage();
   const { updateDraft } = useShinhanIntake();
   const router = useRouter();
   function handleEdit() {
@@ -91,7 +91,7 @@ export function SavedHostResultActions() {
       <button
         type="button"
         className={styles.textButton}
-        disabled={pending || Boolean(attempt)}
+        disabled={pending || preparing || Boolean(attempt)}
         onClick={handleEdit}
       >
         ← 입력 정보 수정
@@ -104,7 +104,8 @@ export function SavedHostResultActions() {
 }
 
 export function SavedHostIntroductionActions() {
-  const { application, pending, attempt, requestIntroduction, setStep } = useShinhanStorage();
+  const { application, pending, preparing, attempt, requestIntroduction, setStep } =
+    useShinhanStorage();
   if (application?.applicationType !== "HOST_ESTIMATE") return null;
   return (
     <div className={styles.centerActions}>
@@ -117,7 +118,7 @@ export function SavedHostIntroductionActions() {
         <BtnCta
           className={styles.primaryButton}
           loading={pending && attempt?.kind === "introduction"}
-          disabled={pending || Boolean(attempt)}
+          disabled={pending || preparing || Boolean(attempt)}
           onClick={() => void requestIntroduction()}
         >
           소개서만 먼저 받아보기
@@ -126,7 +127,7 @@ export function SavedHostIntroductionActions() {
       <button
         type="button"
         className={styles.textButton}
-        disabled={pending || Boolean(attempt)}
+        disabled={pending || preparing || Boolean(attempt)}
         onClick={() => setStep("concerns")}
       >
         ← 걱정 선택 다시 보기
@@ -140,23 +141,28 @@ export function SavedMutationError() {
   const {
     error,
     pending,
+    preparing,
     attempt,
     retry,
     retryInSeconds,
     retryReady,
     clearRejectedAttempt,
-    prepare,
+    consents,
   } = useShinhanStorage();
   if (!error) return null;
   const canReview =
     [400, 413, 422].includes(error.status) ||
     ["CONSENT_VERSION_MISMATCH", "CSRF_INVALID"].includes(error.code ?? "");
   return (
-    <section className={styles.errorCard} aria-label="저장 요청 상태">
+    <section
+      className={styles.errorCard}
+      aria-label={!consents && !attempt ? "동의 준비 상태" : "저장 요청 상태"}
+    >
       <p role="alert">{error.message}</p>
       <p>
-        이미 저장된 신청은 유지됩니다. 현재 요청의 저장 결과가 확인되기 전에는 완료로 처리하지
-        않습니다.
+        {!consents && !attempt
+          ? "이미 저장된 신청은 유지됩니다. 아래에서 서버 전문을 다시 준비한 뒤 선택 동의를 확인해 주세요."
+          : "이미 저장된 신청은 유지됩니다. 현재 요청의 저장 결과가 확인되기 전에는 완료로 처리하지 않습니다."}
       </p>
       {attempt && (
         <p>
@@ -174,14 +180,7 @@ export function SavedMutationError() {
         </BtnCta>
       )}
       {canReview && (
-        <BtnCta
-          variant="stroke"
-          disabled={pending}
-          onClick={() => {
-            clearRejectedAttempt();
-            void prepare();
-          }}
-        >
+        <BtnCta variant="stroke" disabled={pending || preparing} onClick={clearRejectedAttempt}>
           입력과 동의 다시 확인하기
         </BtnCta>
       )}

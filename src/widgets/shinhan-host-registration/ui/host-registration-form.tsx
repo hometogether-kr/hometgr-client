@@ -37,6 +37,9 @@ export function HostRegistrationForm() {
     validationAttempted && !conditionsResult.success
       ? conditionsResult.error.flatten().fieldErrors
       : {};
+  const ownershipError =
+    conditionErrors.ownership?.[0] ?? storage.fieldErrors["input.ownership"]?.[0];
+  const areaError = conditionErrors.areaRaw?.[0] ?? storage.fieldErrors["input.areaRaw"]?.[0];
   const currentSnapshot = JSON.stringify({
     phone: draft.phone,
     requiredConsent: draft.requiredConsent,
@@ -74,7 +77,8 @@ export function HostRegistrationForm() {
       <ShinhanPhoneField label="1. 전화번호" error={contactErrors.phone?.[0]} />
       <fieldset
         className={styles.ownership}
-        aria-describedby={conditionErrors.ownership ? `${fieldId}-ownership-error` : undefined}
+        aria-invalid={Boolean(ownershipError) || undefined}
+        aria-describedby={ownershipError ? `${fieldId}-ownership-error` : undefined}
       >
         <legend>2. 집이 자가인가요?</legend>
         <div className={styles.choices}>
@@ -95,9 +99,9 @@ export function HostRegistrationForm() {
             월세/전세
           </SelectTile>
         </div>
-        {conditionErrors.ownership && (
+        {ownershipError && (
           <p className={styles.error} id={`${fieldId}-ownership-error`}>
-            {conditionErrors.ownership[0]}
+            {ownershipError}
           </p>
         )}
       </fieldset>
@@ -110,7 +114,7 @@ export function HostRegistrationForm() {
           maxLength={200}
           disabled={locked}
           aria-describedby={`${fieldId}-location-help`}
-          error={conditionErrors.areaRaw?.[0]}
+          error={areaError}
           onChange={(event) => {
             const areaRaw = event.target.value;
             updateDraft((current) =>
