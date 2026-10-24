@@ -15,6 +15,10 @@ const loopbackOriginSchema = z
   });
 
 const bridgeEnvironmentSchema = z.object({
+  // Keep legacy local settings valid; explicit remote settings must never fall back to local.
+  // Remote activation waits for bootstrap deployment and registered consent documents.
+  SHINHAN_APP_ENV: z.literal("local").optional(),
+  SHINHAN_CLIENT_IP_MODE: z.literal("local").optional(),
   SHINHAN_API_ORIGIN: loopbackOriginSchema,
   SHINHAN_BRIDGE_SECRET: z.string().min(32),
   SHINHAN_CLIENT_IP_HMAC_SECRET: z.string().min(32),
