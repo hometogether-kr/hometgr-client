@@ -63,7 +63,6 @@ interface ShinhanDraftBase {
   step: ShinhanDraftStep;
   phone: string;
   requiredConsent: boolean;
-  optionalConsent: boolean | null;
   concernCodes: string[];
 }
 
@@ -98,7 +97,6 @@ export function createShinhanDraft(applicationType: ShinhanApplicationType): Shi
     step: "conditions",
     phone: "",
     requiredConsent: false,
-    optionalConsent: null,
     concernCodes: [],
   };
 

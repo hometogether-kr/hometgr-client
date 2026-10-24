@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { getShinhanSessionMode } from "@/features/shinhan-bridge";
 import { ShinhanPrivacyPage } from "@/pages-layer/shinhan-privacy";
 
 export const metadata: Metadata = {
@@ -8,8 +9,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function Page() {
-  // Replace the design snapshot with the approved, versioned consent before production use.
-  if (process.env.NODE_ENV !== "development") notFound();
+export default async function Page() {
+  if (process.env.NODE_ENV !== "development" && (await getShinhanSessionMode()) !== "remote")
+    notFound();
   return <ShinhanPrivacyPage />;
 }

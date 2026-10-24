@@ -3,14 +3,10 @@
 import type { ReactNode } from "react";
 
 import { useShinhanStorage } from "../model/storage-context";
-import { ShinhanLivePreparation } from "./live-submit";
+import { ShinhanLivePreparation, ShinhanSessionRestart } from "./live-submit";
 import { ShinhanPrivacyLink, ShinhanPrivacyReturn } from "./privacy-navigation";
 
-export function ShinhanServerConsentSummary({
-  kind = "required",
-}: {
-  kind?: "required" | "optional";
-}) {
+export function ShinhanServerConsentSummary() {
   const { consents, consentPreparationStarted } = useShinhanStorage();
   if (!consents)
     return (
@@ -23,18 +19,16 @@ export function ShinhanServerConsentSummary({
   return (
     <div className="mt-2 text-sm leading-6 text-grayscale-600">
       <p>
-        표시·제출할 동의 버전: <span className="break-all">{consents[kind].version}</span>
+        표시·제출할 동의 버전: <span className="break-all">{consents.required.version}</span>
       </p>
       {consents.localOnly && <p>로컬 확인용 전문이며 운영 승인본이 아닙니다.</p>}
-      <ShinhanPrivacyLink kind={kind}>
-        {kind === "required" ? "서버 필수 동의 전문 보기" : "서버 선택 동의 전문 보기"}
-      </ShinhanPrivacyLink>
+      <ShinhanPrivacyLink>서버 필수 동의 전문 보기</ShinhanPrivacyLink>
     </div>
   );
 }
 
 export function ServerConsentDocument({ fallback }: { fallback: ReactNode }) {
-  const { consents, privacyKind, consentPreparationStarted, preparing, error, application } =
+  const { consents, consentPreparationStarted, preparing, error, application } =
     useShinhanStorage();
   if (!consents) {
     if (!consentPreparationStarted) return fallback;
@@ -54,17 +48,18 @@ export function ServerConsentDocument({ fallback }: { fallback: ReactNode }) {
             {error.message}
           </p>
         )}
+        <ShinhanSessionRestart />
         <ShinhanPrivacyReturn />
       </article>
     );
   }
-  const snapshot = consents[privacyKind];
+  const snapshot = consents.required;
   return (
     <article className="mx-auto max-w-4xl space-y-6 px-5 py-10 md:px-8 md:py-16">
       <ShinhanPrivacyReturn />
       <header className="space-y-3">
         <h1 className="text-2xl leading-snug font-bold md:text-4xl">
-          개인정보 수집·이용 전문 ({privacyKind === "required" ? "필수" : "선택"})
+          개인정보 수집·이용 전문 (필수)
         </h1>
         <p className="text-sm leading-6 break-all text-grayscale-600">
           서버 전문 버전: {snapshot.version}
@@ -75,15 +70,13 @@ export function ServerConsentDocument({ fallback }: { fallback: ReactNode }) {
             저장하지 않습니다.
           </p>
         )}
-        {privacyKind === "required" &&
-          application &&
-          application.requiredConsent.version !== snapshot.version && (
-            <p className="text-sm leading-6 text-grayscale-600">
-              현재 제출에 사용할 전문입니다. 기존 신청에 기록된 필수 동의 버전은{" "}
-              {application.requiredConsent.version}이며, 이 전문을 열람하거나 다시 불러와도 기존
-              동의 기록은 변경되지 않습니다.
-            </p>
-          )}
+        {application && application.requiredConsent.version !== snapshot.version && (
+          <p className="text-sm leading-6 text-grayscale-600">
+            현재 제출에 사용할 전문입니다. 기존 신청에 기록된 필수 동의 버전은{" "}
+            {application.requiredConsent.version}이며, 이 전문을 열람하거나 다시 불러와도 기존 동의
+            기록은 변경되지 않습니다.
+          </p>
+        )}
       </header>
       <div className="rounded-2xl bg-white p-5 text-base leading-8 break-words whitespace-pre-wrap md:p-8">
         {snapshot.content}

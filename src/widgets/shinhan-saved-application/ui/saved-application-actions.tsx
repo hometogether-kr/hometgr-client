@@ -161,7 +161,7 @@ export function SavedMutationError() {
       <p role="alert">{error.message}</p>
       <p>
         {!consents && !attempt
-          ? "이미 저장된 신청은 유지됩니다. 아래에서 서버 전문을 다시 준비한 뒤 선택 동의를 확인해 주세요."
+          ? "이미 저장된 신청은 유지됩니다. 아래에서 신청 세션을 다시 준비해 주세요."
           : "이미 저장된 신청은 유지됩니다. 현재 요청의 저장 결과가 확인되기 전에는 완료로 처리하지 않습니다."}
       </p>
       {attempt && (

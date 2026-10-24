@@ -16,6 +16,7 @@ import {
   createShinhanApplication,
   createShinhanSession,
   requestShinhanIntroduction,
+  resetShinhanSession,
   submitShinhanConcerns,
 } from "../api/application.api";
 import {
@@ -46,6 +47,8 @@ type StorageAttempt =
   | { kind: "introduction"; idempotencyKey: string; applicationId: string };
 
 interface StorageContextValue {
+  sessionMode: "local" | "remote" | "unavailable";
+  submissionAvailable: boolean;
   consents: ShinhanConsents | null;
   consentPreparationStarted: boolean;
   application: ShinhanApplication | undefined;
@@ -57,6 +60,8 @@ interface StorageContextValue {
   retryInSeconds: number;
   retryReady: boolean;
   prepare: () => Promise<void>;
+  sessionExpired: boolean;
+  restartSession: () => Promise<void>;
   submitApplication: () => Promise<boolean>;
   submitConcerns: () => Promise<boolean>;
   requestIntroduction: () => Promise<boolean>;
@@ -69,22 +74,27 @@ interface StorageContextValue {
   setStep: (step: SavedStep) => void;
   concernCodes: string[];
   setConcernCodes: (codes: string[]) => void;
-  optionalAgreed: boolean;
-  setOptionalAgreed: (agreed: boolean) => void;
   guideMode: "selected" | "all";
   setGuideMode: (mode: "selected" | "all") => void;
-  privacyKind: "required" | "optional";
-  setPrivacyKind: (kind: "required" | "optional") => void;
 }
 
 const StorageContext = createContext<StorageContextValue | null>(null);
 
-export function ShinhanStorageProvider({ children }: { children: ReactNode }) {
-  const { draftGeneration } = useShinhanIntake();
-  return <StorageQueryScope key={draftGeneration}>{children}</StorageQueryScope>;
+interface ShinhanStorageProviderProps {
+  children: ReactNode;
+  sessionMode: "local" | "remote" | "unavailable";
 }
 
-function StorageQueryScope({ children }: { children: ReactNode }) {
+export function ShinhanStorageProvider({ children, sessionMode }: ShinhanStorageProviderProps) {
+  const { draftGeneration } = useShinhanIntake();
+  return (
+    <StorageQueryScope key={draftGeneration} sessionMode={sessionMode}>
+      {children}
+    </StorageQueryScope>
+  );
+}
+
+function StorageQueryScope({ children, sessionMode }: ShinhanStorageProviderProps) {
   // Anonymous intake has a separate session from account login; its 401 must preserve the draft.
   const [client] = useState(
     () =>
@@ -97,7 +107,7 @@ function StorageQueryScope({ children }: { children: ReactNode }) {
   );
   return (
     <QueryClientProvider client={client}>
-      <StorageSession>{children}</StorageSession>
+      <StorageSession sessionMode={sessionMode}>{children}</StorageSession>
     </QueryClientProvider>
   );
 }
@@ -122,8 +132,11 @@ function toStorageError(error: unknown): ShinhanApiError {
   });
 }
 
-function StorageSession({ children }: { children: ReactNode }) {
+function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) {
   const { draft, updateDraft } = useShinhanIntake();
+  const submissionAvailable =
+    sessionMode === "local" ||
+    (sessionMode === "remote" && draft?.applicationType === "HOST_REGISTRATION");
   const queryClient = useQueryClient();
   const [applicationId, setApplicationId] = useState<string | null>(null);
   const consentsQuery = useQuery<ShinhanConsents>({
@@ -148,14 +161,18 @@ function StorageSession({ children }: { children: ReactNode }) {
   const retainedAttempt = useRef<StorageAttempt | null>(null);
   const [attempt, setAttempt] = useState<StorageAttempt | null>(null);
   const [error, setError] = useState<ShinhanApiError | null>(null);
+  const [sessionResetRequired, setSessionResetRequired] = useState(false);
+  const lastCsrfToken = useRef<string | null>(null);
   const [retryAt, setRetryAt] = useState(0);
   const [retryInSeconds, setRetryInSeconds] = useState(0);
   const [step, setStep] = useState<SavedStep>("complete");
   const [concernCodes, setConcernCodes] = useState<string[]>([]);
-  const [optionalAgreed, setOptionalAgreed] = useState(false);
   const [guideMode, setGuideMode] = useState<"selected" | "all">("selected");
-  const [privacyKind, setPrivacyKind] = useState<"required" | "optional">("required");
   const lastCreateInput = useRef<ShinhanCreateApplicationInput | null>(null);
+  const sessionExpired =
+    sessionResetRequired ||
+    error?.status === 401 ||
+    (applicationQuery.error instanceof ShinhanApiError && applicationQuery.error.status === 401);
 
   useEffect(() => {
     if (!retryAt) return;
@@ -177,13 +194,20 @@ function StorageSession({ children }: { children: ReactNode }) {
 
   function recordError(cause: unknown) {
     const next = toStorageError(cause);
+    if (next.status === 401) setSessionResetRequired(true);
     setError(next);
     setRetryInSeconds(next.retryAfter ?? 0);
     setRetryAt(next.retryAfter ? Date.now() + next.retryAfter * 1000 : 0);
   }
 
   async function prepare() {
-    if (busy.current || retainedAttempt.current || error?.status === 401 || Date.now() < retryAt)
+    if (
+      !submissionAvailable ||
+      busy.current ||
+      retainedAttempt.current ||
+      sessionExpired ||
+      Date.now() < retryAt
+    )
       return;
     busy.current = true;
     setPreparing(true);
@@ -192,16 +216,82 @@ function StorageSession({ children }: { children: ReactNode }) {
     try {
       const initialize = async () => {
         const snapshot = await getShinhanConsents();
+        lastCsrfToken.current = snapshot.csrfToken;
         await createShinhanSession(snapshot.csrfToken);
         return snapshot;
       };
       // Multiple tabs must share the first CSRF cookie and anonymous session.
-      const snapshot = navigator.locks
-        ? await navigator.locks.request("shinhan-intake-session", initialize)
-        : await initialize();
+      let snapshot: ShinhanConsents;
+      if (navigator.locks) {
+        try {
+          snapshot = await navigator.locks.request("shinhan-intake-session", initialize);
+        } catch (cause) {
+          if (cause instanceof ShinhanApiError) throw cause;
+          throw new ShinhanApiError(
+            "신청 준비를 위한 브라우저 잠금을 사용할 수 없습니다. 지원되는 브라우저에서 다시 시도해 주세요.",
+            {
+              status: 0,
+              kind: "unknown",
+              code: "SESSION_LOCK_UNAVAILABLE",
+              retryable: false,
+            },
+          );
+        }
+      } else if (sessionMode === "local") {
+        snapshot = await initialize();
+      } else {
+        throw new ShinhanApiError(
+          "이 브라우저에서는 안전하게 신청을 준비할 수 없습니다. 지원되는 브라우저에서 다시 시도해 주세요.",
+          {
+            status: 0,
+            kind: "unknown",
+            code: "SESSION_LOCK_UNAVAILABLE",
+            retryable: false,
+          },
+        );
+      }
       queryClient.setQueryData(shinhanApplicationKeys.consents(), snapshot);
       updateDraft((current) => ({ ...current, requiredConsent: false }));
-      setOptionalAgreed(false);
+    } catch (cause) {
+      recordError(cause);
+    } finally {
+      busy.current = false;
+      setPreparing(false);
+    }
+  }
+
+  async function restartSession() {
+    if (busy.current || !sessionExpired) return;
+    busy.current = true;
+    setPreparing(true);
+    setSessionResetRequired(true);
+    try {
+      const reset = () => resetShinhanSession(lastCsrfToken.current ?? consents?.csrfToken ?? null);
+      if (navigator.locks) await navigator.locks.request("shinhan-intake-session", reset);
+      else if (sessionMode === "local") await reset();
+      else
+        throw new ShinhanApiError("지원되는 브라우저에서 새 신청 세션을 시작해 주세요.", {
+          status: 0,
+          kind: "unknown",
+          code: "SESSION_LOCK_UNAVAILABLE",
+          retryable: false,
+        });
+      await queryClient.cancelQueries();
+      await queryClient.resetQueries();
+      queryClient.clear();
+      setApplicationId(null);
+      retainedAttempt.current = null;
+      lastCreateInput.current = null;
+      lastCsrfToken.current = null;
+      setAttempt(null);
+      setConcernCodes([]);
+      setStep("complete");
+      setError(null);
+      setRetryAt(0);
+      setRetryInSeconds(0);
+      setConsentPreparationStarted(false);
+      setSessionResetRequired(false);
+      updateDraft((current) => ({ ...current, requiredConsent: false }));
     } catch (cause) {
       recordError(cause);
     } finally {
@@ -214,7 +304,7 @@ function StorageSession({ children }: { children: ReactNode }) {
     if (
       busy.current ||
       !consents ||
-      error?.status === 401 ||
+      sessionExpired ||
       (applicationQuery.error instanceof ShinhanApiError && applicationQuery.error.status === 401)
     )
       return false;
@@ -245,7 +335,6 @@ function StorageSession({ children }: { children: ReactNode }) {
       if (next.kind === "create") {
         lastCreateInput.current = next.input;
         setConcernCodes([]);
-        setOptionalAgreed(false);
         setStep(saved.applicationType === "HOST_ESTIMATE" ? "result" : "complete");
       } else if (next.kind === "concerns") {
         setGuideMode("selected");
@@ -268,7 +357,8 @@ function StorageSession({ children }: { children: ReactNode }) {
   }
 
   async function submitApplication(): Promise<boolean> {
-    if (!draft || !consents || busy.current || retainedAttempt.current) return false;
+    if (!submissionAvailable || !draft || !consents || busy.current || retainedAttempt.current)
+      return false;
     try {
       const input = prepareShinhanApplicationInput(draft, consents.required.version);
       if (application) {
@@ -286,13 +376,18 @@ function StorageSession({ children }: { children: ReactNode }) {
   }
 
   async function saveConcerns(): Promise<boolean> {
-    if (!application || !consents || !optionalAgreed || busy.current || retainedAttempt.current)
+    if (
+      sessionMode !== "local" ||
+      !application ||
+      !consents ||
+      busy.current ||
+      retainedAttempt.current
+    )
       return false;
     try {
       const input = shinhanConcernsInputSchema.parse({
         state: "SUBMITTED",
         concernCodes,
-        optionalConsent: { agreed: optionalAgreed, version: consents.optional.version },
       });
       return await execute({
         kind: "concerns",
@@ -308,6 +403,7 @@ function StorageSession({ children }: { children: ReactNode }) {
 
   async function saveIntroduction(): Promise<boolean> {
     if (
+      sessionMode !== "local" ||
       !application ||
       application.applicationType !== "HOST_ESTIMATE" ||
       busy.current ||
@@ -335,7 +431,6 @@ function StorageSession({ children }: { children: ReactNode }) {
     if (error?.code === "CONSENT_VERSION_MISMATCH" || error?.code === "CSRF_INVALID") {
       void queryClient.resetQueries({ queryKey: shinhanApplicationKeys.consents() });
       updateDraft((current) => ({ ...current, requiredConsent: false }));
-      setOptionalAgreed(false);
     }
     retainedAttempt.current = null;
     setAttempt(null);
@@ -350,6 +445,8 @@ function StorageSession({ children }: { children: ReactNode }) {
   return (
     <StorageContext
       value={{
+        sessionMode,
+        submissionAvailable,
         consents,
         consentPreparationStarted,
         application,
@@ -361,6 +458,8 @@ function StorageSession({ children }: { children: ReactNode }) {
         retryInSeconds,
         retryReady: Boolean(attempt && error?.retryable && retryInSeconds === 0 && !pending),
         prepare,
+        sessionExpired,
+        restartSession,
         submitApplication,
         submitConcerns: saveConcerns,
         requestIntroduction: saveIntroduction,
@@ -373,12 +472,8 @@ function StorageSession({ children }: { children: ReactNode }) {
         setStep,
         concernCodes,
         setConcernCodes,
-        optionalAgreed,
-        setOptionalAgreed,
         guideMode,
         setGuideMode,
-        privacyKind,
-        setPrivacyKind,
       }}
     >
       {children}

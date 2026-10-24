@@ -160,7 +160,7 @@ export function SavedApplicationSummary({
                       .map((code) => concernLabels[code] ?? "저장된 걱정 항목")
                       .join(" · ")
                   : `${application.concerns.codes.length}개 항목 저장됨`
-                : "선택한 걱정 없음 (동의 후 저장)"
+                : "선택한 걱정 없음"
               : application.concerns.state === "SKIPPED"
                 ? "응답하지 않음"
                 : "아직 저장하지 않음"}

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState } from "react";
+import { type FormEvent, type ReactNode, useEffect, useRef } from "react";
 
 import {
   confirmGuestConcerns,
@@ -12,7 +12,6 @@ import {
   useShinhanIntake,
 } from "@/features/shinhan-intake";
 import { BtnCta } from "@/shared/ui/btn-cta";
-import { Checkbox } from "@/shared/ui/checkbox";
 
 import { GUEST_CONCERNS } from "../config/content";
 import { GuestReceiptDetails } from "./guest-receipt-details";
@@ -53,9 +52,7 @@ export function ShinhanGuestFollowupFlow({
   examples,
 }: GuestFollowupFlowProps) {
   const { guestFollowup: example, updateGuestFollowup } = useShinhanIntake();
-  const [attempted, setAttempted] = useState(false);
   const focusTarget = useRef<HTMLDivElement>(null);
-  const id = useId();
   const step = example?.step;
 
   // 단계 전환 후 키보드·스크린리더가 새 내용을 바로 탐색할 수 있게 한다.
@@ -77,7 +74,6 @@ export function ShinhanGuestFollowupFlow({
       </section>
     );
 
-  const consentError = attempted && example.optionalConsent !== true;
   const visibleCards =
     example.guideMode === "all"
       ? guideCards
@@ -89,7 +85,6 @@ export function ShinhanGuestFollowupFlow({
 
   function handleConcernSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setAttempted(true);
     updateGuestFollowup((current) => confirmGuestConcerns(current) ?? current);
   }
 
@@ -146,40 +141,6 @@ export function ShinhanGuestFollowupFlow({
               </button>
             ))}
           </fieldset>
-          <div className={styles.consent}>
-            <div className={styles.consentLine}>
-              <Checkbox
-                id={`${id}-consent`}
-                checked={example.optionalConsent === true}
-                aria-invalid={consentError || undefined}
-                aria-describedby={`${id}-consent-help ${id}-consent-error`}
-                onChange={(event) =>
-                  updateGuestFollowup((current) => ({
-                    ...current,
-                    optionalConsent: event.target.checked,
-                  }))
-                }
-              />
-              <label htmlFor={`${id}-consent`}>걱정 항목 수집·이용 동의 (선택·개발 예시)</label>
-            </div>
-            <p id={`${id}-consent-help`} className={styles.help}>
-              동의 화면의 개발 예시이며 선택 내용은 전송·저장되지 않습니다. 선택 동의의 승인된
-              전문은 아직 연결되지 않았습니다.
-            </p>
-            <ShinhanPrivacyLink>기본 신청 개인정보 전문 보기</ShinhanPrivacyLink>
-            <p className={styles.help}>
-              위 전문은 기본 신청용이며 걱정 항목의 선택 동의는 포함하지 않습니다.
-            </p>
-            <p
-              id={`${id}-consent-error`}
-              role={consentError ? "alert" : undefined}
-              className={styles.error}
-            >
-              {consentError
-                ? "선택한 내용을 확인하려면 개발 예시 동의에 체크해 주세요. 동의 없이도 전체 확인 사항을 볼 수 있어요."
-                : ""}
-            </p>
-          </div>
           <p className={styles.centerHelp}>
             걱정되는 점을 선택하지 않아도 전체 확인 사항을 볼 수 있어요.
           </p>
@@ -205,7 +166,7 @@ export function ShinhanGuestFollowupFlow({
           </header>
           <p className={styles.guideMode}>
             {example.guideMode === "all"
-              ? "전체 확인 사항 · 걱정 응답과 동의 상태는 바뀌지 않아요"
+              ? "전체 확인 사항 · 걱정 응답는 바뀌지 않아요"
               : "선택한 걱정의 확인 사항"}
           </p>
           <div className={styles.guideGrid}>

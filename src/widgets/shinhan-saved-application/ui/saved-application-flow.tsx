@@ -1,16 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { type FormEvent, type ReactNode, useEffect, useId, useRef } from "react";
+import { type FormEvent, type ReactNode, useEffect, useRef } from "react";
 
 import {
   ShinhanHostProgress,
   ShinhanLivePreparation,
   ShinhanPrivacyLink,
+  ShinhanSessionRestart,
   useShinhanStorage,
 } from "@/features/shinhan-intake";
 import { BtnCta } from "@/shared/ui/btn-cta";
-import { Checkbox } from "@/shared/ui/checkbox";
 
 import { SavedMutationError, SavedNavigationButton } from "./saved-application-actions";
 import { SavedApplicationSummary } from "./saved-application-details";
@@ -49,8 +49,6 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
     consents,
     concernCodes,
     setConcernCodes,
-    optionalAgreed,
-    setOptionalAgreed,
     submitConcerns,
     guideMode,
     setGuideMode,
@@ -60,7 +58,6 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
     fieldErrors,
   } = storage;
   const focusTarget = useRef<HTMLDivElement>(null);
-  const consentId = useId();
   useEffect(() => {
     focusTarget.current?.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -96,7 +93,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
   }
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!blocked && optionalAgreed && consents) void submitConcerns();
+    if (!blocked && consents) void submitConcerns();
   }
   function toggleConcern(code: string) {
     setConcernCodes(
@@ -117,8 +114,8 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
   return (
     <div className={styles.container} ref={focusTarget} tabIndex={-1} aria-label="저장된 신한 신청">
       <p className={styles.localBanner}>
-        로컬 저장 검증 화면입니다. 신한 개발 DB에 저장된 신청을 표시합니다. 외부 알림톡·시트 반영은
-        이 환경에서 실행하지 않습니다. 접수 완료와 알림 전달 완료는 다릅니다.
+        신한 API 저장 검증 화면입니다. 서버에 저장된 신청을 표시합니다. 외부 알림톡·시트 반영은 이
+        환경에서 실행하지 않습니다. 접수 완료와 알림 전달 완료는 다릅니다.
       </p>
       {isHostEstimate && <ShinhanHostProgress currentStep={currentHostStep} />}
       {application.applicationType === "HOST_REGISTRATION" && (
@@ -128,6 +125,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
         </ol>
       )}
       <SavedMutationError />
+      <ShinhanSessionRestart />
       {!consents && <ShinhanLivePreparation />}
       {step === "complete" &&
         (application.applicationType === "HOST_REGISTRATION"
@@ -156,10 +154,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
             <h1>
               {isHostEstimate ? "어떤 점이 가장 걱정되세요?" : "홈쉐어링에서 어떤 점이 걱정되나요?"}
             </h1>
-            <p>
-              걱정되는 점을 모두 골라주세요. 선택한 항목을 저장하려면 선택정보 수집·이용에 동의해
-              주세요.
-            </p>
+            <p>걱정되는 점을 모두 골라주세요. 여러 개 선택할 수 있어요.</p>
           </header>
           <fieldset className={styles.concerns} disabled={blocked}>
             <legend className="sr-only">걱정되는 점 (여러 개 선택 가능)</legend>
@@ -181,31 +176,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
               </button>
             ))}
           </fieldset>
-          <div className={styles.consent}>
-            <div className={styles.consentLine}>
-              <Checkbox
-                id={consentId}
-                checked={optionalAgreed}
-                disabled={blocked || !consents}
-                onChange={(event) => setOptionalAgreed(event.target.checked)}
-              />
-              <label htmlFor={consentId}>걱정 항목 수집·이용 동의 (선택)</label>
-            </div>
-            {consents ? (
-              <>
-                <p className={styles.help}>
-                  선택 동의 버전: {consents.optional.version}
-                  {consents.localOnly ? " · 로컬 검증용 동의문" : ""}
-                </p>
-                <details className={styles.consentText}>
-                  <summary>선택정보 수집·이용 내용 확인</summary>
-                  <p>{consents.optional.content}</p>
-                </details>
-              </>
-            ) : (
-              <p className={styles.help}>선택 동의문을 준비해야 응답을 저장할 수 있습니다.</p>
-            )}
-            <ShinhanPrivacyLink kind="optional">선택 개인정보 전문 보기</ShinhanPrivacyLink>
+          <div>
             {Object.entries(fieldErrors).map(([field, messages]) => (
               <p key={field} role="alert" className={styles.fieldError}>
                 {messages.join(" ")}
@@ -231,14 +202,13 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
               type="submit"
               className={styles.primaryButton}
               loading={pending && attempt?.kind === "concerns"}
-              disabled={blocked || !optionalAgreed || !consents}
+              disabled={blocked || !consents}
             >
               {isHostEstimate ? "선택한 걱정으로 시작 방법 보기" : "선택한 내용 확인하기"}
             </BtnCta>
           </div>
           <p className={styles.help}>
-            아무 항목도 고르지 않고 동의 후 저장하면 ‘선택한 걱정 없음’으로 기록합니다. 전문
-            열람만으로 동의하거나 저장하지 않습니다.
+            아무 항목도 고르지 않고 저장하면 ‘선택한 걱정 없음’으로 기록합니다.
           </p>
         </form>
       )}
@@ -250,7 +220,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
           </header>
           <p className={styles.help}>
             {guideMode === "all"
-              ? "전체 확인 사항 · 저장된 걱정 응답과 동의는 바뀌지 않아요"
+              ? "전체 확인 사항 · 저장된 걱정 응답은 바뀌지 않아요"
               : "저장한 걱정의 확인 사항"}
           </p>
           <div className={styles.guideGrid}>

@@ -4,24 +4,15 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { useShinhanIntake } from "../model/intake-context";
-import { useShinhanStorage } from "../model/storage-context";
 
 import styles from "./shinhan-intake.module.css";
 
-export function ShinhanPrivacyLink({
-  children = "전문 보기",
-  kind = "required",
-}: {
-  children?: ReactNode;
-  kind?: "required" | "optional";
-}) {
+export function ShinhanPrivacyLink({ children = "전문 보기" }: { children?: ReactNode }) {
   const { rememberPrivacyReturn } = useShinhanIntake();
-  const { setPrivacyKind } = useShinhanStorage();
   return (
     <Link
       href="/shinhan/privacy"
       onNavigate={() => {
-        setPrivacyKind(kind);
         rememberPrivacyReturn();
       }}
       className={styles.privacyLink}

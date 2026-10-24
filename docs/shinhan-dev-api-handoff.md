@@ -1,77 +1,75 @@
 # 신한 고객 웹 dev API 연결 인계
 
-버전 **1.2.0** · 2026-10-24 (Asia/Seoul) · 대상 `hometgr-client`의 `dev`.
+버전 **1.3.0** · 2026-10-24 · 대상 `hometgr-client`의 `dev`.
 
-## 기준과 현재 상태
+## 기준과 범위
 
-- 서버 인계: `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.4.0**, 상태 기준 2026-10-24 19:37 KST.
-- 공개 API: 같은 폴더의 `api-contract-v1.md` **1.0.0**.
-- 런타임 분리: `runtime-split-contract-v1.md` **1.0.2**. 초기 관리자 origin 설명보다 우선하며 동일 DB·데이터 공유 결정이 반영됐다.
-- 원격 연결 정책: `customer-bff-remote-contract-v1.md` **1.0.1**. 정책은 정해졌지만 세션 확장·마이그레이션·쿠키 전환은 아직 구현·배포 전이다.
-- 실제 dev API origin은 **https://dev-shinhan-api.hometogether.kr**, 기본 경로는 `/api/v1`이다. DNS·HTTPS·health200·접근 차단·인증서 갱신 검증은 서버 인계에 기록돼 있다.
-- 실행 API SHA는 `f19eea39a666af6828c45b6ce5fbaa2c9cc70cec`, bootstrap 도구·배포 준비 기준 SHA는 `7714f709533c6a227cad6b2636484cda79fe551c`다. 어느 쪽도 새 원격 세션 구현 완료 근거가 아니다.
-- RDS 역할·migrations001/002·TLS 앱 인증·최소 권한은 완료됐다. 새 migration003·원격 세션 확장·비로컬 동의 등록은 미완료다. worker는 중지 상태다.
-- 위 상태는 서버 인계 기록을 읽은 결과다. 이번 고객 작업에서 AWS·HTTPS·DB 검증을 다시 실행하지 않았다.
+- 서버 인계 `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.5.1**.
+- 원격 BFF 계약 **1.1.1**, 동의·걱정 계약 **2.0.0**, 공개 API 계약 **1.0.0**, 런타임 분리 계약 **1.0.2**. 확장 계약이 해당 경로에 우선한다.
+- 서버 배포·검증 SHA **63612a4d8eb1511c97607aef1115c7fef3c66bb5**. migrations001/002/003·원격 세션·회수·필수 동의 등록 완료는 서버 인계의 기록이며 고객 웹의 실제 접수 결과가 아니다.
+- API origin **https://dev-shinhan-api.hometogether.kr**, 기본 경로 `/api/v1`.
+- 이번 원격 범위는 공통 BFF·익명 세션·필수 동의·HOST_REGISTRATION OWNED/RENTED다. 다른 세 신청 유형과 걱정·소개서 저장은 원격에서 활성화하지 않는다.
 
-공통 BFF·익명 세션·동의 조회와 HOST_REGISTRATION 전송 코드는 기존에 구현돼 있다. 이번 단계는 기존 화면·신청 DTO·로컬 동작을 유지하며 원격 준비 설정의 잘못된 로컬 실행을 막는 작업이다. API 주소·환경 파일·비밀값을 교체하지 않았으며 서버·DB·관리자·공통 계약·의존성은 변경하지 않았다.
+## 구현
 
-## 이번 변경: 명시적 원격 설정 차단
+브라우저는 동일 출처 `/api/shinhan/*`만 호출한다. BFF는 경로·메서드 allowlist, 정확한 Host/Origin, Sec-Fetch-Site, CSRF, JSON·본문 크기를 검사하며 관리자 API를 전달하지 않는다. upstream은 서버 키 주입, redirect 차단, 10초 제한, no-store, 응답 크기·Zod·환경·경로별 계약 버전을 검증한다.
 
-`src/features/shinhan-bridge/config/environment.server.ts`가 `SHINHAN_APP_ENV`와 `SHINHAN_CLIENT_IP_MODE`를 읽는다.
+| upstream 경로                                     | 응답 계약 버전 |
+| ------------------------------------------------- | -------------- |
+| `GET consents`, `PUT applications/:id/concerns`   | `2.0.0`        |
+| `POST sessions/bootstrap`                         | `1.1.0`        |
+| 신청 생성·현재 내역·소개서, local `POST sessions` | `1.0.0`        |
 
-- 두 값이 없으면 기존 로컬 설정과 호환된다. 각각 명시한 경우 `local`만 허용한다.
-- `dev`·`production`·`vercel-direct`·빈 문자열·미지원 값은 연결 불가로 처리한다. API 주소가 loopback이어도 원격 설정을 무시하고 로컬 요청을 보내지 않는다.
-- 기존 `NODE_ENV=development`, loopback origin, upstream 환경 `local` 및 계약 `1.0.0` 검사는 유지한다. 설정이 거부되면 BFF의 기존 503 처리로 끝난다.
-- 이는 기존 local 호환 단계다. 원격 계약의 환경값 누락 허용이나 dev 활성화를 구현한 것이 아니다. 원격 전환 때는 명시적 환경 선택을 필수로 적용한다.
+- 환경값 누락·오류는 연결 불가로 처리한다. local은 development·loopback만 허용한다. dev 원격은 `VERCEL=1`, `VERCEL_ENV=preview`, `vercel-direct`, 정확한 dev API origin과 HTTPS Vercel origin이 모두 필요하다. production은 지원하지 않는다.
+- 원격 IP는 단일 `x-vercel-forwarded-for`만 사용한다. 다른 헤더로 대체하지 않으며 IPv4/IPv6 정규화 후 환경별 HMAC을 만든다.
+- 브라우저 `POST sessions {}`는 원격에서 upstream `POST sessions/bootstrap {}`로 연결한다. 환경·고객 origin·CSRF nonce 기반 Session-Key를 사용하며 시간·새 UUID·IP를 섞지 않는다.
+- 원격 쿠키는 `__Host-shinhan_intake`, `__Host-shinhan_csrf`이며 HttpOnly·Secure·Path=/·Domain 없음이다. 버전·용도·환경·origin을 서명에 결합하고 세션과 CSRF nonce를 결합한다. 만료는 API/CSRF 중 이른 시각이며 동의 재조회로 CSRF 만료를 늘리지 않는다.
+- 토큰·Session-Key를 브라우저 JSON·URL·브라우저 저장소·로그로 반환하지 않는다. 만료·서명 오류·API 401은 두 쿠키를 지운다. 자동 재발급·재제출하지 않는다.
+- Web Locks가 동의 조회부터 세션 발급 응답까지 보호한다. 원격에서 잠금을 사용할 수 없으면 중단한다. 명시적 재시작은 초안을 유지하고 필수 동의를 해제한 뒤 사용자의 재확인·제출을 기다린다.
+- 서버 required 전문·버전·UTF-8 SHA-256 및 원격 `localOnly=false`를 검증한다. 필수 체크박스와 해당 버전 제출을 유지한다. 걱정 선택 동의 UI·상태·payload는 제거하고 과거 응답의 동의 기록은 nullable과 함께 지원한다.
+- 행동별 UUID와 본문을 유지하여 불명확한 실패를 재시도한다. 실제 저장 성공 응답 뒤에만 완료로 이동하고 알림·시트 반영과 구분한다.
+- 원격 화면은 호스트 방 등록·개인정보 전문·접수 내역만 허용한다. 기존 소개 화면과 나머지 로컬 개발 화면은 유지한다.
 
-## 공통 연결의 기존 구현과 다음 변경
+## 고객 dev 실행 환경
 
-아래 오른쪽 열은 **서버 준비 완료 후 적용할 목록**이며 이번에 활성화한 기능이 아니다.
+Vercel 프로젝트 **welcome-web**, Preview Git branch **dev**. 직접 ingress를 확인한 고정 별칭:
 
-| 위치·경계                                           | 현재 유지하는 동작                                                                        | 원격 정책 1.0.1 적용 시 변경                                                                                                                                |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `shinhan-bridge/config/environment.server.ts`       | development·loopback·명시적 local만 허용                                                  | `SHINHAN_APP_ENV`로 업무 환경 구분, 정확한 HTTPS 고객/API origin 검증. production 빌드의 dev 환경도 구분                                                    |
-| `shinhan-bridge/api/upstream.server.ts`             | 공개 bridge 서버 주입, no-store·10초·redirect 차단, JSON·크기·버전·local 응답 검사        | 설정 환경과 응답 환경 일치 검사. bootstrap만 upstream 계약1.1.0, 동의·신청·조회는1.0.0 유지                                                                 |
-| `shinhan-bridge/api/session.server.ts`              | 기존 HttpOnly 세션, 프로세스 Map, 고정 loopback Client-Key                                | Vercel 직접 ingress 확인 후 단일 IP 검증·IPv4/IPv6 정규화·환경별 HMAC. 서버 bootstrap의 환경+CSRF 기반 Session-Key로 인스턴스 간 같은 세션 재현             |
-| `shinhan-bridge/api/handler.server.ts`              | 얇은 route 뒤 allowlist·Origin·Host·Sec-Fetch-Site·JSON·16KiB·CSRF, 관리자 경로 전달 금지 | 브라우저 `POST /api/shinhan/sessions {}`는 유지하고 upstream만 `sessions/bootstrap`으로 선택. 브라우저 인증 헤더 복사 금지                                  |
-| 세션·CSRF 쿠키                                      | 기존 local 쿠키 codec·고정 세션 만료                                                      | `__Host-shinhan_intake`/`__Host-shinhan_csrf`, 별도 상태 키 서명, 용도·환경·origin·nonce 결합, API/CSRF 중 이른 만료 적용. 만료/서명 불일치 시 두 쿠키 제거 |
-| `shinhan-intake/model/storage-context.tsx`          | Web Locks 안에서 동의 조회→세션 발급, local의 무잠금 fallback                             | 원격은 Web Locks 없거나 획득 실패 시 중단. 잠금 획득 후 새 조회로 쿠키 확인, 오래된 탭 상태 재사용 금지. 명시적 재시작과 일반 재조회 구분                   |
-| `shinhan-application/api/consents.schema.ts` 및 BFF | 서버 전문·버전·SHA-256 검증, 실패 시 예시 전문 대체 금지                                  | 비로컬 REQUIRED·OPTIONAL 및 `localOnly=false` 확인. 응답 content의 UTF-8 해시 사용                                                                          |
+`https://welcome-web-git-dev-hometogethers-projects-5dc18f8f.vercel.app`
 
-세션 토큰·Session-Key는 브라우저 JSON·URL·브라우저 저장소·로그에 노출하지 않는다. 실제 성공을 받기 전 완료로 바꾸지 않고, 불명확한 신청 재시도는 같은 세션·UUID 행동 키·본문을 유지한다. 서버 저장 성공과 알림 전달·시트 반영은 구분한다.
+`dev.hometogether.kr`는 Cloudflare 경유이므로 이번 `vercel-direct` allowlist에서 제외한다. 로컬에서 `VERCEL=1`을 흉내 내 실제 원격 API를 호출하지 않는다.
 
-## 동의와 남은 준비
+아래는 **해당 프로젝트 dev branch Preview에만** 필요한 서버 환경변수이며 아직 실제 설정·배포·원격 접수 완료를 뜻하지 않는다.
 
-기존 전문 사용에 대한 추가 승인 증빙을 요구하지 않는다. 원격 정책 1.0.1에 기록된 상태는 다음과 같다.
+| 이름                            | 값 또는 공급 방식                                           |
+| ------------------------------- | ----------------------------------------------------------- |
+| `SHINHAN_APP_ENV`               | `dev`                                                       |
+| `SHINHAN_CLIENT_IP_MODE`        | `vercel-direct`                                             |
+| `SHINHAN_API_ORIGIN`            | `https://dev-shinhan-api.hometogether.kr`                   |
+| `SHINHAN_ALLOWED_ORIGINS`       | 위 고정 Vercel 별칭 하나                                    |
+| `SHINHAN_BRIDGE_SECRET`         | 서버 공개 dev bridge 키를 승인된 경로로 공급                |
+| `SHINHAN_CLIENT_IP_HMAC_SECRET` | 고객 BFF 전용 독립 난수 키, 최소 32바이트                   |
+| `SHINHAN_BFF_STATE_SECRET`      | 위 키·bridge 키와 다른 고객 BFF 전용 난수 키, 최소 32바이트 |
 
-- 필수 본문 출처는 `src/widgets/shinhan-privacy/ui/shinhan-privacy-document.tsx`다. TSX 파일 해시는 API가 반환할 content 해시가 아니다.
-- 선택 본문은 서버 조사에서 미확보다. 필수 본문이나 합성 seed로 대체하지 않는다.
-- 실제 `consent_documents`는 인계 시점 0건이며 `GET /consents`는 503이다.
-- 현재 계약은 REQUIRED·OPTIONAL 둘 다 필요하다. HOST_REGISTRATION에서 선택 동의를 제출하지 않더라도 공통 조회를 위해 두 문서의 등록이 필요하다. optional을 nullable로 만들거나 `localOnly=false`를 강제로 바꾸지 않는다.
+비밀값은 Git·채팅·로그에 기록하지 않는다. `NEXT_PUBLIC_*`, API의 `INTAKE_SESSION_SECRET`, `DATABASE_URL`, 관리자 키는 사용하지 않는다. 실제 `.env.local`과 공유 의존성은 변경하지 않았다.
 
-2026-10-24 서버 대화창 **신한 서버·DB 기반 구현 시작**에 전달했던 환경·IP·초기화·쿠키 정책 요청은 원격 계약1.0.1로 정리됐고, DB 공유 문구 정정은 런타임1.0.2에 반영됐다. 같은 정책 결정을 다시 요청하지 않는다. 현재 남은 사항은 다음과 같다.
+로컬 화면 검증은 기존 의존성으로 `npm run dev`를 사용한다. local BFF를 사용할 때는 프로세스의 `SHINHAN_APP_ENV=local`, `SHINHAN_CLIENT_IP_MODE=local`과 기존 loopback 설정이 명시되어야 한다. 새 API·DB는 구축하지 않는다.
 
-1. **서버:** migration003, 환경별 세션·bootstrap·회수/만료 처리의 구현·집중 검증·실제 HTTPS 배포 SHA와 응답 버전.
-2. **서버:** 기준 필수·선택 원문 확보와 비로컬 등록, 실제 version/content/sha256 및 `localOnly=false` 조회 결과. 호스트 견적 수집표의 전화번호 누락 기록도 원문 대조 대상으로 유지.
-3. **고객 배포:** 정확한 dev 고객 origin과 Vercel 직접 ingress 확인. 기존 도메인의 DNS/프록시 설정을 임의 변경하지 않는다.
-4. **검증 준비:** 환경별 키의 안전한 공급, 외부 쓰기 disabled/false와 worker 중지 확인, 합성 전화번호 허용 목록. 비밀값은 채팅·Git에 기록하지 않는다.
+## 이번 검증과 남은 실제 검증
 
-## 환경변수와 재개 순서
+- 세션·IP·쿠키 helper 모의 검증 **55/55 통과**.
+- BFF 환경·Origin·경로/메서드·응답 버전·크기 제한·토큰 비노출·쿠키 삭제·reset 모의 검증 **62/62 통과**.
+- 필수 동의 유지·선택 동의 제거·과거 응답 호환 schema 검증 **16/16 통과**.
+- PC 1440px OWNED·모바일 390px RENTED의 브라우저 모의 검증 **18/18 통과**, page error 0건. 필수 전문·버전과 왕복 입력/선택/동의 유지, 제출 중 비활성화, 중복 클릭 1요청, 503 거짓 완료 방지, 동일 키·본문 재시도 후 조회 전용 내역, 401 명시적 재시작·자동 제출 없음, 걱정 선택 동의 제거를 확인했다. 화면 배치·줄바꿈·가로 넘침도 확인했다.
+- `tsc --noEmit`, 변경된 TypeScript 파일 ESLint, `git diff --check` 통과. 최초 누락 import와 import 정렬 오류는 수정했다. 이미 통과한 helper/BFF/schema 검증은 반복하지 않았다.
+- 위 브라우저 응답도 모의 데이터이며 실제 API·DB 쓰기는 0회다. 로컬 검증은 프로세스에만 fixture 설정을 적용하고 실제 upstream에 접근할 수 없게 구성했다. 결과는 외부 작업 폴더의 `shinhan-152-client-browser-mock-report.json`에 있으며 파일명의 152와 관계없이 기존 1.5.1 구현을 검증한 기록이다.
 
-현재 로컬 BFF의 서버 전용 변수는 `SHINHAN_API_ORIGIN`, `SHINHAN_ALLOWED_ORIGINS`, `SHINHAN_BRIDGE_SECRET`, `SHINHAN_CLIENT_IP_HMAC_SECRET`다. 이번에 읽기 시작한 `SHINHAN_APP_ENV`·`SHINHAN_CLIENT_IP_MODE`는 현재 local 차단 검증만 한다. 실제 환경 파일은 수정하지 않았다.
+자동 승인 검토가 공개 dev bridge 키를 위 Vercel Preview에 등록하도록 서버 담당에게 보내는 요청을 거절했다. 특정 프로젝트로의 비밀값 공급에 명시적 승인이 필요하다는 사유다. 대상·범위를 승인받기 전 다른 경로로 키를 이동하거나 환경을 활성화하지 않는다.
 
-서버 준비 후 원격 전환 시 `SHINHAN_APP_ENV`·`SHINHAN_CLIENT_IP_MODE=vercel-direct`·`SHINHAN_BFF_STATE_SECRET` 및 환경별 기존 변수들을 계약대로 설정한다. 두 고객 HMAC 키는 분리하며 `NEXT_PUBLIC_*`를 쓰지 않는다. API의 `INTAKE_SESSION_SECRET`·`DATABASE_URL`·관리자 키는 고객 BFF에 넣지 않는다.
+설정 승인 후 실제 검증 순서:
 
-1. 준비 완료 인계와 정확한 고객 origin·ingress를 받은 뒤 위 원격 변경을 적용한다. DNS·health 성공만으로 가드를 제거하지 않는다.
-2. 공통 BFF의 환경·IP·동의·세션·쿠키·Web Locks·응답 유실 경계만 검증한다. 기존 화면 전체 검증을 반복하지 않는다.
-3. HOST_REGISTRATION의 OWNED/RENTED 합성 **2건**을 각 다른 키로 저장하고 같은 세션·키·본문 재시도에서 추가 접수 **0건**을 확인한다. 공유 DB의 전체 초기화·자동 삭제를 하지 않는다.
-4. 입력 오류·세션 만료·장애 시 거짓 성공 방지와 PC·모바일 제출 상태를 확인한다. worker는 중지하고 실제 고객 발송·운영 시트 쓰기는 하지 않는다.
-5. 결과를 보고한 뒤 다른 세 유형을 진행한다. 이번에는 main 반영·배포를 실행하지 않는다.
+1. 서버 담당에게 합성 전화번호 허용 목록, worker 중지, `INTEGRATION_MODE=disabled`, `EXTERNAL_WRITES_APPROVED=false` 유지 여부를 확인한다.
+2. 정확한 dev commit을 Preview로 배포하고 위 고정 origin에서 공통 BFF·필수 동의·세션을 확인한다.
+3. OWNED/RENTED 합성 **2건**을 서로 다른 키로 저장한다. 같은 세션·키·본문 재요청의 추가 접수 **0건**을 서버 건수와 대조한다.
+4. 입력 오류·세션 회수/만료·API 장애에서 거짓 성공이 없고 PC·모바일 제출 상태가 맞는지 확인한다. 사용한 세션 회수는 서버 담당에게 요청한다.
 
-기존 `main`의 `6067ffe` 배포와 로컬 API 검증 기록(stage10/11)은 이전 단계 이력이며 원격 전체 연결 완료 근거가 아니다.
-
-## 이번 검증 기록
-
-- 작업 시작 기준은 `dev / 68bb054`다. 미추적 기획·UTM 문서를 보존했다.
-- 변경된 환경 선택 경계의 합성 설정 검사 **14/14 통과**. 기존 local 호환, 명시적 원격/빈값/미지원 설정 거부, production 빌드·원격 origin·키 누락 차단을 확인했다. 실제 API·DB 요청은 0회다.
-- 코드 검사·문서 형식 검사는 이번 변경 파일로 한정한다. 화면·DTO·세션 구현이 그대로이므로 이전 PC/모바일·빌드 검증은 반복하지 않는다.
+서버 인증·DB·공통 계약·관리자 코드를 직접 수정하지 않는다. 데이터 초기화·seed·실제 고객 발송·운영 시트 쓰기·production 배포·main 반영은 포함하지 않는다. 이전 stage10/11 로컬 검증과 main `6067ffe` 이력은 원격 검증 완료 근거가 아니다.
