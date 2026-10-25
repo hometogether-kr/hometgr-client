@@ -30,7 +30,7 @@ function HostIntakeLayout({ children, notice }: HostIntakeLayoutProps) {
 
 export function ShinhanHostEstimatePage() {
   return (
-    <HostIntakeLayout notice="개발 확인용 화면입니다. 입력은 이 탭에서만 유지되며 전송·접수되지 않습니다. 실제 신청은 승인된 동의 전문과 저장 API 연결 후 제공됩니다.">
+    <HostIntakeLayout notice="개발 확인용 화면입니다. ‘예상 수익 확인하기’는 견적을 서버에 저장한 뒤 계산 결과를 표시합니다. 소개서 알림 신청은 결과를 확인한 뒤 별도로 선택하며, 견적 저장만으로 알림을 신청하지 않습니다.">
       <ShinhanHostEstimate />
     </HostIntakeLayout>
   );

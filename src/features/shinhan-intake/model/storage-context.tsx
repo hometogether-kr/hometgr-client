@@ -136,7 +136,9 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
   const { draft, updateDraft } = useShinhanIntake();
   const submissionAvailable =
     sessionMode === "local" ||
-    (sessionMode === "remote" && draft?.applicationType === "HOST_REGISTRATION");
+    (sessionMode === "remote" &&
+      (draft?.applicationType === "HOST_REGISTRATION" ||
+        draft?.applicationType === "HOST_ESTIMATE"));
   const queryClient = useQueryClient();
   const [applicationId, setApplicationId] = useState<string | null>(null);
   const consentsQuery = useQuery<ShinhanConsents>({
@@ -357,7 +359,14 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
   }
 
   async function submitApplication(): Promise<boolean> {
-    if (!submissionAvailable || !draft || !consents || busy.current || retainedAttempt.current)
+    if (
+      !submissionAvailable ||
+      !draft ||
+      !consents ||
+      sessionExpired ||
+      busy.current ||
+      retainedAttempt.current
+    )
       return false;
     try {
       const input = prepareShinhanApplicationInput(draft, consents.required.version);
@@ -377,9 +386,12 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
 
   async function saveConcerns(): Promise<boolean> {
     if (
-      sessionMode !== "local" ||
       !application ||
+      application.applicationType === "HOST_REGISTRATION" ||
+      (sessionMode !== "local" &&
+        !(sessionMode === "remote" && application.applicationType === "HOST_ESTIMATE")) ||
       !consents ||
+      sessionExpired ||
       busy.current ||
       retainedAttempt.current
     )
@@ -403,9 +415,10 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
 
   async function saveIntroduction(): Promise<boolean> {
     if (
-      sessionMode !== "local" ||
+      (sessionMode !== "local" && sessionMode !== "remote") ||
       !application ||
       application.applicationType !== "HOST_ESTIMATE" ||
+      sessionExpired ||
       busy.current ||
       retainedAttempt.current
     )

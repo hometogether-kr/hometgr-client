@@ -64,9 +64,12 @@ export function SavedHostIncome() {
         </div>
       </div>
       <div className={styles.help}>
-        <p>참고 지역: {estimate.region.districtUsed ?? "서울 기준 참고값"}</p>
+        {estimate.region.districtUsed && <p>참고 지역: {estimate.region.districtUsed}</p>}
         {estimate.region.source === "seoul_config_average" && (
-          <p>입력 지역의 개별 시세가 아닌 서울 기준 참고값을 적용한 예상 금액입니다.</p>
+          <p>기본 예상 범위 · 서울 25개 구 설정값 평균 기준</p>
+        )}
+        {estimate.plannedFurnitureKeys.length > 0 && (
+          <p>구매 예정 가구를 입주 전까지 제공하는 조건의 예상 금액입니다.</p>
         )}
         <p>계산 규칙: {estimate.rulesVersion}</p>
       </div>
@@ -104,7 +107,7 @@ export function SavedHostResultActions() {
 }
 
 export function SavedHostIntroductionActions() {
-  const { application, pending, preparing, attempt, requestIntroduction, setStep } =
+  const { application, pending, preparing, sessionExpired, attempt, requestIntroduction, setStep } =
     useShinhanStorage();
   if (application?.applicationType !== "HOST_ESTIMATE") return null;
   return (
@@ -118,7 +121,7 @@ export function SavedHostIntroductionActions() {
         <BtnCta
           className={styles.primaryButton}
           loading={pending && attempt?.kind === "introduction"}
-          disabled={pending || preparing || Boolean(attempt)}
+          disabled={pending || preparing || sessionExpired || Boolean(attempt)}
           onClick={() => void requestIntroduction()}
         >
           소개서만 먼저 받아보기
@@ -132,7 +135,10 @@ export function SavedHostIntroductionActions() {
       >
         ← 걱정 선택 다시 보기
       </button>
-      <p className={styles.help}>신청 저장이 완료되면 접수 완료 화면으로 이동합니다.</p>
+      <p className={styles.help}>
+        현재 견적에 소개서 알림 신청을 저장합니다. 저장 성공 후 접수 완료 화면으로 이동하며, 알림
+        전달 완료와는 다릅니다.
+      </p>
     </div>
   );
 }

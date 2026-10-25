@@ -45,6 +45,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
     setStep,
     pending,
     preparing,
+    sessionExpired,
     attempt,
     consents,
     concernCodes,
@@ -93,7 +94,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
   }
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!blocked && consents) void submitConcerns();
+    if (!blocked && !sessionExpired && consents) void submitConcerns();
   }
   function toggleConcern(code: string) {
     setConcernCodes(
@@ -156,7 +157,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
             </h1>
             <p>걱정되는 점을 모두 골라주세요. 여러 개 선택할 수 있어요.</p>
           </header>
-          <fieldset className={styles.concerns} disabled={blocked}>
+          <fieldset className={styles.concerns} disabled={blocked || sessionExpired}>
             <legend className="sr-only">걱정되는 점 (여러 개 선택 가능)</legend>
             {concerns.map((concern) => (
               <button
@@ -202,7 +203,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
               type="submit"
               className={styles.primaryButton}
               loading={pending && attempt?.kind === "concerns"}
-              disabled={blocked || !consents}
+              disabled={blocked || sessionExpired || !consents}
             >
               {isHostEstimate ? "선택한 걱정으로 시작 방법 보기" : "선택한 내용 확인하기"}
             </BtnCta>
