@@ -139,7 +139,8 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
     (sessionMode === "remote" &&
       (draft?.applicationType === "HOST_REGISTRATION" ||
         draft?.applicationType === "HOST_ESTIMATE" ||
-        draft?.applicationType === "GUEST_BUDGET"));
+        draft?.applicationType === "GUEST_BUDGET" ||
+        draft?.applicationType === "GUEST_DEMAND"));
   const queryClient = useQueryClient();
   const [applicationId, setApplicationId] = useState<string | null>(null);
   const consentsQuery = useQuery<ShinhanConsents>({
@@ -393,7 +394,8 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
         !(
           sessionMode === "remote" &&
           (application.applicationType === "HOST_ESTIMATE" ||
-            application.applicationType === "GUEST_BUDGET")
+            application.applicationType === "GUEST_BUDGET" ||
+            application.applicationType === "GUEST_DEMAND")
         )) ||
       !consents ||
       sessionExpired ||
