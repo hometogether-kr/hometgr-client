@@ -115,8 +115,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
   return (
     <div className={styles.container} ref={focusTarget} tabIndex={-1} aria-label="저장된 신한 신청">
       <p className={styles.localBanner}>
-        신한 API 저장 검증 화면입니다. 서버에 저장된 신청을 표시합니다. 외부 알림톡·시트 반영은 이
-        환경에서 실행하지 않습니다. 접수 완료와 알림 전달 완료는 다릅니다.
+        접수된 신청 내역입니다. 접수 완료와 안내 메시지 전달 완료는 다릅니다.
       </p>
       {isHostEstimate && <ShinhanHostProgress currentStep={currentHostStep} />}
       {application.applicationType === "HOST_REGISTRATION" && (

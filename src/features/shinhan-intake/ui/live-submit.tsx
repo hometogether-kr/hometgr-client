@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 
 import { BtnCta } from "@/shared/ui/btn-cta";
 
+import { SHINHAN_SAVED_APPLICATION_PATH } from "../config/routes";
 import { useShinhanStorage } from "../model/storage-context";
 
 export function ShinhanLivePreparation() {
@@ -16,10 +17,10 @@ export function ShinhanLivePreparation() {
       <p>
         {storage.application
           ? "기존 신청은 유지됩니다. 신청 세션을 다시 준비한 뒤 계속해 주세요."
-          : "신한 API 저장 검증용입니다. 서버 동의 전문을 준비한 뒤 필수 동의를 다시 선택해 주세요."}
+          : "개인정보 수집·이용 안내를 불러온 뒤 필수 동의를 확인해 주세요."}
       </p>
       {storage.consents ? (
-        <p role="status">서버 동의 전문과 신청 세션을 준비했습니다.</p>
+        <p role="status">신청할 준비가 됐어요. 입력 내용과 필수 동의를 확인해 주세요.</p>
       ) : (
         <BtnCta
           type="button"
@@ -36,7 +37,7 @@ export function ShinhanLivePreparation() {
             void storage.prepare();
           }}
         >
-          {storage.preparing ? "신청 준비 중…" : "실제 저장 준비 (개발용)"}
+          {storage.preparing ? "신청 준비 중…" : "신청 준비하기"}
         </BtnCta>
       )}
     </div>
@@ -60,11 +61,11 @@ export function ShinhanLiveSubmit({
       storage.error.code === "CSRF_INVALID");
 
   async function submit() {
-    if (await storage.submitApplication()) router.push("/shinhan/dev/application");
+    if (await storage.submitApplication()) router.push(SHINHAN_SAVED_APPLICATION_PATH);
   }
 
   async function retry() {
-    if (await storage.retry()) router.push("/shinhan/dev/application");
+    if (await storage.retry()) router.push(SHINHAN_SAVED_APPLICATION_PATH);
   }
 
   return (
@@ -88,7 +89,7 @@ export function ShinhanLiveSubmit({
       </BtnCta>
       <p className="text-sm leading-6 text-grayscale-600">
         {storage.submissionAvailable
-          ? "서버 저장 성공 응답을 받은 뒤에만 결과·완료 화면으로 이동합니다. 접수 완료와 알림 전달 완료는 다릅니다."
+          ? "접수가 확인되면 완료 화면으로 이동합니다. 안내 메시지 전달 여부는 접수와 별도로 확인해 주세요."
           : "실제 접수는 연결 준비가 완료된 뒤 이용할 수 있습니다."}
       </p>
       {storage.error && (
@@ -189,7 +190,7 @@ export function ShinhanSavedApplicationNotice() {
       </p>
       <Link
         className="inline-flex min-h-12 items-center rounded-xl bg-primary-500 px-5 py-3 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-600"
-        href="/shinhan/dev/application"
+        href={SHINHAN_SAVED_APPLICATION_PATH}
       >
         저장한 신청 내역 보기
       </Link>

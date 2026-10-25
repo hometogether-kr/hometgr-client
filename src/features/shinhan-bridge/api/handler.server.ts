@@ -125,7 +125,7 @@ export async function handleShinhanBridge(request: Request, segments: unknown) {
     const route = resolveRoute(request.method, segments);
     version = upstreamContractVersion(route.path);
     if (!environment) throw unavailable();
-    if (route.action === "sessions" && environment.SHINHAN_APP_ENV === "dev") version = "1.1.0";
+    if (route.action === "sessions" && environment.SHINHAN_APP_ENV !== "local") version = "1.1.0";
     origin = validateBrowserRequest(request, environment);
     const names = getCookieNames(environment);
     if (route.action === "consents") {

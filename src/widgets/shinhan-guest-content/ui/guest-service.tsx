@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { BtnCta } from "@/shared/ui/btn-cta";
+import { ShinhanEntryNotice, ShinhanHostFormButton } from "@/features/shinhan-intake";
 
 import styles from "./guest-service.module.css";
 
@@ -210,8 +210,8 @@ export function ShinhanGuestHostBand() {
           <h2 id="shinhan-guest-host-band-heading">홈쉐어를 시작해 보세요</h2>
         </div>
         <div className={styles.hostAction}>
-          <BtnCta
-            disabled
+          <ShinhanHostFormButton
+            flow="registration"
             variant="stroke"
             size="pill"
             className={styles.hostButton}
@@ -227,9 +227,11 @@ export function ShinhanGuestHostBand() {
             }
           >
             홈투게더에 방 등록하기
-          </BtnCta>
+          </ShinhanHostFormButton>
           <p id="shinhan-guest-host-registration-notice" className={styles.notice}>
-            방 등록 신청은 준비 중이에요.
+            <ShinhanEntryNotice>
+              집 위치와 연락처를 입력해 방 등록을 신청해 보세요.
+            </ShinhanEntryNotice>
           </p>
         </div>
       </div>

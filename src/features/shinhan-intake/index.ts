@@ -9,6 +9,7 @@ export {
   SHINHAN_SAVED_APPLICATION_PATH,
 } from "./config/routes";
 export { shinhanContactSchema } from "./model/contact.schema";
+export { ShinhanEntryProvider } from "./model/entry-context";
 export type { GuestConcernCode } from "./model/guest-concerns.schema";
 export {
   shinhanGuestBudgetSchema,
@@ -39,6 +40,7 @@ export {
   ShinhanPhoneField,
   ShinhanRequiredConsentFields,
 } from "./ui/contact-fields";
+export { ShinhanEntryNotice } from "./ui/entry-notice";
 export { ShinhanGuestBudgetField, ShinhanGuestBudgetRangeField } from "./ui/guest-budget-fields";
 export { ShinhanGuestRegionField, ShinhanMoveInDateField } from "./ui/guest-condition-fields";
 export {

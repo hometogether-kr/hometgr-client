@@ -32,9 +32,8 @@ export function ShinhanGuestBudgetPage() {
     <GuestIntakeLayout
       notice={
         <>
-          신한 API 저장 검증 화면입니다. ‘상세조건 안내받기’는 서버 저장에 성공한 뒤 접수가
-          완료됩니다. 접수 완료와 알림 전달 완료는 다르며, 이 환경에서는 외부 알림톡·시트 반영을
-          실행하지 않습니다.
+          원하는 예산과 입주 조건을 확인하고 상세 안내를 신청하세요. 접수 완료와 안내 메시지 전달
+          완료는 다릅니다.
         </>
       }
     >
@@ -47,11 +46,7 @@ export function ShinhanGuestDemandPage() {
   return (
     <GuestIntakeLayout
       notice={
-        <>
-          신한 API 저장 검증 화면입니다. ‘입주조건 확인하기’는 서버 저장에 성공한 뒤 접수가
-          완료됩니다. 접수 완료와 알림 전달 완료는 다르며, 이 환경에서는 외부 알림톡·시트 반영을
-          실행하지 않습니다.
-        </>
+        <>원하는 위치와 입주 조건을 알려 주세요. 접수 완료와 안내 메시지 전달 완료는 다릅니다.</>
       }
     >
       <ShinhanGuestIntake applicationType="GUEST_DEMAND" />

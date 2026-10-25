@@ -19,7 +19,7 @@ const originSchema = z
   });
 
 const bridgeEnvironmentSchema = z.object({
-  SHINHAN_APP_ENV: z.enum(["local", "dev"]),
+  SHINHAN_APP_ENV: z.enum(["local", "dev", "production"]),
   SHINHAN_CLIENT_IP_MODE: z.enum(["local", "vercel-direct"]),
   SHINHAN_API_ORIGIN: originSchema,
   SHINHAN_BRIDGE_SECRET: z.string().min(32),
@@ -47,12 +47,18 @@ export function getBridgeEnvironment(): BridgeEnvironment | null {
       ? environment
       : null;
   }
-  // This stage permits only the deployed dev API through a direct Vercel Preview origin.
+  const deploymentEnvironment =
+    environment.SHINHAN_APP_ENV === "production" ? "production" : "preview";
+  const apiOrigin =
+    environment.SHINHAN_APP_ENV === "production"
+      ? "https://shinhan-api.hometogether.kr"
+      : "https://dev-shinhan-api.hometogether.kr";
+  // Each Vercel target connects only to its matching API. Proxy ingress requires its own contract.
   if (
     process.env.VERCEL !== "1" ||
-    process.env.VERCEL_ENV !== "preview" ||
+    process.env.VERCEL_ENV !== deploymentEnvironment ||
     environment.SHINHAN_CLIENT_IP_MODE !== "vercel-direct" ||
-    environment.SHINHAN_API_ORIGIN !== "https://dev-shinhan-api.hometogether.kr"
+    environment.SHINHAN_API_ORIGIN !== apiOrigin
   )
     return null;
   if (

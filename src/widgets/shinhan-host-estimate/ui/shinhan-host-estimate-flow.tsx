@@ -176,13 +176,17 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                   : undefined,
             }}
           />
-          <BtnCta type="submit" variant="stroke" className={styles.cta} disabled={locked}>
-            입력 형식 확인
-          </BtnCta>
-          {verifiedContact === contactSnapshot && (
-            <p role="status" className={styles.notice}>
-              입력 형식을 확인했어요. 아직 접수되지는 않았습니다.
-            </p>
+          {process.env.NODE_ENV === "development" && (
+            <>
+              <BtnCta type="submit" variant="stroke" className={styles.cta} disabled={locked}>
+                입력 형식 확인
+              </BtnCta>
+              {verifiedContact === contactSnapshot && (
+                <p role="status" className={styles.notice}>
+                  입력 형식을 확인했어요. 아직 접수되지는 않았습니다.
+                </p>
+              )}
+            </>
           )}
           <ShinhanLiveSubmit className={styles.cta}>예상 수익 확인하기</ShinhanLiveSubmit>
           {process.env.NODE_ENV === "development" && (

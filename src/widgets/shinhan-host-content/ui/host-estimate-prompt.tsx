@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useState } from "react";
 
-import { ShinhanHostFormButton } from "@/features/shinhan-intake";
+import { ShinhanEntryNotice, ShinhanHostFormButton } from "@/features/shinhan-intake";
 
 import styles from "./host-estimate-prompt.module.css";
 
@@ -45,9 +45,7 @@ export function ShinhanHostEstimatePrompt() {
         예상 월세 진단하기
       </ShinhanHostFormButton>
       <p id={descriptionId} className={styles.notice}>
-        {process.env.NODE_ENV === "development"
-          ? "개발 확인용 · 접수되지 않습니다."
-          : "신청 기능을 준비하고 있어요."}
+        <ShinhanEntryNotice>집 조건을 입력해 예상 월세를 확인해 보세요.</ShinhanEntryNotice>
       </p>
     </aside>
   );
