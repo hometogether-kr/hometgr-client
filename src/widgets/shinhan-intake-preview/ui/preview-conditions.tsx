@@ -3,8 +3,6 @@
 import { useId } from "react";
 
 import { useShinhanIntake } from "@/features/shinhan-intake";
-import { BtnCta } from "@/shared/ui/btn-cta";
-import { Checkbox } from "@/shared/ui/checkbox";
 import { SelectTile } from "@/shared/ui/select-tile";
 import { TextField } from "@/shared/ui/text-field";
 
@@ -269,7 +267,7 @@ export function PreviewSelectionMemory() {
 
   return (
     <section className={styles.memoryCheck} aria-labelledby={`${consentId}-heading`}>
-      <h3 id={`${consentId}-heading`}>복수 선택·선택 동의 보존 확인</h3>
+      <h3 id={`${consentId}-heading`}>복수 선택 보존 확인</h3>
       <p className={styles.help}>
         개발 검증용 항목입니다. 실제 걱정 선택 화면의 순서와 제출 기능은 후속 단계에서 연결합니다.
       </p>
@@ -294,29 +292,6 @@ export function PreviewSelectionMemory() {
           ))}
         </div>
       </fieldset>
-      <div className={styles.checkboxRow}>
-        <Checkbox
-          id={consentId}
-          size="24"
-          checked={draft.optionalConsent === true}
-          className={styles.checkbox}
-          aria-describedby={`${consentId}-status`}
-          onChange={(event) =>
-            updateDraft((current) => ({ ...current, optionalConsent: event.target.checked }))
-          }
-        />
-        <label htmlFor={consentId}>선택정보 동의 상태 확인 (개발 검증용)</label>
-      </div>
-      <p className={styles.help} id={`${consentId}-status`}>
-        현재 상태:{" "}
-        {draft.optionalConsent === null ? "미응답" : draft.optionalConsent ? "동의" : "미동의"}
-      </p>
-      <BtnCta
-        variant="stroke"
-        onClick={() => updateDraft((current) => ({ ...current, optionalConsent: null }))}
-      >
-        선택 동의를 미응답으로 되돌리기
-      </BtnCta>
     </section>
   );
 }

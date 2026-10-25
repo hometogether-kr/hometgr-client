@@ -37,7 +37,6 @@ export interface GuestFollowupExample {
   readonly application: GuestBudgetExampleApplication | GuestDemandExampleApplication;
   step: GuestFollowupStep;
   selectedCodes: GuestConcernCode[];
-  optionalConsent: boolean | null;
   response: GuestConcernNotSubmitted | GuestConcernSubmitted;
   guideMode: "selected" | "all";
 }
@@ -76,7 +75,6 @@ export function createGuestFollowupExample(
     application,
     step: "concerns",
     selectedCodes: [],
-    optionalConsent: null,
     response: { state: "NOT_SUBMITTED", codes: [] },
     guideMode: "selected",
   };
@@ -89,7 +87,6 @@ export function showAllGuide(example: GuestFollowupExample): GuestFollowupExampl
 export function confirmGuestConcerns(example: GuestFollowupExample): GuestFollowupExample | null {
   const result = guestConcernResponseSchema.safeParse({
     codes: example.selectedCodes,
-    optionalConsent: example.optionalConsent,
   });
   if (!result.success) return null;
 

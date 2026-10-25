@@ -130,26 +130,31 @@ export function HostRegistrationForm() {
       </div>
       <ShinhanRequiredConsentFields error={contactErrors.requiredConsent?.[0]} />
       <div className={styles.actions}>
-        <ShinhanLiveSubmit className={styles.nextButton}>
-          방 등록 신청 저장 (개발용)
-        </ShinhanLiveSubmit>
+        <ShinhanLiveSubmit className={styles.nextButton}>방 등록 신청하기</ShinhanLiveSubmit>
         <p className={styles.hint}>입력하신 정보를 검토한 뒤, 심사 결과를 연락드려요.</p>
       </div>
-      <div className={styles.validation}>
-        <p id={`${fieldId}-submission-status`}>
-          아래 버튼은 입력 형식만 확인하며 서버에 저장하지 않습니다.
-        </p>
-        <BtnCta variant="stroke" type="submit" className={styles.validateButton} disabled={locked}>
-          입력 내용 확인 (개발용)
-        </BtnCta>
-        <p className={styles.validationMessage} role="status">
-          {validatedSnapshot === currentSnapshot
-            ? "입력 형식 확인 완료. 접수되지는 않았습니다."
-            : validationAttempted && (!contactResult.success || !conditionsResult.success)
-              ? "입력 내용을 확인해 주세요. 접수되지는 않았습니다."
-              : "입력 형식만 확인하며 신청을 저장하지 않습니다."}
-        </p>
-      </div>
+      {process.env.NODE_ENV === "development" && (
+        <div className={styles.validation}>
+          <p id={`${fieldId}-submission-status`}>
+            아래 버튼은 입력 형식만 확인하며 서버에 저장하지 않습니다.
+          </p>
+          <BtnCta
+            variant="stroke"
+            type="submit"
+            className={styles.validateButton}
+            disabled={locked}
+          >
+            입력 내용 확인 (개발용)
+          </BtnCta>
+          <p className={styles.validationMessage} role="status">
+            {validatedSnapshot === currentSnapshot
+              ? "입력 형식 확인 완료. 접수되지는 않았습니다."
+              : validationAttempted && (!contactResult.success || !conditionsResult.success)
+                ? "입력 내용을 확인해 주세요. 접수되지는 않았습니다."
+                : "입력 형식만 확인하며 신청을 저장하지 않습니다."}
+          </p>
+        </div>
+      )}
     </form>
   );
 }

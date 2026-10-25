@@ -46,7 +46,6 @@ export const shinhanConcernsInputSchema = z.discriminatedUnion("state", [
   z.strictObject({
     state: z.literal("SUBMITTED"),
     concernCodes: z.array(concernCodeSchema).max(6),
-    optionalConsent: agreedConsentSchema,
   }),
 ]);
 

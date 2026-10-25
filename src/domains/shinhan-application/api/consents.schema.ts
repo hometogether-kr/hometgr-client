@@ -9,9 +9,8 @@ const consentSnapshotSchema = z.object({
 });
 
 export const shinhanConsentsEnvelopeSchema = z.object({
-  data: z.object({
+  data: z.strictObject({
     required: consentSnapshotSchema,
-    optional: consentSnapshotSchema,
     localOnly: z.boolean(),
   }),
 });

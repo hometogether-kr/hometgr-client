@@ -1,6 +1,10 @@
 import Image from "next/image";
 
-import { ShinhanGuestDemandSearch, ShinhanGuestFormButton } from "@/features/shinhan-intake";
+import {
+  ShinhanEntryNotice,
+  ShinhanGuestDemandSearch,
+  ShinhanGuestFormButton,
+} from "@/features/shinhan-intake";
 
 import styles from "./guest-introduction.module.css";
 
@@ -57,9 +61,9 @@ export function ShinhanGuestHero() {
               buttonClassName={styles.searchButton}
             />
             <p id="shinhan-guest-demand-status" className={styles.notice}>
-              {process.env.NODE_ENV === "development"
-                ? "개발용 조건 입력으로 이동하며, 아직 접수되지는 않습니다."
-                : "위치·예산 수요조사 신청을 준비하고 있어요."}
+              <ShinhanEntryNotice>
+                희망 지역과 조건을 입력하고 입주 안내를 신청해 보세요.
+              </ShinhanEntryNotice>
             </p>
           </div>
         </div>
@@ -102,9 +106,7 @@ export function ShinhanGuestBudgetBanner() {
             내 예산에 맞는 방 보기&nbsp; →
           </ShinhanGuestFormButton>
           <p id="shinhan-guest-budget-status" className={styles.notice}>
-            {process.env.NODE_ENV === "development"
-              ? "개발용 예산 입력을 확인할 수 있어요. 실제 접수는 준비 중입니다."
-              : "예산으로 찾기 신청을 준비하고 있어요."}
+            <ShinhanEntryNotice>예산을 입력하고 상세조건 안내를 신청해 보세요.</ShinhanEntryNotice>
           </p>
         </div>
         <div className={styles.bannerArt}>

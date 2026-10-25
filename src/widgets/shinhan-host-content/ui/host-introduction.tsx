@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { ShinhanHostFormButton } from "@/features/shinhan-intake";
+import { ShinhanEntryNotice, ShinhanHostFormButton } from "@/features/shinhan-intake";
 
 import styles from "./host-introduction.module.css";
 
@@ -79,9 +79,9 @@ export function ShinhanHostHero() {
                 홈투게더로 방 등록하기
               </ShinhanHostFormButton>
               <p id="shinhan-registration-status" className={styles.preparing}>
-                {process.env.NODE_ENV === "development"
-                  ? "개발 확인용 · 실제 접수되지 않습니다."
-                  : "방 등록 신청은 준비 중이에요."}
+                <ShinhanEntryNotice>
+                  집 위치와 연락처를 입력해 방 등록을 신청해 보세요.
+                </ShinhanEntryNotice>
               </p>
             </div>
           </div>
@@ -228,9 +228,9 @@ export function ShinhanHostEstimateBand() {
           빈방 예상 월세 알아보기
         </ShinhanHostFormButton>
         <p id="shinhan-estimate-status" className={styles.preparing}>
-          {process.env.NODE_ENV === "development"
-            ? "개발 확인용 · 실제 접수되지 않습니다."
-            : "예상 월세 진단은 준비 중이에요."}
+          <ShinhanEntryNotice>
+            우리 집 조건을 입력하고 예상 월세를 확인해 보세요.
+          </ShinhanEntryNotice>
         </p>
       </div>
     </section>

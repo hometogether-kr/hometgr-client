@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
 
-import { ShinhanGuestFormButton } from "@/features/shinhan-intake";
+import { ShinhanEntryNotice, ShinhanGuestFormButton } from "@/features/shinhan-intake";
 
 import styles from "./guest-budget-prompt.module.css";
 
@@ -83,9 +83,7 @@ export function ShinhanGuestBudgetPrompt() {
           내 조건에 맞는 방 찾기
         </ShinhanGuestFormButton>
         <p className={styles.notice} id={noticeId}>
-          {process.env.NODE_ENV === "development"
-            ? "개발용 입력 화면입니다. 실제 접수는 준비 중이에요."
-            : "예산으로 찾기 신청을 준비하고 있어요."}
+          <ShinhanEntryNotice>예산을 입력하고 상세조건 안내를 신청해 보세요.</ShinhanEntryNotice>
         </p>
       </div>
       <button

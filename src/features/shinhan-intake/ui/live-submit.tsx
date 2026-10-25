@@ -6,20 +6,21 @@ import type { ReactNode } from "react";
 
 import { BtnCta } from "@/shared/ui/btn-cta";
 
+import { SHINHAN_SAVED_APPLICATION_PATH } from "../config/routes";
 import { useShinhanStorage } from "../model/storage-context";
 
 export function ShinhanLivePreparation() {
   const storage = useShinhanStorage();
-  if (process.env.NODE_ENV !== "development") return null;
+  if (!storage.submissionAvailable) return null;
   return (
     <div className="mb-4 space-y-3 rounded-xl border border-primary-200 bg-primary-50 p-4 text-sm leading-6 text-grayscale-700">
       <p>
         {storage.application
-          ? "기존 신청은 유지됩니다. 선택정보를 저장하려면 서버 전문을 준비한 뒤 선택 동의를 다시 확인해 주세요."
-          : "로컬 서버 저장 확인용입니다. 서버 동의 전문을 준비한 뒤 필수 동의를 다시 선택해 주세요."}
+          ? "기존 신청은 유지됩니다. 신청 세션을 다시 준비한 뒤 계속해 주세요."
+          : "개인정보 수집·이용 안내를 불러온 뒤 필수 동의를 확인해 주세요."}
       </p>
       {storage.consents ? (
-        <p role="status">서버 동의 전문과 신청 세션을 준비했습니다.</p>
+        <p role="status">신청할 준비가 됐어요. 입력 내용과 필수 동의를 확인해 주세요.</p>
       ) : (
         <BtnCta
           type="button"
@@ -29,14 +30,14 @@ export function ShinhanLivePreparation() {
             storage.preparing ||
             storage.pending ||
             storage.attempt !== null ||
-            storage.error?.status === 401 ||
+            storage.sessionExpired ||
             storage.retryInSeconds > 0
           }
           onClick={() => {
             void storage.prepare();
           }}
         >
-          {storage.preparing ? "신청 준비 중…" : "실제 저장 준비 (개발용)"}
+          {storage.preparing ? "신청 준비 중…" : "신청 준비하기"}
         </BtnCta>
       )}
     </div>
@@ -60,11 +61,11 @@ export function ShinhanLiveSubmit({
       storage.error.code === "CSRF_INVALID");
 
   async function submit() {
-    if (await storage.submitApplication()) router.push("/shinhan/dev/application");
+    if (await storage.submitApplication()) router.push(SHINHAN_SAVED_APPLICATION_PATH);
   }
 
   async function retry() {
-    if (await storage.retry()) router.push("/shinhan/dev/application");
+    if (await storage.retry()) router.push(SHINHAN_SAVED_APPLICATION_PATH);
   }
 
   return (
@@ -73,10 +74,11 @@ export function ShinhanLiveSubmit({
         type="button"
         className={className}
         disabled={
-          process.env.NODE_ENV !== "development" ||
+          !storage.submissionAvailable ||
           !storage.consents ||
           storage.preparing ||
           storage.pending ||
+          storage.sessionExpired ||
           storage.attempt !== null
         }
         onClick={() => {
@@ -86,8 +88,8 @@ export function ShinhanLiveSubmit({
         {storage.pending ? "저장 결과 확인 중…" : children}
       </BtnCta>
       <p className="text-sm leading-6 text-grayscale-600">
-        {process.env.NODE_ENV === "development"
-          ? "서버 저장 성공 응답을 받은 뒤에만 결과·완료 화면으로 이동합니다. 로컬 동의 전문은 운영 승인본이 아닙니다."
+        {storage.submissionAvailable
+          ? "접수가 확인되면 완료 화면으로 이동합니다. 안내 메시지 전달 여부는 접수와 별도로 확인해 주세요."
           : "실제 접수는 연결 준비가 완료된 뒤 이용할 수 있습니다."}
       </p>
       {storage.error && (
@@ -128,7 +130,7 @@ export function ShinhanLiveSubmit({
               입력 내용 다시 확인
             </BtnCta>
           )}
-          {!storage.attempt && !storage.consents && storage.error.status !== 401 && (
+          {!storage.attempt && !storage.consents && !storage.sessionExpired && (
             <BtnCta
               type="button"
               variant="stroke"
@@ -141,6 +143,7 @@ export function ShinhanLiveSubmit({
               신청 준비 다시 시도
             </BtnCta>
           )}
+          <ShinhanSessionRestart />
         </div>
       )}
       {fieldErrors.length > 0 && (
@@ -150,6 +153,27 @@ export function ShinhanLiveSubmit({
           ))}
         </ul>
       )}
+    </div>
+  );
+}
+
+export function ShinhanSessionRestart() {
+  const { sessionExpired, preparing, pending, restartSession } = useShinhanStorage();
+  if (!sessionExpired) return null;
+  return (
+    <div className="space-y-3 text-sm leading-6">
+      <p>
+        이전 요청은 이미 접수됐을 수 있습니다. 새로 시작해도 기존 접수는 삭제되지 않으며 자동으로
+        다시 제출하지 않습니다. 입력 내용은 유지하고 필수 동의를 다시 확인합니다.
+      </p>
+      <BtnCta
+        type="button"
+        variant="stroke"
+        disabled={preparing || pending}
+        onClick={() => void restartSession()}
+      >
+        새 신청 세션으로 다시 시작
+      </BtnCta>
     </div>
   );
 }
@@ -166,7 +190,7 @@ export function ShinhanSavedApplicationNotice() {
       </p>
       <Link
         className="inline-flex min-h-12 items-center rounded-xl bg-primary-500 px-5 py-3 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-600"
-        href="/shinhan/dev/application"
+        href={SHINHAN_SAVED_APPLICATION_PATH}
       >
         저장한 신청 내역 보기
       </Link>

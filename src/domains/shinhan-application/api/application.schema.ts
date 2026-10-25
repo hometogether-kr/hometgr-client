@@ -118,15 +118,14 @@ function concernResponseSchema<T extends z.ZodType<string>>(codeSchema: T) {
     z.object({
       state: z.literal("SUBMITTED"),
       codes: z.array(codeSchema).max(6),
-      consent: recordedConsentSchema.extend({
-        agreed: z.literal(true),
-        version: shinhanConsentVersionSchema,
-      }),
+      consent: recordedConsentSchema
+        .extend({ agreed: z.literal(true), version: shinhanConsentVersionSchema })
+        .nullable(),
     }),
     z.object({
       state: z.literal("SKIPPED"),
       codes: z.array(codeSchema).length(0),
-      consent: recordedConsentSchema.extend({ agreed: z.literal(false) }),
+      consent: recordedConsentSchema.extend({ agreed: z.literal(false) }).nullable(),
     }),
   ]);
 }

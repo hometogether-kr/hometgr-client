@@ -39,6 +39,9 @@ export function HostResultFrame({ income, children }: HostResultFrameProps) {
       <p className={styles.disclaimer}>
         ※ 참고용 예상 금액으로, 실제 월세는 주택 상태와 계약 조건 등에 따라 달라질 수 있으며
         임대수익을 보장하지 않습니다.
+        <br />
+        연간 금액은 공실 없이 12개월 임대한 경우이며, 관리비·공과금은 별도이고 수수료·세금 차감 전
+        금액입니다.
       </p>
     </div>
   );

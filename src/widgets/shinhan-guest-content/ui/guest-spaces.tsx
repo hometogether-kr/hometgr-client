@@ -1,6 +1,10 @@
 import Image from "next/image";
 
-import { ShinhanGuestFormButton, ShinhanGuestRegionButton } from "@/features/shinhan-intake";
+import {
+  ShinhanEntryNotice,
+  ShinhanGuestFormButton,
+  ShinhanGuestRegionButton,
+} from "@/features/shinhan-intake";
 
 import styles from "./guest-spaces.module.css";
 
@@ -69,9 +73,8 @@ export function ShinhanGuestSpaces() {
           </ShinhanGuestFormButton>
           <p className={styles.counseling}>자세한 비용과 생활 조건은 상담으로 안내해드려요.</p>
           <p id="shinhan-guest-space-notice" className={styles.notice}>
-            {process.env.NODE_ENV === "development"
-              ? "공간 사진은 예시입니다. 개발용 조건 입력으로 이동해요."
-              : "공간 사진은 예시이며, 입주 조건 확인은 준비 중이에요."}
+            공간 사진은 예시입니다.{" "}
+            <ShinhanEntryNotice>희망하는 입주 조건을 알려 주세요.</ShinhanEntryNotice>
           </p>
         </div>
       </div>
@@ -109,9 +112,8 @@ export function ShinhanGuestRegions() {
           ))}
         </ul>
         <p id="shinhan-guest-region-notice" className={styles.regionNotice}>
-          {process.env.NODE_ENV === "development"
-            ? "공간 예시 사진입니다. 선택한 지역으로 개발용 조건 입력을 시작해요."
-            : "공간 예시 사진입니다. 지역별 입주 조건 확인은 준비 중이에요."}
+          공간 예시 사진입니다.{" "}
+          <ShinhanEntryNotice>선택한 지역의 입주 조건을 입력할 수 있어요.</ShinhanEntryNotice>
         </p>
       </div>
     </section>

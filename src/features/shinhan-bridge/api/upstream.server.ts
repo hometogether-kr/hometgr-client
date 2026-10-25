@@ -44,6 +44,13 @@ interface UpstreamInput {
   token?: string;
   idempotencyKey?: string;
   clientKey?: string;
+  sessionKey?: string;
+}
+
+export function upstreamContractVersion(path: string) {
+  if (path === "sessions/bootstrap") return "1.1.0";
+  if (path === "consents" || /^applications\/[0-9a-f-]+\/concerns$/i.test(path)) return "2.0.0";
+  return "1.0.0";
 }
 
 const supportedErrorStatuses = new Set([400, 401, 403, 404, 405, 409, 413, 422, 429, 503]);
@@ -54,6 +61,7 @@ export async function requestUpstream<T>(input: UpstreamInput, schema: z.ZodType
   if (input.token) headers.set("Authorization", `Bearer ${input.token}`);
   if (input.idempotencyKey) headers.set("Idempotency-Key", input.idempotencyKey);
   if (input.clientKey) headers.set("X-Shinhan-Client-Key", input.clientKey);
+  if (input.sessionKey) headers.set("X-Shinhan-Session-Key", input.sessionKey);
   let response: Response;
   let body: unknown;
   try {
@@ -66,8 +74,8 @@ export async function requestUpstream<T>(input: UpstreamInput, schema: z.ZodType
       signal: AbortSignal.timeout(10000),
     });
     if (
-      response.headers.get("X-Contract-Version") !== "1.0.0" ||
-      response.headers.get("X-Shinhan-App-Env") !== "local" ||
+      response.headers.get("X-Contract-Version") !== upstreamContractVersion(input.path) ||
+      response.headers.get("X-Shinhan-App-Env") !== input.environment.SHINHAN_APP_ENV ||
       !response.headers.get("Content-Type")?.toLowerCase().startsWith("application/json")
     )
       throw unavailable();
