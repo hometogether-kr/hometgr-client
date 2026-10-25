@@ -1,14 +1,28 @@
 # 신한 고객 웹 dev API 연결 인계
 
-버전 **1.8.0** · 2026-10-25 · 대상 `hometgr-client`의 `dev`.
+버전 **1.9.0** · 2026-10-25 · 대상 `hometgr-client`의 `dev`.
 
 ## 기준과 범위
 
-- 서버 인계 `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.5.4**. 고객 계약은 그대로이며 1.5.3의 고객 dev 비밀변수 공급과 1.5.4의 방 등록 저장·중복·세션 회수 결과를 반영했다.
-- 원격 BFF 계약 **1.1.1**, 동의·걱정 계약 **2.0.0**, 공개 API 계약 **1.0.0**, 런타임 분리 계약 **1.0.2**. 확장 계약이 해당 경로에 우선한다.
+- 서버 인계 `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.5.5**(서버 기록 Git 기준 `529aee7150751fa0910492624d5eaa5fd54c708a`)와 대조했다. 이번 갱신은 기존 결과 문서만 정리하며 API·화면·계약·환경을 변경하거나 검증을 재실행하지 않았다.
+- 원격 세션 문서 **1.1.1** / bootstrap API **1.1.0**, 동의·걱정 계약 **2.0.0**, 공개 API 계약 **1.0.0**, 런타임 분리 계약 **1.0.2**. 확장 계약이 해당 경로에 우선한다.
 - 서버 배포·검증 SHA **63612a4d8eb1511c97607aef1115c7fef3c66bb5**. migrations001/002/003·원격 세션·회수·필수 동의 등록 완료는 서버 인계의 기록이며 고객 웹의 실제 접수 결과가 아니다.
 - API origin **https://dev-shinhan-api.hometogether.kr**, 기본 경로 `/api/v1`.
 - 공통 BFF·익명 세션·필수 동의·HOST_REGISTRATION OWNED/RENTED는 실제 검증을 완료했다. 후속 `3400d37`에서 HOST_ESTIMATE와 현재 견적의 걱정·소개서 원격 연결을 구현했고 견적 2건·소개서 1건의 실제 검증도 완료했다. `0cb50ff`의 GUEST_BUDGET, `4722e01`의 GUEST_DEMAND도 각각 합성 신청 1건의 실제 브라우저 검증을 완료했다. 일반 공개 진입과 운영·외부 전달은 별도 범위다.
+
+## 완료 상태와 근거 구분
+
+| 범위 | 완료 근거 | 반복하지 않는 확인 |
+| --- | --- | --- |
+| HOST_REGISTRATION OWNED/RENTED | 고객 실제 브라우저 15항목 + 서버 인계9.1의 저장2건·추가중복0 대조 | 실제 저장·같은 키 재요청·대상 세션 회수 후401/쿠키 삭제 |
+| HOST_ESTIMATE | 고객 실제 브라우저 13항목 + 서버 인계9.2의 견적2건·소개서1건 대조 | 계산 스냅샷·원견적 보존·같은 입력의 추가 POST0·소개서 응답 유실 재시도 |
+| GUEST_BUDGET | 고객 실제 브라우저 9항목 + 서버 인계9.2의 신청1건·추가중복0 대조 | 실제 저장·원래 키 재시도·걱정 저장·조회 전용 내역 |
+| GUEST_DEMAND | 고객 실제 브라우저 9항목·순수 경계27항목 + 서버 인계9.2의 신청1건·추가중복0 대조 | 실제 저장·원래 세션/키/본문 재시도·걱정 저장·조회 전용 내역 |
+| 관리자 로그인·호스트/게스트 목록·상세 | 2026-10-25 사용자의 Chrome 등 브라우저 수동 확인, 서버 인계9.3 | 관리자 화면 재검사·재로그인 |
+
+관리자 근거는 [관리자 dev 사용자 확인 기록 1.0.0](C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/admin-dev-acceptance-2026-10-25.md)이다. 앞선 자동 HTTP 경계8/8과 사용자 수동 확인을 구분한다. 자동 정상 로그인200·모든 쿠키 속성·신청6건의 전체 상세 필드·두 관리자 역할 각각의 원격 검사를 새로 수행한 것으로 확대하지 않는다. 이 근거의 한계가 로그인·목록·상세 단계를 다시 미완료로 돌리는 이유는 아니다.
+
+서버 인계9.1~9.2의 대상은 합성 신청 **6건**이다. 개별 점검 결과를 합친 작업은 **16건(NOTIFY_SEND5·SHEET_SYNC11)**이며 각각 점검 당시 PENDING/attempts0·실행 이력0·공급자 요청0·전달0이었다. 이 합계는 최신 전역 DB를 새로 조회한 수치가 아니다. 후속 견적·게스트 신청은 필수 동의 각1건·선택 동의0건·걱정 consent=null도 서버에서 대조했다. 방 등록의 대상 세션2개만 회수한 기존 기록을 유지하며 다른 세션의 회수를 새로 주장하지 않는다.
 
 ## 구현
 
@@ -66,7 +80,7 @@ Vercel 프로젝트 **welcome-web**, Preview Git branch **dev**. 직접 ingress�
 
 이전에 키 공급 요청이 자동 승인 검토에서 거절됐으나, 사용자가 정확한 welcome-web Preview/dev 설정·배포 범위를 승인한 뒤 서버 담당이 안전한 메모리 전달 방식으로 비밀변수 3개를 등록했다. 고객 담당은 일반 연결 변수 4개를 등록했다. Production 변수·기존 키 회전·API 인증·DB 변경은 없다.
 
-고객 구현 `afb0b133aad8a648c17c371e8c1e97f7b52706b6`을 dev에 푸시했고 Preview `dpl_7jyhk1jH9VbzyoVC46ZKrQzVQ5A8`가 READY다. 위 직접 Vercel 별칭이 해당 배포를 가리키며 target=null/branch=dev를 확인했다. main은 `6067ffe`를 유지한다.
+당시 고객 구현 `afb0b133aad8a648c17c371e8c1e97f7b52706b6`을 dev에 푸시했고 Preview `dpl_7jyhk1jH9VbzyoVC46ZKrQzVQ5A8`의 READY와 직접 Vercel 별칭 연결·target=null/branch=dev를 확인했다. 이후 단계별 검증 배포는 아래에 각각 기록하며 이 문서 갱신에서 별칭을 다시 조회하지 않았다. 고객 main은 `6067ffe`를 유지한다.
 
 2026-10-24 23:26 KST 실제 배포 BFF 읽기 검증: 필수 동의200·계약2.0.0·등록 버전/본문 SHA-256 일치·localOnly=false·optional 없음, __Host CSRF의 HttpOnly/Secure/Strict/Path=/ 및 Domain 없음, 잘못된 Origin403, 관리자 경로404를 확인했다. Server=Vercel/x-vercel-id 있음/CF-RAY 없음이다. 이 검증은 신청을 생성하지 않았다.
 
@@ -74,7 +88,7 @@ Vercel 프로젝트 **welcome-web**, Preview Git branch **dev**. 직접 ingress�
 
 첫 실제 브라우저 실행에서 익명 세션201/1.1과 쿠키 속성은 통과했으나, 빈 areaRaw 입력 오류 probe의 예상422 검사에서 중단했다. 당시 HTTP 상태 진단값을 보고서에 남기지 않아403 추정은 확정하지 않는다. 유효 신청 요청은 보내지 않았고, 서버·사용자가23:38 KST 전체 신청0/작업0 및 해당 합성 번호의 빈areaRaw 접수0을 확인했다. 검증 도구의 route.fetch에 원래 브라우저 헤더 전달과 안전한 진단 기록을 보완한 뒤 재개했다. BFF/서버 보안 가드는 변경하지 않았다.
 
-### 실제 dev API 접수 2건
+### 방 등록 실제 dev API 접수 2건 — 2026-10-24
 
 | 유형 / 화면           | 신청 ID                                | 서버 저장 시각 (2026-10-24 KST) | 같은 키·본문 재요청                                 |
 | --------------------- | -------------------------------------- | ------------------------------- | --------------------------------------------------- |
@@ -82,7 +96,7 @@ Vercel 프로젝트 **welcome-web**, Preview Git branch **dev**. 직접 ingress�
 | RENTED / 모바일 390px | `9aa97d2a-c1a8-49cd-9e5b-43e5a4cdc760` | 23:42:14.846494                 | 201, `Idempotency-Replayed:true`, 같은 ID·createdAt |
 
 - 두 최초 저장 모두 실제 API201/계약1.0.0, 현재 내역 조회200과 일치했다. 각각 원래 세션·키·본문을 재사용한 재요청이다. 새로운 키로 추가 접수하지 않았다.
-- 서버 담당의 DB 대조 결과 전체 접수는 정확히2건, 동일 키 재요청으로 증가한 접수는0건이며 각 dev 검증 세션에는 해당 신청1건만 연결됐다. 알림톡·시트 작업4건은 모두 대기 상태이며 실행 이력은0건이다.
+- 서버 담당의 당시 DB 대조 결과 전체 접수는 정확히2건, 동일 키 재요청으로 증가한 접수는0건이며 각 dev 검증 세션에는 해당 신청1건만 연결됐다. 당시 알림톡·시트 작업4건은 모두 대기 상태이며 실행 이력은0건이었다.
 - 실제 필수 동의2.0.0·익명 세션1.1.0·expiry만 있는 브라우저 JSON, HttpOnly/Secure/host-only 쿠키와 고정 만료를 확인했다. 전문 왕복 후 입력·소유 형태·필수 동의 선택이 유지됐고 저장된 내역은 조회 전용이었다.
 - OWNED의 빈 `areaRaw`는 실제 API422 `VALIDATION_ERROR`와 `input.areaRaw` 필드 오류로 거절됐다. 중복 클릭은 최초 저장 요청1회만 보냈다.
 - OWNED 최초 실제201 응답을 브라우저에서 유실시켜 거짓 완료가 나타나지 않는지 확인했다. 이어 브라우저에만503을 주입하고, 같은 키·본문을 실제 API에 재요청하여 원래 신청을 복원했다. **503은 모의 장애이며 실제 API 서버를 중단한 검증이 아니다.**
@@ -95,7 +109,7 @@ Vercel 프로젝트 **welcome-web**, Preview Git branch **dev**. 직접 ingress�
 
 ### 호스트 견적·소개서 실제 dev API 검증
 
-[상세 연결·검증 기록 1.1.0](shinhan-host-estimate-api-stage.md). 테스트 대상은 `8db7e65`의 dev Preview `dpl_FjqxZexG2StXAgvuEHD5A418CARB`이며 동작 코드는 `3400d37`이다. main·Production은 변경하지 않았다.
+[상세 연결·검증 기록 1.1.1](shinhan-host-estimate-api-stage.md). 테스트 대상은 `8db7e65`의 dev Preview `dpl_FjqxZexG2StXAgvuEHD5A418CARB`이며 동작 코드는 `3400d37`이다. main·Production은 변경하지 않았다.
 
 사용자가 2026-10-25 **16:44:25 KST** 설정 파일·실행 API의 `dev`, `worker inactive`, `INTEGRATION_MODE=disabled`, `EXTERNAL_WRITES_APPROVED=false`, SHA `63612a4`를 확인한 뒤 예정된 범위의 재개를 지시했다.
 
@@ -112,7 +126,7 @@ Vercel 프로젝트 **welcome-web**, Preview Git branch **dev**. 직접 ingress�
 
 ### 게스트 예산 실제 dev API 검증
 
-[상세 연결·검증 기록 1.0.0](shinhan-guest-budget-api-stage.md). 구현 `0cb50ff4898032dc818109b664d1c6facb11e366`, dev Preview `dpl_EJBapAKZCUEVxu1DuhnDAhFzjmjQ` **READY**와 고정 직접 Vercel 별칭 연결을 확인했다. 기존 7개 환경변수·비밀키는 유지했다.
+[상세 연결·검증 기록 1.0.1](shinhan-guest-budget-api-stage.md). 구현 `0cb50ff4898032dc818109b664d1c6facb11e366`, dev Preview `dpl_EJBapAKZCUEVxu1DuhnDAhFzjmjQ` **READY**와 고정 직접 Vercel 별칭 연결을 확인했다. 기존 7개 환경변수·비밀키는 유지했다.
 
 - 신청 ID `9d9f4b60-78bd-4596-8f16-dcc52231b15c`, 저장 시각 **2026-10-25 17:15:26.012254 KST**. 최초 실제201 응답을 브라우저에서 유실시킨 뒤 동일 키·본문 재시도201 / `Idempotency-Replayed:true`로 같은 ID·시각을 복원했다.
 - 알림 `PENDING` / `deliveredAt=null`, `estimate=null`, `introductionRequestedAt=null`, `exampleContentVersion=common-space-v1`을 확인했다. 걱정 `PRIVACY`, `COST_CONTRACT` 1회 저장은200 / 계약2.0.0이다. 생성 키1개·HTTP2회, 걱정 키1개·HTTP1회이며 신규 신청은1건이다.
@@ -122,7 +136,7 @@ Vercel 프로젝트 **welcome-web**, Preview Git branch **dev**. 직접 ingress�
 
 ### 게스트 위치·예산 수요조사 실제 dev API 검증
 
-[상세 연결·검증 기록 1.0.0](shinhan-guest-demand-api-stage.md). 구현 `4722e018ba6cd8b3c15e50f23d132bdbb5757890`, dev Preview `dpl_8uBPAW9nNhKGej8yJiakh3nNbZHx` **READY**와 직접 Vercel 고정 별칭 연결을 확인했다. 기존 환경변수·키·계약을 유지했다.
+[상세 연결·검증 기록 1.0.1](shinhan-guest-demand-api-stage.md). 구현 `4722e018ba6cd8b3c15e50f23d132bdbb5757890`, dev Preview `dpl_8uBPAW9nNhKGej8yJiakh3nNbZHx` **READY**와 직접 Vercel 고정 별칭 연결을 확인했다. 기존 환경변수·키·계약을 유지했다.
 
 - 실제 신청 ID `2e8f0dd7-ce57-411b-a52a-8699c6d91134`, 저장 시각 **2026-10-25 17:29:51.130878 KST**. 최초 실제201 응답을 브라우저에 유실시킨 뒤 원래 세션·키·본문 재시도201 / `Idempotency-Replayed:true`로 같은 ID·시각을 복원했다.
 - 걱정 `PRIVACY`, `COST_CONTRACT` 1회 저장은200 / 계약2.0.0이다. 생성 키1개·HTTP2회, 걱정 키1개·HTTP1회, 신규 신청1건·세션1개이며 다른 유형 변경은0회다. 알림 `PENDING`·전달 시각null, 계산·소개서null·`common-space-v1`을 확인했다.
@@ -131,10 +145,26 @@ Vercel 프로젝트 **welcome-web**, Preview Git branch **dev**. 직접 ingress�
 - 서버 담당의 **17:32:17 KST** 대상 읽기 대조 결과 신청1건·추가 중복0건, 최초 입력·시각 보존, 걱정2개·버전2로 일치했다. 알림 사건1건·발송 작업1건·시트 작업2건 모두 `PENDING`, 실행 이력·공급자 요청·전달 기록0건이다. worker 중지·차단 유지, DB·세션·키 변경 없음과 임시 SSH 규칙 삭제를 확인했다.
 - 기존 세 유형·세션 회수 검사는 반복하지 않았다. 검증 브라우저만 종료했고 원래 문서·도구·캐시를 보존했다. 이번 작업은 GUEST_DEMAND 단계에서 마무리하며 공개/운영 전환을 진행하지 않는다.
 
-## 남은 범위
+## 환경·UI 검증의 범위
 
-1. 공개 진입 동선 전환은 후속 범위다. 현재 원격 신청은 환경 검사를 통과한 dev 전용 경로에서 제공한다. 완료된 네 유형의 저장·재시도 검사를 반복하지 않는다.
-2. 실제 외부 연동과 운영 전환은 서버 담당의 준비·별도 사용자 지시 후 진행한다. 이번에는 실제 서버 중단, 모든 브라우저의 다중 탭 동시 동작, 알림톡·시트 전달 성공을 검증했다고 보고하지 않는다.
+아래 표는 기존 근거의 범위를 구분한 것으로 새로운 전체 재검증 목록이 아니다. 네 유형의 저장·재시도·후속 처리와 관리자 사용자 확인의 완료 판정을 유지한다. 추가 증거가 없는 항목만 별도로 표시하며 이번 기록 정리에서 새 요청·브라우저 검사·DB 조회는 하지 않았다.
+
+| 항목 | 실제 확인 완료 | 모의·순수 확인 | 실제 환경의 추가 증거가 없는 범위 |
+| --- | --- | --- | --- |
+| ingress·IP | 고정 Vercel 별칭·Server/x-vercel-id·CF-RAY 없음, 익명 세션, 동의200·잘못된 Origin403·관리자 경로404 | helper55/BFF62: IPv4/IPv6 정규화·HMAC, 잘못된/대체 IP 헤더·위조 forwarded host·브라우저 Client-Key 처리 | 실제 ingress에 위조 IP 헤더를 주입했을 때 플랫폼 처리, IPv4/IPv6 네트워크별 대조 |
+| 쿠키·CSRF | HttpOnly/Secure/host-only/SameSite·만료 상한·expiry-only JSON, 회수 후401·두 쿠키 삭제·자동 발급/제출0 | CSRF 누락·불일치·변조·환경/origin 결합·중복 쿠키·reset의 세부 경계 | 해당 공격 변형들의 배포 환경 실증. 이미 확인한 정상 쿠키/Origin403/회수401은 완료 유지 |
+| 동시성·다중 탭 | 서버 인계9절의 bootstrap **10묶음×4요청**, 묶음당 DB1행·동일 token/expiry 재현 | 고객 HMAC 안정성·원키 유지·쿠키 결합; Web Locks 구현 확인 | 고객 브라우저 여러 탭의 실제 동시 초기화·Web Locks 경합 |
+| PC·모바일 | 네 유형의 PC1440/모바일390 주요 흐름·전문 복귀·입력/선택 유지·완료/오류/재시도·조회 전용과 캡처 확인 | 초기 방 등록 브라우저 모의18항목·폰트 보완4항목 | 물리 모바일 기기·iOS Safari·인앱 웹뷰·모든 브라우저 조합 |
+| 로딩·실패 | 실제201 응답 유실 후 원키 재현·저장 전 거짓 완료 방지, 실제422·회수 후401 | 브라우저 주입503, upstream 네트워크/스키마/상태 오류 | 실제 API 중단·외부 공급자 장애·전달 성공 |
+
+모의·순수 확인 근거는 기존 `shinhan-151-session-helper-report.json`, `shinhan-151-bff-boundary-report.json`, `shinhan-152-client-browser-mock-report.json`이며 실제 신청 근거는 153~156 보고서와 위 단계별 기록이다. 서버의 동시 bootstrap 확인과 고객 브라우저 다중 탭 확인을 혼동하지 않는다. 관리자 자동 검사의 범위 한계는 위 완료 상태 절에 기록했으며 새 관리자 검사나 재로그인을 요구하지 않는다.
+
+## 미확인·미결정인 후속 범위
+
+1. **고객 공개 진입·운영 환경:** 현재 환경 검사를 통과한 dev 전용 경로에서 제공한다. 일반 공개 동선 전환, 운영 origin/설정, main 반영·운영 배포는 별도 지시 후 진행한다. 위 표의 실제 환경 미확인 항목도 필요한 범위를 정한 후에만 진행한다.
+2. **서버 환경 격리:** 공유 DB의 관리자 세션 환경 경계와 작업 큐 출처/claim 격리는 서버 담당 범위다. 사용자 수동 관리자 확인 완료와 운영 동시 기동 준비 완료를 구분한다.
+3. **합성 대기 작업 처리 방침:** 기존 합성 신청6건과 점검 합산 작업16건의 처리 방침이 남아 있다. 세션 만료/회수가 저장된 작업을 취소하지 않는다. 임의 삭제·취소·발송 전환 없이 worker 중지·외부 disabled/false 상태를 유지한다.
+4. **실제 NHN·Google 연동:** 자격·템플릿·승인된 테스트 수신자·시트 권한과 실제 요청 접수/전달/시트 쓰기는 미검증이다. 테스트 대상과 승인 범위를 정한 뒤 서버 담당이 별도 진행한다. PENDING을 실제 발송·시트 반영 완료로 표시하지 않는다.
 
 서버 인증·DB·공통 계약·관리자 코드를 직접 수정하지 않는다. 데이터 초기화·seed·실제 고객 발송·운영 시트 쓰기·production 배포·main 반영은 포함하지 않는다. 이전 stage10/11 로컬 검증과 main `6067ffe` 이력은 원격 검증 완료 근거가 아니다.
 

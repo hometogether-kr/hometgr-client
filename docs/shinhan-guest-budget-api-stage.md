@@ -1,12 +1,12 @@
 # 게스트 예산 dev API 연결
 
-버전 **1.0.0** · 2026-10-25 · `hometgr-client` / `dev`.
+버전 **1.0.1** · 2026-10-25 · `hometgr-client` / `dev`.
 
 ## 범위와 기준
 
-- 서버 인계 `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.5.4**. 공개 신청·조회 **1.0.0**, 동의·걱정 **2.0.0**, 원격 문서 **1.1.1** / bootstrap **1.1.0**, 런타임 분리 **1.0.2**를 유지한다.
+- 검증 당시 서버 인계 `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.5.4**. 결과 기록은 후속 **1.5.5** 9.2와 대조했다. 공개 신청·조회 **1.0.0**, 동의·걱정 **2.0.0**, 원격 문서 **1.1.1** / bootstrap **1.1.0**, 런타임 분리 **1.0.2**와 기존 검증 결과를 유지하며 재검증하지 않았다.
 - 구현 커밋 `0cb50ff4898032dc818109b664d1c6facb11e366`: `feat(shinhan): 게스트 예산 원격 접수 연결`.
-- 기존 공통 BFF·익명 세션·서버 필수 동의·응답 Zod·같은 키/본문 재시도를 재사용한다. 원격 생성과 걱정 저장에 `GUEST_BUDGET`만 추가했다. `GUEST_DEMAND`는 다음 단계다.
+- 기존 공통 BFF·익명 세션·서버 필수 동의·응답 Zod·같은 키/본문 재시도를 재사용한다. 원격 생성과 걱정 저장에 `GUEST_BUDGET`만 추가했다. 당시 다음 단계였던 `GUEST_DEMAND`도 후속 단계에서 완료했다.
 - `/shinhan/dev/guest/budget`는 기존 환경·origin 검사를 통과한 dev Preview에서만 원격으로 열린다. 일반 공개 진입 버튼·Production 보안 가드를 변경하지 않았다.
 - 월 예산 20~100만 원·1만 원 단위, 자유 입력 위치, 기존 Calendar와 KST 오늘 이상 날짜 검사를 유지했다. 공통 예시 사진과 ‘찾았어요’를 유지하며 실제 매물 검색 결과로 표시하지 않는다.
 - 기본 신청은 서버201 이후에만 완료된다. 이후 조건·사진은 조회 전용이고 신청을 다시 생성하지 않는다. 게스트는 소개서 API를 사용하지 않는다.
@@ -73,4 +73,4 @@ Preview `dpl_EJBapAKZCUEVxu1DuhnDAhFzjmjQ`, SHA `0cb50ff4898032dc818109b664d1c6f
 
 ## 남은 범위
 
-GUEST_DEMAND 원격 연결, 일반 공개 진입 동선 전환, 실제 외부 연동과 운영 전환은 다음 단계다. 이번 단계에서 main·운영 배포·실고객 발송·운영 시트 쓰기를 수행하지 않는다.
+[GUEST_DEMAND](shinhan-guest-demand-api-stage.md)의 원격 연결·실제 저장·재시도는 후속 단계에서 완료했다. 현재 미확인 항목과 일반 공개 진입·외부 연동·운영 전환은 [통합 인계 1.9.0](shinhan-dev-api-handoff.md)의 구분을 따른다. 이번 기록 정리에서는 기존 검증·main·운영 배포·실고객 발송·시트 쓰기를 실행하지 않았다.

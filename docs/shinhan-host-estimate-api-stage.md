@@ -1,13 +1,13 @@
 # 호스트 견적·소개서 dev API 연결
 
-버전 **1.1.0** · 2026-10-25 · `hometgr-client` / `dev`.
+버전 **1.1.1** · 2026-10-25 · `hometgr-client` / `dev`.
 
 ## 기준과 변경
 
-- 서버 인계 `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.5.4**.
+- 검증 당시 서버 인계 `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.5.4**. 결과 기록은 후속 **1.5.5** 9.2와 대조했으며 계약·기존 검증 결과는 유지하고 재검증하지 않았다.
 - 공개 신청·조회·소개서 **1.0.0**, 원격 문서 **1.1.1** / bootstrap **1.1.0**, 동의·걱정 **2.0.0**, 런타임 분리 **1.0.2**.
 - 고객 구현 커밋 `3400d372dc22db2aaf8e749b5e788f72ab326af1`: `feat(shinhan): 호스트 견적과 소개서 원격 접수 연결`.
-- 기존 공통 BFF·익명 세션·서버 필수 동의·Idempotency-Key 처리를 재사용해 HOST_ESTIMATE와 해당 견적의 걱정 응답·소개서를 원격에서 허용했다. 게스트 두 유형은 다음 단계로 남긴다.
+- 기존 공통 BFF·익명 세션·서버 필수 동의·Idempotency-Key 처리를 재사용해 HOST_ESTIMATE와 해당 견적의 걱정 응답·소개서를 원격에서 허용했다. 당시 다음 단계였던 게스트 두 유형도 후속 단계에서 완료했다.
 - `/shinhan/dev/host/estimate`는 기존 환경·origin 검사를 통과한 dev Preview에서만 원격으로 열린다. 운영 진입 버튼과 다른 경로의 공개 범위를 임의로 넓히지 않았다.
 - 서버의 월·연 예상 금액 스냅샷을 그대로 표시한다. 원본 `docs/sources/rent-rules-v1.md`에 따른 서울 25개 구 설정값 평균, 구매 예정 가구 제공 조건, 공실 없는 12개월·관리비/공과금 별도·수수료/세금 차감 전 안내를 반영했다.
 - 견적 저장과 소개서 신청을 구분했다. 같은 입력의 결과 재보기는 새 접수를 만들지 않고, 조건 변경은 새 키·새 견적을 사용한다. 소개서·걱정은 현재 견적 ID에만 저장한다.
@@ -105,4 +105,4 @@
 
 ## 남은 범위
 
-GUEST_BUDGET → GUEST_DEMAND 원격 연결, 공개 진입 동선 전환, 실제 외부 연동과 운영 전환은 다음 단계다. 이번 작업은 알림톡 전달·운영 시트 반영·운영 배포를 수행하지 않는다.
+[GUEST_BUDGET](shinhan-guest-budget-api-stage.md)과 [GUEST_DEMAND](shinhan-guest-demand-api-stage.md)의 원격 연결·실제 저장·재시도는 후속 단계에서 완료했다. 현재 미확인 항목과 공개 진입·외부 연동·운영 전환은 [통합 인계 1.9.0](shinhan-dev-api-handoff.md)의 구분을 따른다. 이번 기록 정리에서는 기존 검증·알림톡 전달·시트 쓰기·운영 배포를 실행하지 않았다.

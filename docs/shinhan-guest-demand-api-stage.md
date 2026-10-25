@@ -1,10 +1,10 @@
 # 게스트 위치·예산 수요조사 dev API 연결
 
-버전 **1.0.0** · 2026-10-25 · `hometgr-client` / `dev`.
+버전 **1.0.1** · 2026-10-25 · `hometgr-client` / `dev`.
 
 ## 범위와 계약
 
-- 기준 인계: `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.5.4**.
+- 검증 당시 기준 인계: `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md` **1.5.4**. 결과 기록은 후속 **1.5.5** 9.2와 대조했으며 계약·기존 검증 결과는 유지하고 재검증하지 않았다.
 - 신청·현재 조회 **1.0.0**, 원격 문서 **1.1.1** / bootstrap **1.1.0**, 동의·걱정 **2.0.0**, 런타임 분리 **1.0.2**를 유지한다.
 - 기존 BFF·익명 세션·HttpOnly 쿠키·필수 동의 버전·Zod·멱등 재시도를 재사용해 `GUEST_DEMAND`를 원격 생성·걱정 저장 허용 목록에 추가했다. 서버 인증·DB·공통 계약·공유 의존성·키 변경은 없다.
 - `/shinhan/dev/guest/demand`는 기존 환경·origin 검사를 통과한 dev Preview에서 열린다. 얇은 Server Component route와 FSD 구조, 기존 화면·공통 예시 사진을 유지했다.
@@ -92,5 +92,7 @@
 - DB·세션·키를 변경하지 않았고 임시 SSH 규칙은 삭제됐다. 기존 세 유형 검사를 반복하지 않았다.
 
 ## 이번 범위 밖
+
+네 신청 유형과 관리자 사용자 수동 확인의 완료 상태, 남은 미확인 항목은 [통합 인계 1.9.0](shinhan-dev-api-handoff.md)에서 구분한다.
 
 운영/main 배포, 일반 공개 진입 동선 전환, worker 기동, 실제 알림톡 발송·시트 쓰기, 키 변경, 데이터 삭제, 세션 회수는 수행하지 않는다. 다중 탭 전체 조합·실제 서버 중단·외부 전달 성공을 검증했다고 보고하지 않는다.
