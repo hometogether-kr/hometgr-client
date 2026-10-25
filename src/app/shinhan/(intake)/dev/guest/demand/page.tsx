@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { getShinhanSessionMode } from "@/features/shinhan-bridge";
 import { ShinhanGuestDemandPage } from "@/pages-layer/shinhan-guest-intake";
 
 export const metadata: Metadata = {
@@ -8,7 +9,8 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function Page() {
-  if (process.env.NODE_ENV !== "development") notFound();
+export default async function Page() {
+  if (process.env.NODE_ENV !== "development" && (await getShinhanSessionMode()) !== "remote")
+    notFound();
   return <ShinhanGuestDemandPage />;
 }

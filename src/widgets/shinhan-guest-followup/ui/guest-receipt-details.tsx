@@ -18,7 +18,7 @@ export function GuestReceiptDetails({ example }: { example: GuestFollowupExample
     response.state === "NOT_SUBMITTED"
       ? "아직 응답하지 않음"
       : response.codes.length === 0
-        ? "선택한 걱정 없음 (동의 후 확인)"
+        ? "선택한 걱정 없음"
         : response.codes
             .map((code) => GUEST_CONCERNS.find((item) => item.code === code)?.title)
             .join(" · ");

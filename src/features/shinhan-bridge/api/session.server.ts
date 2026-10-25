@@ -1,90 +1,64 @@
 import "server-only";
 
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHmac } from "node:crypto";
 import { z } from "zod";
 
 import type { BridgeEnvironment } from "../config/environment.server";
-import { BridgeFailure, expiredSession, unavailable } from "./errors.server";
+import { createClientKey } from "./client-ip.server";
+import {
+  CSRF_COOKIE,
+  type IntakeSession,
+  readCookie,
+  readRemoteCsrf,
+  readSession,
+  sameSecret,
+  SESSION_LIFETIME_MS,
+  sessionSchema,
+} from "./cookies.server";
+import { expiredSession, unavailable } from "./errors.server";
 import { requestUpstream } from "./upstream.server";
 
-export const SESSION_COOKIE = "shinhan_intake";
-export const CSRF_COOKIE = "shinhan_csrf";
-const tokenSchema = z.string().regex(/^[A-Za-z0-9_-]{32,256}$/);
-const sessionSchema = z.object({
-  sessionToken: tokenSchema,
-  expiresAt: z.iso.datetime({ offset: true }),
-});
-const sessionEnvelopeSchema = z.object({ data: sessionSchema });
-type IntakeSession = z.infer<typeof sessionSchema>;
+export {
+  CSRF_COOKIE,
+  encodeSession,
+  getCookieNames,
+  prepareCsrf,
+  readCookie,
+  readSession,
+  sameSecret,
+  SESSION_COOKIE,
+  validateCsrf,
+} from "./cookies.server";
 
-function sign(value: string, environment: BridgeEnvironment) {
-  return createHmac("sha256", environment.SHINHAN_CLIENT_IP_HMAC_SECRET)
-    .update(value)
+const sessionEnvelopeSchema = z.strictObject({ data: sessionSchema });
+
+export function createBootstrapKey(
+  environment: BridgeEnvironment,
+  origin: string,
+  csrfNonce: string,
+) {
+  if (
+    !environment.SHINHAN_BFF_STATE_SECRET ||
+    !environment.SHINHAN_ALLOWED_ORIGINS.includes(origin) ||
+    !/^[a-f0-9]{64}$/.test(csrfNonce)
+  )
+    throw unavailable();
+  return createHmac("sha256", environment.SHINHAN_BFF_STATE_SECRET)
+    .update(`shinhan-bootstrap:v1\n${environment.SHINHAN_APP_ENV}\n${origin}\n${csrfNonce}`)
     .digest("hex");
 }
 
-export function sameSecret(left: string, right: string) {
-  const a = Buffer.from(left);
-  const b = Buffer.from(right);
-  return a.length === b.length && timingSafeEqual(a, b);
+function validateApiExpiry(session: IntakeSession) {
+  const expiresAt = Date.parse(session.expiresAt);
+  if (expiresAt <= Date.now() || expiresAt > Date.now() + SESSION_LIFETIME_MS + 30000)
+    throw unavailable();
+  return expiresAt;
 }
 
-export function readCookie(request: Request, name: string) {
-  const values = (request.headers.get("cookie") ?? "")
-    .split(";")
-    .map((item) => item.trim())
-    .filter((item) => item.startsWith(`${name}=`));
-  if (values.length > 1)
-    throw new BridgeFailure(403, "CSRF_INVALID", "신청 화면을 새로 열어 주세요.");
-  return values[0]?.slice(name.length + 1);
-}
-
-export function csrfToken(request: Request) {
-  const existing = readCookie(request, CSRF_COOKIE);
-  return existing && /^[a-f0-9]{64}$/.test(existing) ? existing : randomBytes(32).toString("hex");
-}
-
-export function validateCsrf(request: Request) {
-  const cookie = readCookie(request, CSRF_COOKIE);
-  const header = request.headers.get("X-Shinhan-CSRF");
-  if (
-    !cookie ||
-    !header ||
-    !/^[a-f0-9]{64}$/.test(cookie) ||
-    !/^[a-f0-9]{64}$/.test(header) ||
-    !sameSecret(cookie, header)
-  ) {
-    throw new BridgeFailure(403, "CSRF_INVALID", "개인정보 안내를 다시 확인한 뒤 시도해 주세요.");
-  }
-  return cookie;
-}
-
-export function encodeSession(session: IntakeSession, environment: BridgeEnvironment) {
-  const payload = Buffer.from(JSON.stringify(session)).toString("base64url");
-  return `${payload}.${sign(`session:${payload}`, environment)}`;
-}
-
-export function readSession(request: Request, environment: BridgeEnvironment) {
-  const cookie = readCookie(request, SESSION_COOKIE);
-  if (!cookie) return null;
-  if (cookie.length > 1200) throw expiredSession();
-  const [payload, signature, extra] = cookie.split(".");
-  if (
-    !payload ||
-    !signature ||
-    extra ||
-    !sameSecret(signature, sign(`session:${payload}`, environment))
-  )
-    throw expiredSession();
-  try {
-    const parsed = sessionSchema.safeParse(
-      JSON.parse(Buffer.from(payload, "base64url").toString("utf8")),
-    );
-    if (!parsed.success || Date.parse(parsed.data.expiresAt) <= Date.now()) throw expiredSession();
-    return parsed.data;
-  } catch {
-    throw expiredSession();
-  }
+function localInitializationKey(environment: BridgeEnvironment, origin: string, csrf: string) {
+  return createHmac("sha256", environment.SHINHAN_CLIENT_IP_HMAC_SECRET)
+    .update(`initialize:${origin}:${csrf}`)
+    .digest("hex");
 }
 
 interface SessionInitialization {
@@ -92,18 +66,16 @@ interface SessionInitialization {
   expiresAt: number;
 }
 
-// Keep successful initialization until fixed expiry, including when the first cookie response was lost.
-// This is deliberately process-local and is disabled together with the whole bridge in production.
+// Local compatibility only. Remote retries are coordinated by the API's persisted bootstrap key.
 const initializingSessions = new Map<string, SessionInitialization>();
 
-export async function initializeSession(
+async function initializeLocalSession(
   request: Request,
   environment: BridgeEnvironment,
   csrf: string,
+  origin: string,
 ) {
-  const existing = readSession(request, environment);
-  if (existing) return existing;
-  const key = sign(`initialize:${new URL(request.url).origin}:${csrf}`, environment);
+  const key = localInitializationKey(environment, origin, csrf);
   const now = Date.now();
   for (const [entryKey, entry] of initializingSessions) {
     if (entry.expiresAt <= now) initializingSessions.delete(entryKey);
@@ -121,14 +93,11 @@ export async function initializeSession(
             method: "POST",
             expectedStatus: 201,
             body: {},
-            // Only loopback origins are enabled; forwarded IP headers are intentionally untrusted.
-            clientKey: sign("local-client:loopback", environment),
+            clientKey: createClientKey(request, environment),
           },
           sessionEnvelopeSchema,
         );
-        const expiresAt = Date.parse(result.body.data.expiresAt);
-        if (expiresAt <= Date.now() || expiresAt > Date.now() + 7230000) throw unavailable();
-        entry.expiresAt = expiresAt;
+        entry.expiresAt = validateApiExpiry(result.body.data);
         return result.body.data;
       } catch (error) {
         initializingSessions.delete(key);
@@ -141,14 +110,56 @@ export async function initializeSession(
   return entry.promise;
 }
 
-export function forgetInitialization(request: Request, environment: BridgeEnvironment) {
+export async function initializeSession(
+  request: Request,
+  environment: BridgeEnvironment,
+  csrf: string,
+  origin: string,
+): Promise<IntakeSession & { replayed: boolean }> {
+  const existing = readSession(request, environment, origin);
+  if (existing) return { ...existing, replayed: false };
+  if (environment.SHINHAN_APP_ENV === "local") {
+    return {
+      ...(await initializeLocalSession(request, environment, csrf, origin)),
+      replayed: false,
+    };
+  }
+  const currentCsrf = readRemoteCsrf(request, environment, origin);
+  if (!currentCsrf || !sameSecret(csrf, currentCsrf.nonce)) throw expiredSession();
+  const result = await requestUpstream(
+    {
+      environment,
+      path: "sessions/bootstrap",
+      method: "POST",
+      expectedStatus: 201,
+      body: {},
+      clientKey: createClientKey(request, environment),
+      sessionKey: createBootstrapKey(environment, origin, currentCsrf.nonce),
+    },
+    sessionEnvelopeSchema,
+  );
+  const expiresAt = Math.min(
+    validateApiExpiry(result.body.data),
+    Date.parse(currentCsrf.expiresAt),
+  );
+  if (expiresAt <= Date.now()) throw expiredSession();
+  return {
+    sessionToken: result.body.data.sessionToken,
+    expiresAt: new Date(expiresAt).toISOString(),
+    replayed: result.replayed,
+  };
+}
+
+export function forgetInitialization(
+  request: Request,
+  environment: BridgeEnvironment,
+  origin: string,
+) {
+  if (environment.SHINHAN_APP_ENV !== "local") return;
   try {
     const csrf = readCookie(request, CSRF_COOKIE);
-    if (csrf)
-      initializingSessions.delete(
-        sign(`initialize:${new URL(request.url).origin}:${csrf}`, environment),
-      );
+    if (csrf) initializingSessions.delete(localInitializationKey(environment, origin, csrf));
   } catch {
-    // An ambiguous incoming cookie must not prevent the expired session cookie from being cleared.
+    // Ambiguous cookies must not prevent clearing an expired session.
   }
 }

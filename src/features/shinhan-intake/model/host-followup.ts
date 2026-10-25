@@ -52,7 +52,6 @@ export interface HostFollowupExample {
   readonly estimate: HostEstimateExample;
   step: HostFollowupStep;
   selectedCodes: HostConcernCode[];
-  optionalConsent: boolean | null;
   response: HostConcernResponse;
 }
 
@@ -113,7 +112,6 @@ export function createHostFollowupExample(
     estimate: createEstimateExample(),
     step: "result",
     selectedCodes: [],
-    optionalConsent: null,
     response: { state: "NOT_SUBMITTED", codes: [] },
   };
 }
@@ -121,7 +119,6 @@ export function createHostFollowupExample(
 export function confirmHostConcerns(example: HostFollowupExample): HostFollowupExample | null {
   const result = hostConcernResponseSchema.safeParse({
     codes: example.selectedCodes,
-    optionalConsent: example.optionalConsent,
   });
   if (!result.success) return null;
 

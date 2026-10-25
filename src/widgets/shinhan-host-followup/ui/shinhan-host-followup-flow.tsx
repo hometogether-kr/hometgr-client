@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type FormEvent, type ReactNode, useEffect, useId, useRef, useState } from "react";
+import { type FormEvent, type ReactNode, useEffect, useId, useRef } from "react";
 
 import {
   confirmHostConcerns,
@@ -13,7 +13,6 @@ import {
   useShinhanIntake,
 } from "@/features/shinhan-intake";
 import { BtnCta } from "@/shared/ui/btn-cta";
-import { Checkbox } from "@/shared/ui/checkbox";
 
 import { HOST_CONCERNS } from "../config/content";
 
@@ -139,7 +138,7 @@ export function HostIntroductionActions() {
     response.state === "NOT_SUBMITTED"
       ? "아직 응답하지 않음"
       : response.codes.length === 0
-        ? "선택한 걱정 없음 (동의 후 확인)"
+        ? "선택한 걱정 없음"
         : response.codes
             .map((code) => HOST_CONCERNS.find((item) => item.code === code)?.title)
             .join(" · ");
@@ -173,9 +172,7 @@ interface HostFollowupFlowProps {
 
 export function ShinhanHostFollowupFlow({ result, introduction }: HostFollowupFlowProps) {
   const { hostFollowup: example, updateHostFollowup } = useShinhanIntake();
-  const [attempted, setAttempted] = useState(false);
   const focusTarget = useRef<HTMLDivElement>(null);
-  const id = useId();
   const step = example?.step;
   useEffect(() => {
     if (!step) return;
@@ -193,7 +190,6 @@ export function ShinhanHostFollowupFlow({ result, introduction }: HostFollowupFl
         <Link href={SHINHAN_HOST_ESTIMATE_PATH}>호스트 견적 입력으로 돌아가기</Link>
       </section>
     );
-  const consentError = attempted && example.optionalConsent !== true;
   function toggleConcern(code: HostConcernCode) {
     updateHostFollowup((current) => ({
       ...current,
@@ -204,7 +200,6 @@ export function ShinhanHostFollowupFlow({ result, introduction }: HostFollowupFl
   }
   function handleConcernSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setAttempted(true);
     updateHostFollowup((current) => confirmHostConcerns(current) ?? current);
   }
   return (
@@ -242,40 +237,6 @@ export function ShinhanHostFollowupFlow({ result, introduction }: HostFollowupFl
               </button>
             ))}
           </fieldset>
-          <div className={styles.consent}>
-            <div className={styles.consentLine}>
-              <Checkbox
-                id={`${id}-consent`}
-                checked={example.optionalConsent === true}
-                aria-invalid={consentError || undefined}
-                aria-describedby={`${id}-help ${id}-error`}
-                onChange={(event) =>
-                  updateHostFollowup((current) => ({
-                    ...current,
-                    optionalConsent: event.target.checked,
-                  }))
-                }
-              />
-              <label htmlFor={`${id}-consent`}>걱정 항목 수집·이용 동의 (선택·개발 예시)</label>
-            </div>
-            <p id={`${id}-help`} className={styles.help}>
-              동의 화면의 개발 예시이며 선택 내용은 전송·저장되지 않습니다. 선택 동의의 승인된
-              전문은 아직 연결되지 않았습니다.
-            </p>
-            <ShinhanPrivacyLink>기본 신청 개인정보 전문 보기</ShinhanPrivacyLink>
-            <p className={styles.help}>
-              위 전문은 기본 신청용이며 걱정 항목의 선택 동의는 포함하지 않습니다.
-            </p>
-            <p
-              id={`${id}-error`}
-              role={consentError ? "alert" : undefined}
-              className={styles.error}
-            >
-              {consentError
-                ? "선택한 걱정으로 시작 방법을 보려면 개발 예시 동의에 체크해 주세요."
-                : ""}
-            </p>
-          </div>
           <div className={styles.actionRow}>
             <BtnCta
               variant="stroke"
@@ -298,9 +259,7 @@ export function ShinhanHostFollowupFlow({ result, introduction }: HostFollowupFl
             >
               소개서 안내만 미리보기 (개발용)
             </button>
-            <p className={styles.help}>
-              안내 화면으로만 이동하며 걱정 응답과 동의를 바꾸지 않습니다.
-            </p>
+            <p className={styles.help}>안내 화면으로만 이동하며 걱정 응답을 바꾸지 않습니다.</p>
           </div>
         </form>
       )}
