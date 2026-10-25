@@ -182,8 +182,8 @@ export function ShinhanGuestIntakeFlow({
             </BtnCta>
             <p role="status" className={styles.notice}>
               {verifiedContact === contactSnapshot
-                ? "입력 형식을 확인했어요. 아직 접수되지는 않았습니다."
-                : "입력 형식만 확인하며 신청을 저장하지 않습니다."}
+                ? "입력 형식을 확인했어요. 신청 저장 성공 전에는 접수가 완료되지 않습니다."
+                : "‘입력 내용 확인’ 버튼은 형식만 확인하며 신청을 저장하지 않습니다."}
             </p>
             {process.env.NODE_ENV === "development" && (
               <BtnCta
