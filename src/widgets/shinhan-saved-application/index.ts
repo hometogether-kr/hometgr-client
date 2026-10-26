@@ -4,6 +4,7 @@ export {
   SavedHostRegistrationFrame,
 } from "./ui/completion-frames";
 export {
+  SavedHomeLink,
   SavedHostIncome,
   SavedHostIntroductionActions,
   SavedHostResultActions,

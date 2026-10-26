@@ -16,6 +16,7 @@ import {
 import {
   SavedApplicationSummary,
   SavedGuestCompletionFrame,
+  SavedHomeLink,
   SavedHostIncome,
   SavedHostIntroductionActions,
   SavedHostIntroductionFrame,
@@ -56,11 +57,7 @@ export function ShinhanSavedApplicationPage() {
           hostRegistration={
             <SavedHostRegistrationFrame
               summary={<SavedApplicationSummary />}
-              actions={
-                <SavedNavigationButton step="receipt" variant="secondary">
-                  ← 기본 정보 다시 보기
-                </SavedNavigationButton>
-              }
+              actions={<SavedHomeLink role="host" />}
             />
           }
           hostResult={

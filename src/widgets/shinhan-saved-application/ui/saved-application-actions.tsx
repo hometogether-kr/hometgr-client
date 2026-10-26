@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -36,6 +37,27 @@ export function SavedNavigationButton({
     >
       {children}
     </BtnCta>
+  );
+}
+
+interface SavedHomeLinkProps {
+  role: "host" | "guest";
+}
+
+export function SavedHomeLink({ role }: SavedHomeLinkProps) {
+  const { pending, preparing, attempt } = useShinhanStorage();
+  const label = role === "host" ? "호스트 홈 화면으로 돌아가기" : "게스트 홈화면으로 돌아가기";
+  if (pending || preparing || attempt) {
+    return (
+      <span className={styles.homeLink} aria-disabled="true">
+        {label}
+      </span>
+    );
+  }
+  return (
+    <Link href={role === "host" ? "/shinhan/host" : "/shinhan/guest"} className={styles.homeLink}>
+      {label}
+    </Link>
   );
 }
 
@@ -153,6 +175,9 @@ export function SavedMutationError() {
     retryInSeconds,
     retryReady,
     clearRejectedAttempt,
+    refresh,
+    refreshing,
+    queryError,
     consents,
   } = useShinhanStorage();
   if (!error) return null;
@@ -191,9 +216,17 @@ export function SavedMutationError() {
         </BtnCta>
       )}
       {!error.retryable && !canReview && (
-        <p>
-          아래 조회 버튼으로 저장 상태를 확인할 수 있습니다. 새 신청을 자동으로 만들지 않습니다.
-        </p>
+        <div>
+          <BtnCta
+            variant="stroke"
+            loading={refreshing}
+            disabled={pending || preparing}
+            onClick={() => void refresh()}
+          >
+            신청 내역 다시 불러오기
+          </BtnCta>
+          {queryError && <p role="alert">{queryError.message}</p>}
+        </div>
       )}
     </section>
   );

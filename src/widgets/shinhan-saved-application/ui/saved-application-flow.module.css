@@ -42,6 +42,11 @@
   font-style: normal;
 }
 
+.concernForm .concerns {
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
 .concerns,
 .guideGrid {
   display: grid;
@@ -170,8 +175,7 @@
 }
 
 .centerActions,
-.receiptActions,
-.readActions {
+.receiptActions {
   display: grid;
   justify-items: center;
   gap: 16px;
@@ -333,10 +337,32 @@
   color: #b42318;
 }
 
-.readActions {
-  padding: 24px 0 0;
-  border-top: 1px solid var(--color-grayscale-200);
+.homeLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 64px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--color-primary-500);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
   text-align: center;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.homeLink:hover {
+  opacity: 0.8;
+}
+
+.homeLink[aria-disabled="true"] {
+  background: var(--color-grayscale-200);
+  color: var(--color-grayscale-400);
+  cursor: not-allowed;
 }
 
 .privacy {
@@ -409,7 +435,8 @@
   }
 
   .primaryButton,
-  .secondaryButton {
+  .secondaryButton,
+  .homeLink {
     min-height: 52px;
     font-size: 16px;
     line-height: 24px;
