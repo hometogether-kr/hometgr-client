@@ -68,10 +68,10 @@
 
 ### 기준과 외부 준비 상태
 
-- 서버 계약: `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-production-ingress-contract-v1.md` **1.0.0**.
-- 서버 인계: 같은 디렉터리의 `customer-web-handoff.md` **1.7.0**, 최신 0절 우선. 원격 세션 문서 1.1.1/bootstrap 1.1.0, 동의·걱정 2.0.0, 신청·조회 1.0.0 유지.
-- 사용자와 서버 인계에 따르면 welcome-web Production 기본 변수 7개는 등록 완료다. 운영 bridge 동의 GET 200 및 외부 연동 차단 확인은 **서버 담당의 결과**이며 고객이 다시 실행하지 않았다.
-- 여덟 번째 서버 전용 변수 `SHINHAN_CF_INGRESS_SECRET`과 CF 규칙은 아직 미완료다. 이 키가 없으면 새 코드도 화면 unavailable/API 503을 유지한다.
+- 최초 구현은 서버 계약 `C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-production-ingress-contract-v1.md` **1.0.0**과 인계 **1.7.0**을 기준으로 했다. 이후 계약 **1.1.0**, 같은 디렉터리의 `customer-web-handoff.md` **1.8.0**을 대조했다. 최신 0절을 우선한다.
+- 1.1.0은 운영 준비·적용 기록을 갱신했으며 BFF 구현 규칙은 그대로다. `31771ef3d2178946aab7fc92d5f3bd582f382b65`의 소스 4개에 추가 변경이 필요하지 않았다. 원격 세션 문서 1.1.1/bootstrap 1.1.0, 동의·걱정 2.0.0, 신청·조회 1.0.0 유지.
+- 사용자와 서버 인계에 따르면 welcome-web Production 변수 **8개**와 CF 규칙 **4개**(API 전용 strict TLS·cache bypass·헤더 remove→set)가 준비됐다. 운영 bridge 동의 GET 200·외부 연동 차단 및 CF 규칙 적용 확인은 **서버 담당의 결과**이며 고객이 다시 실행하지 않았다.
+- 여덟 번째 서버 전용 변수 `SHINHAN_CF_INGRESS_SECRET`도 서버 담당이 등록했다. 고객 작업에서 키를 읽거나 변경하지 않았다. 키 누락 시 새 코드가 화면 unavailable/API 503을 유지하는 정책은 그대로다.
 
 ### 고객 코드 변경
 
@@ -88,9 +88,11 @@
 - Web Headers가 제거할 수 있는 원시 공백은 검사 함수의 get/has 대역으로 따로 검증했다. 실제 네트워크에서 이미 정규화된 원시 헤더까지 관측했다는 뜻은 아니다.
 - 재현 스크립트: `C:/Users/PC/.codex/visualizations/2026/10/22/01a16209-7b74-77d0-8d98-02e59f6e504a/shinhan-production-ingress-check.cjs`. 같은 디렉터리의 `shinhan-production-ingress-report.json`에 항목과 소스 hash를 기록했다. 새 테스트 프레임워크나 의존성을 추가하지 않았다.
 - 변경 TypeScript 4개 파일 ESLint, `tsc --noEmit --incremental`, `git diff --check` 통과. 첫 타입 검사에서는 worktree 캐시 쓰기 권한 오류가 있어 동일 검사를 쓰기 가능한 실행으로 마쳤다. 독립 읽기 리뷰에서도 계약과 충돌하는 문제를 찾지 못했다.
-- 변경은 신한 BFF 소스 4개와 이 기록 1개뿐이다. 원본 dev의 미추적 기획서·UTM 문서 4개는 보존했다. 로컬 커밋만 준비하며 원격 푸시·배포는 수행하지 않는다.
+- 현재 운영/main `9a292dc9413858c65db6665f13e59aa3238ecd84` 대비 변경은 신한 BFF 소스 4개와 이 기록 1개뿐이다. 원본 dev의 미추적 기획서·UTM 문서 4개는 보존했다. 구현 커밋 `31771ef`를 기존 `codex/shinhan-production-only`에 푸시했다.
 - 이전 네 유형 저장·계산·전체 UI 검사와 이전 전체 BFF 검사는 반복하지 않았다. 이번 결과는 실제 브라우저·Cloudflare 경유 또는 운영 API 연결 검증을 대신하지 않는다.
 
-실제 CF 규칙/순서·cache bypass·TLS·Worker/기존 변환 규칙, 양쪽 ingress key 설정, 운영 도메인의 IPv4/IPv6 경로는 아직 확인하지 않았다. 이 준비 완료를 확인하기 전에는 푸시로 자동 배포를 유발하거나 수동 재배포·접수 활성화를 하지 않는다. 이후 배포 시 동의·CSRF·익명 세션과 직접 Vercel 별칭 차단만 우선 확인한다. 실제 신청·알림톡·시트 실행은 이번 변경에서 하지 않는다.
+최신 사용자 지시는 **현재 브랜치에서 커밋·푸시까지만 진행하고 main PR은 사용자가 직접 생성**하는 것이다. 고객 작업에서는 PR 생성·main/dev 병합·수동 운영 재배포를 하지 않았다. 기존 Production은 `9a292dc` / `dpl_8SQAhxTazapqfMACc49xxSF1Tuma`로 확인했다. 브랜치 푸시로 생성되는 Preview와 운영 배포는 구분한다.
+
+새 계약 대조에서 실행 코드 변경이 없어 기존 63개 모의 검사·타입·린트 검사는 반복하지 않았다. 코드 배포 후 두 운영 도메인의 동의·CSRF·익명 세션 연결, 직접 Vercel 별칭·위조 헤더 차단, IPv4/IPv6 실제 경로 확인은 **미완료**다. 사용자의 PR 반영과 운영 배포 이후 이 변경 경계만 확인해야 한다. 실제 신청·알림톡·시트 실행은 이번 변경에서 하지 않는다.
 
 일반 홈투게더·공유 의존성·서버 인증·DB·공통 계약은 변경하지 않는다. 서버 계약 변경 요청도 이번 구현에는 필요하지 않았다. 기존 원본 dev의 다른 작업과 도구·의존성·캐시는 보존한다.
