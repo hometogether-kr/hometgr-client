@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createHmac } from "node:crypto";
+import { createHmac, timingSafeEqual } from "node:crypto";
 import { isIP } from "node:net";
 
 import type { BridgeEnvironment } from "../config/environment.server";
@@ -57,16 +57,37 @@ export function normalizeClientIp(header: string | null) {
   return `v6:${compressIpv6(words)}`;
 }
 
+export function authenticateCloudflareClientIp(headers: Headers, environment: BridgeEnvironment) {
+  const supplied = headers.get("x-shinhan-ingress-key");
+  const expected = environment.SHINHAN_CF_INGRESS_SECRET;
+  if (
+    environment.SHINHAN_CLIENT_IP_MODE !== "cloudflare-vercel" ||
+    !supplied ||
+    !expected ||
+    supplied.length !== 64 ||
+    expected.length !== 64 ||
+    !/^[a-f0-9]{64}$/.test(supplied) ||
+    !/^[a-f0-9]{64}$/.test(expected) ||
+    !timingSafeEqual(Buffer.from(supplied, "ascii"), Buffer.from(expected, "ascii")) ||
+    headers.has("cf-worker")
+  )
+    throw unavailable();
+  return normalizeClientIp(headers.get("x-shinhan-visitor-ip"));
+}
+
 export function createClientKey(request: Request, environment: BridgeEnvironment) {
   const hmac = createHmac("sha256", environment.SHINHAN_CLIENT_IP_HMAC_SECRET);
   if (environment.SHINHAN_APP_ENV === "local") {
     return hmac.update("local-client:loopback").digest("hex");
   }
-  if (environment.SHINHAN_CLIENT_IP_MODE !== "vercel-direct" || process.env.VERCEL !== "1") {
+  if (environment.SHINHAN_CLIENT_IP_MODE === "local" || process.env.VERCEL !== "1") {
     throw unavailable();
   }
-  // Only the Vercel ingress header is trusted; alternate forwarding headers never provide fallback.
-  const normalizedIp = normalizeClientIp(request.headers.get("x-vercel-forwarded-for"));
+  // The selected ingress has one IP source; forwarding headers never provide fallback.
+  const normalizedIp =
+    environment.SHINHAN_CLIENT_IP_MODE === "cloudflare-vercel"
+      ? authenticateCloudflareClientIp(request.headers, environment)
+      : normalizeClientIp(request.headers.get("x-vercel-forwarded-for"));
   return hmac
     .update(`shinhan-client:v1\n${environment.SHINHAN_APP_ENV}\n${normalizedIp}`)
     .digest("hex");
