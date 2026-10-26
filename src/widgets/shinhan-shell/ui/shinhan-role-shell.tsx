@@ -81,15 +81,9 @@ export function ShinhanRoleFooter() {
             주식회사 핀타 · 사업자등록번호 481-87-04211 · 인천광역시 연수구 갯벌로 12, 511호(송도동,
             미추홀타워 별관A동)
           </p>
-          {process.env.NODE_ENV === "development" ? (
-            <Link href="/shinhan/privacy" className={styles.privacy}>
-              개인정보 수집·이용 동의 전문
-            </Link>
-          ) : (
-            <span role="link" aria-disabled="true" className={styles.privacy}>
-              개인정보 수집·이용 동의 전문
-            </span>
-          )}
+          <Link href="/shinhan/privacy" className={styles.privacy}>
+            개인정보 수집·이용 동의 전문
+          </Link>
         </div>
       </div>
     </footer>

@@ -33,6 +33,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px 32px;
+  margin-bottom: 32px;
   border: 0;
   padding: 0;
 }
@@ -130,6 +131,28 @@
   height: auto;
   padding: 16px 20px;
   font-size: 18px;
+}
+.homeLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: var(--color-primary-500);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+  text-align: center;
+  word-break: keep-all;
+}
+.homeLink:hover {
+  opacity: 0.8;
+}
+.homeLink:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 4px;
 }
 .secondaryButton {
   width: 320px;
@@ -331,7 +354,8 @@
     gap: 12px;
   }
   .primaryButton,
-  .secondaryButton {
+  .secondaryButton,
+  .homeLink {
     width: 100%;
     min-height: 52px;
     font-size: 16px;

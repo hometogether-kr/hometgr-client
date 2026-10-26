@@ -12,7 +12,11 @@ import {
 } from "@/features/shinhan-intake";
 import { BtnCta } from "@/shared/ui/btn-cta";
 
-import { SavedMutationError, SavedNavigationButton } from "./saved-application-actions";
+import {
+  SavedHomeLink,
+  SavedMutationError,
+  SavedNavigationButton,
+} from "./saved-application-actions";
 import { SavedApplicationSummary } from "./saved-application-details";
 
 import styles from "./saved-application-flow.module.css";
@@ -53,9 +57,6 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
     submitConcerns,
     guideMode,
     setGuideMode,
-    refresh,
-    refreshing,
-    queryError,
     fieldErrors,
   } = storage;
   const focusTarget = useRef<HTMLDivElement>(null);
@@ -149,7 +150,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
       {step === "introduction" && isHostEstimate && props.hostIntroduction}
       {step === "introComplete" && isHostEstimate && props.hostIntroComplete}
       {step === "concerns" && (
-        <form noValidate onSubmit={handleSubmit}>
+        <form noValidate onSubmit={handleSubmit} className={styles.concernForm}>
           <header className={styles.heading}>
             <h1>
               {isHostEstimate ? "어떤 점이 가장 걱정되세요?" : "홈쉐어링에서 어떤 점이 걱정되나요?"}
@@ -237,10 +238,8 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
             </div>
           )}
           <div className={styles.centerActions}>
-            <SavedNavigationButton step="notice">궁금한 점 전달하기</SavedNavigationButton>
-            <p className={styles.help}>
-              다음 안내 화면으로 이동합니다. 질문을 작성하거나 전송하지 않습니다.
-            </p>
+            <SavedNavigationButton step="notice">집주인 프로필 보고 결정하기</SavedNavigationButton>
+            <p className={styles.help}>방과 집주인 정보를 안내받는 방법을 확인하세요.</p>
             <SavedNavigationButton step="concerns" variant="secondary">
               걱정 다시 선택하기
             </SavedNavigationButton>
@@ -256,12 +255,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
               concernLabels={Object.fromEntries(concerns.map(({ code, title }) => [code, title]))}
             />
             {isGuest ? (
-              <>
-                <SavedNavigationButton step="examples">공간 사진 다시 보기</SavedNavigationButton>
-                <SavedNavigationButton step="guide" variant="secondary">
-                  함께 확인할 내용 다시 보기
-                </SavedNavigationButton>
-              </>
+              <SavedHomeLink role="guest" />
             ) : (
               <SavedNavigationButton step="complete" variant="secondary">
                 심사 안내로 돌아가기
@@ -300,28 +294,6 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
           </div>
         </section>
       )}
-      <section className={styles.readActions} aria-label="저장 상태 확인">
-        <BtnCta
-          variant="stroke"
-          loading={refreshing}
-          disabled={pending || preparing || refreshing}
-          onClick={() => void refresh()}
-        >
-          저장 상태 다시 확인
-        </BtnCta>
-        <p className={styles.help}>
-          현재 신청을 조회합니다. 새 접수·걱정 응답·소개서 신청은 전송하지 않습니다.
-        </p>
-        {queryError && (
-          <div role="alert" className={styles.fieldError}>
-            <p>{queryError.message}</p>
-            <p>
-              마지막으로 확인한 신청 내역을 표시하고 있습니다. 조회 실패로 접수가 취소되거나 다시
-              제출되지는 않습니다.
-            </p>
-          </div>
-        )}
-      </section>
       <div className={styles.privacy}>
         <ShinhanPrivacyLink>기본 신청 개인정보 전문 보기</ShinhanPrivacyLink>
       </div>

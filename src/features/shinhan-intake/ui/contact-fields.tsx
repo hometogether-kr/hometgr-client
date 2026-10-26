@@ -6,6 +6,7 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { TextField } from "@/shared/ui/text-field";
 
 import { useShinhanIntake } from "../model/intake-context";
+import { formatShinhanPhone } from "../model/phone";
 import { useShinhanStorage } from "../model/storage-context";
 import { ShinhanLivePreparation } from "./live-submit";
 import { ShinhanPrivacyLink } from "./privacy-navigation";
@@ -41,13 +42,13 @@ export function ShinhanPhoneField({
       label={label}
       type="tel"
       autoComplete="tel-national"
-      inputMode="tel"
+      inputMode="numeric"
       placeholder="010-0000-0000"
       value={draft.phone}
       maxLength={20}
       disabled={pending || preparing || attempt !== null}
       onChange={(event) => {
-        const phone = event.target.value;
+        const phone = formatShinhanPhone(event.target.value);
         updateDraft((current) => ({ ...current, phone }));
       }}
       error={error ?? fieldErrors.phone?.[0]}
