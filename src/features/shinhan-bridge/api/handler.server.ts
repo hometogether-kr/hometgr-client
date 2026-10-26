@@ -10,6 +10,7 @@ import {
 } from "@/domains/shinhan-application";
 
 import { type BridgeEnvironment, getBridgeEnvironment } from "../config/environment.server";
+import { authenticateCloudflareClientIp } from "./client-ip.server";
 import { BridgeFailure, expiredSession, unavailable } from "./errors.server";
 import {
   encodeSession,
@@ -127,6 +128,11 @@ export async function handleShinhanBridge(request: Request, segments: unknown) {
     if (!environment) throw unavailable();
     if (route.action === "sessions" && environment.SHINHAN_APP_ENV !== "local") version = "1.1.0";
     origin = validateBrowserRequest(request, environment);
+    // Check every API action before touching cookies, including reads and session reuse.
+    if (environment.SHINHAN_CLIENT_IP_MODE === "cloudflare-vercel") {
+      if (request.headers.get("x-forwarded-proto") !== "https") throw unavailable();
+      authenticateCloudflareClientIp(request.headers, environment);
+    }
     const names = getCookieNames(environment);
     if (route.action === "consents") {
       const result = await requestUpstream(
