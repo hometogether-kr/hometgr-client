@@ -130,8 +130,12 @@ export function HostRegistrationForm() {
       </div>
       <ShinhanRequiredConsentFields error={contactErrors.requiredConsent?.[0]} />
       <div className={styles.actions}>
-        <ShinhanLiveSubmit className={styles.nextButton}>방 등록 신청하기</ShinhanLiveSubmit>
-        <p className={styles.hint}>입력하신 정보를 검토한 뒤, 심사 결과를 연락드려요.</p>
+        <ShinhanLiveSubmit
+          className={styles.nextButton}
+          notice="신청 후 접수 내역을 확인할 수 있어요. 입력하신 정보를 검토한 뒤 심사 결과를 안내해 드릴게요."
+        >
+          방 등록 신청하기
+        </ShinhanLiveSubmit>
       </div>
       {process.env.NODE_ENV === "development" && (
         <div className={styles.validation}>
