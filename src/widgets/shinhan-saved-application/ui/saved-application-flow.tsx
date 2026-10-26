@@ -4,8 +4,8 @@ import Link from "next/link";
 import { type FormEvent, type ReactNode, useEffect, useRef } from "react";
 
 import {
+  ShinhanConsentStatus,
   ShinhanHostProgress,
-  ShinhanLivePreparation,
   ShinhanPrivacyLink,
   ShinhanSessionRestart,
   useShinhanStorage,
@@ -126,7 +126,7 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
       )}
       <SavedMutationError />
       <ShinhanSessionRestart />
-      {!consents && <ShinhanLivePreparation />}
+      {!consents && <ShinhanConsentStatus />}
       {step === "complete" &&
         (application.applicationType === "HOST_REGISTRATION"
           ? props.hostRegistration

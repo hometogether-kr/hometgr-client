@@ -16,7 +16,6 @@ import {
   ShinhanLiveSubmit,
   ShinhanMoveInDateField,
   ShinhanPhoneField,
-  ShinhanPrivacyLink,
   ShinhanRequiredConsentFields,
   ShinhanSavedApplicationNotice,
   useShinhanIntake,
@@ -325,7 +324,6 @@ export function ShinhanGuestIntakeFlow({
                 <p className={styles.notice}>
                   다음 화면에서 공통 공간 예시와 연락처 입력을 확인할 수 있어요.
                 </p>
-                <ShinhanPrivacyLink>개인정보 수집·이용 전문 보기</ShinhanPrivacyLink>
               </div>
             </fieldset>
           </form>

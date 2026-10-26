@@ -50,7 +50,6 @@ export {
 } from "./ui/guest-entry";
 export { ShinhanHostFormButton } from "./ui/host-form-button";
 export {
-  ShinhanLivePreparation,
   ShinhanLiveSubmit,
   ShinhanSavedApplicationNotice,
   ShinhanSessionRestart,
@@ -60,5 +59,5 @@ export {
   ShinhanPrivacyLink,
   ShinhanPrivacyReturn,
 } from "./ui/privacy-navigation";
-export { ServerConsentDocument, ShinhanServerConsentSummary } from "./ui/server-consent";
+export { ServerConsentDocument, ShinhanConsentStatus } from "./ui/server-consent";
 export { ShinhanHostProgress } from "./ui/shinhan-host-progress";

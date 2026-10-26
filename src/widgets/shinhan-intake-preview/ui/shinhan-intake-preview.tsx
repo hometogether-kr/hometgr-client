@@ -8,7 +8,6 @@ import {
   type ShinhanApplicationType,
   ShinhanContactFields,
   shinhanContactSchema,
-  ShinhanPrivacyLink,
   useShinhanIntake,
 } from "@/features/shinhan-intake";
 import { BtnCta } from "@/shared/ui/btn-cta";
@@ -116,10 +115,6 @@ export function ShinhanIntakePreview() {
               <h2 id="shinhan-preview-conditions-heading">검증 1단계: 조건·선택값</h2>
               <PreviewConditions />
               <PreviewSelectionMemory />
-              <div className={styles.privacyRow}>
-                <span>작성 중인 상태로 개인정보 전문 확인</span>
-                <ShinhanPrivacyLink />
-              </div>
               <BtnCta
                 className={styles.fullWidth}
                 onClick={() => {

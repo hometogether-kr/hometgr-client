@@ -50,7 +50,8 @@ interface StorageContextValue {
   sessionMode: "local" | "remote" | "unavailable";
   submissionAvailable: boolean;
   consents: ShinhanConsents | null;
-  consentPreparationStarted: boolean;
+  consentsLoading: boolean;
+  consentError: Error | null;
   application: ShinhanApplication | undefined;
   preparing: boolean;
   pending: boolean;
@@ -59,7 +60,7 @@ interface StorageContextValue {
   attempt: StorageAttempt | null;
   retryInSeconds: number;
   retryReady: boolean;
-  prepare: () => Promise<void>;
+  reloadConsents: () => Promise<void>;
   sessionExpired: boolean;
   restartSession: () => Promise<void>;
   submitApplication: () => Promise<boolean>;
@@ -132,6 +133,23 @@ function toStorageError(error: unknown): ShinhanApiError {
   });
 }
 
+async function withSessionLock<T>(
+  sessionMode: ShinhanStorageProviderProps["sessionMode"],
+  action: () => Promise<T>,
+): Promise<T> {
+  if (navigator.locks) return navigator.locks.request("shinhan-intake-session", action);
+  if (sessionMode === "local") return action();
+  throw new ShinhanApiError(
+    "이 브라우저에서는 신청할 수 없어요. 다른 브라우저에서 다시 시도해 주세요.",
+    {
+      status: 0,
+      kind: "unknown",
+      code: "SESSION_LOCK_UNAVAILABLE",
+      retryable: false,
+    },
+  );
+}
+
 function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) {
   const { draft, updateDraft } = useShinhanIntake();
   const submissionAvailable =
@@ -143,10 +161,13 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
         draft?.applicationType === "GUEST_DEMAND"));
   const queryClient = useQueryClient();
   const [applicationId, setApplicationId] = useState<string | null>(null);
+  const [sessionResetRequired, setSessionResetRequired] = useState(false);
+  const [attempt, setAttempt] = useState<StorageAttempt | null>(null);
   const consentsQuery = useQuery<ShinhanConsents>({
     queryKey: shinhanApplicationKeys.consents(),
-    queryFn: ({ signal }) => getShinhanConsents(signal),
-    enabled: false,
+    // Consent reads also set the CSRF cookie; serialize them across tabs.
+    queryFn: ({ signal }) => withSessionLock(sessionMode, () => getShinhanConsents(signal)),
+    enabled: sessionMode !== "unavailable" && !sessionResetRequired && !attempt,
   });
   const applicationQuery = useQuery({
     queryKey: shinhanApplicationKeys.detail(applicationId),
@@ -159,13 +180,10 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
   const consents = consentsQuery.data ?? null;
   const application = applicationQuery.data;
   const [preparing, setPreparing] = useState(false);
-  const [consentPreparationStarted, setConsentPreparationStarted] = useState(false);
   const [pending, setPending] = useState(false);
   const busy = useRef(false);
   const retainedAttempt = useRef<StorageAttempt | null>(null);
-  const [attempt, setAttempt] = useState<StorageAttempt | null>(null);
   const [error, setError] = useState<ShinhanApiError | null>(null);
-  const [sessionResetRequired, setSessionResetRequired] = useState(false);
   const lastCsrfToken = useRef<string | null>(null);
   const [retryAt, setRetryAt] = useState(0);
   const [retryInSeconds, setRetryInSeconds] = useState(0);
@@ -204,64 +222,16 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
     setRetryAt(next.retryAfter ? Date.now() + next.retryAfter * 1000 : 0);
   }
 
-  async function prepare() {
+  async function reloadConsents() {
     if (
-      !submissionAvailable ||
+      sessionMode === "unavailable" ||
       busy.current ||
       retainedAttempt.current ||
       sessionExpired ||
       Date.now() < retryAt
     )
       return;
-    busy.current = true;
-    setPreparing(true);
-    setConsentPreparationStarted(true);
-    setError(null);
-    try {
-      const initialize = async () => {
-        const snapshot = await getShinhanConsents();
-        lastCsrfToken.current = snapshot.csrfToken;
-        await createShinhanSession(snapshot.csrfToken);
-        return snapshot;
-      };
-      // Multiple tabs must share the first CSRF cookie and anonymous session.
-      let snapshot: ShinhanConsents;
-      if (navigator.locks) {
-        try {
-          snapshot = await navigator.locks.request("shinhan-intake-session", initialize);
-        } catch (cause) {
-          if (cause instanceof ShinhanApiError) throw cause;
-          throw new ShinhanApiError(
-            "신청 준비를 위한 브라우저 잠금을 사용할 수 없습니다. 지원되는 브라우저에서 다시 시도해 주세요.",
-            {
-              status: 0,
-              kind: "unknown",
-              code: "SESSION_LOCK_UNAVAILABLE",
-              retryable: false,
-            },
-          );
-        }
-      } else if (sessionMode === "local") {
-        snapshot = await initialize();
-      } else {
-        throw new ShinhanApiError(
-          "이 브라우저에서는 안전하게 신청을 준비할 수 없습니다. 지원되는 브라우저에서 다시 시도해 주세요.",
-          {
-            status: 0,
-            kind: "unknown",
-            code: "SESSION_LOCK_UNAVAILABLE",
-            retryable: false,
-          },
-        );
-      }
-      queryClient.setQueryData(shinhanApplicationKeys.consents(), snapshot);
-      updateDraft((current) => ({ ...current, requiredConsent: false }));
-    } catch (cause) {
-      recordError(cause);
-    } finally {
-      busy.current = false;
-      setPreparing(false);
-    }
+    await consentsQuery.refetch();
   }
 
   async function restartSession() {
@@ -271,17 +241,8 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
     setSessionResetRequired(true);
     try {
       const reset = () => resetShinhanSession(lastCsrfToken.current ?? consents?.csrfToken ?? null);
-      if (navigator.locks) await navigator.locks.request("shinhan-intake-session", reset);
-      else if (sessionMode === "local") await reset();
-      else
-        throw new ShinhanApiError("지원되는 브라우저에서 새 신청 세션을 시작해 주세요.", {
-          status: 0,
-          kind: "unknown",
-          code: "SESSION_LOCK_UNAVAILABLE",
-          retryable: false,
-        });
+      await withSessionLock(sessionMode, reset);
       await queryClient.cancelQueries();
-      await queryClient.resetQueries();
       queryClient.clear();
       setApplicationId(null);
       retainedAttempt.current = null;
@@ -293,9 +254,12 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
       setError(null);
       setRetryAt(0);
       setRetryInSeconds(0);
-      setConsentPreparationStarted(false);
       setSessionResetRequired(false);
-      updateDraft((current) => ({ ...current, requiredConsent: false }));
+      updateDraft((current) => ({
+        ...current,
+        requiredConsent: false,
+        requiredConsentVersion: null,
+      }));
     } catch (cause) {
       recordError(cause);
     } finally {
@@ -323,7 +287,12 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
       const credentials = { csrfToken: consents.csrfToken, idempotencyKey: next.idempotencyKey };
       const saved =
         next.kind === "create"
-          ? await createShinhanApplication({ ...credentials, input: next.input })
+          ? await withSessionLock(sessionMode, async () => {
+              // Keep the same CSRF, UUID and body if bootstrap or submission loses its response.
+              lastCsrfToken.current = credentials.csrfToken;
+              await createShinhanSession(credentials.csrfToken);
+              return createShinhanApplication({ ...credentials, input: next.input });
+            })
           : next.kind === "concerns"
             ? await submitShinhanConcerns({
                 ...credentials,
@@ -371,6 +340,23 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
     )
       return false;
     try {
+      if (draft.requiredConsent && draft.requiredConsentVersion !== consents.required.version) {
+        updateDraft((current) => ({
+          ...current,
+          requiredConsent: false,
+          requiredConsentVersion: null,
+        }));
+        throw new ShinhanApiError(
+          "개인정보 안내가 변경되었어요. 내용을 확인하고 다시 동의해 주세요.",
+          {
+            status: 422,
+            kind: "validation",
+            code: "CONSENT_VERSION_MISMATCH",
+            retryable: false,
+            fieldErrors: { requiredConsent: ["변경된 개인정보 수집·이용 안내에 동의해 주세요."] },
+          },
+        );
+      }
       const input = prepareShinhanApplicationInput(draft, consents.required.version);
       if (application) {
         if (application.applicationType !== "HOST_ESTIMATE") return false;
@@ -450,7 +436,11 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
     if (busy.current || !isCorrectable(error)) return;
     if (error?.code === "CONSENT_VERSION_MISMATCH" || error?.code === "CSRF_INVALID") {
       void queryClient.resetQueries({ queryKey: shinhanApplicationKeys.consents() });
-      updateDraft((current) => ({ ...current, requiredConsent: false }));
+      updateDraft((current) => ({
+        ...current,
+        requiredConsent: false,
+        requiredConsentVersion: null,
+      }));
     }
     retainedAttempt.current = null;
     setAttempt(null);
@@ -468,7 +458,8 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
         sessionMode,
         submissionAvailable,
         consents,
-        consentPreparationStarted,
+        consentsLoading: consentsQuery.isFetching,
+        consentError: consentsQuery.error,
         application,
         preparing,
         pending,
@@ -477,7 +468,7 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
         attempt,
         retryInSeconds,
         retryReady: Boolean(attempt && error?.retryable && retryInSeconds === 0 && !pending),
-        prepare,
+        reloadConsents,
         sessionExpired,
         restartSession,
         submitApplication,

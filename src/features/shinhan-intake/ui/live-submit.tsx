@@ -9,47 +9,14 @@ import { BtnCta } from "@/shared/ui/btn-cta";
 import { SHINHAN_SAVED_APPLICATION_PATH } from "../config/routes";
 import { useShinhanStorage } from "../model/storage-context";
 
-export function ShinhanLivePreparation() {
-  const storage = useShinhanStorage();
-  if (!storage.submissionAvailable) return null;
-  return (
-    <div className="mb-4 space-y-3 rounded-xl border border-primary-200 bg-primary-50 p-4 text-sm leading-6 text-grayscale-700">
-      <p>
-        {storage.application
-          ? "기존 신청은 유지됩니다. 신청 세션을 다시 준비한 뒤 계속해 주세요."
-          : "개인정보 수집·이용 안내를 불러온 뒤 필수 동의를 확인해 주세요."}
-      </p>
-      {storage.consents ? (
-        <p role="status">신청할 준비가 됐어요. 입력 내용과 필수 동의를 확인해 주세요.</p>
-      ) : (
-        <BtnCta
-          type="button"
-          variant="stroke"
-          className="w-full whitespace-normal"
-          disabled={
-            storage.preparing ||
-            storage.pending ||
-            storage.attempt !== null ||
-            storage.sessionExpired ||
-            storage.retryInSeconds > 0
-          }
-          onClick={() => {
-            void storage.prepare();
-          }}
-        >
-          {storage.preparing ? "신청 준비 중…" : "신청 준비하기"}
-        </BtnCta>
-      )}
-    </div>
-  );
-}
-
 export function ShinhanLiveSubmit({
   children,
   className,
+  notice = "신청이 완료되면 접수 내역을 확인할 수 있어요.",
 }: {
   children: ReactNode;
   className?: string;
+  notice?: string;
 }) {
   const storage = useShinhanStorage();
   const router = useRouter();
@@ -85,12 +52,12 @@ export function ShinhanLiveSubmit({
           void submit();
         }}
       >
-        {storage.pending ? "저장 결과 확인 중…" : children}
+        {storage.pending ? "신청 중…" : children}
       </BtnCta>
       <p className="text-sm leading-6 text-grayscale-600">
         {storage.submissionAvailable
-          ? "접수가 확인되면 완료 화면으로 이동합니다. 안내 메시지 전달 여부는 접수와 별도로 확인해 주세요."
-          : "실제 접수는 연결 준비가 완료된 뒤 이용할 수 있습니다."}
+          ? notice
+          : "지금은 신청을 이용할 수 없어요. 잠시 후 다시 시도해 주세요."}
       </p>
       {storage.error && (
         <div
@@ -128,19 +95,6 @@ export function ShinhanLiveSubmit({
               onClick={storage.clearRejectedAttempt}
             >
               입력 내용 다시 확인
-            </BtnCta>
-          )}
-          {!storage.attempt && !storage.consents && !storage.sessionExpired && (
-            <BtnCta
-              type="button"
-              variant="stroke"
-              className="w-full whitespace-normal"
-              disabled={storage.preparing || storage.retryInSeconds > 0}
-              onClick={() => {
-                void storage.prepare();
-              }}
-            >
-              신청 준비 다시 시도
             </BtnCta>
           )}
           <ShinhanSessionRestart />
