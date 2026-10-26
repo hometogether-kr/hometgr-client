@@ -10,7 +10,6 @@ import {
   shinhanHostEstimateSchema,
   type ShinhanHostEstimateValues,
   ShinhanLiveSubmit,
-  ShinhanPrivacyLink,
   useShinhanIntake,
   useShinhanStorage,
 } from "@/features/shinhan-intake";
@@ -344,7 +343,6 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                 빈방 예상 월세 확인하기 →
               </BtnCta>
               <p className={styles.hint}>실제 월세는 평면도와 방 상태 확인 후 달라질 수 있어요.</p>
-              <ShinhanPrivacyLink>개인정보 수집·이용 전문 보기</ShinhanPrivacyLink>
             </div>
           </fieldset>
         </form>

@@ -8,9 +8,8 @@ import { TextField } from "@/shared/ui/text-field";
 import { useShinhanIntake } from "../model/intake-context";
 import { formatShinhanPhone } from "../model/phone";
 import { useShinhanStorage } from "../model/storage-context";
-import { ShinhanLivePreparation } from "./live-submit";
 import { ShinhanPrivacyLink } from "./privacy-navigation";
-import { ShinhanServerConsentSummary } from "./server-consent";
+import { ShinhanConsentStatus } from "./server-consent";
 
 import styles from "./shinhan-intake.module.css";
 
@@ -59,23 +58,28 @@ export function ShinhanPhoneField({
 
 export function ShinhanRequiredConsentFields({ error }: { error?: string }) {
   const { draft, updateDraft } = useShinhanIntake();
-  const { pending, preparing, attempt, fieldErrors } = useShinhanStorage();
+  const { pending, preparing, attempt, fieldErrors, consents } = useShinhanStorage();
   const consentId = useId();
   const consentError =
     error ?? fieldErrors.requiredConsent?.[0] ?? fieldErrors["requiredConsent.agreed"]?.[0];
   if (!draft) return null;
   return (
     <div>
-      <ShinhanLivePreparation />
       <div className={styles.consentRow}>
         <Checkbox
           id={consentId}
           size="24"
-          checked={draft.requiredConsent}
-          disabled={pending || preparing || attempt !== null}
+          checked={
+            draft.requiredConsent && draft.requiredConsentVersion === consents?.required.version
+          }
+          disabled={!consents || pending || preparing || attempt !== null}
           onChange={(event) => {
             const requiredConsent = event.target.checked;
-            updateDraft((current) => ({ ...current, requiredConsent }));
+            updateDraft((current) => ({
+              ...current,
+              requiredConsent,
+              requiredConsentVersion: requiredConsent ? (consents?.required.version ?? null) : null,
+            }));
           }}
           aria-invalid={Boolean(consentError) || undefined}
           aria-describedby={consentError ? `${consentId}-error` : undefined}
@@ -84,7 +88,7 @@ export function ShinhanRequiredConsentFields({ error }: { error?: string }) {
         <label htmlFor={consentId}>개인정보 수집·이용 동의 (필수)</label>
         <ShinhanPrivacyLink />
       </div>
-      <ShinhanServerConsentSummary />
+      <ShinhanConsentStatus />
       {consentError && (
         <p id={`${consentId}-error`} className={styles.error}>
           {consentError}
