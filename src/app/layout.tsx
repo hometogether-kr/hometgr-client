@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 
 import { SessionHintProvider } from "@/domains/user";
+import { MarketingAttributionObserver } from "@/features/capture-marketing-attribution";
 import { hasSessionCookie } from "@/shared/api/server";
 import { ToastProvider } from "@/shared/ui/toast";
 
@@ -47,7 +48,10 @@ export default async function RootLayout({
       <body className="flex min-h-full flex-col font-sans">
         <SessionHintProvider authenticated={authenticated}>
           <QueryProvider>
-            <ToastProvider>{children}</ToastProvider>
+            <ToastProvider>
+              <MarketingAttributionObserver />
+              {children}
+            </ToastProvider>
           </QueryProvider>
         </SessionHintProvider>
       </body>

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useCallback, useState } from "react";
 
+import { useBetaFlowInput } from "@/features/beta-tracking";
 import {
   SHINHAN_HOST_FOLLOWUP_PATH,
   ShinhanContactFields,
@@ -41,6 +42,9 @@ const furnitureStates = [
 
 export function ShinhanHostEstimateFlow({ introduction, incomePreview }: EstimateFlowProps) {
   const { draft, updateDraft, startHostFollowup } = useShinhanIntake();
+  const { trackValidInput, markResultReady } = useBetaFlowInput("HOST_ESTIMATE", {
+    enabled: draft?.applicationType === "HOST_ESTIMATE",
+  });
   const storage = useShinhanStorage();
   const locked = storage.pending || storage.attempt !== null || storage.preparing;
   const router = useRouter();
@@ -54,25 +58,29 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
   const closeAddressSearch = useCallback(() => setAddressOpen(false), []);
   const selectAddress = useCallback(
     (address: SelectedAddress) => {
+      const selectedAddress = {
+        addressSource: "KAKAO_POSTCODE" as const,
+        addressRaw: address.address,
+        sido: address.sido,
+        sigungu: address.sigungu,
+      };
       updateDraft((current) =>
         current.applicationType === "HOST_ESTIMATE"
           ? {
               ...current,
               values: {
                 ...current.values,
-                address: {
-                  addressSource: "KAKAO_POSTCODE",
-                  addressRaw: address.address,
-                  sido: address.sido,
-                  sigungu: address.sigungu,
-                },
+                address: selectedAddress,
               },
             }
           : current,
       );
       setErrors((current) => ({ ...current, address: "" }));
+      if (shinhanHostEstimateSchema.shape.address.safeParse(selectedAddress).success) {
+        trackValidInput();
+      }
     },
-    [updateDraft],
+    [trackValidInput, updateDraft],
   );
 
   if (draft?.applicationType !== "HOST_ESTIMATE") return null;
@@ -167,6 +175,7 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
         <form className={styles.contactForm} onSubmit={handleContactCheck} noValidate>
           <h2>휴대폰 번호를 입력해 주세요</h2>
           <ShinhanContactFields
+            onValidInput={trackValidInput}
             errors={{
               phone: contactErrorValues?.phone === draft.phone ? errors.phone : undefined,
               requiredConsent:
@@ -187,7 +196,9 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
               )}
             </>
           )}
-          <ShinhanLiveSubmit className={styles.cta}>예상 수익 확인하기</ShinhanLiveSubmit>
+          <ShinhanLiveSubmit onSaved={markResultReady} className={styles.cta}>
+            예상 수익 확인하기
+          </ShinhanLiveSubmit>
           {process.env.NODE_ENV === "development" && (
             <BtnCta
               variant="stroke"
@@ -250,6 +261,12 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                       ...current,
                       buildingDong: value,
                     }));
+                    if (
+                      value.trim() &&
+                      shinhanHostEstimateSchema.shape.buildingDong.safeParse(value).success
+                    ) {
+                      trackValidInput();
+                    }
                   }}
                   className={styles.textField}
                 />
@@ -262,6 +279,12 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                   onChange={(event) => {
                     const value = event.target.value;
                     updateValues("unitHo", (current) => ({ ...current, unitHo: value }));
+                    if (
+                      value.trim() &&
+                      shinhanHostEstimateSchema.shape.unitHo.safeParse(value).success
+                    ) {
+                      trackValidInput();
+                    }
                   }}
                   className={styles.textField}
                 />
@@ -290,12 +313,19 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                           key={state.value}
                           selected={values.furniture[item.key] === state.value}
                           className={styles.segment}
-                          onClick={() =>
+                          onClick={() => {
                             updateValues(`furniture.${item.key}`, (current) => ({
                               ...current,
                               furniture: { ...current.furniture, [item.key]: state.value },
-                            }))
-                          }
+                            }));
+                            if (
+                              shinhanHostEstimateSchema.shape.furniture.shape[item.key].safeParse(
+                                state.value,
+                              ).success
+                            ) {
+                              trackValidInput();
+                            }
+                          }}
                         >
                           {state.label}
                         </SelectTile>
@@ -321,12 +351,15 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                     key={count}
                     selected={values.bathroomCount === count}
                     className={styles.segment}
-                    onClick={() =>
+                    onClick={() => {
                       updateValues("bathroomCount", (current) => ({
                         ...current,
                         bathroomCount: count,
-                      }))
-                    }
+                      }));
+                      if (shinhanHostEstimateSchema.shape.bathroomCount.safeParse(count).success) {
+                        trackValidInput();
+                      }
+                    }}
                   >
                     화장실 {count}개
                   </SelectTile>

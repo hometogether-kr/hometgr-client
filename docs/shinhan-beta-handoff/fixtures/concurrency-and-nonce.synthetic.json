@@ -1,0 +1,126 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.3",
+  "cases": [
+    {
+      "name": "two_tabs_claim_different_flow",
+      "initial": "one unselected entry, neither flow has a prior attempt",
+      "lock_order": [
+        "HOST_ESTIMATE",
+        "GUEST_DEMAND"
+      ],
+      "expected": {
+        "first_flow": "claims_existing_entry",
+        "second_flow": "creates_its_own_entry_and_start",
+        "attempts": 2,
+        "entered": 2,
+        "started": 2,
+        "original_entry_stays_unselected": true
+      }
+    },
+    {
+      "name": "second_flow_already_exists",
+      "initial": "one unselected entry plus an existing incomplete GUEST_DEMAND attempt",
+      "lock_order": [
+        "HOST_ESTIMATE",
+        "GUEST_DEMAND"
+      ],
+      "expected": {
+        "second_flow": "reuses_existing_attempt",
+        "new_entries": 0
+      }
+    },
+    {
+      "name": "nonce_latest_valid_second",
+      "first_received_seconds": 1000000000,
+      "signed_timestamp": 1000000300,
+      "checked_at_seconds": 1000000600,
+      "previously_accepted": true,
+      "expected_error": "REPLAYED_ENVELOPE",
+      "may_delete_nonce": false
+    },
+    {
+      "name": "nonce_after_signature_expiry",
+      "first_received_seconds": 1000000000,
+      "signed_timestamp": 1000000300,
+      "checked_at_seconds": 1000000601,
+      "previously_accepted": true,
+      "expected_error": "SIGNATURE_EXPIRED",
+      "may_delete_nonce": true
+    },
+    {
+      "name": "two_tabs_reenter_completed_same_flow",
+      "initial": {
+        "flow_id": "HOST_ESTIMATE",
+        "current_attempt_id": "00000000-0000-4000-8000-000000000601",
+        "current_completed": true
+      },
+      "form_leases": [
+        {
+          "tab": "synthetic_tab_A",
+          "captured_attempt_id": "00000000-0000-4000-8000-000000000601",
+          "fresh_form_after_completion": true
+        },
+        {
+          "tab": "synthetic_tab_B",
+          "captured_attempt_id": "00000000-0000-4000-8000-000000000601",
+          "fresh_form_after_completion": true
+        }
+      ],
+      "lock_order": [
+        "synthetic_tab_A_valid_input",
+        "synthetic_tab_B_valid_input"
+      ],
+      "expected": {
+        "first": "creates_next_attempt",
+        "second": "joins_current_incomplete_attempt",
+        "current_attempt_id": "00000000-0000-4000-8000-000000000602",
+        "new_entries": 1,
+        "new_starts": 1,
+        "new_completes": 0,
+        "transport_tab_field_added": false
+      }
+    },
+    {
+      "name": "old_observer_cannot_complete_new_attempt",
+      "initial": {
+        "observer_bound_attempt_id": "00000000-0000-4000-8000-000000000601",
+        "current_attempt_id": "00000000-0000-4000-8000-000000000602",
+        "old_completed": true,
+        "current_completed": false
+      },
+      "observation": "old_result_visible_again",
+      "expected": {
+        "old_duplicate": true,
+        "current_new_completes": 0,
+        "rebind_old_result_to_current": false
+      }
+    },
+    {
+      "name": "second_reentry_lease_already_superseded_and_completed",
+      "initial": {
+        "captured_completed_attempt_id": "00000000-0000-4000-8000-000000000601",
+        "current_attempt_id": "00000000-0000-4000-8000-000000000602",
+        "current_completed": true
+      },
+      "observation": "valid_input_from_lease_captured_before_next_attempt_completed",
+      "expected": {
+        "new_attempts": 0,
+        "new_events": 0,
+        "requires_fresh_existing_form_entry": true
+      }
+    },
+    {
+      "name": "unsafe_form_result_association",
+      "initial": "no trustworthy in-memory form-to-result attempt binding",
+      "observation": "result_visible",
+      "expected": {
+        "new_completes": 0,
+        "fabricated_predecessors": 0,
+        "customer_blocked": false,
+        "business_identifiers_used": false
+      }
+    }
+  ]
+}

@@ -2,6 +2,7 @@
 
 import { type FormEvent, useId, useState } from "react";
 
+import { useBetaFlowInput } from "@/features/beta-tracking";
 import {
   shinhanContactSchema,
   shinhanHostRegistrationSchema,
@@ -21,6 +22,11 @@ import styles from "./shinhan-host-registration.module.css";
 export function HostRegistrationForm() {
   const { draft, updateDraft } = useShinhanIntake();
   const storage = useShinhanStorage();
+  const { trackValidInput, markResultReady } = useBetaFlowInput("HOST_REGISTRATION", {
+    enabled:
+      draft?.applicationType === "HOST_REGISTRATION" &&
+      storage.application?.applicationType !== "HOST_REGISTRATION",
+  });
   const [validationAttempted, setValidationAttempted] = useState(false);
   const [validatedSnapshot, setValidatedSnapshot] = useState<string | null>(null);
   const fieldId = useId();
@@ -61,6 +67,9 @@ export function HostRegistrationForm() {
         ? { ...current, values: { ...current.values, ownership } }
         : current,
     );
+    if (shinhanHostRegistrationSchema.shape.ownership.safeParse(ownership).success) {
+      trackValidInput();
+    }
   }
 
   return (
@@ -74,7 +83,11 @@ export function HostRegistrationForm() {
         <h2 id={`${fieldId}-title`}>기본 정보</h2>
         <p>아래 세 가지만 알려주세요.</p>
       </div>
-      <ShinhanPhoneField label="1. 전화번호" error={contactErrors.phone?.[0]} />
+      <ShinhanPhoneField
+        label="1. 전화번호"
+        error={contactErrors.phone?.[0]}
+        onValidInput={trackValidInput}
+      />
       <fieldset
         className={styles.ownership}
         aria-invalid={Boolean(ownershipError) || undefined}
@@ -122,6 +135,9 @@ export function HostRegistrationForm() {
                 ? { ...current, values: { ...current.values, areaRaw } }
                 : current,
             );
+            if (shinhanHostRegistrationSchema.shape.areaRaw.safeParse(areaRaw).success) {
+              trackValidInput();
+            }
           }}
         />
         <p className={styles.hint} id={`${fieldId}-location-help`}>
@@ -131,6 +147,7 @@ export function HostRegistrationForm() {
       <ShinhanRequiredConsentFields error={contactErrors.requiredConsent?.[0]} />
       <div className={styles.actions}>
         <ShinhanLiveSubmit
+          onSaved={markResultReady}
           className={styles.nextButton}
           notice="신청 후 접수 내역을 확인할 수 있어요. 입력하신 정보를 검토한 뒤 심사 결과를 안내해 드릴게요."
         >

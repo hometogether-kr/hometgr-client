@@ -1,0 +1,3069 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과가 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.3",
+  "purpose": "approved_operating_policy_with_synthetic_data_not_activation",
+  "synthetic_config": {
+    "snapshot_key": "synthetic-public-v1",
+    "freshness_limit_ms": 129600000,
+    "schedule": {
+      "timezone": "Asia/Seoul",
+      "hour": 9,
+      "minute": 0
+    },
+    "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+    "guard": "All-or-nothing numeric release; every nonzero contributor-vector class across candidate and all actually published numeric coordinates must contain at least 5 distinct synthetic browsers. Unknown or expired proof fails closed. This is a technical guard proposed for review, not a claim of production deployment."
+  },
+  "cases": [
+    {
+      "name": "public_not_enabled",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "disabled",
+          "reason": "NOT_ENABLED",
+          "unit": "flow_attempt",
+          "period": null,
+          "as_of": null,
+          "generated_at": null,
+          "privacy_policy_version": null,
+          "freshness": null,
+          "counts": null,
+          "rates": null,
+          "by_source": []
+        }
+      }
+    },
+    {
+      "name": "policy_missing",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "disabled",
+          "reason": "POLICY_UNCONFIRMED",
+          "unit": "flow_attempt",
+          "period": null,
+          "as_of": null,
+          "generated_at": null,
+          "privacy_policy_version": null,
+          "freshness": null,
+          "counts": null,
+          "rates": null,
+          "by_source": []
+        }
+      }
+    },
+    {
+      "name": "not_connected",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "not_connected",
+          "reason": "NOT_CONNECTED",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": null,
+          "generated_at": null,
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": null,
+          "counts": null,
+          "rates": null,
+          "by_source": []
+        }
+      }
+    },
+    {
+      "name": "ready_zero",
+      "guard_input": {
+        "contributors": [],
+        "published_history_complete": true,
+        "expected_min_nonzero_class_size": null
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "ready",
+          "reason": null,
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "visible",
+              "value": 0
+            },
+            "started": {
+              "status": "visible",
+              "value": 0
+            },
+            "completed": {
+              "status": "visible",
+              "value": 0
+            },
+            "incomplete": {
+              "status": "visible",
+              "value": 0
+            },
+            "abandoned_24h": {
+              "status": "visible",
+              "value": 0
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "not_applicable",
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "not_applicable",
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "not_applicable",
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ready_five_same_contribution",
+      "guard_input": {
+        "distinct_browsers": 5,
+        "attempts_per_browser": 1,
+        "pattern": "all_enter_start_complete_in_kakao",
+        "published_history_complete": true,
+        "expected_classes": [
+          5
+        ]
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "ready",
+          "reason": null,
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "visible",
+              "value": 5
+            },
+            "started": {
+              "status": "visible",
+              "value": 5
+            },
+            "completed": {
+              "status": "visible",
+              "value": 5
+            },
+            "incomplete": {
+              "status": "visible",
+              "value": 0
+            },
+            "abandoned_24h": {
+              "status": "visible",
+              "value": 0
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "visible",
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1
+            },
+            "completion_from_entry": {
+              "status": "visible",
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1
+            },
+            "completion_from_start": {
+              "status": "visible",
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 5
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 5
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 5,
+                  "denominator": 5,
+                  "value": 1
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "fresh_at_36h_limit",
+      "guard_input": {
+        "same_as": "ready_five_same_contribution"
+      },
+      "refresh_failed": false,
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "ready",
+          "reason": null,
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-28T12:00:00.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "visible",
+              "value": 5
+            },
+            "started": {
+              "status": "visible",
+              "value": 5
+            },
+            "completed": {
+              "status": "visible",
+              "value": 5
+            },
+            "incomplete": {
+              "status": "visible",
+              "value": 0
+            },
+            "abandoned_24h": {
+              "status": "visible",
+              "value": 0
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "visible",
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1
+            },
+            "completion_from_entry": {
+              "status": "visible",
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1
+            },
+            "completion_from_start": {
+              "status": "visible",
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 5
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 5
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 5,
+                  "denominator": 5,
+                  "value": 1
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "age_exceeds_36h",
+      "guard_input": {
+        "same_as": "ready_five_same_contribution"
+      },
+      "refresh_failed": false,
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "stale",
+          "reason": null,
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "stale",
+            "evaluated_at": "2026-10-28T12:00:00.001Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "visible",
+              "value": 5
+            },
+            "started": {
+              "status": "visible",
+              "value": 5
+            },
+            "completed": {
+              "status": "visible",
+              "value": 5
+            },
+            "incomplete": {
+              "status": "visible",
+              "value": 0
+            },
+            "abandoned_24h": {
+              "status": "visible",
+              "value": 0
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "visible",
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1
+            },
+            "completion_from_entry": {
+              "status": "visible",
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1
+            },
+            "completion_from_start": {
+              "status": "visible",
+              "numerator": 5,
+              "denominator": 5,
+              "value": 1
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 5
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 5
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 5,
+                  "denominator": 5,
+                  "value": 1
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "suppress_1_distinct_browsers",
+      "guard_input": {
+        "distinct_browsers": 1,
+        "attempts_per_browser": 1,
+        "pattern": "all_enter_start_complete_in_kakao",
+        "published_history_complete": true,
+        "expected_classes": [
+          1
+        ]
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "suppress_4_distinct_browsers",
+      "guard_input": {
+        "distinct_browsers": 4,
+        "attempts_per_browser": 1,
+        "pattern": "all_enter_start_complete_in_kakao",
+        "published_history_complete": true,
+        "expected_classes": [
+          4
+        ]
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "one_browser_forty_attempts_still_suppressed",
+      "guard_input": {
+        "distinct_browsers": 1,
+        "attempts_per_browser": 40,
+        "pattern": "all_enter_start_complete_in_kakao",
+        "published_history_complete": true,
+        "expected_classes": [
+          1
+        ]
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "five_browsers_different_contributions_suppressed",
+      "guard_input": {
+        "distinct_browsers": 5,
+        "pattern": "four_complete_one_incomplete",
+        "published_history_complete": true,
+        "expected_classes": [
+          4,
+          1
+        ]
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "temporal_single_browser_change_suppressed",
+      "guard_input": {
+        "previous_publication": "five_existing_browsers_each_one_completed_attempt",
+        "candidate": "same_five_plus_one_new_browser_completed_attempt",
+        "published_history_complete": true,
+        "expected_classes": [
+          5,
+          1
+        ],
+        "reason": "Pairwise totals exceed 5 but the previous public value isolates one new contributor."
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "row_complement_small_group_suppressed",
+      "guard_input": {
+        "distinct_browsers": 9,
+        "pattern": "five_kakao_and_four_apartment_all_complete",
+        "published_history_complete": true,
+        "expected_classes": [
+          5,
+          4
+        ],
+        "reason": "Publishing total and one source can recover the other source."
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "history_proof_missing_suppressed",
+      "guard_input": {
+        "distinct_browsers": 5,
+        "published_history_complete": false,
+        "expected_classes": [
+          5
+        ],
+        "reason": "Current-only threshold cannot prove safety against earlier public values."
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "expired_history_proof_suppressed",
+      "guard_input": {
+        "distinct_browsers": 5,
+        "published_history_complete": false,
+        "reason": "Retention expiry removes proof; do not extend identifiers beyond retention or forget earlier disclosure."
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T00:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "suppressed_and_stale",
+      "guard_input": {
+        "distinct_browsers": 4,
+        "expected_classes": [
+          4
+        ]
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T00:00:00.000Z",
+          "generated_at": "2026-10-27T00:00:01.000Z",
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": {
+            "status": "stale",
+            "evaluated_at": "2026-10-28T12:00:00.001Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "policy_changed",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.3",
+        "data": {
+          "status": "suppressed",
+          "reason": "POLICY_CHANGED",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-09-27T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": null,
+          "generated_at": null,
+          "privacy_policy_version": "shinhan_public_contribution_guard_v1",
+          "freshness": null,
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": []
+        }
+      }
+    },
+    {
+      "name": "unavailable",
+      "http_status": 503,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.3",
+        "error": {
+          "code": "AGGREGATE_UNAVAILABLE",
+          "retryable": true,
+          "retry_after_ms": 1000
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.2",
+  "cases": [
+    {
+      "label": "A",
+      "attempt_id": "00000000-0000-4000-8000-000000000101",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001001",
+        "00000000-0000-4000-8000-000000001002",
+        "00000000-0000-4000-8000-000000001003"
+      ],
+      "flow_id": "HOST_ESTIMATE"
+    },
+    {
+      "label": "B",
+      "attempt_id": "00000000-0000-4000-8000-000000000102",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001004",
+        "00000000-0000-4000-8000-000000001005",
+        "00000000-0000-4000-8000-000000001006"
+      ],
+      "flow_id": "HOST_REGISTRATION"
+    },
+    {
+      "label": "C",
+      "attempt_id": "00000000-0000-4000-8000-000000000103",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001007",
+        "00000000-0000-4000-8000-000000001008",
+        "00000000-0000-4000-8000-000000001009"
+      ],
+      "flow_id": "GUEST_BUDGET"
+    },
+    {
+      "label": "D",
+      "attempt_id": "00000000-0000-4000-8000-000000000104",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001010",
+        "00000000-0000-4000-8000-000000001011"
+      ],
+      "flow_id": "GUEST_DEMAND"
+    },
+    {
+      "label": "E",
+      "attempt_id": "00000000-0000-4000-8000-000000000105",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001012",
+        "00000000-0000-4000-8000-000000001013"
+      ],
+      "flow_id": "GUEST_BUDGET"
+    },
+    {
+      "label": "F",
+      "attempt_id": "00000000-0000-4000-8000-000000000106",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001014"
+      ],
+      "flow_id": ""
+    },
+    {
+      "label": "G",
+      "attempt_id": "00000000-0000-4000-8000-000000000107",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001015",
+        "00000000-0000-4000-8000-000000001016",
+        "00000000-0000-4000-8000-000000001017"
+      ],
+      "flow_id": "GUEST_DEMAND"
+    },
+    {
+      "label": "H",
+      "attempt_id": "00000000-0000-4000-8000-000000000108",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001018"
+      ],
+      "flow_id": ""
+    },
+    {
+      "label": "I",
+      "attempt_id": "00000000-0000-4000-8000-000000000109",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001019"
+      ],
+      "flow_id": ""
+    },
+    {
+      "label": "J",
+      "attempt_id": "00000000-0000-4000-8000-000000000110",
+      "event_ids": [
+        "00000000-0000-4000-8000-000000001020"
+      ],
+      "flow_id": ""
+    }
+  ],
+  "notes": [
+    "A/B share one synthetic browser but are different flows.",
+    "D is exactly 24h after start at the first as_of.",
+    "G completes after 24h and after first as_of.",
+    "H is before lower boundary; I is at excluded upper boundary; J has a different run.",
+    "All records are connection_test; a beta query must exclude every row.",
+    "C has 10 minutes transport delay. D start occurred 5 minutes before receipt; the 24h threshold uses received_at."
+  ]
+}

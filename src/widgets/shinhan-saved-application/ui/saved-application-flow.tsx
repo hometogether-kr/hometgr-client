@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { type FormEvent, type ReactNode, useEffect, useRef } from "react";
 
+import { BetaFlowObserver } from "@/features/beta-tracking";
 import {
   ShinhanConsentStatus,
   ShinhanHostProgress,
@@ -128,16 +129,19 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
       <SavedMutationError />
       <ShinhanSessionRestart />
       {!consents && <ShinhanConsentStatus />}
-      {step === "complete" &&
-        (application.applicationType === "HOST_REGISTRATION"
-          ? props.hostRegistration
-          : application.applicationType === "GUEST_BUDGET"
-            ? props.guestBudgetComplete
-            : application.applicationType === "GUEST_DEMAND"
-              ? props.guestDemandComplete
-              : null)}
+      {step === "complete" && application.applicationType !== "HOST_ESTIMATE" && (
+        <>
+          <BetaFlowObserver flow={application.applicationType} resultVisible />
+          {application.applicationType === "HOST_REGISTRATION"
+            ? props.hostRegistration
+            : application.applicationType === "GUEST_BUDGET"
+              ? props.guestBudgetComplete
+              : props.guestDemandComplete}
+        </>
+      )}
       {step === "result" && isHostEstimate && (
         <>
+          <BetaFlowObserver flow="HOST_ESTIMATE" resultVisible />
           {props.hostResult}
           <details className={styles.resultDetails}>
             <summary>저장된 입력 조건 확인</summary>
@@ -226,7 +230,10 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
           </p>
           <div className={styles.guideGrid}>
             {visibleCards.map(({ code, content }) => (
-              <div key={code}>{content}</div>
+              <div key={code}>
+                <BetaFlowObserver flow={application.applicationType} guideVisible />
+                {content}
+              </div>
             ))}
           </div>
           {visibleCards.length === 0 && (

@@ -1,10 +1,8 @@
 import Image from "next/image";
 
-import {
-  ShinhanEntryNotice,
-  ShinhanGuestFormButton,
-  ShinhanGuestRegionButton,
-} from "@/features/shinhan-intake";
+import { ShinhanEntryNotice, ShinhanGuestFormButton } from "@/features/shinhan-intake";
+
+import { TrackedGuestRegionButton } from "./tracked-guest-entry";
 
 import styles from "./guest-spaces.module.css";
 
@@ -92,7 +90,7 @@ export function ShinhanGuestRegions() {
         <ul className={styles.regionList}>
           {regions.map((region) => (
             <li key={region.name}>
-              <ShinhanGuestRegionButton
+              <TrackedGuestRegionButton
                 region={region.name}
                 type="button"
                 className={styles.regionCard}
@@ -107,7 +105,7 @@ export function ShinhanGuestRegions() {
                   />
                 </span>
                 <span className={styles.regionName}>{region.name}</span>
-              </ShinhanGuestRegionButton>
+              </TrackedGuestRegionButton>
             </li>
           ))}
         </ul>

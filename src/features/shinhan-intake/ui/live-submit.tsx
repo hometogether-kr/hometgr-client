@@ -13,10 +13,12 @@ export function ShinhanLiveSubmit({
   children,
   className,
   notice = "신청이 완료되면 접수 내역을 확인할 수 있어요.",
+  onSaved,
 }: {
   children: ReactNode;
   className?: string;
   notice?: string;
+  onSaved?: () => void;
 }) {
   const storage = useShinhanStorage();
   const router = useRouter();
@@ -27,12 +29,21 @@ export function ShinhanLiveSubmit({
       storage.error.code === "CONSENT_VERSION_MISMATCH" ||
       storage.error.code === "CSRF_INVALID");
 
+  function showSavedApplication() {
+    try {
+      onSaved?.();
+    } catch {
+      // Optional observers must never interrupt an already successful application.
+    }
+    router.push(SHINHAN_SAVED_APPLICATION_PATH);
+  }
+
   async function submit() {
-    if (await storage.submitApplication()) router.push(SHINHAN_SAVED_APPLICATION_PATH);
+    if (await storage.submitApplication()) showSavedApplication();
   }
 
   async function retry() {
-    if (await storage.retry()) router.push(SHINHAN_SAVED_APPLICATION_PATH);
+    if (await storage.retry()) showSavedApplication();
   }
 
   return (

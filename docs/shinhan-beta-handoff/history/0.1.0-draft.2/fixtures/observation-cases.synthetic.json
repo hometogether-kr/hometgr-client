@@ -1,0 +1,136 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.2",
+  "cases": [
+    {
+      "flow_id": "HOST_ESTIMATE",
+      "sequence": [
+        "form_display",
+        "automatic_furniture_NONE",
+        "valid_user_address_selection",
+        "validated_saved_response",
+        "existing_result_visible",
+        "result_visible_again"
+      ],
+      "expected": {
+        "landing_view": 1,
+        "beta_mission_start": 1,
+        "beta_mission_complete": 1
+      },
+      "forbidden_followup_requirement": true
+    },
+    {
+      "flow_id": "HOST_REGISTRATION",
+      "sequence": [
+        "form_display",
+        "invalid_phone",
+        "valid_phone_input",
+        "validated_saved_response",
+        "existing_complete_visible"
+      ],
+      "expected": {
+        "landing_view": 1,
+        "beta_mission_start": 1,
+        "beta_mission_complete": 1
+      },
+      "forbidden_followup_requirement": true
+    },
+    {
+      "flow_id": "GUEST_BUDGET",
+      "sequence": [
+        "form_display",
+        "automatic_slider_display",
+        "valid_user_slider_choice",
+        "validated_saved_response",
+        "existing_complete_visible",
+        "concern_selection_visible",
+        "empty_guide_visible"
+      ],
+      "expected": {
+        "landing_view": 1,
+        "beta_mission_start": 1,
+        "beta_mission_complete": 0
+      }
+    },
+    {
+      "flow_id": "GUEST_BUDGET",
+      "sequence": [
+        "previous_budget_case",
+        "existing_show_all_guide",
+        "guide_card_visible",
+        "guide_visible_again"
+      ],
+      "expected_total": {
+        "landing_view": 1,
+        "beta_mission_start": 1,
+        "beta_mission_complete": 1
+      }
+    },
+    {
+      "flow_id": "GUEST_DEMAND",
+      "sequence": [
+        "valid_region_tile_selection_before_form",
+        "form_display",
+        "validated_saved_response",
+        "existing_complete_visible",
+        "guide_card_visible"
+      ],
+      "expected": {
+        "landing_view": 1,
+        "beta_mission_start": 1,
+        "beta_mission_complete": 1
+      }
+    },
+    {
+      "flow_id": "HOST_ESTIMATE",
+      "sequence": [
+        "valid_input",
+        "save_error"
+      ],
+      "expected": {
+        "landing_view": 1,
+        "beta_mission_start": 1,
+        "beta_mission_complete": 0
+      }
+    },
+    {
+      "flow_id": "HOST_ESTIMATE",
+      "sequence": [
+        "previously_completed_attempt",
+        "reload_saved_route_empty_state"
+      ],
+      "expected_new_events": 0,
+      "restore_application_for_tracking": false
+    },
+    {
+      "flow_id": "HOST_ESTIMATE",
+      "sequence": [
+        "concurrent_tabs_same_context_browser_flow",
+        "same_stage_observed_twice"
+      ],
+      "expected_distinct_attempts": 1,
+      "expected_distinct_stage_events": 1
+    },
+    {
+      "flow_id": "HOST_REGISTRATION",
+      "sequence": [
+        "same_browser_completed_estimate",
+        "registration_valid_input",
+        "registration_complete_visible"
+      ],
+      "expected_total_distinct_flows": 2,
+      "expected_total_completes": 2
+    },
+    {
+      "flow_id": "GUEST_DEMAND",
+      "sequence": [
+        "valid_input",
+        "tracking_timeout",
+        "synthetic_save_success",
+        "guide_card_visible"
+      ],
+      "expected_customer_flow_blocked": false
+    }
+  ]
+}

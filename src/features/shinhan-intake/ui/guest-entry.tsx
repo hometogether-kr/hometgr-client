@@ -39,26 +39,39 @@ interface GuestRegionButtonProps extends Omit<
   "onClick" | "disabled"
 > {
   region: string;
+  onValidInput?: () => void;
 }
 
-export function ShinhanGuestRegionButton({ region, ...props }: GuestRegionButtonProps) {
+export function ShinhanGuestRegionButton({
+  region,
+  onValidInput,
+  ...props
+}: GuestRegionButtonProps) {
   const { available, startIntake } = useStartGuestIntake();
   return (
     <button
       {...props}
       type="button"
       disabled={!available}
-      onClick={() => startIntake("demand", region)}
+      onClick={() => {
+        if (available && shinhanGuestRegionSchema.safeParse(region).success) onValidInput?.();
+        startIntake("demand", region);
+      }}
     />
   );
 }
 
 interface GuestSearchProps {
+  onValidInput?: () => void;
   fieldClassName?: string;
   buttonClassName?: string;
 }
 
-export function ShinhanGuestDemandSearch({ fieldClassName, buttonClassName }: GuestSearchProps) {
+export function ShinhanGuestDemandSearch({
+  fieldClassName,
+  buttonClassName,
+  onValidInput,
+}: GuestSearchProps) {
   const [region, setRegion] = useState("");
   const [attempted, setAttempted] = useState(false);
   const { available, startIntake } = useStartGuestIntake();
@@ -78,7 +91,11 @@ export function ShinhanGuestDemandSearch({ fieldClassName, buttonClassName }: Gu
         className={fieldClassName}
         value={region}
         maxLength={200}
-        onChange={(event) => setRegion(event.target.value)}
+        onChange={(event) => {
+          const nextRegion = event.target.value;
+          setRegion(nextRegion);
+          if (available && shinhanGuestRegionSchema.safeParse(nextRegion).success) onValidInput?.();
+        }}
         error={attempted && !parsed.success ? parsed.error.issues[0]?.message : undefined}
         action={
           <BtnCta

@@ -1,10 +1,8 @@
 import Image from "next/image";
 
-import {
-  ShinhanEntryNotice,
-  ShinhanGuestDemandSearch,
-  ShinhanGuestFormButton,
-} from "@/features/shinhan-intake";
+import { ShinhanEntryNotice, ShinhanGuestFormButton } from "@/features/shinhan-intake";
+
+import { TrackedGuestDemandSearch } from "./tracked-guest-entry";
 
 import styles from "./guest-introduction.module.css";
 
@@ -56,7 +54,7 @@ export function ShinhanGuestHero() {
             월세는 <em>가볍게</em>
           </h1>
           <div className={styles.location}>
-            <ShinhanGuestDemandSearch
+            <TrackedGuestDemandSearch
               fieldClassName={styles.locationField}
               buttonClassName={styles.searchButton}
             />

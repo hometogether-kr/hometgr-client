@@ -5,6 +5,7 @@ import { useId } from "react";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { TextField } from "@/shared/ui/text-field";
 
+import { shinhanContactSchema } from "../model/contact.schema";
 import { useShinhanIntake } from "../model/intake-context";
 import { formatShinhanPhone } from "../model/phone";
 import { useShinhanStorage } from "../model/storage-context";
@@ -14,25 +15,26 @@ import { ShinhanConsentStatus } from "./server-consent";
 import styles from "./shinhan-intake.module.css";
 
 interface ContactFieldsProps {
+  onValidInput?: () => void;
   errors?: { phone?: string; requiredConsent?: string };
 }
 
-export function ShinhanContactFields({ errors = {} }: ContactFieldsProps) {
+export function ShinhanContactFields({ errors = {}, onValidInput }: ContactFieldsProps) {
   return (
     <div className={styles.contactFields}>
-      <ShinhanPhoneField error={errors.phone} />
+      <ShinhanPhoneField error={errors.phone} onValidInput={onValidInput} />
       <ShinhanRequiredConsentFields error={errors.requiredConsent} />
     </div>
   );
 }
 
-export function ShinhanPhoneField({
-  error,
-  label = "휴대폰 번호",
-}: {
+interface PhoneFieldProps {
   error?: string;
   label?: string;
-}) {
+  onValidInput?: () => void;
+}
+
+export function ShinhanPhoneField({ error, label = "휴대폰 번호", onValidInput }: PhoneFieldProps) {
   const { draft, updateDraft } = useShinhanIntake();
   const { pending, preparing, attempt, fieldErrors } = useShinhanStorage();
   if (!draft) return null;
@@ -49,6 +51,7 @@ export function ShinhanPhoneField({
       onChange={(event) => {
         const phone = formatShinhanPhone(event.target.value);
         updateDraft((current) => ({ ...current, phone }));
+        if (shinhanContactSchema.shape.phone.safeParse(phone).success) onValidInput?.();
       }}
       error={error ?? fieldErrors.phone?.[0]}
       className={styles.phone}

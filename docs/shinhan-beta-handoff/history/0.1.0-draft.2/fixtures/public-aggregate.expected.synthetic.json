@@ -1,0 +1,27 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.2",
+  "purpose": "public_disabled_default",
+  "request": {
+    "contract_version": "0.1.0-draft.2",
+    "snapshot_key": "synthetic-public-v1"
+  },
+  "response": {
+    "ok": true,
+    "contract_version": "0.1.0-draft.2",
+    "data": {
+      "status": "disabled",
+      "reason": "POLICY_UNCONFIRMED",
+      "unit": "flow_attempt",
+      "period": null,
+      "as_of": null,
+      "generated_at": null,
+      "privacy_policy_version": null,
+      "freshness": null,
+      "counts": null,
+      "rates": null,
+      "by_source": []
+    }
+  }
+}

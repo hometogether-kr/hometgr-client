@@ -1,0 +1,306 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.1",
+  "default_precondition": "Each case is independent; accepted requires empty collector. Retry/conflict cases seed A landing_view. Dirty case seeds A entry/start.",
+  "cases": [
+    {
+      "name": "accepted",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001001",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "landing_view",
+          "role": "unselected",
+          "occurred_at": "2026-10-25T15:00:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "",
+          "completion_basis": ""
+        }
+      },
+      "http_status": 201,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.1",
+        "data": {
+          "status": "accepted",
+          "request_event_id": "00000000-0000-4000-8000-000000001001",
+          "event_id": "00000000-0000-4000-8000-000000001001",
+          "received_at": "2026-10-25T15:00:00.000Z",
+          "projection_state": "current"
+        }
+      },
+      "appended_rows": 1
+    },
+    {
+      "name": "same_event_retry",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001001",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "landing_view",
+          "role": "unselected",
+          "occurred_at": "2026-10-25T15:00:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "",
+          "completion_basis": ""
+        }
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.1",
+        "data": {
+          "status": "duplicate",
+          "request_event_id": "00000000-0000-4000-8000-000000001001",
+          "event_id": "00000000-0000-4000-8000-000000001001",
+          "received_at": "2026-10-25T15:00:00.000Z",
+          "projection_state": "current"
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "semantic_retry_new_event_id",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000009001",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "landing_view",
+          "role": "unselected",
+          "occurred_at": "2026-10-25T15:00:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "",
+          "completion_basis": ""
+        }
+      },
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.1",
+        "data": {
+          "status": "duplicate",
+          "request_event_id": "00000000-0000-4000-8000-000000009001",
+          "event_id": "00000000-0000-4000-8000-000000001001",
+          "received_at": "2026-10-25T15:00:00.000Z",
+          "projection_state": "current"
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "event_id_changed_body",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001001",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "landing_view",
+          "role": "unselected",
+          "occurred_at": "2026-10-25T15:00:01.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "",
+          "completion_basis": ""
+        }
+      },
+      "http_status": 409,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "EVENT_ID_CONFLICT",
+          "retryable": false,
+          "retry_after_ms": null
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "semantic_key_changed_body",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000009002",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "landing_view",
+          "role": "unselected",
+          "occurred_at": "2026-10-25T15:00:01.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "",
+          "completion_basis": ""
+        }
+      },
+      "http_status": 409,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "SEMANTIC_CONFLICT",
+          "retryable": false,
+          "retry_after_ms": null
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "complete_without_start",
+      "precondition": "empty collector",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001003",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "beta_mission_complete",
+          "role": "host",
+          "occurred_at": "2026-10-25T15:10:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "HOST_ESTIMATE",
+          "completion_basis": "simulation"
+        }
+      },
+      "http_status": 409,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "MISSING_PREDECESSOR",
+          "retryable": true,
+          "retry_after_ms": 1000
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "ledger_saved_projection_dirty",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001003",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "beta_mission_complete",
+          "role": "host",
+          "occurred_at": "2026-10-25T15:10:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "HOST_ESTIMATE",
+          "completion_basis": "simulation"
+        }
+      },
+      "http_status": 201,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.1",
+        "data": {
+          "status": "accepted",
+          "request_event_id": "00000000-0000-4000-8000-000000001003",
+          "event_id": "00000000-0000-4000-8000-000000001003",
+          "received_at": "2026-10-25T15:10:00.000Z",
+          "projection_state": "dirty"
+        }
+      },
+      "appended_rows": 1
+    },
+    {
+      "name": "stale_context",
+      "request": {
+        "context_id": "synthetic-expired-context",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001001",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "landing_view",
+          "role": "unselected",
+          "occurred_at": "2026-10-25T15:00:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "",
+          "completion_basis": ""
+        }
+      },
+      "http_status": 409,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "CONTEXT_MISMATCH",
+          "retryable": false,
+          "retry_after_ms": null
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "collector_unavailable",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001001",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "landing_view",
+          "role": "unselected",
+          "occurred_at": "2026-10-25T15:00:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "",
+          "completion_basis": ""
+        }
+      },
+      "http_status": 503,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "COLLECTOR_UNAVAILABLE",
+          "retryable": true,
+          "retry_after_ms": 1000
+        }
+      },
+      "appended_rows": 0,
+      "precondition": "collector unavailable before any append"
+    }
+  ]
+}

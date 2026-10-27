@@ -1,0 +1,207 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지. 금지 키의 값은 실제 ID가 아닌 거부 검증용 sentinel이며 원장에 저장하지 않습니다.",
+  "contract_version": "0.1.0-draft.1",
+  "cases": [
+    {
+      "name": "prohibited_field",
+      "precondition": "no append",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001003",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "beta_mission_complete",
+          "role": "host",
+          "occurred_at": "2026-10-25T15:10:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "HOST_ESTIMATE",
+          "completion_basis": "simulation",
+          "application_id": "SYNTHETIC_FORBIDDEN_SENTINEL_NOT_AN_APPLICATION_ID"
+        }
+      },
+      "http_status": 422,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "INVALID_EVENT",
+          "retryable": false,
+          "retry_after_ms": null
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "role_flow_mismatch",
+      "precondition": "no append",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001003",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "beta_mission_complete",
+          "role": "host",
+          "occurred_at": "2026-10-25T15:10:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "GUEST_BUDGET",
+          "completion_basis": "simulation"
+        }
+      },
+      "http_status": 422,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "INVALID_EVENT",
+          "retryable": false,
+          "retry_after_ms": null
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "attempt_flow_mismatch",
+      "precondition": "A entry and start already persisted",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001003",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "beta_mission_complete",
+          "role": "host",
+          "occurred_at": "2026-10-25T15:10:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "HOST_REGISTRATION",
+          "completion_basis": "simulation"
+        }
+      },
+      "http_status": 409,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "ATTEMPT_CONFLICT",
+          "retryable": false,
+          "retry_after_ms": null
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "attempt_anonymous_mismatch",
+      "precondition": "A entry and start already persisted",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001003",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000008888",
+          "event_name": "beta_mission_complete",
+          "role": "host",
+          "occurred_at": "2026-10-25T15:10:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "HOST_ESTIMATE",
+          "completion_basis": "simulation"
+        }
+      },
+      "http_status": 409,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "ATTEMPT_CONFLICT",
+          "retryable": false,
+          "retry_after_ms": null
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "attempt_attribution_mismatch",
+      "precondition": "A entry and start already persisted",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001003",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "beta_mission_complete",
+          "role": "host",
+          "occurred_at": "2026-10-25T15:10:00.000Z",
+          "utm_source": "instagram",
+          "utm_medium": "social",
+          "utm_campaign": "guest_acq_2026q4",
+          "utm_content": "profile",
+          "flow_id": "HOST_ESTIMATE",
+          "completion_basis": "simulation"
+        }
+      },
+      "http_status": 409,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "ATTEMPT_CONFLICT",
+          "retryable": false,
+          "retry_after_ms": null
+        }
+      },
+      "appended_rows": 0
+    },
+    {
+      "name": "server_owned_field_in_browser",
+      "precondition": "no append",
+      "request": {
+        "context_id": "synthetic-context-v1",
+        "event": {
+          "schema_version": "0.1.0-draft.1",
+          "event_id": "00000000-0000-4000-8000-000000001003",
+          "attempt_id": "00000000-0000-4000-8000-000000000101",
+          "anonymous_id": "00000000-0000-4000-8000-000000000001",
+          "event_name": "beta_mission_complete",
+          "role": "host",
+          "occurred_at": "2026-10-25T15:10:00.000Z",
+          "utm_source": "apartment",
+          "utm_medium": "qr",
+          "utm_campaign": "host_acq_2026q4",
+          "utm_content": "ad_01",
+          "flow_id": "HOST_ESTIMATE",
+          "completion_basis": "simulation",
+          "dataset": "beta"
+        }
+      },
+      "http_status": 422,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.1",
+        "error": {
+          "code": "INVALID_EVENT",
+          "retryable": false,
+          "retry_after_ms": null
+        }
+      },
+      "appended_rows": 0
+    }
+  ]
+}

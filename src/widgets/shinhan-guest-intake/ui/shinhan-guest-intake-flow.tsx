@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useId, useState } from "react";
 
+import { useBetaFlowInput } from "@/features/beta-tracking";
 import {
   SHINHAN_GUEST_FOLLOWUP_PATH,
   shinhanContactSchema,
@@ -47,6 +48,11 @@ export function ShinhanGuestIntakeFlow({
 }: GuestIntakeFlowProps) {
   const { draft, updateDraft, startGuestFollowup } = useShinhanIntake();
   const storage = useShinhanStorage();
+  const { trackValidInput, markResultReady } = useBetaFlowInput(applicationType, {
+    enabled:
+      draft?.applicationType === applicationType &&
+      storage.application?.applicationType !== applicationType,
+  });
   const locked = storage.pending || storage.attempt !== null || storage.preparing;
   const router = useRouter();
   const [conditionsAttempted, setConditionsAttempted] = useState(false);
@@ -83,6 +89,14 @@ export function ShinhanGuestIntakeFlow({
         ? { ...current, values: { ...current.values, ...values } }
         : current,
     );
+    const fields = shinhanGuestBudgetSchema.shape;
+    if (
+      fields.budgetMonthlyKrw.safeParse(values.budgetMonthlyKrw).success ||
+      fields.desiredRegionRaw.safeParse(values.desiredRegionRaw).success ||
+      fields.moveInDate.safeParse(values.moveInDate).success
+    ) {
+      trackValidInput();
+    }
   }
 
   function updateDemand(values: Partial<ShinhanGuestDemandValues>) {
@@ -91,6 +105,17 @@ export function ShinhanGuestIntakeFlow({
         ? { ...current, values: { ...current.values, ...values } }
         : current,
     );
+    const fields = shinhanGuestDemandSchema.shape;
+    if (
+      fields.desiredRegionRaw.safeParse(values.desiredRegionRaw).success ||
+      fields.budgetMinKrw.safeParse(values.budgetMinKrw).success ||
+      fields.budgetMaxKrw.safeParse(values.budgetMaxKrw).success ||
+      fields.moveInDate.safeParse(values.moveInDate).success ||
+      fields.contractTermCode.safeParse(values.contractTermCode).success ||
+      fields.gender.safeParse(values.gender).success
+    ) {
+      trackValidInput();
+    }
   }
 
   function handleConditionsSubmit(event: FormEvent<HTMLFormElement>) {
@@ -171,9 +196,10 @@ export function ShinhanGuestIntakeFlow({
                   : "입주 조건을 받으려면 전화번호를 남겨 주세요"
               }
               error={contactErrors.phone?.[0]}
+              onValidInput={trackValidInput}
             />
             <ShinhanRequiredConsentFields error={contactErrors.requiredConsent?.[0]} />
-            <ShinhanLiveSubmit className={styles.cta}>
+            <ShinhanLiveSubmit onSaved={markResultReady} className={styles.cta}>
               {isBudget ? "상세조건 안내받기" : "입주조건 확인하기"}
             </ShinhanLiveSubmit>
             {process.env.NODE_ENV === "development" && (
