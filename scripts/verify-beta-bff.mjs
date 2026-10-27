@@ -11,6 +11,7 @@ const require = createRequire(resolve(root, "package.json"));
 const ts = require("typescript");
 const modules = new Map();
 let checks = 0;
+const transportOnly = process.argv.includes("--transport-only");
 const originalFetch = globalThis.fetch;
 const originalEnvironment = { ...process.env };
 const version = "0.1.0-draft.3";
@@ -49,6 +50,10 @@ function loadTypeScript(filename) {
 }
 const localEnvironment = {
   NODE_ENV: "development",
+  SHINHAN_APP_ENV: "local",
+  SHINHAN_CLIENT_IP_MODE: "local",
+  SHINHAN_CF_INGRESS_SECRET: "",
+  VERCEL_ENV: "development",
   VERCEL: "0",
   BETA_TRACKING_ENABLED: "true",
   BETA_TRACKING_MODE: "local",
@@ -57,7 +62,7 @@ const localEnvironment = {
   BETA_DATASET: "connection_test",
   BETA_START_AT: "2000-01-01T00:00:00.000Z",
   BETA_TRACKING_ALLOWED_ORIGINS: "http://127.0.0.1:3319",
-  BETA_TRACKING_WEB_APP_URL: "http://127.0.0.1:4319/collector",
+  BETA_TRACKING_API_URL: "http://127.0.0.1:4319/api/v1/beta/rpc",
   BETA_EVENT_WRITE_SECRET: "synthetic-local-only-write-secret-2026",
 };
 function configure(overrides = {}) {
@@ -78,15 +83,20 @@ function request(body, headers = {}, url = "http://127.0.0.1:3319/api/beta/event
   });
 }
 const jsonResponse = (body) =>
-  new Response(JSON.stringify(body), { headers: { "Content-Type": "application/json" } });
+  new Response(JSON.stringify(body), { headers: {
+    "Content-Type": "application/json", "X-Contract-Version": version,
+    "X-Shinhan-App-Env": process.env.SHINHAN_APP_ENV,
+  } });
 let sent = [];
 let stubResponse;
 globalThis.fetch = async (url, init) => {
-  check(String(url), localEnvironment.BETA_TRACKING_WEB_APP_URL, "fixed collector URL");
+  check(String(url), process.env.BETA_TRACKING_API_URL, "fixed collector URL");
   check(init.method, "POST", "collector method");
   check(init.credentials, "omit", "no browser credentials");
   check(init.redirect, "manual", "redirect handling");
-  check(init.headers, { "Content-Type": "application/json" }, "only JSON header forwarded");
+  check(init.headers, { "Content-Type": "application/json", Accept: "application/json" }, "only JSON headers forwarded");
+  check(init.cache, "no-store", "transport no cache");
+  check(init.referrerPolicy, "no-referrer", "no upstream referrer");
   const envelope = JSON.parse(init.body);
   const signingInput = [
     envelope.contract_version,
@@ -123,7 +133,7 @@ try {
   const success = acceptedCase.response;
 
   check(domain.BETA_SCHEMA_VERSION, version, "contract version");
-  for (const record of records) {
+  for (const record of transportOnly ? [] : records) {
     const event = Object.fromEntries(
       Object.entries(record).filter(
         ([key]) => !["run_id", "dataset", "mission_id", "received_at"].includes(key),
@@ -136,7 +146,7 @@ try {
     );
     check(Object.keys(event).length, 13, "browser field count");
   }
-  for (const item of [...recordCases, ...invalidCases]) {
+  for (const item of transportOnly ? [] : [...recordCases, ...invalidCases]) {
     check(
       domain.betaEventResponseSchema.safeParse(item.response).success,
       true,
@@ -178,14 +188,18 @@ try {
   check(configuration.getBetaTrackingContext(), null, "before start disabled");
   configure({ BETA_TRACKING_ENABLED: "false" });
   check(configuration.getBetaTrackingContext(), null, "explicit disabled");
-  configure({ BETA_TRACKING_WEB_APP_URL: "not-a-url" });
+  configure({ BETA_TRACKING_API_URL: "not-a-url" });
   check(configuration.getBetaTrackingContext(), null, "invalid config is harmless");
   const production = {
     NODE_ENV: "production",
+    SHINHAN_APP_ENV: "production",
+    SHINHAN_CLIENT_IP_MODE: "vercel-direct",
+    VERCEL: "1",
+    VERCEL_ENV: "production",
     BETA_TRACKING_MODE: "production",
     BETA_DATASET: "beta",
     BETA_TRACKING_ALLOWED_ORIGINS: "https://synthetic.example",
-    BETA_TRACKING_WEB_APP_URL: "https://script.google.com/macros/s/SYNTHETIC_NO_NETWORK/exec",
+    BETA_TRACKING_API_URL: "https://shinhan-api.hometogether.kr/api/v1/beta/rpc",
     BETA_EVENT_WRITE_SECRET: "a".repeat(64),
   };
   configure(production);
@@ -196,9 +210,9 @@ try {
   );
   for (const overrides of [
     { BETA_TRACKING_ALLOWED_ORIGINS: "http://synthetic.example" },
-    { BETA_TRACKING_WEB_APP_URL: "https://script.google.com.evil.example/macros/s/id/exec" },
-    { BETA_TRACKING_WEB_APP_URL: "https://script.google.com/macros/s/id/dev" },
-    { BETA_TRACKING_WEB_APP_URL: "https://script.google.com/macros/s/id/exec?key=x" },
+    { BETA_TRACKING_API_URL: "https://script.google.com.evil.example/macros/s/id/exec" },
+    { BETA_TRACKING_API_URL: "https://script.google.com/macros/s/id/dev" },
+    { BETA_TRACKING_API_URL: "https://script.google.com/macros/s/id/exec?key=x" },
     { BETA_EVENT_WRITE_SECRET: signing.fixture_key_utf8 },
     { NODE_ENV: "development" },
   ]) {
@@ -207,7 +221,7 @@ try {
   }
 
   configure();
-  for (const item of [...recordCases, ...invalidCases]) {
+  for (const item of transportOnly ? [] : [...recordCases, ...invalidCases]) {
     sent = [];
     stubResponse = item.response;
     const response = await handler.handleBetaEvent(
@@ -250,7 +264,7 @@ try {
       "INVALID_EVENT",
     ],
   ];
-  for (const [body, headers, status, code] of localFailures) {
+  for (const [body, headers, status, code] of transportOnly ? [] : localFailures) {
     sent = [];
     stubResponse = success;
     const response = await handler.handleBetaEvent(request(body, headers));
@@ -300,6 +314,120 @@ try {
   check(sent.length, 2, "one server envelope retry");
   check(sent[0].payload_json, sent[1].payload_json, "retry payload stable");
   check(sent[0].nonce !== sent[1].nonce, true, "retry nonce fresh");
+
+
+  // Only the changed transport and shared ingress boundary run with --transport-only.
+  for (const overrides of [
+    { BETA_TRACKING_API_URL: "http://127.0.0.1:4319/collector" },
+    { BETA_TRACKING_API_URL: "http://127.0.0.1:4319/api/v1/beta/rpc?secret=synthetic" },
+    { BETA_TRACKING_API_URL: "http://untrusted.invalid:4319/api/v1/beta/rpc" },
+    { BETA_TRACKING_API_URL: "", BETA_TRACKING_WEB_APP_URL: localEnvironment.BETA_TRACKING_API_URL },
+  ]) {
+    configure(overrides);
+    check(configuration.getBetaTrackingEnvironment(), null, "legacy or unapproved local target disabled");
+  }
+  for (const overrides of [
+    { BETA_TRACKING_API_URL: "https://dev-shinhan-api.hometogether.kr/api/v1/beta/rpc" },
+    { BETA_TRACKING_API_URL: "https://shinhan-api.hometogether.kr/api/v1/beta/rpc/" },
+    { BETA_TRACKING_API_URL: "https://shinhan-api.hometogether.kr.evil.invalid/api/v1/beta/rpc" },
+    { VERCEL_ENV: "preview" }, { SHINHAN_APP_ENV: "local" },
+  ]) {
+    configure({ ...production, ...overrides });
+    check(configuration.getBetaTrackingEnvironment(), null, "environment and server target must match");
+  }
+  configure({ ...production, SHINHAN_APP_ENV: "dev", VERCEL_ENV: "preview",
+    BETA_TRACKING_API_URL: "https://dev-shinhan-api.hometogether.kr/api/v1/beta/rpc" });
+  check(configuration.getBetaTrackingEnvironment() !== null, true, "dev preview targets only dev API");
+  configure({ SHINHAN_APP_ENV: "test", NODE_ENV: "test" });
+  check(configuration.getBetaTrackingEnvironment() !== null, true, "explicit test loopback mode");
+  configure();
+  for (const status of [301, 302, 303, 307, 308]) {
+    sent = [];
+    stubResponse = () => new Response(null, { status, headers: {
+      location: "https://script.googleusercontent.com/macros/echo?user_content_key=synthetic",
+    } });
+    const response = await handler.handleBetaEvent(request(input));
+    check(response.status, 503, "all redirects rejected");
+    check(sent.length, 1, "redirect target never requested");
+  }
+  for (const [header, value] of [
+    ["X-Shinhan-App-Env", null], ["X-Shinhan-App-Env", "production"],
+    ["X-Shinhan-App-Env", "local, production"], ["X-Contract-Version", null],
+    ["X-Contract-Version", "0.1.0-draft.2"], ["Content-Type", "text/html"],
+  ]) {
+    sent = [];
+    stubResponse = () => {
+      const response = jsonResponse(success);
+      if (value === null) response.headers.delete(header);
+      else response.headers.set(header, value);
+      return response;
+    };
+    check((await handler.handleBetaEvent(request(input))).status, 503, "untrusted response metadata rejected");
+    check(sent.length, 1, "bad response is not retried");
+  }
+  for (const [status, code, retryable, expectedStatus] of [
+    [400, "INVALID_EVENT", false, 422], [404, "TRACKING_DISABLED", false, 404],
+    [405, "INVALID_EVENT", false, 422], [413, "PAYLOAD_TOO_LARGE", false, 413],
+    [415, "UNSUPPORTED_MEDIA_TYPE", false, 415], [429, "RATE_LIMITED", true, 429],
+    [503, "COLLECTOR_UNAVAILABLE", true, 503],
+  ]) {
+    sent = [];
+    stubResponse = () => new Response(JSON.stringify({ ok: false, contract_version: version,
+      error: { code, retryable, retry_after_ms: retryable ? 1000 : null } }), {
+      status, headers: jsonResponse(success).headers,
+    });
+    const response = await handler.handleBetaEvent(request(input));
+    check(response.status, expectedStatus, "safe non-2xx error envelope normalized");
+    check((await response.json()).error.code, code, "safe server error code preserved");
+  }
+  stubResponse = () => new Response(JSON.stringify(success), { status: 503, headers: jsonResponse(success).headers });
+  check((await handler.handleBetaEvent(request(input))).status, 503, "ok body cannot bypass failed HTTP status");
+  const sharedIngress = loadTypeScript(resolve(root, "src/shared/api/cloudflare-ingress/index.ts"));
+  const bridgeIp = loadTypeScript(resolve(root, "src/features/shinhan-bridge/api/client-ip.server.ts"));
+  for (const [raw, expected] of [
+    ["192.0.2.10", "v4:192.0.2.10"], [" 192.0.2.10 ", "v4:192.0.2.10"],
+    ["2001:0db8:0000:0000:0000:0000:0000:0001", "v6:2001:db8::1"],
+    ["::ffff:192.0.2.10", "v4:192.0.2.10"], ["::1", "v6:::1"],
+  ]) {
+    check(sharedIngress.normalizeClientIp(raw), expected, "shared normalization preserves existing IP semantics");
+    check(bridgeIp.normalizeClientIp(raw), expected, "existing bridge normalization preserved");
+  }
+  const cfSecret = "b".repeat(64);
+  const cfEnvironment = { ...production, SHINHAN_CLIENT_IP_MODE: "cloudflare-vercel",
+    SHINHAN_CF_INGRESS_SECRET: cfSecret, BETA_TRACKING_ALLOWED_ORIGINS: "https://hometogether.kr" };
+  const cfHeaders = { "x-shinhan-ingress-key": cfSecret, "x-shinhan-visitor-ip": "192.0.2.10" };
+  for (const secret of ["", "B".repeat(64), production.BETA_EVENT_WRITE_SECRET]) {
+    configure({ ...cfEnvironment, SHINHAN_CF_INGRESS_SECRET: secret });
+    check(configuration.getBetaTrackingContext(), null, "CF key absent invalid or reused as event key disables tracking");
+  }
+  configure(cfEnvironment);
+  check(configuration.getBetaTrackingContext() !== null, true, "valid CF production configuration");
+  for (const overrides of [
+    { "x-shinhan-ingress-key": null }, { "x-shinhan-ingress-key": "c".repeat(64) },
+    { "x-shinhan-ingress-key": cfSecret + "," + cfSecret },
+    { "x-shinhan-visitor-ip": null }, { "x-shinhan-visitor-ip": "invalid" },
+    { "x-shinhan-visitor-ip": "192.0.2.10, 192.0.2.11" }, { "cf-worker": "" },
+  ]) {
+    const headers = new Headers(cfHeaders);
+    for (const [name, value] of Object.entries(overrides)) {
+      if (value === null) headers.delete(name); else headers.set(name, value);
+    }
+    assert.throws(() => bridgeIp.authenticateCloudflareClientIp(headers, cfEnvironment)); checks += 1;
+    const incoming = request(input, Object.fromEntries(headers), "https://hometogether.kr/api/beta/events");
+    sent = [];
+    stubResponse = success;
+    const response = await handler.handleBetaEvent(incoming);
+    check(response.status, 503, "invalid CF ingress rejected");
+    check((await response.json()).error.code, "INGRESS_UNAVAILABLE", "safe ingress error");
+    check(incoming.bodyUsed, false, "CF rejection precedes body consumption");
+    check(sent.length, 0, "CF rejection makes no collector request");
+  }
+  check(bridgeIp.authenticateCloudflareClientIp(new Headers(cfHeaders), cfEnvironment), "v4:192.0.2.10", "existing bridge CF behavior preserved");
+  sent = [];
+  stubResponse = success;
+  check((await handler.handleBetaEvent(request(input, cfHeaders, "https://hometogether.kr/api/beta/events"))).status, 201, "valid CF ingress reaches collector");
+  check(sent.length, 1, "valid CF request sends once without ingress proof or IP upstream");
+  configure();
 
   configure({ BETA_TRACKING_ENABLED: "false" });
   sent = [];

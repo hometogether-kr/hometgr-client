@@ -2,6 +2,8 @@ import "server-only";
 
 import { z } from "zod";
 
+import { authenticateCloudflareIp } from "@/shared/api/cloudflare-ingress";
+
 import { BETA_SCHEMA_VERSION, betaEventRequestSchema } from "@/domains/beta-tracking";
 
 import {
@@ -55,6 +57,14 @@ export async function handleBetaEvent(request: Request) {
     const environment = getBetaTrackingEnvironment();
     if (!environment) throw new BetaTrackingFailure("TRACKING_DISABLED");
     validateBrowserRequest(request, environment);
+    if (environment.SHINHAN_CLIENT_IP_MODE === "cloudflare-vercel") {
+      try {
+        authenticateCloudflareIp(request.headers, {
+          secret: environment.SHINHAN_CF_INGRESS_SECRET,
+          keyHeader: "x-shinhan-ingress-key", ipHeader: "x-shinhan-visitor-ip",
+        });
+      } catch { throw new BetaTrackingFailure("INGRESS_UNAVAILABLE"); }
+    }
     const raw = await readBetaJson(request, 4096);
     const version = versionSchema.safeParse(raw);
     if (version.success && version.data.event.schema_version !== BETA_SCHEMA_VERSION) {

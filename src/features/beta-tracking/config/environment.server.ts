@@ -38,6 +38,9 @@ const collectorUrlSchema = z
   });
 
 const environmentSchema = z.object({
+  SHINHAN_APP_ENV: z.enum(["local", "test", "dev", "production"]),
+  SHINHAN_CLIENT_IP_MODE: z.enum(["local", "vercel-direct", "cloudflare-vercel"]),
+  SHINHAN_CF_INGRESS_SECRET: z.string().optional(),
   BETA_TRACKING_ENABLED: z.literal("true"),
   BETA_TRACKING_MODE: z.enum(["local", "production"]),
   BETA_TRACKING_CONTEXT_ID: betaContextIdSchema,
@@ -48,7 +51,7 @@ const environmentSchema = z.object({
     .string()
     .transform((value) => value.split(",").map((origin) => origin.trim()))
     .pipe(z.array(originSchema).min(1).max(10)),
-  BETA_TRACKING_WEB_APP_URL: collectorUrlSchema,
+  BETA_TRACKING_API_URL: collectorUrlSchema,
   BETA_EVENT_WRITE_SECRET: z.string().min(32).max(256),
 });
 
@@ -59,36 +62,45 @@ function isLoopback(url: URL) {
 }
 
 export function isAllowedBetaCollectorUrl(url: URL, environment: BetaTrackingEnvironment) {
-  if (url.username || url.password || url.search || url.hash) return false;
-  if (environment.BETA_TRACKING_MODE === "local") {
-    return (
-      environment.BETA_DATASET === "connection_test" && url.protocol === "http:" && isLoopback(url)
-    );
+  const endpoint = environment.BETA_TRACKING_API_URL;
+  if (url.href !== endpoint || url.username || url.password || url.search || url.hash) return false;
+  if (url.pathname !== "/api/v1/beta/rpc") return false;
+  if (environment.SHINHAN_APP_ENV === "local" || environment.SHINHAN_APP_ENV === "test") {
+    return environment.BETA_TRACKING_MODE === "local" && environment.BETA_DATASET === "connection_test" &&
+      /^http:\/\/(127\.0\.0\.1|localhost|\[::1\]):[1-9][0-9]{0,4}\/api\/v1\/beta\/rpc$/.test(endpoint);
   }
-  return (
-    url.protocol === "https:" &&
-    url.hostname === "script.google.com" &&
-    !url.port &&
-    /^\/macros\/s\/[a-zA-Z0-9_-]+\/exec$/.test(url.pathname)
-  );
+  const origin = environment.SHINHAN_APP_ENV === "dev"
+    ? "https://dev-shinhan-api.hometogether.kr" : "https://shinhan-api.hometogether.kr";
+  return environment.BETA_TRACKING_MODE === "production" && endpoint === origin + "/api/v1/beta/rpc";
 }
 
 function isAllowedRuntime(environment: BetaTrackingEnvironment) {
   const origins = environment.BETA_TRACKING_ALLOWED_ORIGINS.map((origin) => new URL(origin));
   if (environment.BETA_TRACKING_MODE === "local") {
     return (
-      process.env.NODE_ENV === "development" &&
-      process.env.VERCEL !== "1" &&
+      ((environment.SHINHAN_APP_ENV === "local" && process.env.NODE_ENV === "development") ||
+        (environment.SHINHAN_APP_ENV === "test" && process.env.NODE_ENV === "test")) &&
+      process.env.VERCEL !== "1" && environment.SHINHAN_CLIENT_IP_MODE === "local" &&
       environment.BETA_DATASET === "connection_test" &&
       origins.every((origin) => origin.protocol === "http:" && isLoopback(origin))
     );
   }
-  return (
-    process.env.NODE_ENV === "production" &&
-    origins.every((origin) => origin.protocol === "https:" && !isLoopback(origin)) &&
-    environment.BETA_EVENT_WRITE_SECRET !== "PUBLIC_SYNTHETIC_FIXTURE_KEY_DO_NOT_USE" &&
-    !environment.BETA_EVENT_WRITE_SECRET.startsWith("synthetic-")
-  );
+  if (
+    !["dev", "production"].includes(environment.SHINHAN_APP_ENV) ||
+    process.env.NODE_ENV !== "production" || process.env.VERCEL !== "1" ||
+    process.env.VERCEL_ENV !== (environment.SHINHAN_APP_ENV === "production" ? "production" : "preview") ||
+    environment.SHINHAN_CLIENT_IP_MODE === "local" ||
+    !origins.every((origin) => origin.protocol === "https:" && !isLoopback(origin)) ||
+    environment.BETA_EVENT_WRITE_SECRET === "PUBLIC_SYNTHETIC_FIXTURE_KEY_DO_NOT_USE" ||
+    environment.BETA_EVENT_WRITE_SECRET.startsWith("synthetic-")
+  ) return false;
+  if (environment.SHINHAN_CLIENT_IP_MODE === "cloudflare-vercel") {
+    const secret = environment.SHINHAN_CF_INGRESS_SECRET;
+    return environment.SHINHAN_APP_ENV === "production" && !!secret && secret.length === 64 && /^[a-f0-9]{64}$/.test(secret) &&
+      secret !== environment.BETA_EVENT_WRITE_SECRET &&
+      origins.every((origin) => ["https://hometogether.kr", "https://www.hometogether.kr"].includes(origin.origin));
+  }
+  return true;
 }
 
 export function getBetaTrackingEnvironment(): BetaTrackingEnvironment | null {
@@ -98,7 +110,7 @@ export function getBetaTrackingEnvironment(): BetaTrackingEnvironment | null {
   if (Date.now() < Date.parse(environment.BETA_START_AT)) return null;
   if (
     !isAllowedRuntime(environment) ||
-    !isAllowedBetaCollectorUrl(new URL(environment.BETA_TRACKING_WEB_APP_URL), environment)
+    !isAllowedBetaCollectorUrl(new URL(environment.BETA_TRACKING_API_URL), environment)
   ) {
     return null;
   }

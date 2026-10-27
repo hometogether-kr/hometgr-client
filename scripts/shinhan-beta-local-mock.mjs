@@ -150,8 +150,8 @@ const server = createServer(async (request, response) => {
       collectorMode = body.mode;
       return respond(response, 200, { synthetic: true, collectorMode });
     }
-    if (request.method === "POST" && url.pathname === "/collector")
-      return respond(response, 200, collect(body));
+    if (request.method === "POST" && url.pathname === "/api/v1/beta/rpc")
+      return respond(response, 200, collect(body), version);
     const route = url.pathname.replace(/^\/api\/v1\//, "");
     if (route === "consents" && request.method === "GET") {
       return respond(
@@ -267,7 +267,7 @@ if (process.argv.includes("--dev")) {
         BETA_DATASET: "connection_test",
         BETA_START_AT: "2026-01-01T00:00:00.000Z",
         BETA_TRACKING_ALLOWED_ORIGINS: origin,
-        BETA_TRACKING_WEB_APP_URL: `${mockOrigin}/collector`,
+        BETA_TRACKING_API_URL: `${mockOrigin}/api/v1/beta/rpc`,
         BETA_EVENT_WRITE_SECRET: writeSecret,
       },
     },

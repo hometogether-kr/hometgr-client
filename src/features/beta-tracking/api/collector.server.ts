@@ -83,26 +83,12 @@ function collectorPayload(
   };
 }
 
-function isContentRedirect(url: URL) {
-  return (
-    url.protocol === "https:" &&
-    url.hostname === "script.googleusercontent.com" &&
-    !url.port &&
-    !url.username &&
-    !url.password &&
-    !url.hash &&
-    url.pathname === "/macros/echo" &&
-    Boolean(url.searchParams.get("user_content_key")) &&
-    [...url.searchParams.keys()].every((key) => key === "user_content_key" || key === "lib")
-  );
-}
-
 async function sendEnvelope(
   envelope: BetaEventEnvelope,
   environment: BetaTrackingEnvironment,
   signal: AbortSignal,
 ): Promise<BetaEventResponse> {
-  const url = new URL(environment.BETA_TRACKING_WEB_APP_URL);
+  const url = new URL(environment.BETA_TRACKING_API_URL);
   if (!isAllowedBetaCollectorUrl(url, environment)) {
     throw new BetaTrackingFailure("COLLECTOR_UNAVAILABLE");
   }
@@ -110,32 +96,22 @@ async function sendEnvelope(
   if (Buffer.byteLength(body, "utf8") > 8192) {
     throw new BetaTrackingFailure("PAYLOAD_TOO_LARGE");
   }
-  let response = await fetch(url, {
+  const response = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
     body,
     cache: "no-store",
     credentials: "omit",
+    referrerPolicy: "no-referrer",
     redirect: "manual",
     signal,
   });
-  if ([302, 303].includes(response.status)) {
-    const location = response.headers.get("location");
-    if (environment.BETA_TRACKING_MODE !== "production" || !location) {
-      throw new BetaTrackingFailure("COLLECTOR_UNAVAILABLE");
-    }
-    const target = new URL(location);
-    if (!isContentRedirect(target)) throw new BetaTrackingFailure("COLLECTOR_UNAVAILABLE");
+  if (
+    (response.status >= 300 && response.status < 400) || response.redirected ||
+    response.headers.get("x-shinhan-app-env") !== environment.SHINHAN_APP_ENV ||
+    response.headers.get("x-contract-version") !== BETA_SCHEMA_VERSION
+  ) {
     await response.body?.cancel();
-    response = await fetch(target, {
-      method: "GET",
-      cache: "no-store",
-      credentials: "omit",
-      redirect: "error",
-      signal,
-    });
-  }
-  if (response.status >= 300 && response.status < 400) {
     throw new BetaTrackingFailure("COLLECTOR_UNAVAILABLE");
   }
   if (!/^application\/json(?:\s*;.*)?$/i.test(response.headers.get("content-type") ?? "")) {
