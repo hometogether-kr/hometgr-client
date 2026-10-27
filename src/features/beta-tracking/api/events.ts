@@ -13,7 +13,7 @@ export async function sendBetaEvent(input: BetaEventRequest): Promise<EventDeliv
   const parsedRequest = betaEventRequestSchema.safeParse(input);
   if (!parsedRequest.success) return { kind: "permanent" };
   const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), 1_500);
+  const timeout = window.setTimeout(() => controller.abort(), 20_000);
   try {
     const response = await fetch("/api/beta/events", {
       method: "POST",

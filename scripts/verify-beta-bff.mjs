@@ -12,6 +12,7 @@ const ts = require("typescript");
 const modules = new Map();
 let checks = 0;
 const transportOnly = process.argv.includes("--transport-only");
+const deadlinesOnly = process.argv.includes("--deadlines-only");
 const originalFetch = globalThis.fetch;
 const originalEnvironment = { ...process.env };
 const version = "0.1.0-draft.3";
@@ -131,6 +132,90 @@ try {
   const acceptedCase = recordCases.find((item) => item.name === "accepted");
   const input = acceptedCase.request;
   const success = acceptedCase.response;
+
+  const syntheticFetch = globalThis.fetch;
+  const originalTimeout = AbortSignal.timeout;
+  const originalWindow = globalThis.window;
+  try {
+    for (const appEnvironment of ["local", "test", "dev", "production"]) {
+      for (const dataset of ["beta", "connection_test"]) {
+        const remote = ["dev", "production"].includes(appEnvironment);
+        configure(remote ? {
+          NODE_ENV: "production", VERCEL: "1", VERCEL_ENV: appEnvironment === "dev" ? "preview" : "production",
+          SHINHAN_APP_ENV: appEnvironment, SHINHAN_CLIENT_IP_MODE: "vercel-direct",
+          BETA_TRACKING_MODE: "production", BETA_DATASET: dataset,
+          BETA_TRACKING_ALLOWED_ORIGINS: "https://synthetic.example",
+          BETA_TRACKING_API_URL: "https://" + (appEnvironment === "dev" ? "dev-shinhan-api" : "shinhan-api") + ".hometogether.kr/api/v1/beta/rpc",
+          BETA_EVENT_WRITE_SECRET: "a".repeat(64),
+        } : { SHINHAN_APP_ENV: appEnvironment, NODE_ENV: appEnvironment === "test" ? "test" : "development", BETA_DATASET: dataset });
+        const allowed = dataset === (remote ? "beta" : "connection_test");
+        check(configuration.getBetaTrackingEnvironment() !== null, allowed, "dataset fixed by runtime: " + appEnvironment + "/" + dataset);
+        if (!allowed) {
+          let forwarded = false;
+          globalThis.fetch = async () => { forwarded = true; throw new Error("SYNTHETIC_FORBIDDEN_FETCH"); };
+          check((await handler.handleBetaEvent(request(input))).status, 404, "invalid dataset leaves tracking disabled");
+          check(forwarded, false, "invalid dataset makes no collector request");
+        }
+      }
+    }
+    configure();
+    const budgets = [], controllers = [], bffRequests = [];
+    AbortSignal.timeout = (milliseconds) => {
+      budgets.push(milliseconds);
+      const controller = new AbortController();
+      controllers.push(controller);
+      return controller.signal;
+    };
+    globalThis.fetch = async (_url, init) => {
+      bffRequests.push({ signal: init.signal, envelope: JSON.parse(init.body) });
+      return bffRequests.length === 1 ? jsonResponse({ ok: false, contract_version: version,
+        error: { code: "REPLAYED_ENVELOPE", retryable: true, retry_after_ms: null } }) : jsonResponse(success);
+    };
+    const environment = configuration.getBetaTrackingEnvironment();
+    check((await collector.recordBetaEvent(input.event, environment)).ok, true, "renewed envelope succeeds within shared budget");
+    check(budgets, [18_000], "BFF gives both envelope attempts one 18 second budget");
+    check(bffRequests[0].signal === bffRequests[1].signal, true, "retry does not reset BFF deadline");
+    check(bffRequests[0].envelope.payload_json, bffRequests[1].envelope.payload_json, "deadline adjustment preserves exact event payload");
+    check(bffRequests[0].envelope.nonce !== bffRequests[1].envelope.nonce, true, "envelope retry still uses a fresh nonce");
+    globalThis.fetch = async (_url, init) => new Promise((_resolve, reject) => {
+      init.signal.addEventListener("abort", () => reject(new Error("SYNTHETIC_TIMEOUT")), { once: true });
+      queueMicrotask(() => controllers.at(-1).abort());
+    });
+    await assert.rejects(() => collector.recordBetaEvent(input.event, environment), { message: "COLLECTOR_UNAVAILABLE" });
+    checks += 1;
+    check(budgets.at(-1), 18_000, "BFF timeout uses the agreed budget");
+
+    const delivery = loadTypeScript(resolve(root, "src/features/beta-tracking/api/events.ts"));
+    const browserTimers = [], cleared = [], browserBodies = [];
+    globalThis.window = {
+      setTimeout(callback, milliseconds) { browserTimers.push({ callback, milliseconds }); return browserTimers.length; },
+      clearTimeout(id) { cleared.push(id); },
+    };
+    globalThis.fetch = async (_url, init) => new Promise((_resolve, reject) => {
+      browserBodies.push(init.body);
+      init.signal.addEventListener("abort", () => reject(new Error("SYNTHETIC_TIMEOUT")), { once: true });
+      queueMicrotask(() => browserTimers.at(-1).callback());
+    });
+    check(await delivery.sendBetaEvent(input), { kind: "retry", retryAfterMs: 0, missingPredecessor: false }, "browser timeout retains retryable event");
+    check(browserTimers[0].milliseconds, 20_000, "browser allows 20 seconds for BFF response");
+    globalThis.fetch = async (_url, init) => {
+      browserBodies.push(init.body);
+      return new Response(JSON.stringify(success), { status: 201, headers: jsonResponse(success).headers });
+    };
+    check(await delivery.sendBetaEvent(input), { kind: "accepted" }, "same browser event can succeed after timeout");
+    check(browserBodies[0], browserBodies[1], "browser retry preserves exact serialized event and ID");
+    check(cleared, [1, 2], "both browser paths clear their deadline timer");
+    check(browserTimers.map(({milliseconds}) => milliseconds), [20_000, 20_000], "every browser request has its own bounded budget");
+    check(15_000 < budgets[0] && budgets[0] < browserTimers[0].milliseconds, true, "server 15/BFF18/browser20 budget ordering");
+  } finally {
+    globalThis.fetch = syntheticFetch;
+    AbortSignal.timeout = originalTimeout;
+    if (originalWindow === undefined) delete globalThis.window; else globalThis.window = originalWindow;
+  }
+  if (deadlinesOnly) {
+    console.log("PASS: " + checks + " offline dataset/deadline assertions; virtual deadlines, no network.");
+  } else {
+
 
   check(domain.BETA_SCHEMA_VERSION, version, "contract version");
   for (const record of transportOnly ? [] : records) {
@@ -441,6 +526,7 @@ try {
       records.length +
       " synthetic ledger rows; no network.",
   );
+  }
 } finally {
   globalThis.fetch = originalFetch;
   for (const key of Object.keys(process.env))

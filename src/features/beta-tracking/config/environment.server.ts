@@ -87,6 +87,7 @@ function isAllowedRuntime(environment: BetaTrackingEnvironment) {
   }
   if (
     !["dev", "production"].includes(environment.SHINHAN_APP_ENV) ||
+    environment.BETA_DATASET !== "beta" ||
     process.env.NODE_ENV !== "production" || process.env.VERCEL !== "1" ||
     process.env.VERCEL_ENV !== (environment.SHINHAN_APP_ENV === "production" ? "production" : "preview") ||
     environment.SHINHAN_CLIENT_IP_MODE === "local" ||

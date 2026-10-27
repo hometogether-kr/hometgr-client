@@ -135,7 +135,7 @@ export async function recordBetaEvent(
   environment: BetaTrackingEnvironment,
 ): Promise<Extract<BetaEventResponse, { ok: true }>> {
   const payload = collectorPayload(event, environment);
-  const signal = AbortSignal.timeout(1200);
+  const signal = AbortSignal.timeout(18_000);
   try {
     for (let attempt = 0; attempt < 2; attempt += 1) {
       const envelope = createBetaEventEnvelope(payload, environment.BETA_EVENT_WRITE_SECRET);

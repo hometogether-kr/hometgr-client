@@ -9,7 +9,7 @@
 - 원격 주소는 SHINHAN_APP_ENV=dev의 https://dev-shinhan-api.hometogether.kr/api/v1/beta/rpc 또는 production의 https://shinhan-api.hometogether.kr/api/v1/beta/rpc로 고정한다. Vercel Preview/Production도 각 환경과 일치해야 한다.
 - local/test는 명시한 포트의 HTTP loopback과 같은 RPC path, connection_test만 허용한다. BETA_TRACKING_MODE는 기존 local/production 구분을 유지한다.
 - 모든 redirect를 거절하고 응답의 X-Shinhan-App-Env, X-Contract-Version=0.1.0-draft.3, JSON·엄격한 응답 schema를 확인한다. 실패 HTTP 응답의 안전한 error envelope도 해석한다.
-- 기존 8KiB 요청/응답 한도, 1.2초 전송 제한, 같은 payload에 새 nonce를 쓰는 제한적 재시도, 쿠키 미전달, no-store를 유지한다. 분석 실패는 기존 신청 진행을 막지 않는다.
+- 기존 8KiB 요청/응답 한도, 같은 payload에 새 nonce를 쓰는 제한적 재시도, 쿠키 미전달, no-store를 유지한다. 전송 시간 제한은 아래 후속 기술값을 따른다. 분석 실패는 기존 신청 진행을 막지 않는다.
 
 ## 기존 Cloudflare 경계 재사용
 
@@ -33,3 +33,15 @@ SHINHAN_CF_INGRESS_SECRET은 기존 Cloudflare 경유 검증 목적에만 재사
 - 합성 실행기는 새 RPC 주소와 draft.3 응답 헤더만 맞췄으며 실행하지 않았다.
 
 전송 추가 계약의 원본은 관리자 docs/shinhan-beta-handoff/server-transport.md다. 과거 connection-readiness.md의 Apps Script URL/배포 설명은 당시 이력이고 현재 연결 대상으로 사용하지 않는다.
+
+## 후속 기술 추가 — 데이터 구분과 시간 제한
+
+shinhan_beta_server_transport_v1의 후속 기술값으로 서버 이벤트 전체 처리 예산 15초 → 고객 BFF 18초 → 브라우저 전송 20초를 사용한다. 기존 draft.3 contract.md의 브라우저 timeout 1.5초와 BFF 구현의 1.2초는 이 서버 전송에서 위 값으로 대체한다. 동결 contract.md·fixtures·manifest의 원본 바이트와 DTO/HMAC 규칙은 변경하지 않았다.
+
+- dev/production은 BETA_DATASET=beta만 허용한다. connection_test는 명시적 local/test loopback에서만 사용한다. 부적합한 조합은 공개 context를 제공하지 않고 TRACKING_DISABLED를 반환하며 수집 요청은 0회다. 과거 문서의 원격 connection_test 시험안은 현재 guard 하에서 실행하지 않는다.
+- BFF의 최대 두 번 서명 요청은 하나의 18초 signal을 공유한다. nonce 갱신으로 제한 시간을 다시 시작하지 않는다.
+- 브라우저의 한 전송은 20초에 중단된다. 응답 유실 시 같은 event ID·본문을 보존하며 기존 최대 5회·0/1/3/10/30초+jitter와 미전송 7일 TTL을 유지한다. 분석용 상태 90일과 고객 동작의 비대기 원칙도 유지한다.
+- JSON 본문 소비의 기존 1.5초 제한은 별도 크기/스트림 방어로 유지한다. 서버 전체 15초 구현과 검증은 관리자 서버 작업 범위다.
+- 이 값은 실제 WIF+Sheets 왕복 시간을 측정한 성능 보장이 아니다. 실제 배포 환경의 실행 한도와 신규·중복 이벤트의 지연, 중단 시 부분 실패 복구는 원격 승인 범위에서 별도로 확인한다. 시간 초과가 원본 미저장을 뜻하지 않는다.
+
+후속 검증: node scripts/verify-beta-bff.mjs --deadlines-only의 합성 assertion 30개가 통과했다. 가상 deadline만 사용했고 실제 네트워크는 0회다. 원격/local의 dataset 조합, 거절 시 수집 0회, BFF 공통 예산·중단, 브라우저 중단 후 동일 이벤트 재전송을 확인했다. 기존 367개 전송 검증과 브라우저 전체 검증은 반복하지 않았다. 타입 구조는 바뀌지 않아 전체 타입 검사를 반복하지 않았다.
