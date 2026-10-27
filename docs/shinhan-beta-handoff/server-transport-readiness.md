@@ -46,3 +46,7 @@ shinhan_beta_server_transport_v1의 후속 기술값으로 서버 이벤트 전�
 - 이 값은 실제 WIF+Sheets 왕복 시간을 측정한 성능 보장이 아니다. 실제 배포 환경의 실행 한도와 신규·중복 이벤트의 지연, 중단 시 부분 실패 복구는 원격 승인 범위에서 별도로 확인한다. 시간 초과가 원본 미저장을 뜻하지 않는다.
 
 후속 검증: node scripts/verify-beta-bff.mjs --deadlines-only의 합성 assertion 30개가 통과했다. 가상 deadline만 사용했고 실제 네트워크는 0회다. 원격/local의 dataset 조합, 거절 시 수집 0회, BFF 공통 예산·중단, 브라우저 중단 후 동일 이벤트 재전송을 확인했다. 기존 367개 전송 검증과 브라우저 전체 검증은 반복하지 않았다. 타입 구조는 바뀌지 않아 전체 타입 검사를 반복하지 않았다.
+
+## 배포 준비 보완 — 요청 시점의 환경 평가
+
+/shinhan 상위 Server Layout은 환경을 읽기 전에 await connection()을 호출한다. 로컬 prebuilt에 Production Sensitive 키가 없어도 unavailable/404 또는 비활성 context가 정적 결과로 고정되지 않으며, 실제 키는 배포된 서버의 런타임 환경에서만 읽는다. 빌드용 합성 키는 만들지 않고 기존 화면·동선·신청 API는 유지한다. 설치 Next 가이드와 환경 읽기 전 await 순서를 정적으로 확인했다. 실제 Production 빌드 결과는 후속 배포 기록에 남긴다.
