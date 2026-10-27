@@ -12,7 +12,19 @@
 
 최신 서버 인계는 [customer-web-handoff.md](C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-web-handoff.md) **1.8.0**, [고객 ingress 계약](C:/Users/PC/Documents/GitHub/shinhan-runtime-split/docs/customer-production-ingress-contract-v1.md) **1.1.0**다. 과거 인계의 배포 권한 오류와 초기 미완료 기록은 해당 문서의 최신 0절보다 우선하지 않는다.
 
-후속 상태 확인(관리자 turn 01a17acc-36f2-7e62-a182-1374c0809c7d): 관리자는 전체 코드를 하나의 Code.gs로 준비하고 사용자에게 새 베타 프로젝트의 코드·manifest 저장을 안내했다. 키 공급과 웹앱 배포는 다음 단계로 남았고, 설정 전 수집은 비활성이다. 따라서 현재 인계된 실제 /exec URL이나 고객 쓰기 키 적용 완료 증거는 없다. 이 문서는 관리자 채팅의 저장/배포 절차를 중복 실행하지 않는다.
+이전 상태 확인(관리자 turn 01a17acc-36f2-7e62-a182-1374c0809c7d): 관리자는 전체 코드를 하나의 Code.gs로 준비하고 사용자에게 새 베타 프로젝트의 코드·manifest 저장을 안내했다. 당시 키 공급과 웹앱 배포는 다음 단계로 남아 있었다. 이후 확인한 최신 배포 응답 상태는 아래 절을 따른다. 이 문서는 관리자 채팅의 저장/배포 절차를 중복 실행하지 않는다.
+
+## 웹앱 URL 인계 — GET 응답만 확인
+
+2026-10-27 관리자 인계와 [관리자 연결 상태](C:/Users/PC/Documents/GitHub/shinhan-beta-dashboard/docs/shinhan-beta-handoff/connection-status.md)를 읽기 대조했다.
+
+- 인계 URL: [베타 Apps Script 웹앱](https://script.google.com/macros/s/AKfycbz3mb9tuf1QfbeM3Jo491zz4gA-xXIu465k7dqevzqzOpo_g6gD035jm0Hi3iGxTovo/exec).
+- 관리자 확인 범위: 인증정보 없는 GET 2회(script.google.com 302 → script.googleusercontent.com 200). application/json의 contract_version=0.1.0-draft.3 / INVALID_EVENT가 doGet의 예상 정적 응답과 일치했다.
+- 해당 확인의 이벤트 POST·시트 쓰기·집계 실행은 각각0회다. 이 고객 문서 동기화에서는 GET을 반복하지 않았으며 외부 요청0회다.
+- 정적 응답은 원격 코드 원문, 실행 계정·접근 정책, HMAC 키, 시트 읽기/쓰기 또는 전체 수집 연결을 검증하지 않는다.
+- 프로젝트 편집 URL/Script ID, 원격 속성, 키 공급, run/context·최초 시작시각·허용 Origin, /api/beta ingress 보호는 확인·공급 전이다. 웹앱 배포 ID를 Script ID로 대신 쓰지 않는다.
+
+URL은 인계 자료에만 기록했다. 고객 환경변수에 적용하거나 수집을 활성화하지 않았다. 관리자 측이 프로젝트 식별자와 비밀값을 노출하지 않는 키 공급 경로를 준비하며, 고객은 동일 키의 안전한 공급 및 나머지 적용 증거를 기다린다.
 
 ## 고정 대상과 역할
 
@@ -33,7 +45,7 @@
 
 | 설정 | 적용 위치·공급 책임 | 아직 필요한 실행 증거 |
 | --- | --- | --- |
-| `BETA_TRACKING_WEB_APP_URL` | 관리자 연결 담당이 실제 `/exec` 배포 결과를 인계, 고객 BFF 환경에 적용 | 실제 배포 ID/URL, 실행자·접근 정책, 대상 버전 |
+| `BETA_TRACKING_WEB_APP_URL` | 위 `/exec` URL 인계 및 관리자 GET 응답 확인 완료. 고객 BFF 환경에는 미적용 | 원격 배포 버전·실행자·접근 정책 확인, 실제 서명 연결 검증 |
 | `BETA_EVENT_WRITE_SECRET` | 고객 서버 환경과 Apps Script에 같은 전용 쓰기 키 공급 | 양쪽 등록 여부만 확인. 32~256자, 다른 두 읽기 키와 분리 |
 | `BETA_AGGREGATE_READ_SECRET` | 관리자 서버와 Apps Script에만 공급 | 내부 읽기 경계 적용 여부 |
 | `BETA_PUBLIC_AGGREGATE_READ_SECRET` | 관리자 공개 집계 서버와 Apps Script에만 공급 | 공개 읽기 경계 적용 여부. 공급이 공개 개시를 뜻하지 않음 |
@@ -63,7 +75,7 @@
 ### 실행 전 채울 항목
 
 - 승인된 검증용 HTTPS 고객 BFF URL/Origin 및 그 배포 버전: 미확인.
-- 관리자 Apps Script `/exec` URL·배포 버전·실행 계정·접근 범위: 진행 중인 관리자 연결 결과 대기.
+- 관리자 Apps Script `/exec` URL: 위 인계 URL 확보. 원격 배포 버전·실행 계정·접근 범위·서명 연결은 확인 대기.
 - 검증 전용 고정 run/context와 최초 시작 시각: 적용값 미확인.
 - 자료 범위: `dataset=connection_test`, 공개 비활성, 위 고정 베타 탭만 사용.
 - 고객 BFF로 보내는 이벤트 POST 상한: **4회**. 예상 신규 원장: **3행, A:Q 51셀**. 기존 행/헤더 변경 0회.
