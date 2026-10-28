@@ -5,10 +5,9 @@ import { ShinhanRoleFooter, ShinhanServiceHeader } from "@/widgets/shinhan-shell
 
 interface GuestIntakeLayoutProps {
   children: ReactNode;
-  notice: ReactNode;
 }
 
-function GuestIntakeLayout({ children, notice }: GuestIntakeLayoutProps) {
+function GuestIntakeLayout({ children }: GuestIntakeLayoutProps) {
   return (
     <div className="min-h-screen bg-grayscale-50 text-grayscale-900">
       <ShinhanServiceHeader
@@ -16,12 +15,7 @@ function GuestIntakeLayout({ children, notice }: GuestIntakeLayoutProps) {
         skipTarget="#shinhan-guest-intake"
         skipLabel="신청 내용으로 건너뛰기"
       />
-      <main id="shinhan-guest-intake">
-        <p className="mx-auto mt-6 max-w-[1120px] rounded-xl bg-primary-50 px-5 py-3 text-sm leading-6 text-grayscale-700">
-          {notice}
-        </p>
-        {children}
-      </main>
+      <main id="shinhan-guest-intake">{children}</main>
       <ShinhanRoleFooter />
     </div>
   );
@@ -29,14 +23,7 @@ function GuestIntakeLayout({ children, notice }: GuestIntakeLayoutProps) {
 
 export function ShinhanGuestBudgetPage() {
   return (
-    <GuestIntakeLayout
-      notice={
-        <>
-          원하는 예산과 입주 조건을 확인하고 상세 안내를 신청하세요. 접수 완료와 안내 메시지 전달
-          완료는 다릅니다.
-        </>
-      }
-    >
+    <GuestIntakeLayout>
       <ShinhanGuestIntake applicationType="GUEST_BUDGET" />
     </GuestIntakeLayout>
   );
@@ -44,11 +31,7 @@ export function ShinhanGuestBudgetPage() {
 
 export function ShinhanGuestDemandPage() {
   return (
-    <GuestIntakeLayout
-      notice={
-        <>원하는 위치와 입주 조건을 알려 주세요. 접수 완료와 안내 메시지 전달 완료는 다릅니다.</>
-      }
-    >
+    <GuestIntakeLayout>
       <ShinhanGuestIntake applicationType="GUEST_DEMAND" />
     </GuestIntakeLayout>
   );

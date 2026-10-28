@@ -9,24 +9,27 @@ import { SHINHAN_GUEST_BUDGET_PATH } from "../config/routes";
 import { useShinhanEntryAvailability } from "../model/entry-context";
 import { shinhanGuestRegionSchema } from "../model/guest-conditions.schema";
 import { useShinhanIntake } from "../model/intake-context";
+import type { ShinhanGuestBudgetValues } from "../model/intake-draft";
 
 function useStartGuestIntake() {
   const router = useRouter();
   const { startGuestDraft } = useShinhanIntake();
   const available = useShinhanEntryAvailability();
-  function startIntake(region = "") {
+  function startIntake(region = "", initialValues?: Partial<ShinhanGuestBudgetValues>) {
     if (!available) return;
-    startGuestDraft("GUEST_BUDGET", region);
+    startGuestDraft("GUEST_BUDGET", region, initialValues);
     router.push(SHINHAN_GUEST_BUDGET_PATH);
   }
   return { available, startIntake };
 }
 
-type GuestFormButtonProps = Omit<BtnCtaProps, "onClick" | "disabled">;
+interface GuestFormButtonProps extends Omit<BtnCtaProps, "onClick" | "disabled"> {
+  initialValues?: Partial<ShinhanGuestBudgetValues>;
+}
 
-export function ShinhanGuestFormButton(props: GuestFormButtonProps) {
+export function ShinhanGuestFormButton({ initialValues, ...props }: GuestFormButtonProps) {
   const { available, startIntake } = useStartGuestIntake();
-  return <BtnCta {...props} disabled={!available} onClick={() => startIntake()} />;
+  return <BtnCta {...props} disabled={!available} onClick={() => startIntake("", initialValues)} />;
 }
 
 interface GuestRegionButtonProps extends Omit<

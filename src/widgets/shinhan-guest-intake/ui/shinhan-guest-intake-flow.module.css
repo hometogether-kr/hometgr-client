@@ -198,3 +198,67 @@
     margin-top: 24px;
   }
 }
+
+.contactHeading {
+  text-align: left;
+  margin-bottom: 20px;
+}
+.contactEyebrow {
+  display: block;
+  margin-bottom: 6px;
+  color: #1c6be3;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 23px;
+}
+.contactHeading h1 {
+  font-size: 40px;
+  line-height: 54px;
+  margin-bottom: 6px;
+}
+.contactHeading h1 em {
+  color: #1c6be3;
+}
+.contactHeading p {
+  color: #2e3b49;
+}
+.contactForm {
+  margin-top: 20px;
+  gap: 12px;
+}
+.contactForm label {
+  font-size: 16px;
+}
+.back {
+  margin-top: 12px;
+  color: #1c6be3;
+  text-decoration: none;
+  font-size: 14px;
+}
+@media (max-width: 767px) {
+  .contactHeading h1 {
+    font-size: 28px;
+    line-height: 40px;
+  }
+}
+
+.contactForm > div:first-child > label {
+  color: #151d25;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+}
+.contactForm > div:first-child > div > div {
+  min-height: 56px;
+}
+.contactForm > div:nth-child(2) {
+  padding: 2px 12px;
+  border-radius: 12px;
+  background: #f6f9fc;
+}
+.contactForm .cta,
+.form .cta {
+  background: #1c6be3;
+  border-radius: 14px;
+  font-size: 17px;
+}

@@ -59,7 +59,16 @@ export function ShinhanPhoneField({ error, label = "휴대폰 번호", onValidIn
   );
 }
 
-export function ShinhanRequiredConsentFields({ error }: { error?: string }) {
+interface RequiredConsentFieldsProps {
+  error?: string;
+  label?: string;
+  privacyLabel?: string;
+}
+export function ShinhanRequiredConsentFields({
+  error,
+  label = "개인정보 수집·이용 동의 (필수)",
+  privacyLabel = "전문 보기",
+}: RequiredConsentFieldsProps) {
   const { draft, updateDraft } = useShinhanIntake();
   const { pending, preparing, attempt, fieldErrors, consents } = useShinhanStorage();
   const consentId = useId();
@@ -88,8 +97,8 @@ export function ShinhanRequiredConsentFields({ error }: { error?: string }) {
           aria-describedby={consentError ? `${consentId}-error` : undefined}
           className={styles.checkbox}
         />
-        <label htmlFor={consentId}>개인정보 수집·이용 동의 (필수)</label>
-        <ShinhanPrivacyLink />
+        <label htmlFor={consentId}>{label}</label>
+        <ShinhanPrivacyLink>{privacyLabel}</ShinhanPrivacyLink>
       </div>
       <ShinhanConsentStatus />
       {consentError && (

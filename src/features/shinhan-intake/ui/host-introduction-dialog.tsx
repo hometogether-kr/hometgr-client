@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { type FormEvent, useId, useRef, useState } from "react";
 
 import { useDialogBehavior } from "@/shared/lib/hooks";
@@ -8,9 +9,12 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { TextField } from "@/shared/ui/text-field";
 
 import { shinhanContactSchema } from "../model/contact.schema";
+import { useShinhanIntake } from "../model/intake-context";
 import { formatShinhanPhone } from "../model/phone";
 import { useShinhanStorage } from "../model/storage-context";
+import { ShinhanSessionRestart } from "./live-submit";
 import { ShinhanPrivacyLink } from "./privacy-navigation";
+import { ShinhanConsentStatus } from "./server-consent";
 
 import styles from "./host-introduction-dialog.module.css";
 
@@ -20,22 +24,40 @@ interface HostIntroductionDialogProps {
 
 export function ShinhanHostIntroductionDialog({ onClose }: HostIntroductionDialogProps) {
   const storage = useShinhanStorage();
+  const { draft, updateDraft } = useShinhanIntake();
+  const router = useRouter();
   const panelRef = useRef<HTMLDivElement>(null);
-  const [phone, setPhone] = useState(() => formatShinhanPhone(storage.application?.phone ?? ""));
-  const [requiredConsent, setRequiredConsent] = useState(false);
+  const phone = draft?.phone ?? "";
+  const requiredConsent = Boolean(
+    draft?.requiredConsent && draft.requiredConsentVersion === storage.consents?.required.version,
+  );
   const [attempted, setAttempted] = useState(false);
   const id = useId();
   const blocked = storage.pending || storage.preparing || Boolean(storage.attempt);
   useDialogBehavior(true, onClose, panelRef);
   const parsed = shinhanContactSchema.safeParse({ phone, requiredConsent });
   const errors = attempted && !parsed.success ? parsed.error.flatten().fieldErrors : {};
-  const matchesEstimate = parsed.success && parsed.data.phone === storage.application?.phone;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setAttempted(true);
-    if (blocked || !parsed.success || !matchesEstimate || storage.sessionExpired) return;
-    if (await storage.requestIntroduction()) onClose();
+    if (blocked || !parsed.success || storage.sessionExpired) return;
+    const saved =
+      storage.application?.applicationType === "HOST_ESTIMATE" &&
+      storage.application.phone === parsed.data.phone
+        ? await storage.requestIntroduction()
+        : await storage.submitHostIntroduction();
+    if (saved) {
+      updateDraft((current) => ({ ...current, step: "introduction" }));
+      router.push("/shinhan/application");
+    }
+  }
+
+  async function retryIntroduction() {
+    if (await storage.retry()) {
+      updateDraft((current) => ({ ...current, step: "introduction" }));
+      router.push("/shinhan/application");
+    }
   }
 
   return (
@@ -78,13 +100,11 @@ export function ShinhanHostIntroductionDialog({ onClose }: HostIntroductionDialo
             value={phone}
             maxLength={13}
             disabled={blocked}
-            onChange={(event) => setPhone(formatShinhanPhone(event.target.value))}
-            error={
-              errors.phone?.[0] ??
-              (attempted && parsed.success && !matchesEstimate
-                ? "예상 월세를 확인할 때 입력한 휴대폰 번호를 확인해 주세요."
-                : undefined)
-            }
+            onChange={(event) => {
+              const phone = formatShinhanPhone(event.target.value);
+              updateDraft((current) => ({ ...current, phone }));
+            }}
+            error={errors.phone?.[0] ?? storage.fieldErrors.phone?.[0]}
           />
           <div>
             <div className={styles.consent}>
@@ -92,8 +112,17 @@ export function ShinhanHostIntroductionDialog({ onClose }: HostIntroductionDialo
                 id={`${id}-consent`}
                 size="24"
                 checked={requiredConsent}
-                disabled={blocked}
-                onChange={(event) => setRequiredConsent(event.target.checked)}
+                disabled={blocked || !storage.consents}
+                onChange={(event) => {
+                  const requiredConsent = event.target.checked;
+                  updateDraft((current) => ({
+                    ...current,
+                    requiredConsent,
+                    requiredConsentVersion: requiredConsent
+                      ? (storage.consents?.required.version ?? null)
+                      : null,
+                  }));
+                }}
                 aria-describedby={errors.requiredConsent ? `${id}-consent-error` : undefined}
                 aria-invalid={Boolean(errors.requiredConsent) || undefined}
               />
@@ -106,6 +135,8 @@ export function ShinhanHostIntroductionDialog({ onClose }: HostIntroductionDialo
               </p>
             )}
           </div>
+          <ShinhanConsentStatus />
+          <ShinhanSessionRestart />
           {storage.error && (
             <p role="alert" className={styles.error}>
               {storage.error.message}
@@ -115,7 +146,9 @@ export function ShinhanHostIntroductionDialog({ onClose }: HostIntroductionDialo
             type="submit"
             className={styles.submit}
             loading={storage.pending}
-            disabled={blocked || storage.sessionExpired}
+            disabled={
+              blocked || storage.sessionExpired || !storage.consents || !storage.submissionAvailable
+            }
           >
             소개서 알림 신청하기
           </BtnCta>
@@ -123,11 +156,21 @@ export function ShinhanHostIntroductionDialog({ onClose }: HostIntroductionDialo
             <BtnCta
               variant="stroke"
               disabled={!storage.retryReady || storage.pending}
-              onClick={() => void storage.retry()}
+              onClick={() => {
+                void retryIntroduction();
+              }}
             >
               같은 요청으로 다시 시도
             </BtnCta>
           )}
+          {storage.attempt &&
+            storage.error &&
+            !storage.error.retryable &&
+            [400, 413, 422].includes(storage.error.status) && (
+              <BtnCta variant="stroke" onClick={storage.clearRejectedAttempt}>
+                입력 내용 다시 확인
+              </BtnCta>
+            )}
         </form>
       </div>
     </div>

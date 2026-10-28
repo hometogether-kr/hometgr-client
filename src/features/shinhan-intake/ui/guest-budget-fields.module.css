@@ -176,3 +176,44 @@
     font-size: 14px;
   }
 }
+
+.budget:not(fieldset) {
+  padding: 0 16px 16px;
+  border-radius: 16px;
+  background: #f6f9fc;
+}
+.budget:not(fieldset) .numberField > label {
+  margin: 0 -16px 12px;
+  background: white;
+  font-weight: 600;
+  line-height: 26px;
+}
+.budget:not(fieldset) .amount {
+  justify-content: flex-start;
+  padding-top: 16px;
+  color: #1c6be3;
+}
+.budget:not(fieldset) .amount input {
+  width: 76px;
+  border: 0;
+  font-size: 52px;
+  line-height: 60px;
+  padding: 0;
+  text-align: left;
+  appearance: textfield;
+}
+.budget:not(fieldset) .amount input::-webkit-inner-spin-button {
+  appearance: none;
+}
+.budget:not(fieldset) .amount span {
+  color: #2e3b49;
+  font-size: 17px;
+  font-weight: 600;
+}
+.budget:not(fieldset) .singleTrack {
+  margin-top: 6px;
+}
+.budget:not(fieldset) .bounds {
+  font-size: 12px;
+  line-height: 19px;
+}

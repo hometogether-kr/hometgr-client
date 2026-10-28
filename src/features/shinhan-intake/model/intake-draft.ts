@@ -15,7 +15,8 @@ export const SHINHAN_APPLICATION_LABELS: Record<ShinhanApplicationType, string> 
   GUEST_DEMAND: "게스트 위치·예산 수요조사",
 };
 
-export type ShinhanDraftStep = "conditions" | "contact";
+export type ShinhanDraftStep =
+  "conditions" | "analysis" | "result" | "concerns" | "introduction" | "contact";
 
 export interface ShinhanEstimateAddress {
   addressSource: "KAKAO_POSTCODE";
@@ -45,6 +46,7 @@ export interface ShinhanHostRegistrationValues {
 }
 
 export interface ShinhanGuestBudgetValues {
+  moveInTiming?: "ASAP" | "WITHIN_MONTH" | "DATE";
   budgetMonthlyKrw: number | null;
   desiredRegionRaw: string;
   moveInDate: string;
@@ -125,7 +127,12 @@ export function createShinhanDraft(applicationType: ShinhanApplicationType): Shi
       return {
         ...base,
         applicationType,
-        values: { budgetMonthlyKrw: null, desiredRegionRaw: "", moveInDate: "" },
+        values: {
+          budgetMonthlyKrw: 450000,
+          desiredRegionRaw: "",
+          moveInDate: "",
+          moveInTiming: "ASAP",
+        },
       };
     case "GUEST_DEMAND":
       return {

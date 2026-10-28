@@ -65,11 +65,13 @@ export function ShinhanLiveSubmit({
       >
         {storage.pending ? "신청 중…" : children}
       </BtnCta>
-      <p className="text-sm leading-6 text-grayscale-600">
-        {storage.submissionAvailable
-          ? notice
-          : "지금은 신청을 이용할 수 없어요. 잠시 후 다시 시도해 주세요."}
-      </p>
+      {(notice || !storage.submissionAvailable) && (
+        <p className="text-sm leading-6 text-grayscale-600">
+          {storage.submissionAvailable
+            ? notice
+            : "지금은 신청을 이용할 수 없어요. 잠시 후 다시 시도해 주세요."}
+        </p>
+      )}
       {storage.error && (
         <div
           role="alert"

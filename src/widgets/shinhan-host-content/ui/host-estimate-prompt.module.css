@@ -130,7 +130,7 @@
 .compact {
   display: none;
 }
-@media (max-width: 1919px) {
+@media (max-width: 767px) {
   .prompt {
     right: 0;
     bottom: 0;
@@ -162,7 +162,7 @@
     font-weight: 700;
   }
 }
-@media (prefers-reduced-motion: no-preference) and (min-width: 1920px) {
+@media (prefers-reduced-motion: no-preference) and (min-width: 768px) {
   .card {
     animation: appear 0.45s ease 0.25s both;
   }
