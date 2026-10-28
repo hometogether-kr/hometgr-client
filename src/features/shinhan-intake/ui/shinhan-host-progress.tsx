@@ -6,7 +6,6 @@ interface ShinhanHostProgressProps {
 
 const HOST_STEPS = [
   { value: "result", label: "월세 알아보기" },
-  { value: "concerns", label: "걱정 확인" },
   { value: "introduction", label: "소개서 안내" },
   { value: "notification", label: "알림 신청" },
 ] as const;

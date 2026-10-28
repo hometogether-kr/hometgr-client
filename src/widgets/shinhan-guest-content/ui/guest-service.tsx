@@ -1,6 +1,5 @@
 import Image from "next/image";
-
-import { ShinhanEntryNotice, ShinhanHostFormButton } from "@/features/shinhan-intake";
+import Link from "next/link";
 
 import styles from "./guest-service.module.css";
 
@@ -210,29 +209,16 @@ export function ShinhanGuestHostBand() {
           <h2 id="shinhan-guest-host-band-heading">홈쉐어를 시작해 보세요</h2>
         </div>
         <div className={styles.hostAction}>
-          <ShinhanHostFormButton
-            flow="registration"
-            variant="stroke"
-            size="pill"
-            className={styles.hostButton}
-            aria-describedby="shinhan-guest-host-registration-notice"
-            rightIcon={
-              <Image
-                className={styles.hostPlus}
-                src={`${asset}service-host-plus.svg`}
-                width={28.0039}
-                height={28.0039}
-                alt=""
-              />
-            }
-          >
+          <Link href="/shinhan/host" className={styles.hostButton}>
             홈투게더에 방 등록하기
-          </ShinhanHostFormButton>
-          <p id="shinhan-guest-host-registration-notice" className={styles.notice}>
-            <ShinhanEntryNotice>
-              집 위치와 연락처를 입력해 방 등록을 신청해 보세요.
-            </ShinhanEntryNotice>
-          </p>
+            <Image
+              className={styles.hostPlus}
+              src={`${asset}service-host-plus.svg`}
+              width={28.0039}
+              height={28.0039}
+              alt=""
+            />
+          </Link>
         </div>
       </div>
     </section>

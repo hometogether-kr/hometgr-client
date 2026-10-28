@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { ShinhanEntryNotice, ShinhanHostFormButton } from "@/features/shinhan-intake";
+import { ShinhanHostFormButton } from "@/features/shinhan-intake";
 
 import styles from "./host-introduction.module.css";
 
@@ -62,11 +62,10 @@ export function ShinhanHostHero() {
             </p>
             <div className={styles.registration}>
               <ShinhanHostFormButton
-                flow="registration"
+                flow="estimate"
                 size="pill"
                 shape="rect"
                 className={styles.registrationButton}
-                aria-describedby="shinhan-registration-status"
                 rightIcon={
                   <Image
                     src="/images/shinhan/host/chevron-right.svg"
@@ -76,13 +75,8 @@ export function ShinhanHostHero() {
                   />
                 }
               >
-                홈투게더로 방 등록하기
+                우리 집 빈 방 얼마나 받을 수 있을까?
               </ShinhanHostFormButton>
-              <p id="shinhan-registration-status" className={styles.preparing}>
-                <ShinhanEntryNotice>
-                  집 위치와 연락처를 입력해 방 등록을 신청해 보세요.
-                </ShinhanEntryNotice>
-              </p>
             </div>
           </div>
           <Image
@@ -214,8 +208,7 @@ export function ShinhanHostEstimateBand() {
         <p>홈투게더에 방을 등록하면</p>
         <h2 id="shinhan-estimate-heading">
           <span>우리 집 빈방,</span>
-          <br />
-          얼마 받을 수 있을까요?
+          <span>얼마 받을 수 있을까요?</span>
         </h2>
         <ShinhanHostFormButton
           data-shinhan-estimate-cta
@@ -223,15 +216,9 @@ export function ShinhanHostEstimateBand() {
           variant="stroke"
           size="pill"
           className={styles.estimateButton}
-          aria-describedby="shinhan-estimate-status"
         >
           빈방 예상 월세 알아보기
         </ShinhanHostFormButton>
-        <p id="shinhan-estimate-status" className={styles.preparing}>
-          <ShinhanEntryNotice>
-            우리 집 조건을 입력하고 예상 월세를 확인해 보세요.
-          </ShinhanEntryNotice>
-        </p>
       </div>
     </section>
   );

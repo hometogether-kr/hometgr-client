@@ -1,47 +1,67 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { HostRegistrationForm } from "./host-registration-form";
-
 import styles from "./shinhan-host-registration.module.css";
 
 export function ShinhanHostRegistration() {
   return (
     <section className={styles.section} aria-labelledby="host-registration-title">
       <div className={styles.container}>
-        <ol className={styles.progress} aria-label="방 등록 진행 단계">
-          <li aria-current="step">01 기본 정보 입력</li>
-          <li>02 심사 안내</li>
-        </ol>
-        <div className={styles.columns}>
-          <div className={styles.introduction}>
-            <p className={styles.eyebrow}>우리 집 빈방 등록하기</p>
-            <h1 id="host-registration-title">
-              방 등록,
-              <br />
-              간단한 정보로 시작해요
-            </h1>
-            <p className={styles.description}>
-              연락처와 집에 대한 기본 정보만 알려주세요.
-              <br />
-              심사 후 남겨주신 번호로 연락드릴게요.
-            </p>
-            <div className={styles.illustration}>
-              <Image
-                src="/images/shinhan/host/house.png"
-                alt="파란 지붕의 우리 집"
-                width={260}
-                height={260}
-                sizes="(max-width: 767px) 200px, 260px"
-              />
-            </div>
-            <p className={styles.caption}>방 사진과 자세한 조건은 상담할 때 알려주세요.</p>
-          </div>
-          <HostRegistrationForm />
-        </div>
         <Link className={styles.backLink} href="/shinhan/host">
           ← 홈으로 돌아가기
         </Link>
+        <div className={styles.panel}>
+          <div className={styles.introduction}>
+            <p className={styles.eyebrow}>우리 집 빈방 등록하기</p>
+            <h1 id="host-registration-title">
+              카카오톡으로 대화하면
+              <br />
+              <em>홈투AI가 방 등록을</em>
+              <br />
+              도와드려요.
+            </h1>
+            <p className={styles.description}>
+              우리 집 정보만 카카오톡 채팅으로 알려주세요.
+              <br />
+              AI 도우미 홈투AI가 방 등록을 도와드릴게요.
+            </p>
+            <div className={styles.action}>
+              <a
+                className={styles.kakao}
+                href="http://pf.kakao.com/_ZgxaxiX/chat"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  src="/images/shinhan/host/registration-chat.svg"
+                  alt=""
+                  width={24}
+                  height={24}
+                />
+                <span>홈투AI와 카카오톡에서 집 등록하기</span>
+                <Image
+                  src="/images/shinhan/host/registration-arrow.svg"
+                  alt=""
+                  width={24}
+                  height={24}
+                />
+                <span className="sr-only"> (새 창)</span>
+              </a>
+              <p>버튼을 누르면 홈투AI 카카오톡 채팅방으로 이동해요.</p>
+            </div>
+          </div>
+          <figure className={styles.illustration}>
+            <Image
+              src="/images/shinhan/host/registration-ai.png"
+              alt="집과 카카오톡 대화를 안내하는 홈투AI 일러스트"
+              width={500}
+              height={500}
+              sizes="(max-width: 767px) calc(100vw - 80px), 500px"
+            />
+            <figcaption>카카오톡에서 홈투AI와 이야기해요</figcaption>
+          </figure>
+        </div>
+        <p className={styles.caption}>시니어 분들도 쉽게 사용할 수 있는 매물 등록 방법</p>
       </div>
     </section>
   );

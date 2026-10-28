@@ -1,18 +1,7 @@
 import Link from "next/link";
 
 import { ShinhanIntakeRoleSlot } from "@/features/shinhan-intake";
-import {
-  GUEST_CONCERNS,
-  GuestFollowupNotice,
-  GuestGuideCard,
-  GuestReceiptIntroduction,
-} from "@/widgets/shinhan-guest-followup";
-import { ShinhanGuestSpaceExamples } from "@/widgets/shinhan-guest-intake";
-import {
-  HOST_CONCERNS,
-  HostIntroductionFrame,
-  HostResultFrame,
-} from "@/widgets/shinhan-host-followup";
+import { HostIntroductionFrame, HostResultFrame } from "@/widgets/shinhan-host-followup";
 import {
   SavedApplicationSummary,
   SavedGuestCompletionFrame,
@@ -22,7 +11,6 @@ import {
   SavedHostIntroductionFrame,
   SavedHostRegistrationFrame,
   SavedHostResultActions,
-  SavedNavigationButton,
   ShinhanSavedApplicationFlow,
 } from "@/widgets/shinhan-saved-application";
 import { ShinhanRoleFooter, ShinhanServiceHeader } from "@/widgets/shinhan-shell";
@@ -86,42 +74,16 @@ export function ShinhanSavedApplicationPage() {
             <SavedGuestCompletionFrame
               applicationType="GUEST_BUDGET"
               summary={<SavedApplicationSummary />}
-              actions={
-                <div className="grid gap-3">
-                  <SavedNavigationButton step="concerns">
-                    걱정되는 점 선택하기
-                  </SavedNavigationButton>
-                  <SavedNavigationButton step="examples" variant="secondary">
-                    ← 공간 사진 다시 보기
-                  </SavedNavigationButton>
-                </div>
-              }
+              actions={<SavedHomeLink role="guest" />}
             />
           }
           guestDemandComplete={
             <SavedGuestCompletionFrame
               applicationType="GUEST_DEMAND"
               summary={<SavedApplicationSummary />}
-              actions={
-                <SavedNavigationButton step="concerns">
-                  걱정되는 점 선택하기 →
-                </SavedNavigationButton>
-              }
+              actions={<SavedHomeLink role="guest" />}
             />
           }
-          guideCards={GUEST_CONCERNS.map(({ code }) => ({
-            code,
-            content: <GuestGuideCard key={code} code={code} />,
-          }))}
-          guestNotice={
-            <GuestFollowupNotice>
-              <SavedNavigationButton step="receipt">내 신청 내역 확인하기</SavedNavigationButton>
-            </GuestFollowupNotice>
-          }
-          guestReceiptIntroduction={<GuestReceiptIntroduction />}
-          examples={<ShinhanGuestSpaceExamples />}
-          hostConcerns={HOST_CONCERNS}
-          guestConcerns={GUEST_CONCERNS}
         />
       </main>
       <ShinhanRoleFooter />

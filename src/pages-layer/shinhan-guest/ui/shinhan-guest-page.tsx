@@ -1,5 +1,4 @@
 import {
-  ShinhanGuestBudgetBanner,
   ShinhanGuestBudgetPrompt,
   ShinhanGuestEmpathy,
   ShinhanGuestFaq,
@@ -19,7 +18,6 @@ export function ShinhanGuestPage() {
       <ShinhanServiceHeader mode="guest" />
       <main id="service-introduction" aria-label="홈투게더 게스트 서비스 소개">
         <ShinhanGuestHero />
-        <ShinhanGuestBudgetBanner />
         <ShinhanGuestEmpathy />
         <ShinhanGuestSpaces />
         <ShinhanGuestRegions />

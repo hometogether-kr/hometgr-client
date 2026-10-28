@@ -118,7 +118,6 @@ export function ShinhanGuestFinalCallToAction() {
           마음에 드는 방이 있으면 상담을 신청할 수 있어요.
         </p>
         <ShinhanGuestFormButton
-          flow="demand"
           size="xl"
           className={styles.finalButton}
           aria-describedby="shinhan-guest-final-notice"

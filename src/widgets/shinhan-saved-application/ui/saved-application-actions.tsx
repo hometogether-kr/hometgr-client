@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { ReactNode } from "react";
+import { type ReactNode, useCallback, useState } from "react";
 
 import {
   type SavedStep,
   SHINHAN_HOST_ESTIMATE_PATH,
+  SHINHAN_HOST_REGISTRATION_PATH,
+  ShinhanHostIntroductionDialog,
   useShinhanIntake,
   useShinhanStorage,
 } from "@/features/shinhan-intake";
@@ -112,7 +114,9 @@ export function SavedHostResultActions() {
   return (
     <div className={styles.centerActions}>
       <p>수익만큼 중요한 건, 안심하고 시작하는 방법이에요.</p>
-      <SavedNavigationButton step="concerns">내 집에 맞는 시작 방법 알아보기</SavedNavigationButton>
+      <SavedNavigationButton step="introduction">
+        내 집에 맞는 시작 방법 알아보기
+      </SavedNavigationButton>
       <button
         type="button"
         className={styles.textButton}
@@ -129,38 +133,34 @@ export function SavedHostResultActions() {
 }
 
 export function SavedHostIntroductionActions() {
-  const { application, pending, preparing, sessionExpired, attempt, requestIntroduction, setStep } =
-    useShinhanStorage();
+  const { application, pending, preparing, sessionExpired, attempt, setStep } = useShinhanStorage();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const closeDialog = useCallback(() => setDialogOpen(false), []);
   if (application?.applicationType !== "HOST_ESTIMATE") return null;
+  const blocked = pending || preparing || sessionExpired || Boolean(attempt);
   return (
-    <div className={styles.centerActions}>
-      {application.introductionRequestedAt ? (
-        <>
-          <p>이 견적의 소개서 알림 신청이 이미 접수되었습니다.</p>
-          <SavedNavigationButton step="introComplete">신청 완료 내역 보기</SavedNavigationButton>
-        </>
-      ) : (
-        <BtnCta
-          className={styles.primaryButton}
-          loading={pending && attempt?.kind === "introduction"}
-          disabled={pending || preparing || sessionExpired || Boolean(attempt)}
-          onClick={() => void requestIntroduction()}
-        >
-          소개서만 먼저 받아보기
-        </BtnCta>
-      )}
-      <button
-        type="button"
-        className={styles.textButton}
-        disabled={pending || preparing || Boolean(attempt)}
-        onClick={() => setStep("concerns")}
-      >
-        ← 걱정 선택 다시 보기
-      </button>
-      <p className={styles.help}>
-        현재 견적에 소개서 알림 신청을 저장합니다. 저장 성공 후 접수 완료 화면으로 이동하며, 알림
-        전달 완료와는 다릅니다.
+    <div className={styles.introductionActions}>
+      <p className={styles.introductionReassurance}>
+        <span aria-hidden="true">✓</span> 소개서만 받아보고, 더 진행하지 않으셔도 괜찮아요.
       </p>
+      <div className={styles.introductionActionRow}>
+        <BtnCta
+          className={styles.introductionPrimary}
+          disabled={blocked}
+          onClick={() =>
+            application.introductionRequestedAt ? setStep("introComplete") : setDialogOpen(true)
+          }
+        >
+          소개서만 먼저 받아보기 →
+        </BtnCta>
+        <Link href={SHINHAN_HOST_REGISTRATION_PATH} className={styles.registrationLink}>
+          방 등록하기
+        </Link>
+      </div>
+      <Link href="/shinhan/host" className={styles.introductionHome}>
+        홈 화면으로 돌아가기
+      </Link>
+      {dialogOpen && <ShinhanHostIntroductionDialog onClose={closeDialog} />}
     </div>
   );
 }

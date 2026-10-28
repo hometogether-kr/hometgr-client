@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useCallback, useState } from "react";
 
 import { useBetaFlowInput } from "@/features/beta-tracking";
 import {
-  SHINHAN_HOST_FOLLOWUP_PATH,
   ShinhanContactFields,
   shinhanContactSchema,
   shinhanHostEstimateSchema,
@@ -41,13 +39,12 @@ const furnitureStates = [
 ] as const;
 
 export function ShinhanHostEstimateFlow({ introduction, incomePreview }: EstimateFlowProps) {
-  const { draft, updateDraft, startHostFollowup } = useShinhanIntake();
+  const { draft, updateDraft } = useShinhanIntake();
   const { trackValidInput, markResultReady } = useBetaFlowInput("HOST_ESTIMATE", {
     enabled: draft?.applicationType === "HOST_ESTIMATE",
   });
   const storage = useShinhanStorage();
   const locked = storage.pending || storage.attempt !== null || storage.preparing;
-  const router = useRouter();
   const [addressOpen, setAddressOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [verifiedContact, setVerifiedContact] = useState<string | null>(null);
@@ -148,22 +145,6 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
     setVerifiedContact(contactSnapshot);
   }
 
-  function handleFollowupPreview() {
-    if (locked) return;
-    if (!draft) return;
-    setContactErrorValues({ phone: draft.phone, requiredConsent: draft.requiredConsent });
-    const parsed = shinhanContactSchema.safeParse(draft);
-    if (!parsed.success) {
-      setErrors(
-        Object.fromEntries(
-          parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
-        ),
-      );
-      return;
-    }
-    if (startHostFollowup()) router.push(SHINHAN_HOST_FOLLOWUP_PATH);
-  }
-
   if (draft.step === "contact") {
     return (
       <div className={styles.contactStep}>
@@ -199,16 +180,6 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
           <ShinhanLiveSubmit onSaved={markResultReady} className={styles.cta}>
             예상 수익 확인하기
           </ShinhanLiveSubmit>
-          {process.env.NODE_ENV === "development" && (
-            <BtnCta
-              variant="stroke"
-              className={styles.cta}
-              onClick={handleFollowupPreview}
-              disabled={locked}
-            >
-              결과 화면 미리보기 (개발용)
-            </BtnCta>
-          )}
         </form>
         <button type="button" onClick={showConditions} className={styles.back} disabled={locked}>
           ← 입력 정보 수정

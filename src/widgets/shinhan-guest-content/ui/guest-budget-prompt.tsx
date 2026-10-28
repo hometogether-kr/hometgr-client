@@ -74,12 +74,7 @@ export function ShinhanGuestBudgetPrompt() {
             <Image src="/images/shinhan/guest/budget-close.svg" alt="" width={18} height={18} />
           </button>
         </div>
-        <ShinhanGuestFormButton
-          flow="budget"
-          type="button"
-          className={styles.action}
-          aria-describedby={noticeId}
-        >
+        <ShinhanGuestFormButton type="button" className={styles.action} aria-describedby={noticeId}>
           내 조건에 맞는 방 찾기
         </ShinhanGuestFormButton>
         <p className={styles.notice} id={noticeId}>

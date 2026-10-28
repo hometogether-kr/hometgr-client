@@ -82,7 +82,7 @@ export function ShinhanRoleFooter() {
             미추홀타워 별관A동)
           </p>
           <Link href="/shinhan/privacy" className={styles.privacy}>
-            개인정보 수집·이용 동의 전문
+            개인정보 처리 방침
           </Link>
         </div>
       </div>

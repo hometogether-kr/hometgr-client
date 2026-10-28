@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { getShinhanSessionMode } from "@/features/shinhan-bridge";
-import { ShinhanGuestDemandPage } from "@/pages-layer/shinhan-guest-intake";
+import { SHINHAN_GUEST_BUDGET_PATH } from "@/features/shinhan-intake";
 
 export const metadata: Metadata = {
-  title: "게스트 수요조사 | 개발 확인",
+  title: "예산에 맞는 방 찾기 | 개발 확인",
   robots: { index: false, follow: false },
 };
 
 export default async function Page() {
   if (process.env.NODE_ENV !== "development" && (await getShinhanSessionMode()) !== "remote")
     notFound();
-  return <ShinhanGuestDemandPage />;
+  redirect(SHINHAN_GUEST_BUDGET_PATH);
 }
