@@ -6,7 +6,7 @@ import { ShinhanRoleFooter, ShinhanServiceHeader } from "@/widgets/shinhan-shell
 
 interface HostIntakeLayoutProps {
   children: ReactNode;
-  notice: string;
+  notice?: string;
 }
 
 function HostIntakeLayout({ children, notice }: HostIntakeLayoutProps) {
@@ -18,9 +18,11 @@ function HostIntakeLayout({ children, notice }: HostIntakeLayoutProps) {
         skipLabel="신청 내용으로 건너뛰기"
       />
       <main id="shinhan-host-intake">
-        <p className="mx-auto mt-6 max-w-[1120px] rounded-xl bg-primary-50 px-5 py-3 text-sm leading-6 text-grayscale-700">
-          {notice}
-        </p>
+        {notice && (
+          <p className="mx-auto mt-6 max-w-[1120px] rounded-xl bg-primary-50 px-5 py-3 text-sm leading-6 text-grayscale-700">
+            {notice}
+          </p>
+        )}
         {children}
       </main>
       <ShinhanRoleFooter />
@@ -38,7 +40,7 @@ export function ShinhanHostEstimatePage() {
 
 export function ShinhanHostRegistrationPage() {
   return (
-    <HostIntakeLayout notice="방 등록 신청이 접수되면 입력한 내용을 확인할 수 있습니다. 접수 완료와 안내 메시지 전달 완료는 다릅니다.">
+    <HostIntakeLayout>
       <ShinhanHostRegistration />
     </HostIntakeLayout>
   );

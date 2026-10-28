@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import { getShinhanSessionMode } from "@/features/shinhan-bridge";
-import { ShinhanGuestDemandPage } from "@/pages-layer/shinhan-guest-intake";
+import { SHINHAN_GUEST_BUDGET_PATH } from "@/features/shinhan-intake";
 
 export const metadata: Metadata = {
-  title: "게스트 수요조사 | 신한 슈퍼SOL",
+  title: "예산에 맞는 방 찾기 | 신한 슈퍼SOL",
   robots: { index: false, follow: false },
 };
 
 export default async function Page() {
   if ((await getShinhanSessionMode()) === "unavailable") notFound();
-  return <ShinhanGuestDemandPage />;
+  redirect(SHINHAN_GUEST_BUDGET_PATH);
 }

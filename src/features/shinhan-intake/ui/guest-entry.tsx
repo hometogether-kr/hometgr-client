@@ -1,37 +1,32 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type ButtonHTMLAttributes, type FormEvent, useState } from "react";
+import type { ButtonHTMLAttributes } from "react";
 
 import { BtnCta, type BtnCtaProps } from "@/shared/ui/btn-cta";
-import { TextField } from "@/shared/ui/text-field";
 
-import { SHINHAN_GUEST_BUDGET_PATH, SHINHAN_GUEST_DEMAND_PATH } from "../config/routes";
+import { SHINHAN_GUEST_BUDGET_PATH } from "../config/routes";
 import { useShinhanEntryAvailability } from "../model/entry-context";
 import { shinhanGuestRegionSchema } from "../model/guest-conditions.schema";
 import { useShinhanIntake } from "../model/intake-context";
-
-type GuestFlow = "budget" | "demand";
 
 function useStartGuestIntake() {
   const router = useRouter();
   const { startGuestDraft } = useShinhanIntake();
   const available = useShinhanEntryAvailability();
-  function startIntake(flow: GuestFlow, region = "") {
+  function startIntake(region = "") {
     if (!available) return;
-    startGuestDraft(flow === "budget" ? "GUEST_BUDGET" : "GUEST_DEMAND", region);
-    router.push(flow === "budget" ? SHINHAN_GUEST_BUDGET_PATH : SHINHAN_GUEST_DEMAND_PATH);
+    startGuestDraft("GUEST_BUDGET", region);
+    router.push(SHINHAN_GUEST_BUDGET_PATH);
   }
   return { available, startIntake };
 }
 
-interface GuestFormButtonProps extends Omit<BtnCtaProps, "onClick" | "disabled"> {
-  flow: GuestFlow;
-}
+type GuestFormButtonProps = Omit<BtnCtaProps, "onClick" | "disabled">;
 
-export function ShinhanGuestFormButton({ flow, ...props }: GuestFormButtonProps) {
+export function ShinhanGuestFormButton(props: GuestFormButtonProps) {
   const { available, startIntake } = useStartGuestIntake();
-  return <BtnCta {...props} disabled={!available} onClick={() => startIntake(flow)} />;
+  return <BtnCta {...props} disabled={!available} onClick={() => startIntake()} />;
 }
 
 interface GuestRegionButtonProps extends Omit<
@@ -55,60 +50,8 @@ export function ShinhanGuestRegionButton({
       disabled={!available}
       onClick={() => {
         if (available && shinhanGuestRegionSchema.safeParse(region).success) onValidInput?.();
-        startIntake("demand", region);
+        startIntake(region);
       }}
     />
-  );
-}
-
-interface GuestSearchProps {
-  onValidInput?: () => void;
-  fieldClassName?: string;
-  buttonClassName?: string;
-}
-
-export function ShinhanGuestDemandSearch({
-  fieldClassName,
-  buttonClassName,
-  onValidInput,
-}: GuestSearchProps) {
-  const [region, setRegion] = useState("");
-  const [attempted, setAttempted] = useState(false);
-  const { available, startIntake } = useStartGuestIntake();
-  const parsed = shinhanGuestRegionSchema.safeParse(region);
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-    setAttempted(true);
-    if (parsed.success) startIntake("demand", region);
-  }
-  return (
-    <form onSubmit={handleSubmit} noValidate>
-      <TextField
-        disabled={!available}
-        aria-label="희망하는 대학 또는 지역"
-        placeholder="예) 서울과학기술대학교, 공릉역"
-        aria-describedby="shinhan-guest-demand-status"
-        className={fieldClassName}
-        value={region}
-        maxLength={200}
-        onChange={(event) => {
-          const nextRegion = event.target.value;
-          setRegion(nextRegion);
-          if (available && shinhanGuestRegionSchema.safeParse(nextRegion).success) onValidInput?.();
-        }}
-        error={attempted && !parsed.success ? parsed.error.issues[0]?.message : undefined}
-        action={
-          <BtnCta
-            type="submit"
-            disabled={!available}
-            variant="stroke"
-            size="l"
-            className={buttonClassName}
-          >
-            검색
-          </BtnCta>
-        }
-      />
-    </form>
   );
 }

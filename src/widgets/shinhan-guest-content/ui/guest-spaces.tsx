@@ -63,7 +63,6 @@ export function ShinhanGuestSpaces() {
         </div>
         <div className={styles.actions}>
           <ShinhanGuestFormButton
-            flow="demand"
             className={styles.spaceAction}
             aria-describedby="shinhan-guest-space-notice"
           >

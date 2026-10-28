@@ -174,30 +174,7 @@ export function SavedGuestCompletionFrame({
         </div>
       </section>
       {summary && <div className={styles.summarySlot}>{summary}</div>}
-      <section className={styles.guestConcerns} aria-labelledby="saved-guest-concerns-heading">
-        <p className={styles.guestConcernEyebrow}>
-          {isBudget ? "선택 사항 · 입주 전 생활 준비" : "다음 단계"}
-        </p>
-        <h2 id="saved-guest-concerns-heading">
-          {isBudget ? "더 편안한 홈쉐어링을 준비해 볼까요?" : "홈셰어링, 걱정되는 점이 있으신가요?"}
-        </h2>
-        <p className={styles.guestConcernDescription}>
-          {isBudget ? (
-            <>
-              <span>함께 살 때 걱정되는 점을 선택해 주세요.</span>
-              <span>선택한 항목별로 입주 전에 확인할 내용을 볼 수 있어요.</span>
-            </>
-          ) : (
-            "미리 알려주시면 연락드릴 때 함께 확인해 드리겠습니다."
-          )}
-        </p>
-        <div className={styles.guestActions}>{actions}</div>
-        {isBudget && (
-          <p className={styles.guestConcernCaption}>
-            선택하지 않아도 상세조건 안내를 받으실 수 있어요.
-          </p>
-        )}
-      </section>
+      <div className={styles.guestActions}>{actions}</div>
     </div>
   );
 }
