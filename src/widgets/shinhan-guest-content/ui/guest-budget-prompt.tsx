@@ -1,13 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { type CSSProperties, useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
-import {
-  ShinhanGuestFormButton,
-  ShinhanGuestRegionField,
-  ShinhanMoveInTimingField,
-} from "@/features/shinhan-intake";
+import { ShinhanGuestFormButton } from "@/features/shinhan-intake";
 
 import styles from "./guest-budget-prompt.module.css";
 
@@ -16,15 +12,11 @@ export function ShinhanGuestBudgetPrompt() {
   const [isInlineActionVisible, setIsInlineActionVisible] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   const panelId = useId();
-  const [budget, setBudget] = useState(450000);
-  const [region, setRegion] = useState("");
-  const [timing, setTiming] = useState<"ASAP" | "WITHIN_MONTH" | "DATE">("ASAP");
-  const [date, setDate] = useState("");
-  const characterRef = useRef<HTMLButtonElement>(null);
+  const characterRef = useRef<HTMLDivElement>(null);
 
   function handlePanelClose() {
     setIsPanelOpen(false);
-    characterRef.current?.focus();
+    characterRef.current?.querySelector("button")?.focus();
   }
 
   useEffect(() => {
@@ -70,82 +62,73 @@ export function ShinhanGuestBudgetPrompt() {
       data-collapsed={!isPanelOpen}
     >
       <div className={styles.panel} id={panelId}>
-        <div className={styles.panelHeader}>
-          <p>내 예산에 맞는 방 찾기</p>
-          <button
-            type="button"
-            className={styles.close}
-            aria-label="예산 안내 접기"
-            onClick={handlePanelClose}
-          >
-            <Image src="/images/shinhan/guest/budget-close.svg" alt="" width={18} height={18} />
-          </button>
-        </div>
-        <div className={styles.budget}>
-          <label htmlFor={`${panelId}-budget`}>한 달 월세 예산</label>
-          <output htmlFor={`${panelId}-budget`}>
-            <strong>{budget / 10000}</strong>만 원
-          </output>
-          <input
-            id={`${panelId}-budget`}
-            type="range"
-            min={200000}
-            max={1000000}
-            step={10000}
-            value={budget}
-            onChange={(event) => setBudget(Number(event.target.value))}
-            style={{ "--budget-percent": `${(budget - 200000) / 8000}%` } as CSSProperties}
-          />
-          <span>20만 원</span>
-          <span>100만 원 이상</span>
-        </div>
-        <div className={styles.region}>
-          <ShinhanGuestRegionField
-            label="어느 지역에서 살고 싶으세요?"
-            value={region}
-            onChange={setRegion}
-          />
-        </div>
-        <ShinhanMoveInTimingField
-          compact
-          value={date}
-          timing={timing}
-          onChange={setDate}
-          onTimingChange={(next, value) => {
-            setTiming(next);
-            setDate(value);
-          }}
-        />
         <ShinhanGuestFormButton
           type="button"
-          className={styles.action}
-          initialValues={{
-            budgetMonthlyKrw: budget,
-            desiredRegionRaw: region,
-            moveInTiming: timing,
-            ...(timing === "DATE" || date ? { moveInDate: date } : {}),
-          }}
+          className={styles.entry}
+          aria-label="내 예산에 맞는 방 찾기 페이지로 이동"
         >
-          내 조건에 맞는 방 찾기
+          <span className={styles.panelContent} aria-hidden="true">
+            <span className={styles.panelHeader}>내 예산에 맞는 방 찾기</span>
+            <span className={styles.budget}>
+              <span className={styles.budgetLabel}>한 달 월세 예산</span>
+              <span className={styles.amount}>
+                <strong>45</strong>만 원
+              </span>
+              <span className={styles.slider} />
+              <span className={styles.bound}>20만 원</span>
+              <span className={styles.bound}>100만 원 이상</span>
+            </span>
+            <span className={styles.region}>
+              <span>어느 지역에서 살고 싶으세요?</span>
+              <span className={styles.search}>
+                희망하는 시·구·동 검색
+                <Image
+                  src="/images/shinhan/host/calculator-search.svg"
+                  alt=""
+                  width={22}
+                  height={22}
+                />
+              </span>
+            </span>
+            <span className={styles.timing}>
+              <span>언제쯤 입주하고 싶으세요?</span>
+              <span className={styles.timingOptions}>
+                {["빠른 입주", "1개월 내", "직접 입력"].map((label, index) => (
+                  <span key={label} className={styles.timingOption} data-selected={index === 0}>
+                    <span className={styles.radio}>{index === 0 ? "✓" : ""}</span>
+                    {label}
+                  </span>
+                ))}
+              </span>
+            </span>
+            <span className={styles.action}>내 조건에 맞는 방 찾기</span>
+          </span>
+        </ShinhanGuestFormButton>
+        <button
+          type="button"
+          className={styles.close}
+          aria-label="예산 안내 접기"
+          aria-controls={panelId}
+          onClick={handlePanelClose}
+        >
+          <Image src="/images/shinhan/guest/budget-close.svg" alt="" width={18} height={18} />
+        </button>
+      </div>
+      <div className={styles.character} ref={characterRef}>
+        <ShinhanGuestFormButton
+          type="button"
+          className={styles.characterEntry}
+          aria-label="캐릭터로 예산에 맞는 방 찾기 페이지로 이동"
+        >
+          <Image
+            src="/images/shinhan/guest/budget-character.png"
+            alt=""
+            width={96}
+            height={96}
+            sizes="(max-width:767px) 60px,96px"
+          />
         </ShinhanGuestFormButton>
       </div>
-      <button
-        type="button"
-        ref={characterRef}
-        className={styles.character}
-        aria-label={isPanelOpen ? "예산 안내 접기" : "예산 안내 펼치기"}
-        aria-expanded={isPanelOpen}
-        aria-controls={panelId}
-        onClick={() => setIsPanelOpen(!isPanelOpen)}
-      >
-        <Image
-          src="/images/shinhan/guest/budget-character.png"
-          alt=""
-          width={96}
-          height={96}
-          sizes="96px"
-        />
-      </button>
     </aside>
   );
 }
