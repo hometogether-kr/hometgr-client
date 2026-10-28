@@ -75,7 +75,7 @@ export function ShinhanGuestBudgetField({ value, onChange, error }: BudgetFieldP
     <div className={styles.budget}>
       <BudgetNumber
         id={id}
-        label="1. 한 달 월세 예산"
+        label="한 달 월세 예산이 얼마인가요?"
         value={value}
         onChange={onChange}
         error={error}
@@ -93,9 +93,8 @@ export function ShinhanGuestBudgetField({ value, onChange, error }: BudgetFieldP
       </div>
       <div className={styles.bounds}>
         <span>20만 원</span>
-        <span>100만 원</span>
+        <span>100만 원 이상</span>
       </div>
-      <p className={styles.hint}>20만 원부터 100만 원까지, 1만 원 단위로 선택해 주세요.</p>
       {error && (
         <p id={`${id}-error`} className={styles.error} role="alert">
           {error}
@@ -171,7 +170,7 @@ export function ShinhanGuestBudgetRangeField({
       </div>
       <div className={styles.bounds}>
         <span>20만 원</span>
-        <span>100만 원</span>
+        <span>100만 원 이상</span>
       </div>
       <p className={styles.hint}>각각 1만 원 단위로 선택해 주세요. 같은 금액도 가능해요.</p>
       {minError && (

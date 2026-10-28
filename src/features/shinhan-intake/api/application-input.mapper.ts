@@ -1,11 +1,28 @@
 import { z } from "zod";
 
-import { getShinhanTodayDate } from "../model/guest-date";
-import type { ShinhanIntakeDraft } from "../model/intake-draft";
+import {
+  formatShinhanCalendarDate,
+  getShinhanTodayDate,
+  parseShinhanCalendarDate,
+} from "../model/guest-date";
+import type { ShinhanGuestBudgetValues, ShinhanIntakeDraft } from "../model/intake-draft";
 import {
   type ShinhanCreateApplicationInput,
   shinhanCreateApplicationInputSchema,
 } from "./application-input.schema";
+
+// The current API accepts a single date. Keep the user's timing choice in form state;
+// adapt only at this boundary until the server supports a timing window explicitly.
+function toLegacyMoveInDate(values: ShinhanGuestBudgetValues): string {
+  if (values.moveInTiming === "ASAP") return getShinhanTodayDate();
+  if (values.moveInTiming === "WITHIN_MONTH") {
+    const date = parseShinhanCalendarDate(getShinhanTodayDate());
+    if (!date) throw new Error("Current date is unavailable.");
+    date.setDate(date.getDate() + 30);
+    return formatShinhanCalendarDate(date);
+  }
+  return values.moveInDate;
+}
 
 function normalizeDraftInput(draft: ShinhanIntakeDraft): unknown {
   switch (draft.applicationType) {
@@ -33,7 +50,7 @@ function normalizeDraftInput(draft: ShinhanIntakeDraft): unknown {
       return {
         budgetMonthlyKrw: draft.values.budgetMonthlyKrw,
         desiredRegionRaw: draft.values.desiredRegionRaw.trim(),
-        moveInDate: draft.values.moveInDate,
+        moveInDate: toLegacyMoveInDate(draft.values),
       };
     case "GUEST_DEMAND":
       return {

@@ -1,9 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useId, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useId, useRef, useState } from "react";
 
-import { ShinhanEntryNotice, ShinhanGuestFormButton } from "@/features/shinhan-intake";
+import {
+  ShinhanGuestFormButton,
+  ShinhanGuestRegionField,
+  ShinhanMoveInTimingField,
+} from "@/features/shinhan-intake";
 
 import styles from "./guest-budget-prompt.module.css";
 
@@ -12,7 +16,10 @@ export function ShinhanGuestBudgetPrompt() {
   const [isInlineActionVisible, setIsInlineActionVisible] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   const panelId = useId();
-  const noticeId = useId();
+  const [budget, setBudget] = useState(450000);
+  const [region, setRegion] = useState("");
+  const [timing, setTiming] = useState<"ASAP" | "WITHIN_MONTH" | "DATE">("ASAP");
+  const [date, setDate] = useState("");
   const characterRef = useRef<HTMLButtonElement>(null);
 
   function handlePanelClose() {
@@ -74,12 +81,53 @@ export function ShinhanGuestBudgetPrompt() {
             <Image src="/images/shinhan/guest/budget-close.svg" alt="" width={18} height={18} />
           </button>
         </div>
-        <ShinhanGuestFormButton type="button" className={styles.action} aria-describedby={noticeId}>
+        <div className={styles.budget}>
+          <label htmlFor={`${panelId}-budget`}>한 달 월세 예산</label>
+          <output htmlFor={`${panelId}-budget`}>
+            <strong>{budget / 10000}</strong>만 원
+          </output>
+          <input
+            id={`${panelId}-budget`}
+            type="range"
+            min={200000}
+            max={1000000}
+            step={10000}
+            value={budget}
+            onChange={(event) => setBudget(Number(event.target.value))}
+            style={{ "--budget-percent": `${(budget - 200000) / 8000}%` } as CSSProperties}
+          />
+          <span>20만 원</span>
+          <span>100만 원 이상</span>
+        </div>
+        <div className={styles.region}>
+          <ShinhanGuestRegionField
+            label="어느 지역에서 살고 싶으세요?"
+            value={region}
+            onChange={setRegion}
+          />
+        </div>
+        <ShinhanMoveInTimingField
+          compact
+          value={date}
+          timing={timing}
+          onChange={setDate}
+          onTimingChange={(next, value) => {
+            setTiming(next);
+            setDate(value);
+          }}
+        />
+        <ShinhanGuestFormButton
+          type="button"
+          className={styles.action}
+          initialValues={{
+            budgetMonthlyKrw: budget,
+            desiredRegionRaw: region,
+            moveInTiming: timing,
+            ...(timing === "DATE" || date ? { moveInDate: date } : {}),
+          }}
+        >
           내 조건에 맞는 방 찾기
         </ShinhanGuestFormButton>
-        <p className={styles.notice} id={noticeId}>
-          <ShinhanEntryNotice>예산을 입력하고 상세조건 안내를 신청해 보세요.</ShinhanEntryNotice>
-        </p>
       </div>
       <button
         type="button"

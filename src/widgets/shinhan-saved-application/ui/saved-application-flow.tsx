@@ -7,12 +7,11 @@ import { BetaFlowObserver } from "@/features/beta-tracking";
 import {
   ShinhanConsentStatus,
   ShinhanHostProgress,
-  ShinhanPrivacyLink,
   ShinhanSessionRestart,
   useShinhanStorage,
 } from "@/features/shinhan-intake";
 
-import { SavedMutationError } from "./saved-application-actions";
+import { SavedMutationError, SavedNavigationButton } from "./saved-application-actions";
 import { SavedApplicationSummary } from "./saved-application-details";
 
 import styles from "./saved-application-flow.module.css";
@@ -23,6 +22,7 @@ interface SavedApplicationFlowProps {
   hostIntroduction: ReactNode;
   hostIntroComplete: ReactNode;
   guestBudgetComplete: ReactNode;
+  guestExamples: ReactNode;
   guestDemandComplete: ReactNode;
 }
 
@@ -58,11 +58,25 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
       {!isHostEstimate && (
         <>
           <BetaFlowObserver flow={application.applicationType} resultVisible />
-          {application.applicationType === "HOST_REGISTRATION"
-            ? props.hostRegistration
-            : application.applicationType === "GUEST_BUDGET"
-              ? props.guestBudgetComplete
-              : props.guestDemandComplete}
+          {application.applicationType === "HOST_REGISTRATION" ? (
+            props.hostRegistration
+          ) : application.applicationType === "GUEST_BUDGET" ? (
+            step === "examples" ? (
+              <>
+                <h1 className="mb-5 text-3xl font-bold">내 조건에 맞는 집 · 공간 사진</h1>
+                {props.guestExamples}
+                <div className="mx-auto mt-6 max-w-md">
+                  <SavedNavigationButton step="complete">
+                    신청 완료 화면으로 돌아가기
+                  </SavedNavigationButton>
+                </div>
+              </>
+            ) : (
+              props.guestBudgetComplete
+            )
+          ) : (
+            props.guestDemandComplete
+          )}
         </>
       )}
       {isHostEstimate && step !== "introduction" && step !== "introComplete" && (
@@ -77,9 +91,6 @@ export function ShinhanSavedApplicationFlow(props: SavedApplicationFlowProps) {
       )}
       {isHostEstimate && step === "introduction" && props.hostIntroduction}
       {isHostEstimate && step === "introComplete" && props.hostIntroComplete}
-      <div className={styles.privacy}>
-        <ShinhanPrivacyLink>기본 신청 개인정보 전문 보기</ShinhanPrivacyLink>
-      </div>
     </div>
   );
 }

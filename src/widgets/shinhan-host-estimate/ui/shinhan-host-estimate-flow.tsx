@@ -4,11 +4,10 @@ import { type FormEvent, type ReactNode, useCallback, useState } from "react";
 
 import { useBetaFlowInput } from "@/features/beta-tracking";
 import {
-  ShinhanContactFields,
-  shinhanContactSchema,
+  ShinhanAnalysisProgress,
   shinhanHostEstimateSchema,
   type ShinhanHostEstimateValues,
-  ShinhanLiveSubmit,
+  ShinhanHostProgress,
   useShinhanIntake,
   useShinhanStorage,
 } from "@/features/shinhan-intake";
@@ -22,7 +21,9 @@ import styles from "./shinhan-host-estimate.module.css";
 
 interface EstimateFlowProps {
   introduction: ReactNode;
-  incomePreview: ReactNode;
+  result: ReactNode;
+  concerns: ReactNode;
+  guide: ReactNode;
 }
 
 const furnitureItems = [
@@ -38,7 +39,12 @@ const furnitureStates = [
   { value: "NONE", label: "없음" },
 ] as const;
 
-export function ShinhanHostEstimateFlow({ introduction, incomePreview }: EstimateFlowProps) {
+export function ShinhanHostEstimateFlow({
+  introduction,
+  result,
+  concerns,
+  guide,
+}: EstimateFlowProps) {
   const { draft, updateDraft } = useShinhanIntake();
   const { trackValidInput, markResultReady } = useBetaFlowInput("HOST_ESTIMATE", {
     enabled: draft?.applicationType === "HOST_ESTIMATE",
@@ -47,11 +53,6 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
   const locked = storage.pending || storage.attempt !== null || storage.preparing;
   const [addressOpen, setAddressOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [verifiedContact, setVerifiedContact] = useState<string | null>(null);
-  const [contactErrorValues, setContactErrorValues] = useState<{
-    phone: string;
-    requiredConsent: boolean;
-  } | null>(null);
   const closeAddressSearch = useCallback(() => setAddressOpen(false), []);
   const selectAddress = useCallback(
     (address: SelectedAddress) => {
@@ -82,7 +83,6 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
 
   if (draft?.applicationType !== "HOST_ESTIMATE") return null;
   const values = draft.values;
-  const contactSnapshot = JSON.stringify([draft.phone, draft.requiredConsent]);
 
   function updateValues(
     field: string,
@@ -94,15 +94,6 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
         : current,
     );
     setErrors((current) => ({ ...current, [field]: "" }));
-  }
-
-  function showConditions() {
-    if (locked) return;
-    setErrors({});
-    setVerifiedContact(null);
-    setContactErrorValues(null);
-    updateDraft((current) => ({ ...current, step: "conditions" }));
-    window.scrollTo({ top: 0, behavior: "instant" });
   }
 
   function handleConditionsSubmit(event: FormEvent<HTMLFormElement>) {
@@ -122,74 +113,44 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
       return;
     }
     setErrors({});
-    updateDraft((current) => ({ ...current, step: "contact" }));
+    updateDraft((current) => ({ ...current, step: "analysis" }));
     window.scrollTo({ top: 0, behavior: "instant" });
   }
 
-  function handleContactCheck(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (locked) return;
-    if (!draft) return;
-    setContactErrorValues({ phone: draft.phone, requiredConsent: draft.requiredConsent });
-    const parsed = shinhanContactSchema.safeParse(draft);
-    if (!parsed.success) {
-      setErrors(
-        Object.fromEntries(
-          parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
-        ),
-      );
-      setVerifiedContact(null);
-      return;
-    }
-    setErrors({});
-    setVerifiedContact(contactSnapshot);
-  }
-
-  if (draft.step === "contact") {
+  const currentStep =
+    draft.step === "concerns"
+      ? "concerns"
+      : draft.step === "introduction" || draft.step === "contact"
+        ? "introduction"
+        : "result";
+  if (draft.step !== "conditions") {
     return (
-      <div className={styles.contactStep}>
-        <div className={styles.contactHeading}>
-          <h1>우리 집 빈방의 예상 수익을 확인해 보세요</h1>
-          <p>휴대폰 번호와 필수 동의를 확인해 주세요.</p>
-        </div>
-        {incomePreview}
-        <form className={styles.contactForm} onSubmit={handleContactCheck} noValidate>
-          <h2>휴대폰 번호를 입력해 주세요</h2>
-          <ShinhanContactFields
-            onValidInput={trackValidInput}
-            errors={{
-              phone: contactErrorValues?.phone === draft.phone ? errors.phone : undefined,
-              requiredConsent:
-                contactErrorValues?.requiredConsent === draft.requiredConsent
-                  ? errors.requiredConsent
-                  : undefined,
+      <>
+        <ShinhanHostProgress
+          currentStep={draft.step === "contact" ? "notification" : currentStep}
+        />
+        {draft.step === "analysis" ? (
+          <ShinhanAnalysisProgress
+            mode="host"
+            onComplete={() => {
+              updateDraft((current) => ({ ...current, step: "result" }));
+              markResultReady();
             }}
           />
-          {process.env.NODE_ENV === "development" && (
-            <>
-              <BtnCta type="submit" variant="stroke" className={styles.cta} disabled={locked}>
-                입력 형식 확인
-              </BtnCta>
-              {verifiedContact === contactSnapshot && (
-                <p role="status" className={styles.notice}>
-                  입력 형식을 확인했어요. 아직 접수되지는 않았습니다.
-                </p>
-              )}
-            </>
-          )}
-          <ShinhanLiveSubmit onSaved={markResultReady} className={styles.cta}>
-            예상 수익 확인하기
-          </ShinhanLiveSubmit>
-        </form>
-        <button type="button" onClick={showConditions} className={styles.back} disabled={locked}>
-          ← 입력 정보 수정
-        </button>
-      </div>
+        ) : draft.step === "result" ? (
+          result
+        ) : draft.step === "concerns" ? (
+          concerns
+        ) : (
+          guide
+        )}
+      </>
     );
   }
 
   return (
     <>
+      <ShinhanHostProgress currentStep="result" />
       <div className={styles.columns}>
         {introduction}
         <form className={styles.form} onSubmit={handleConditionsSubmit} noValidate>

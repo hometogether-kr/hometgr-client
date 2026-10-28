@@ -231,3 +231,16 @@ export function SavedMutationError() {
     </section>
   );
 }
+
+export function SavedGuestPhotosButton() {
+  const { setStep } = useShinhanStorage();
+  return (
+    <button
+      type="button"
+      className="min-h-11 cursor-pointer text-base text-primary-600 focus-visible:outline-2 focus-visible:outline-offset-4"
+      onClick={() => setStep("examples")}
+    >
+      ← 공간 사진 다시 보기
+    </button>
+  );
+}

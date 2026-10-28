@@ -44,7 +44,15 @@ export type SavedStep =
 type StorageAttempt =
   | { kind: "create"; idempotencyKey: string; input: ShinhanCreateApplicationInput }
   | { kind: "concerns"; idempotencyKey: string; applicationId: string; input: ShinhanConcernsInput }
-  | { kind: "introduction"; idempotencyKey: string; applicationId: string };
+  | { kind: "introduction"; idempotencyKey: string; applicationId: string }
+  | {
+      kind: "hostIntroduction";
+      idempotencyKey: string;
+      input: ShinhanCreateApplicationInput;
+      concernCodes: string[];
+      concernsKey: string;
+      introductionKey: string;
+    };
 
 interface StorageContextValue {
   sessionMode: "local" | "remote" | "unavailable";
@@ -64,6 +72,7 @@ interface StorageContextValue {
   sessionExpired: boolean;
   restartSession: () => Promise<void>;
   submitApplication: () => Promise<boolean>;
+  submitHostIntroduction: () => Promise<boolean>;
   submitConcerns: () => Promise<boolean>;
   requestIntroduction: () => Promise<boolean>;
   retry: () => Promise<boolean>;
@@ -286,23 +295,43 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
       await queryClient.cancelQueries({ queryKey: shinhanApplicationKeys.detail(applicationId) });
       const credentials = { csrfToken: consents.csrfToken, idempotencyKey: next.idempotencyKey };
       const saved =
-        next.kind === "create"
+        next.kind === "hostIntroduction"
           ? await withSessionLock(sessionMode, async () => {
-              // Keep the same CSRF, UUID and body if bootstrap or submission loses its response.
               lastCsrfToken.current = credentials.csrfToken;
               await createShinhanSession(credentials.csrfToken);
-              return createShinhanApplication({ ...credentials, input: next.input });
-            })
-          : next.kind === "concerns"
-            ? await submitShinhanConcerns({
-                ...credentials,
-                applicationId: next.applicationId,
-                input: next.input,
-              })
-            : await requestShinhanIntroduction({
-                ...credentials,
-                applicationId: next.applicationId,
+              const created = await createShinhanApplication({ ...credentials, input: next.input });
+              await submitShinhanConcerns({
+                csrfToken: credentials.csrfToken,
+                idempotencyKey: next.concernsKey,
+                applicationId: created.applicationId,
+                input: shinhanConcernsInputSchema.parse({
+                  state: "SUBMITTED",
+                  concernCodes: next.concernCodes,
+                }),
               });
+              return requestShinhanIntroduction({
+                csrfToken: credentials.csrfToken,
+                idempotencyKey: next.introductionKey,
+                applicationId: created.applicationId,
+              });
+            })
+          : next.kind === "create"
+            ? await withSessionLock(sessionMode, async () => {
+                // Keep the same CSRF, UUID and body if bootstrap or submission loses its response.
+                lastCsrfToken.current = credentials.csrfToken;
+                await createShinhanSession(credentials.csrfToken);
+                return createShinhanApplication({ ...credentials, input: next.input });
+              })
+            : next.kind === "concerns"
+              ? await submitShinhanConcerns({
+                  ...credentials,
+                  applicationId: next.applicationId,
+                  input: next.input,
+                })
+              : await requestShinhanIntroduction({
+                  ...credentials,
+                  applicationId: next.applicationId,
+                });
       queryClient.setQueryData(shinhanApplicationKeys.detail(saved.applicationId), saved);
       setApplicationId(saved.applicationId);
       if (next.kind === "create") {
@@ -366,6 +395,39 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
         }
       }
       return await execute({ kind: "create", input, idempotencyKey: crypto.randomUUID() });
+    } catch (cause) {
+      recordError(cause);
+      return false;
+    }
+  }
+
+  async function submitHostIntroduction(): Promise<boolean> {
+    if (
+      !submissionAvailable ||
+      draft?.applicationType !== "HOST_ESTIMATE" ||
+      !consents ||
+      sessionExpired ||
+      busy.current ||
+      retainedAttempt.current
+    )
+      return false;
+    try {
+      if (!draft.requiredConsent || draft.requiredConsentVersion !== consents.required.version) {
+        throw new ShinhanApiError("개인정보 안내를 확인하고 동의해 주세요.", {
+          status: 422,
+          kind: "validation",
+          code: "CONSENT_VERSION_MISMATCH",
+          retryable: false,
+        });
+      }
+      return await execute({
+        kind: "hostIntroduction",
+        input: prepareShinhanApplicationInput(draft, consents.required.version),
+        concernCodes: draft.concernCodes,
+        idempotencyKey: crypto.randomUUID(),
+        concernsKey: crypto.randomUUID(),
+        introductionKey: crypto.randomUUID(),
+      });
     } catch (cause) {
       recordError(cause);
       return false;
@@ -472,6 +534,7 @@ function StorageSession({ children, sessionMode }: ShinhanStorageProviderProps) 
         sessionExpired,
         restartSession,
         submitApplication,
+        submitHostIntroduction,
         submitConcerns: saveConcerns,
         requestIntroduction: saveIntroduction,
         retry,

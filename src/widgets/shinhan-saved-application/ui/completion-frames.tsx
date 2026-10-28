@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { SavedGuestPhotosButton } from "./saved-application-actions";
+
 import styles from "./completion-frames.module.css";
 
 interface SavedHostRegistrationFrameProps {
@@ -136,6 +138,27 @@ export function SavedGuestCompletionFrame({
   actions,
 }: SavedGuestCompletionFrameProps) {
   const isBudget = applicationType === "GUEST_BUDGET";
+  if (isBudget)
+    return (
+      <section className={styles.budgetCompletion} aria-labelledby="saved-guest-completion-heading">
+        <Image src="/images/shinhan/guest/budget-character.png" alt="" width={112} height={112} />
+        <h1 id="saved-guest-completion-heading">
+          상세조건 안내 신청이
+          <br />
+          <em>완료됐어요</em>
+        </h1>
+        <p>남겨주신 휴대폰 번호로 상세조건을 안내해 드릴게요.</p>
+        <a
+          className={styles.listingsLink}
+          href="https://app.notion.com/p/34b63a07b34a80dea556d7f82680d985"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          매물 보러가기<span className="sr-only"> (새 창)</span>
+        </a>
+        <SavedGuestPhotosButton />
+      </section>
+    );
 
   return (
     <div className={styles.guestFrame} data-application-type={applicationType}>

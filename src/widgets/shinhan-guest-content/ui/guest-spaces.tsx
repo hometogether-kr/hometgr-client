@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { ShinhanEntryNotice, ShinhanGuestFormButton } from "@/features/shinhan-intake";
+import { ShinhanEntryNotice } from "@/features/shinhan-intake";
 
 import { TrackedGuestRegionButton } from "./tracked-guest-entry";
 
@@ -62,12 +62,6 @@ export function ShinhanGuestSpaces() {
           ))}
         </div>
         <div className={styles.actions}>
-          <ShinhanGuestFormButton
-            className={styles.spaceAction}
-            aria-describedby="shinhan-guest-space-notice"
-          >
-            우리 학교 근처 방 보기
-          </ShinhanGuestFormButton>
           <p className={styles.counseling}>자세한 비용과 생활 조건은 상담으로 안내해드려요.</p>
           <p id="shinhan-guest-space-notice" className={styles.notice}>
             공간 사진은 예시입니다.{" "}

@@ -4,6 +4,7 @@ import { type FormEvent, type ReactNode, useId, useState } from "react";
 
 import { useBetaFlowInput } from "@/features/beta-tracking";
 import {
+  ShinhanAnalysisProgress,
   shinhanContactSchema,
   ShinhanGuestBudgetField,
   ShinhanGuestBudgetRangeField,
@@ -11,9 +12,11 @@ import {
   type ShinhanGuestBudgetValues,
   shinhanGuestDemandSchema,
   type ShinhanGuestDemandValues,
+  ShinhanGuestProgress,
   ShinhanGuestRegionField,
   ShinhanLiveSubmit,
   ShinhanMoveInDateField,
+  ShinhanMoveInTimingField,
   ShinhanPhoneField,
   ShinhanRequiredConsentFields,
   ShinhanSavedApplicationNotice,
@@ -54,7 +57,6 @@ export function ShinhanGuestIntakeFlow({
   const locked = storage.pending || storage.attempt !== null || storage.preparing;
   const [conditionsAttempted, setConditionsAttempted] = useState(false);
   const [contactAttempted, setContactAttempted] = useState(false);
-  const [verifiedContact, setVerifiedContact] = useState<string | null>(null);
   const id = useId();
   if (
     !draft ||
@@ -78,7 +80,6 @@ export function ShinhanGuestIntakeFlow({
   const contactResult = shinhanContactSchema.safeParse(draft);
   const contactErrors =
     contactAttempted && !contactResult.success ? contactResult.error.flatten().fieldErrors : {};
-  const contactSnapshot = JSON.stringify([draft.phone, draft.requiredConsent]);
 
   function updateBudget(values: Partial<ShinhanGuestBudgetValues>) {
     updateDraft((current) =>
@@ -120,7 +121,7 @@ export function ShinhanGuestIntakeFlow({
     if (locked) return;
     setConditionsAttempted(true);
     if (!conditionsResult.success) return;
-    updateDraft((current) => ({ ...current, step: "contact" }));
+    updateDraft((current) => ({ ...current, step: "analysis" }));
     window.scrollTo({ top: 0, behavior: "instant" });
   }
 
@@ -128,7 +129,6 @@ export function ShinhanGuestIntakeFlow({
     event.preventDefault();
     if (locked) return;
     setContactAttempted(true);
-    setVerifiedContact(contactResult.success ? contactSnapshot : null);
   }
 
   function handleEditConditions() {
@@ -139,31 +139,22 @@ export function ShinhanGuestIntakeFlow({
 
   return (
     <>
-      <ol className={styles.progress} aria-label="신청 진행 단계">
-        <li aria-current={draft.step === "conditions" ? "step" : undefined}>01 조건 입력</li>
-        <li aria-current={draft.step === "contact" ? "step" : undefined}>02 공간 예시·연락처</li>
-      </ol>
-      {draft.step === "contact" ? (
+      <ShinhanGuestProgress
+        current={draft.step === "conditions" ? 1 : draft.step === "analysis" ? 2 : 3}
+      />
+      {draft.step === "analysis" ? (
+        <ShinhanAnalysisProgress
+          mode="guest"
+          onComplete={() => updateDraft((current) => ({ ...current, step: "contact" }))}
+        />
+      ) : draft.step === "contact" ? (
         <div className={styles.contactStep}>
           <header className={styles.contactHeading}>
+            <span className={styles.contactEyebrow}>내 조건에 맞는 집</span>
             <h1>
-              {isBudget ? (
-                <>
-                  이런 집에서 살 수 있는 곳을 <em>찾았어요</em>
-                </>
-              ) : (
-                <>
-                  입력하신 조건이라면,
-                  <br />
-                  <em>이런 집</em>에서 거주하실 수 있어요!
-                </>
-              )}
+              입력하신 조건이라면, <em>이런 집</em>에서 거주하실 수 있어요!
             </h1>
-            <p>
-              {isBudget
-                ? "사진으로 공간을 먼저 둘러보고, 상세조건 안내를 신청해 보세요."
-                : "사진은 공간 예시입니다. 전화번호를 남겨 주시면 실제 입주 조건을 안내해 드릴게요."}
-            </p>
+            <p>사진은 공간 예시입니다. 전화번호를 남겨 주시면 실제 입주 조건을 안내해 드릴게요.</p>
           </header>
           {examples}
           <form
@@ -175,33 +166,19 @@ export function ShinhanGuestIntakeFlow({
             <ShinhanPhoneField
               label={
                 isBudget
-                  ? "상세조건을 안내받을 휴대폰 번호"
+                  ? "상세한 매물 정보를 받을 전화번호를 입력해주세요!"
                   : "입주 조건을 받으려면 전화번호를 남겨 주세요"
               }
               error={contactErrors.phone?.[0]}
               onValidInput={trackValidInput}
             />
-            <ShinhanRequiredConsentFields error={contactErrors.requiredConsent?.[0]} />
-            <ShinhanLiveSubmit onSaved={markResultReady} className={styles.cta}>
-              {isBudget ? "상세조건 안내받기" : "입주조건 확인하기"}
+            <ShinhanRequiredConsentFields
+              error={contactErrors.requiredConsent?.[0]}
+              label="[필수] 개인정보 수집·이용에 동의합니다"
+            />
+            <ShinhanLiveSubmit onSaved={markResultReady} className={styles.cta} notice="">
+              입주조건 확인하기 →
             </ShinhanLiveSubmit>
-            {process.env.NODE_ENV === "development" && (
-              <>
-                <BtnCta
-                  type="submit"
-                  variant="stroke"
-                  className={styles.checkButton}
-                  disabled={locked}
-                >
-                  입력 내용 확인 (개발용)
-                </BtnCta>
-                <p role="status" className={styles.notice}>
-                  {verifiedContact === contactSnapshot
-                    ? "입력 형식을 확인했어요. 신청 저장 성공 전에는 접수가 완료되지 않습니다."
-                    : "‘입력 내용 확인’ 버튼은 형식만 확인하며 신청을 저장하지 않습니다."}
-                </p>
-              </>
-            )}
           </form>
           <button
             type="button"
@@ -230,14 +207,18 @@ export function ShinhanGuestIntakeFlow({
                     error={errors.budgetMonthlyKrw}
                   />
                   <ShinhanGuestRegionField
-                    label="2. 희망하는 위치"
+                    label="어느 지역에서 살고 싶으세요?"
                     value={draft.values.desiredRegionRaw}
                     onChange={(desiredRegionRaw) => updateBudget({ desiredRegionRaw })}
                     error={errors.desiredRegionRaw}
                   />
-                  <ShinhanMoveInDateField
+                  <ShinhanMoveInTimingField
                     value={draft.values.moveInDate}
+                    timing={draft.values.moveInTiming}
                     onChange={(moveInDate) => updateBudget({ moveInDate })}
+                    onTimingChange={(moveInTiming, moveInDate) =>
+                      updateBudget({ moveInTiming, moveInDate })
+                    }
                     error={errors.moveInDate}
                   />
                 </>
@@ -317,11 +298,9 @@ export function ShinhanGuestIntakeFlow({
               )}
               <div className={styles.actions}>
                 <BtnCta type="submit" className={styles.cta}>
-                  {isBudget ? "내 예산에 맞는 아파트 찾기" : "내 조건에 맞는 방 둘러보기"}
+                  {isBudget ? "내 예산에 맞는 아파트 찾기 →" : "내 조건에 맞는 방 둘러보기"}
                 </BtnCta>
-                <p className={styles.notice}>
-                  다음 화면에서 공통 공간 예시와 연락처 입력을 확인할 수 있어요.
-                </p>
+                <p className={styles.notice}>예산과 희망 지역에 맞는 아파트 개인방을 확인해요.</p>
               </div>
             </fieldset>
           </form>

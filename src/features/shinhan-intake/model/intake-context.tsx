@@ -21,6 +21,7 @@ import { createHostFollowupExample, type HostFollowupExample } from "./host-foll
 import {
   createShinhanDraft,
   type ShinhanApplicationType,
+  type ShinhanGuestBudgetValues,
   type ShinhanIntakeDraft,
 } from "./intake-draft";
 
@@ -43,6 +44,7 @@ interface IntakeContextValue {
   startGuestDraft: (
     applicationType: "GUEST_BUDGET" | "GUEST_DEMAND",
     desiredRegionRaw?: string,
+    initialValues?: Partial<ShinhanGuestBudgetValues>,
   ) => void;
   updateDraft: (update: (draft: ShinhanIntakeDraft) => ShinhanIntakeDraft) => void;
   rememberPrivacyReturn: () => void;
@@ -146,6 +148,7 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
   function startGuestDraft(
     applicationType: "GUEST_BUDGET" | "GUEST_DEMAND",
     desiredRegionRaw = "",
+    initialValues?: Partial<ShinhanGuestBudgetValues>,
   ) {
     const nextSession = createSession(
       applicationType,
@@ -157,6 +160,9 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
       nextSession.draft?.applicationType === "GUEST_DEMAND"
     ) {
       nextSession.draft.values.desiredRegionRaw = desiredRegionRaw;
+    }
+    if (nextSession.draft?.applicationType === "GUEST_BUDGET" && initialValues) {
+      nextSession.draft.values = { ...nextSession.draft.values, ...initialValues };
     }
     setSession(nextSession);
   }

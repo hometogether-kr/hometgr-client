@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ShinhanIntakeRoleSlot } from "@/features/shinhan-intake";
+import { ShinhanGuestSpaceExamples } from "@/widgets/shinhan-guest-intake";
 import { HostIntroductionFrame, HostResultFrame } from "@/widgets/shinhan-host-followup";
 import {
   SavedApplicationSummary,
@@ -70,6 +71,7 @@ export function ShinhanSavedApplicationPage() {
               }
             />
           }
+          guestExamples={<ShinhanGuestSpaceExamples />}
           guestBudgetComplete={
             <SavedGuestCompletionFrame
               applicationType="GUEST_BUDGET"
