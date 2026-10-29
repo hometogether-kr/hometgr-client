@@ -25,6 +25,7 @@ import {
 } from "@/features/shinhan-intake";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { SelectTile } from "@/shared/ui/select-tile";
+import { TextField } from "@/shared/ui/text-field";
 
 import styles from "./shinhan-guest-intake-flow.module.css";
 
@@ -206,10 +207,13 @@ export function ShinhanGuestIntakeFlow({
                     onChange={(budgetMonthlyKrw) => updateBudget({ budgetMonthlyKrw })}
                     error={errors.budgetMonthlyKrw}
                   />
-                  <ShinhanGuestRegionField
+                  <TextField
+                    className={styles.budgetRegion}
                     label="어느 지역에서 살고 싶으세요?"
+                    placeholder="예: 노원구, 공릉동, 서울과기대 근처"
                     value={draft.values.desiredRegionRaw}
-                    onChange={(desiredRegionRaw) => updateBudget({ desiredRegionRaw })}
+                    onChange={(event) => updateBudget({ desiredRegionRaw: event.target.value })}
+                    maxLength={200}
                     error={errors.desiredRegionRaw}
                   />
                   <ShinhanMoveInTimingField

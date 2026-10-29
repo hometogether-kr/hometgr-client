@@ -1,3 +1,22 @@
+.budgetRegion {
+  width: 100%;
+  gap: 12px;
+}
+.budgetRegion > label {
+  color: var(--color-grayscale-900);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+}
+.budgetRegion > div > div {
+  min-height: 60px;
+  border-radius: 12px;
+  padding: 16px 20px;
+}
+.budgetRegion input {
+  font-size: 17px;
+  font-weight: 400;
+}
 .progress {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
