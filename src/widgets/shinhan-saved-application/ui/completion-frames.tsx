@@ -2,8 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { SavedGuestPhotosButton } from "./saved-application-actions";
-
 import styles from "./completion-frames.module.css";
 
 interface SavedHostRegistrationFrameProps {
@@ -156,7 +154,12 @@ export function SavedGuestCompletionFrame({
         >
           매물 보러가기<span className="sr-only"> (새 창)</span>
         </a>
-        <SavedGuestPhotosButton />
+        <Link
+          href="/shinhan/guest"
+          className="flex min-h-11 items-center text-base text-primary-600 focus-visible:outline-2 focus-visible:outline-offset-4"
+        >
+          게스트 홈화면 가기
+        </Link>
       </section>
     );
 

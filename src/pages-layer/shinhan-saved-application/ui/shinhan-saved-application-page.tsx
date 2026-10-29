@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { ShinhanIntakeRoleSlot } from "@/features/shinhan-intake";
+import { SHINHAN_HOST_REGISTRATION_PATH, ShinhanIntakeRoleSlot } from "@/features/shinhan-intake";
 import { ShinhanGuestSpaceExamples } from "@/widgets/shinhan-guest-intake";
 import { HostIntroductionFrame, HostResultFrame } from "@/widgets/shinhan-host-followup";
 import {
@@ -62,12 +62,20 @@ export function ShinhanSavedApplicationPage() {
           hostIntroComplete={
             <SavedHostIntroductionFrame
               actions={
-                <Link
-                  href="/shinhan/host"
-                  className="flex min-h-16 w-full items-center justify-center rounded-[14px] bg-primary-500 px-5 py-4 text-xl font-bold text-white hover:opacity-80 max-md:min-h-13 max-md:text-base"
-                >
-                  확인
-                </Link>
+                <>
+                  <Link
+                    href="/shinhan/host"
+                    className="flex min-h-16 w-full items-center justify-center rounded-[14px] bg-primary-500 px-5 py-4 text-xl font-bold text-white hover:opacity-80 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 max-md:min-h-13 max-md:text-base"
+                  >
+                    확인
+                  </Link>
+                  <Link
+                    href={SHINHAN_HOST_REGISTRATION_PATH}
+                    className="flex min-h-16 w-full items-center justify-center rounded-[14px] border border-primary-500 bg-white px-5 py-4 text-xl font-bold text-primary-500 hover:bg-primary-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 max-md:min-h-13 max-md:text-base"
+                  >
+                    방 등록하기
+                  </Link>
+                </>
               }
             />
           }

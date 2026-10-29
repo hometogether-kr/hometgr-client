@@ -146,7 +146,7 @@
   flex-direction: column;
   gap: 6px;
   border-radius: 20px;
-  cursor: not-allowed;
+  cursor: default;
 }
 
 .regionPhoto {
