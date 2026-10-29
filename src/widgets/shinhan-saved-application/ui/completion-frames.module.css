@@ -163,6 +163,19 @@
   width: 100%;
 }
 
+.introductionActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 767px) {
+  .introductionActions {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+
 .brand {
   display: flex;
   min-width: 0;

@@ -45,7 +45,7 @@ export { ShinhanEntryNotice } from "./ui/entry-notice";
 export { ShinhanGuestBudgetField, ShinhanGuestBudgetRangeField } from "./ui/guest-budget-fields";
 export { ShinhanGuestRegionField, ShinhanMoveInDateField } from "./ui/guest-condition-fields";
 export { ShinhanMoveInTimingField } from "./ui/guest-condition-fields";
-export { ShinhanGuestFormButton, ShinhanGuestRegionButton } from "./ui/guest-entry";
+export { ShinhanGuestFormButton } from "./ui/guest-entry";
 export { ShinhanHostFormButton } from "./ui/host-form-button";
 export { ShinhanHostIntroductionDialog } from "./ui/host-introduction-dialog";
 export {

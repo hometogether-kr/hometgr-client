@@ -2,8 +2,6 @@ import Image from "next/image";
 
 import { ShinhanEntryNotice } from "@/features/shinhan-intake";
 
-import { TrackedGuestRegionButton } from "./tracked-guest-entry";
-
 import styles from "./guest-spaces.module.css";
 
 const spaces = [
@@ -83,12 +81,7 @@ export function ShinhanGuestRegions() {
         <ul className={styles.regionList}>
           {regions.map((region) => (
             <li key={region.name}>
-              <TrackedGuestRegionButton
-                region={region.name}
-                type="button"
-                className={styles.regionCard}
-                aria-describedby="shinhan-guest-region-notice"
-              >
+              <figure className={styles.regionCard}>
                 <span className={styles.regionPhoto}>
                   <Image
                     src={region.image}
@@ -97,14 +90,13 @@ export function ShinhanGuestRegions() {
                     sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1023px) 50vw, (max-width: 1279px) 25vw, 282px"
                   />
                 </span>
-                <span className={styles.regionName}>{region.name}</span>
-              </TrackedGuestRegionButton>
+                <figcaption className={styles.regionName}>{region.name}</figcaption>
+              </figure>
             </li>
           ))}
         </ul>
         <p id="shinhan-guest-region-notice" className={styles.regionNotice}>
-          공간 예시 사진입니다.{" "}
-          <ShinhanEntryNotice>선택한 지역의 입주 조건을 입력할 수 있어요.</ShinhanEntryNotice>
+          공간 예시 사진입니다.
         </p>
       </div>
     </section>
