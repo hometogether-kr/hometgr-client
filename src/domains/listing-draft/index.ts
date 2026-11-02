@@ -6,6 +6,7 @@ export type {
   DraftSummaryDto,
   RoomSubmissionDto,
 } from "./api/draft.dto";
+export { draftDataSchema } from "./api/draft.dto";
 export {
   draftAutosaveEntrySchema,
   draftDetailSchema,
@@ -15,6 +16,14 @@ export {
 } from "./api/draft.dto";
 export { toDraftPhoto, toListingDraft, toListingDraftSummary } from "./api/draft.mapper";
 export { listingDraftQueryKeys } from "./api/draft-query-keys";
+export type { HostRoomDetail, HostRoomSummary } from "./api/host-room.api";
+export {
+  fetchHostRoom,
+  fetchHostRooms,
+  hostRoomDetailSchema,
+  hostRoomQueryKeys,
+  hostRoomSummarySchema,
+} from "./api/host-room.api";
 export type {
   DraftDataDto,
   DraftMediaDto,

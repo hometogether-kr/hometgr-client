@@ -51,6 +51,7 @@ export const ROUTES = {
     complete: "/listing/new/complete",
     /** 내 방 관리 */
     manage: "/listing/manage",
+    edit: (roomId: string) => `/listing/manage/${encodeURIComponent(roomId)}`,
   },
   /** 마이페이지 — 헤더 프로필·모바일 사이드바에서 진입 */
   myPage: "/mypage",
