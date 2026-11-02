@@ -9,12 +9,16 @@ import { z } from "zod";
 
 import { fetchHostRoom, type HostRoomDetail, hostRoomQueryKeys } from "@/domains/listing-draft";
 import {
+  createRestorableListing,
   EDIT_MENUS,
   type EditMenuId,
   hasListingChanges,
   isReviewing,
+  type ListingEditReceiptScope,
   type ListingManagementCommands,
   ListingRevisionComplete,
+  saveListingEditReceipt,
+  useListingEditReceipt,
 } from "@/features/manage-listing";
 import { parseKrwAmount, parseStayMonths } from "@/features/save-listing-draft";
 import { ROUTES } from "@/shared/config";
@@ -44,6 +48,7 @@ interface EditLayoutState {
   saved: boolean;
   pending: boolean;
   canSave: boolean;
+  isLastMenu: boolean;
   onReset: () => void;
   listHref: string;
 }
@@ -53,7 +58,6 @@ const EditLayoutContext = createContext<EditLayoutState | null>(null);
 function EditFormLayout({ step, title, description, children, onNext }: ListingStepLayoutProps) {
   const state = useContext(EditLayoutContext);
   if (!state) return null;
-  const sensitive = [1, 2, 3, 4, 5, 6, 7].includes(step);
   return (
     <section
       className={cn(
@@ -79,7 +83,7 @@ function EditFormLayout({ step, title, description, children, onNext }: ListingS
               </p>
             )}
           </div>
-          <fieldset disabled={state.pending} className="min-w-0">
+          <fieldset disabled={state.pending || state.saved} inert={state.saved} className="min-w-0">
             {children}
           </fieldset>
         </div>
@@ -93,7 +97,7 @@ function EditFormLayout({ step, title, description, children, onNext }: ListingS
             <BtnCta variant="stroke" onClick={state.onReset} disabled={state.pending}>
               되돌리기
             </BtnCta>
-          ) : state.saved ? (
+          ) : state.saved && state.isLastMenu ? (
             <Link
               href={state.listHref}
               className="flex h-12 items-center justify-center rounded-xl border border-grayscale-300 px-6 text-sm font-semibold text-grayscale-600"
@@ -102,7 +106,7 @@ function EditFormLayout({ step, title, description, children, onNext }: ListingS
             </Link>
           ) : null}
           <div className="relative pt-0">
-            {state.dirty && sensitive && (
+            {state.dirty && state.isLastMenu && (
               <div className="absolute right-0 bottom-[58px] flex h-8 w-[204px] items-center justify-center text-sm font-bold text-primary-600">
                 <Image
                   src="/images/listing-management/review-tooltip.svg"
@@ -117,15 +121,16 @@ function EditFormLayout({ step, title, description, children, onNext }: ListingS
             <BtnCta
               className={cn(
                 "w-[196px]",
-                !state.dirty && state.saved && "disabled:bg-primary-500 disabled:text-white",
+                state.saved && state.isLastMenu && "disabled:bg-primary-500 disabled:text-white",
               )}
               disabled={
-                state.pending || (state.dirty && !state.canSave) || (!state.dirty && state.saved)
+                state.pending ||
+                (state.isLastMenu && (state.saved || !state.dirty || !state.canSave))
               }
               loading={state.pending}
               onClick={onNext}
             >
-              {state.dirty ? "수정사항 저장" : state.saved ? "저장됨" : "다음으로"}
+              {state.isLastMenu ? (state.saved ? "저장됨" : "수정사항 저장") : "다음으로"}
             </BtnCta>
           </div>
         </div>
@@ -141,6 +146,8 @@ interface ListingEditorProps {
   onMenuChange: (menu: EditMenuId) => void;
   listHref?: string;
   onSaved?: (snapshot: HostRoomDetail) => void;
+  initiallySaved?: boolean;
+  receiptScope?: ListingEditReceiptScope;
 }
 
 export function ListingEditor({
@@ -150,13 +157,14 @@ export function ListingEditor({
   onMenuChange,
   listHref = ROUTES.listing.manage,
   onSaved,
+  initiallySaved = false,
+  receiptScope = "host",
 }: ListingEditorProps) {
   const [baseline, setBaseline] = useState(() => createEditorValues(room));
   const [values, setValues] = useState(baseline);
   const [revision, setRevision] = useState(0);
   const [pending, setPending] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [savedMenu, setSavedMenu] = useState<EditMenuId | null>(null);
+  const [saved, setSaved] = useState(initiallySaved);
   const [complete, setComplete] = useState(false);
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleInput, setTitleInput] = useState(values.title);
@@ -165,6 +173,7 @@ export function ListingEditor({
   const { showToast } = useToast();
   const dirty = hasListingChanges(baseline, values);
   const activeIndex = EDIT_MENUS.findIndex((item) => item.id === menu);
+  const isLastMenu = activeIndex === EDIT_MENUS.length - 1;
   const photo = values.photos[0];
 
   useEffect(() => {
@@ -181,6 +190,7 @@ export function ListingEditor({
   }, []);
 
   function update<K extends keyof EditorValues>(field: K, value: EditorValues[K]) {
+    if (saved || pending) return;
     setValues({ ...values, [field]: value });
     setSaved(false);
   }
@@ -196,7 +206,7 @@ export function ListingEditor({
     setSaved(false);
   };
   const save = async () => {
-    if (pending || !commands) return;
+    if (pending || saved || !dirty || !isLastMenu || !commands) return;
     setPending(true);
     try {
       const snapshot = {
@@ -210,12 +220,21 @@ export function ListingEditor({
         showToast("입력값을 다시 확인해주세요.", { variant: "error" });
         return;
       }
+      const restoredRoom = await createRestorableListing(
+        { ...room, ...snapshot },
+        localFiles.current,
+      );
       await commands.requestChanges(room.roomId, snapshot);
-      setBaseline(values);
+      const receipt = saveListingEditReceipt(receiptScope, restoredRoom);
+      const savedValues = createEditorValues(receipt.room);
+      setBaseline(savedValues);
+      setValues(savedValues);
       setSaved(true);
-      setSavedMenu(menu);
       setComplete(true);
-      onSaved?.({ ...room, ...snapshot });
+      const search = new URLSearchParams(window.location.search);
+      search.set("saved", receipt.id);
+      window.history.replaceState(null, "", `?${search.toString()}`);
+      onSaved?.(receipt.room);
     } catch (error) {
       showToast(
         error instanceof z.ZodError
@@ -230,8 +249,11 @@ export function ListingEditor({
     }
   };
   const handleValidated = () => {
-    if (dirty) void save();
-    else nextMenu();
+    if (isLastMenu) {
+      if (dirty) void save();
+      return;
+    }
+    nextMenu();
   };
   const shared = { Layout: EditFormLayout, isSaving: pending, presentation: "management" as const };
   const forms = {
@@ -402,6 +424,7 @@ export function ListingEditor({
               <button
                 type="button"
                 aria-label="매물 제목 수정"
+                disabled={saved || pending}
                 onClick={() => setEditingTitle(true)}
                 className="flex size-9 items-center justify-center rounded-lg focus-visible:outline-2 focus-visible:outline-primary-500"
               >
@@ -483,9 +506,10 @@ export function ListingEditor({
         <EditLayoutContext
           value={{
             dirty,
-            saved: saved && savedMenu === menu,
+            saved,
             pending,
             canSave: !!commands,
+            isLastMenu,
             onReset: reset,
             listHref,
           }}
@@ -497,7 +521,15 @@ export function ListingEditor({
       </div>
       <ListingRevisionComplete
         open={complete}
-        onContinue={() => setComplete(false)}
+        onClose={() => setComplete(false)}
+        onContinue={() => {
+          setComplete(false);
+          setSaved(false);
+          setRevision((current) => current + 1);
+          const search = new URLSearchParams(window.location.search);
+          search.delete("saved");
+          window.history.replaceState(null, "", `?${search.toString()}`);
+        }}
         onReturn={() => {
           window.location.assign(listHref);
         }}
@@ -513,22 +545,27 @@ export function ConnectedListingEditor({ roomId }: { roomId: string }) {
   });
   const params = useSearchParams();
   const router = useRouter();
+  const receipt = useListingEditReceipt("host", roomId);
+  const savedReceipt = receipt?.id === params.get("saved") ? receipt : null;
   const menu = z
     .enum(EDIT_MENUS.map((item) => item.id))
     .catch("photos")
     .parse(params.get("menu") ?? undefined);
-  if (query.isPending)
+  if (query.isPending || receipt === undefined)
     return <div className="h-[674px] animate-pulse rounded-[28px] bg-white" aria-busy="true" />;
   if (query.isError) return <p role="alert">{query.error.message}</p>;
   if (isReviewing(query.data)) return <p>심사 중에는 수정이 제한됩니다</p>;
   return (
     <ListingEditor
       key={query.data.roomId}
-      room={query.data}
+      room={savedReceipt?.room ?? query.data}
+      initiallySaved={!!savedReceipt}
       menu={menu}
-      onMenuChange={(next) =>
-        router.replace(`${ROUTES.listing.edit(roomId)}?menu=${next}`, { scroll: false })
-      }
+      onMenuChange={(next) => {
+        const search = new URLSearchParams(params.toString());
+        search.set("menu", next);
+        router.replace(`${ROUTES.listing.edit(roomId)}?${search.toString()}`, { scroll: false });
+      }}
     />
   );
 }

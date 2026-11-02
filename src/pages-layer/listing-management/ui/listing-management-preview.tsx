@@ -7,8 +7,8 @@ import { z } from "zod";
 import {
   EDIT_MENUS,
   LISTING_FILTERS,
-  type ListingEditSnapshot,
   type ListingManagementCommands,
+  useListingEditReceipt,
 } from "@/features/manage-listing";
 
 import { PREVIEW_ROOM, PREVIEW_ROOMS } from "../model/preview-fixtures";
@@ -22,7 +22,9 @@ export function ListingManagementPreview() {
   const params = useSearchParams();
   const router = useRouter();
   const [rooms, setRooms] = useState(PREVIEW_ROOMS);
-  const [room, setRoom] = useState(PREVIEW_ROOM);
+  const receipt = useListingEditReceipt("preview", PREVIEW_ROOM.roomId);
+  const savedReceipt = receipt?.id === params.get("saved") ? receipt : null;
+  const room = receipt?.room ?? PREVIEW_ROOM;
   const editing = params.has("room");
   const filter = z
     .enum(LISTING_FILTERS)
@@ -37,21 +39,29 @@ export function ListingManagementPreview() {
       setRooms((current) => current.map((item) => (item.id === id ? { ...item, isPublic } : item)));
       return Promise.resolve();
     },
-    requestChanges: (_id: string, snapshot: ListingEditSnapshot) => {
-      setRoom((current) => ({ ...current, ...snapshot }));
-      return Promise.resolve();
-    },
+    requestChanges: () => Promise.resolve(),
   };
+  if (receipt === undefined) {
+    return (
+      <ListingManagementShell editing={editing} listHref={PREVIEW_PATH}>
+        <div className="h-[674px] animate-pulse rounded-[28px] bg-white" aria-busy="true" />
+      </ListingManagementShell>
+    );
+  }
   return (
     <ListingManagementShell editing={editing} listHref={PREVIEW_PATH}>
       {editing ? (
         <ListingEditor
           room={room}
           commands={commands}
+          initiallySaved={!!savedReceipt}
+          receiptScope="preview"
           menu={menu}
-          onMenuChange={(next) =>
-            router.replace(`${PREVIEW_PATH}?room=1&menu=${next}`, { scroll: false })
-          }
+          onMenuChange={(next) => {
+            const search = new URLSearchParams(params.toString());
+            search.set("menu", next);
+            router.replace(`${PREVIEW_PATH}?${search.toString()}`, { scroll: false });
+          }}
           listHref={PREVIEW_PATH}
         />
       ) : (

@@ -18,15 +18,17 @@ export function ListingRevisionComplete({
   open,
   onContinue,
   onReturn,
+  onClose = onContinue,
 }: {
   open: boolean;
   onContinue: () => void;
   onReturn: () => void;
+  onClose?: () => void;
 }) {
   return (
     <Modal
       open={open}
-      onClose={onContinue}
+      onClose={onClose}
       closeButton="none"
       title="매물 정보 수정 요청이 완료되었습니다"
       classNames={{
