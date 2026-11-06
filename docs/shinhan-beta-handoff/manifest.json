@@ -1,0 +1,145 @@
+{
+  "contract_version": "0.1.0-draft.3",
+  "definition_version": "shinhan_beta_metrics_draft_v2",
+  "synthetic_fixtures": true,
+  "customer_base_sha": "9f314521e444da9b0e63efeb2d80fcea1a89da8b",
+  "customer_branch": "codex/shinhan-beta-tracking",
+  "bundle_kind": "technical_review_bundle",
+  "agreement_record": "agreement.md",
+  "previous_bundle": "history/0.1.0-draft.2/",
+  "operating_policy_sha256": "8c727414ddb233f259e256294153b2fd5c1efa862a09a3a761010d2ffa9360d7",
+  "excludes": [
+    "history/",
+    "agreement.md",
+    "manifest.json",
+    "operating-decisions.md",
+    "implementation-progress.md"
+  ],
+  "files": [
+    {
+      "path": "contract.md",
+      "bytes": 46966,
+      "sha256": "b5ba2f73b9cc7c114ad7e55ff20bc19a42a18b44e99a450229b579aa3cf6aa03"
+    },
+    {
+      "path": "fixtures/README.md",
+      "bytes": 3477,
+      "sha256": "4eed64d43a0ebcb8515f6f6c87a00205a98c9732c35d649640332ef03c66de76"
+    },
+    {
+      "path": "fixtures/admin-aggregate-before-24h.expected.synthetic.json",
+      "bytes": 9989,
+      "sha256": "4b9f1d2d8231695cfe1ebc8ceb9fdee884f2ec8d8e2cab540ec94701c55c0288"
+    },
+    {
+      "path": "fixtures/admin-aggregate-end-boundary.expected.synthetic.json",
+      "bytes": 10128,
+      "sha256": "5b72b72bf79a1d8d47ae4fabe93babf5e7ede14dd97bef2b17ea5eac615d9b65"
+    },
+    {
+      "path": "fixtures/admin-aggregate-late.expected.synthetic.json",
+      "bytes": 10011,
+      "sha256": "f252260c99f451addd37fd015054c01bc4b6ac4e32f2e850ea70946470110e23"
+    },
+    {
+      "path": "fixtures/admin-aggregate.expected.synthetic.json",
+      "bytes": 9989,
+      "sha256": "fef1f69eb6954df886595ba322a08f2796afefc80d890796ff89fa065da2fd48"
+    },
+    {
+      "path": "fixtures/admin-snapshot-cases.synthetic.json",
+      "bytes": 53789,
+      "sha256": "de0a29f244ea85fb98dd81885cedd11cdc312ce2c7d726f06cd4379312b3ac57"
+    },
+    {
+      "path": "fixtures/aggregate-query.synthetic.json",
+      "bytes": 661,
+      "sha256": "17e295cfc29118783c2d28a4eaa6ca038e8ece65e4a53c1db50f16f1d20657c9"
+    },
+    {
+      "path": "fixtures/aggregate-states.synthetic.json",
+      "bytes": 20135,
+      "sha256": "f779ba8e25810353f0227b0a5f66ccf3b3e8e328989372f7ee390b7901fc0ab0"
+    },
+    {
+      "path": "fixtures/attempt-retention-cases.synthetic.json",
+      "bytes": 18446,
+      "sha256": "a27f75ee4f453afa821fb28e6d0be3d3e1b4fc92b6efe8cc4aeedb8c76e1e59c"
+    },
+    {
+      "path": "fixtures/concurrency-and-nonce.synthetic.json",
+      "bytes": 3994,
+      "sha256": "cd5574c70fecb8631139c46e6c5dde1583a6b9fe862865c6f1340563518b9958"
+    },
+    {
+      "path": "fixtures/events.synthetic.json",
+      "bytes": 14457,
+      "sha256": "4962ac990311ca1c1d8d30e07f51b27f3fe5ba5b41867fb88d2beb3fabf6974e"
+    },
+    {
+      "path": "fixtures/invalid-input-cases.synthetic.json",
+      "bytes": 6876,
+      "sha256": "7e34f7624bf1b9a54193a05e97da5f530e581a8cfe2d67f357aaca4d63015474"
+    },
+    {
+      "path": "fixtures/observation-cases.synthetic.json",
+      "bytes": 5189,
+      "sha256": "ce4139dd3d7fb9964016988addd73e99440ee2d9899f4491f927989acb221973"
+    },
+    {
+      "path": "fixtures/operation-policy-aggregate-cases.synthetic.json",
+      "bytes": 34778,
+      "sha256": "c85ba33f533020e5378281535902ac6d076f4f856c83fc65febbe2fadfc22fff"
+    },
+    {
+      "path": "fixtures/public-aggregate-cases.synthetic.json",
+      "bytes": 87892,
+      "sha256": "5aeb4508b6835bca4cd4bccf029044512914d0faaefa1b02b51b13e4e7247f51"
+    },
+    {
+      "path": "fixtures/public-aggregate.expected.synthetic.json",
+      "bytes": 630,
+      "sha256": "712d5881663882293015c014badaa113b13c3a6e5dd565753c732f3cf8861cf7"
+    },
+    {
+      "path": "fixtures/record-cases.synthetic.json",
+      "bytes": 10133,
+      "sha256": "7f04ad71b9b8b1ff3b2d9706e286dc581b6b8e614de2288b977efa7b3c81d171"
+    },
+    {
+      "path": "fixtures/scenarios.synthetic.json",
+      "bytes": 3284,
+      "sha256": "27a90763b49a0f14b9993c0e36ee6119cd462f5795498a2a2804e20d857ea17d"
+    },
+    {
+      "path": "fixtures/signing-vector.synthetic.json",
+      "bytes": 7119,
+      "sha256": "351c955f0b17536324d8531aaec2d763b1b2e2f95eba7e7f97269716cb528b9a"
+    },
+    {
+      "path": "fixtures/source-mapping.synthetic.json",
+      "bytes": 1284,
+      "sha256": "fbfb1024191cfabb8e192614b9464c0a9945ae537c0635a70a5c5bf51574f184"
+    },
+    {
+      "path": "fixtures/utm-cases.synthetic.json",
+      "bytes": 2926,
+      "sha256": "1e759f1341780677deca0b78898c5518eacdaf44086ce0f1a055e7e9ded20bfb"
+    },
+    {
+      "path": "implementation-plan.md",
+      "bytes": 17066,
+      "sha256": "4999693259bb367f53e3aadb9b80ba6256f1799d1ab35a597dee3b41a2193e12"
+    },
+    {
+      "path": "revision-notes.md",
+      "bytes": 2742,
+      "sha256": "dd4eea31ab88f25e88d9178477681d8cb5dcb56978aae9d3928e87538e1e63e3"
+    },
+    {
+      "path": "validation.md",
+      "bytes": 4779,
+      "sha256": "b1cfc8dd5cc762c13b45cff5cf726dbaef0663978bd8e812baa5a408312a9376"
+    }
+  ]
+}

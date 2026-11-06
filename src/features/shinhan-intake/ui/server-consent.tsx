@@ -3,51 +3,58 @@
 import type { ReactNode } from "react";
 
 import { useShinhanStorage } from "../model/storage-context";
-import { ShinhanLivePreparation, ShinhanSessionRestart } from "./live-submit";
-import { ShinhanPrivacyLink, ShinhanPrivacyReturn } from "./privacy-navigation";
+import { ShinhanSessionRestart } from "./live-submit";
+import { ShinhanPrivacyReturn } from "./privacy-navigation";
 
-export function ShinhanServerConsentSummary() {
-  const { consents, consentPreparationStarted } = useShinhanStorage();
-  if (!consents)
+export function ShinhanConsentStatus() {
+  const {
+    consents,
+    consentsLoading,
+    consentError,
+    reloadConsents,
+    sessionMode,
+    sessionExpired,
+    attempt,
+  } = useShinhanStorage();
+  if (consents) return null;
+  if (consentsLoading)
     return (
-      <p className="mt-2 text-sm leading-6 text-grayscale-600">
-        {consentPreparationStarted
-          ? "신청에 사용할 서버 전문을 다시 준비한 뒤 동의해 주세요. 기존 입력 내용은 유지됩니다."
-          : "현재 체크는 화면 확인용입니다. 실제 저장 전에 서버 전문을 준비하고 다시 동의해 주세요."}
+      <p role="status" className="mt-2 text-sm leading-6 text-grayscale-600">
+        개인정보 안내를 확인하고 있어요…
       </p>
     );
+  if (sessionMode === "unavailable" || sessionExpired || !consentError) return null;
   return (
-    <div className="mt-2 text-sm leading-6 text-grayscale-600">
-      <p>
-        표시·제출할 동의 버전: <span className="break-all">{consents.required.version}</span>
-      </p>
-      {consents.localOnly && <p>로컬 확인용 전문이며 운영 승인본이 아닙니다.</p>}
-      <ShinhanPrivacyLink>서버 필수 동의 전문 보기</ShinhanPrivacyLink>
+    <div role="alert" className="mt-2 text-sm leading-6 text-system-error">
+      <p>개인정보 안내를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.</p>
+      <button
+        type="button"
+        disabled={attempt !== null}
+        className="min-h-11 cursor-pointer text-primary-600 underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed"
+        onClick={() => void reloadConsents()}
+      >
+        다시 불러오기
+      </button>
     </div>
   );
 }
 
 export function ServerConsentDocument({ fallback }: { fallback: ReactNode }) {
-  const { consents, consentPreparationStarted, preparing, error, application } =
-    useShinhanStorage();
+  const { consents, consentsLoading, application, sessionMode } = useShinhanStorage();
   if (!consents) {
-    if (!consentPreparationStarted) return fallback;
+    if (sessionMode === "unavailable" && process.env.NODE_ENV === "development") return fallback;
     return (
       <article className="mx-auto max-w-4xl space-y-6 px-5 py-10 md:px-8 md:py-16">
         <ShinhanPrivacyReturn />
         <h1 className="text-2xl leading-snug font-bold md:text-4xl">
-          {preparing ? "개인정보 전문을 준비하고 있어요" : "개인정보 전문을 다시 확인해 주세요"}
+          개인정보 수집·이용 전문 (필수)
         </h1>
         <p className="text-base leading-8">
-          신청에 사용할 서버 전문을 아직 확인하지 못했습니다. 작성한 내용과 선택한 걱정은 유지되며,
-          전문을 불러온 뒤 동의를 다시 선택해야 합니다.
+          {consentsLoading
+            ? "개인정보 안내를 불러오는 중입니다. 작성하던 내용은 그대로 유지돼요."
+            : "현재 개인정보 안내를 확인할 수 없어요. 작성하던 내용은 그대로 유지됩니다."}
         </p>
-        <ShinhanLivePreparation />
-        {error && (
-          <p role="alert" className="text-sm leading-6 text-system-error">
-            {error.message}
-          </p>
-        )}
+        <ShinhanConsentStatus />
         <ShinhanSessionRestart />
         <ShinhanPrivacyReturn />
       </article>
@@ -62,7 +69,7 @@ export function ServerConsentDocument({ fallback }: { fallback: ReactNode }) {
           개인정보 수집·이용 전문 (필수)
         </h1>
         <p className="text-sm leading-6 break-all text-grayscale-600">
-          서버 전문 버전: {snapshot.version}
+          전문 버전: {snapshot.version}
         </p>
         {consents.localOnly && (
           <p className="rounded-xl bg-primary-50 p-4 text-sm leading-6">

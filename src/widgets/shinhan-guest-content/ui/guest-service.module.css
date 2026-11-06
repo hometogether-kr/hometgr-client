@@ -1,5 +1,5 @@
 .container {
-  width: min(1200px, calc(100% - 40px));
+  width: min(1120px, calc(100% - clamp(40px, 12vw, 160px)));
   margin-inline: auto;
 }
 .service {
@@ -394,4 +394,34 @@
     padding: 14px 16px;
     font-size: 16px;
   }
+}
+
+@media (max-width: 767px) {
+  .container {
+    width: calc(100% - 40px);
+  }
+}
+
+.copy,
+.reversed .copy {
+  border-radius: 0;
+  box-shadow: none;
+}
+.featureList li {
+  background: transparent;
+  border-radius: 0;
+  padding-inline: 0;
+}
+.hostButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 58px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 14px 32px;
+}
+.hostButton:hover {
+  background: rgb(255 255 255 / 12%);
 }

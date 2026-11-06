@@ -1,16 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { type FormEvent, type ReactNode, useCallback, useState } from "react";
 
+import { useBetaFlowInput } from "@/features/beta-tracking";
 import {
-  SHINHAN_HOST_FOLLOWUP_PATH,
-  ShinhanContactFields,
-  shinhanContactSchema,
+  ShinhanAnalysisProgress,
   shinhanHostEstimateSchema,
   type ShinhanHostEstimateValues,
-  ShinhanLiveSubmit,
-  ShinhanPrivacyLink,
+  ShinhanHostProgress,
   useShinhanIntake,
   useShinhanStorage,
 } from "@/features/shinhan-intake";
@@ -24,7 +21,9 @@ import styles from "./shinhan-host-estimate.module.css";
 
 interface EstimateFlowProps {
   introduction: ReactNode;
-  incomePreview: ReactNode;
+  result: ReactNode;
+  concerns: ReactNode;
+  guide: ReactNode;
 }
 
 const furnitureItems = [
@@ -40,45 +39,50 @@ const furnitureStates = [
   { value: "NONE", label: "없음" },
 ] as const;
 
-export function ShinhanHostEstimateFlow({ introduction, incomePreview }: EstimateFlowProps) {
-  const { draft, updateDraft, startHostFollowup } = useShinhanIntake();
+export function ShinhanHostEstimateFlow({
+  introduction,
+  result,
+  concerns,
+  guide,
+}: EstimateFlowProps) {
+  const { draft, updateDraft } = useShinhanIntake();
+  const { trackValidInput, markResultReady } = useBetaFlowInput("HOST_ESTIMATE", {
+    enabled: draft?.applicationType === "HOST_ESTIMATE",
+  });
   const storage = useShinhanStorage();
   const locked = storage.pending || storage.attempt !== null || storage.preparing;
-  const router = useRouter();
   const [addressOpen, setAddressOpen] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [verifiedContact, setVerifiedContact] = useState<string | null>(null);
-  const [contactErrorValues, setContactErrorValues] = useState<{
-    phone: string;
-    requiredConsent: boolean;
-  } | null>(null);
   const closeAddressSearch = useCallback(() => setAddressOpen(false), []);
   const selectAddress = useCallback(
     (address: SelectedAddress) => {
+      const selectedAddress = {
+        addressSource: "KAKAO_POSTCODE" as const,
+        addressRaw: address.address,
+        sido: address.sido,
+        sigungu: address.sigungu,
+      };
       updateDraft((current) =>
         current.applicationType === "HOST_ESTIMATE"
           ? {
               ...current,
               values: {
                 ...current.values,
-                address: {
-                  addressSource: "KAKAO_POSTCODE",
-                  addressRaw: address.address,
-                  sido: address.sido,
-                  sigungu: address.sigungu,
-                },
+                address: selectedAddress,
               },
             }
           : current,
       );
       setErrors((current) => ({ ...current, address: "" }));
+      if (shinhanHostEstimateSchema.shape.address.safeParse(selectedAddress).success) {
+        trackValidInput();
+      }
     },
-    [updateDraft],
+    [trackValidInput, updateDraft],
   );
 
   if (draft?.applicationType !== "HOST_ESTIMATE") return null;
   const values = draft.values;
-  const contactSnapshot = JSON.stringify([draft.phone, draft.requiredConsent]);
 
   function updateValues(
     field: string,
@@ -90,15 +94,6 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
         : current,
     );
     setErrors((current) => ({ ...current, [field]: "" }));
-  }
-
-  function showConditions() {
-    if (locked) return;
-    setErrors({});
-    setVerifiedContact(null);
-    setContactErrorValues(null);
-    updateDraft((current) => ({ ...current, step: "conditions" }));
-    window.scrollTo({ top: 0, behavior: "instant" });
   }
 
   function handleConditionsSubmit(event: FormEvent<HTMLFormElement>) {
@@ -118,93 +113,44 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
       return;
     }
     setErrors({});
-    updateDraft((current) => ({ ...current, step: "contact" }));
+    updateDraft((current) => ({ ...current, step: "analysis" }));
     window.scrollTo({ top: 0, behavior: "instant" });
   }
 
-  function handleContactCheck(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (locked) return;
-    if (!draft) return;
-    setContactErrorValues({ phone: draft.phone, requiredConsent: draft.requiredConsent });
-    const parsed = shinhanContactSchema.safeParse(draft);
-    if (!parsed.success) {
-      setErrors(
-        Object.fromEntries(
-          parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
-        ),
-      );
-      setVerifiedContact(null);
-      return;
-    }
-    setErrors({});
-    setVerifiedContact(contactSnapshot);
-  }
-
-  function handleFollowupPreview() {
-    if (locked) return;
-    if (!draft) return;
-    setContactErrorValues({ phone: draft.phone, requiredConsent: draft.requiredConsent });
-    const parsed = shinhanContactSchema.safeParse(draft);
-    if (!parsed.success) {
-      setErrors(
-        Object.fromEntries(
-          parsed.error.issues.map((issue) => [issue.path.join("."), issue.message]),
-        ),
-      );
-      return;
-    }
-    if (startHostFollowup()) router.push(SHINHAN_HOST_FOLLOWUP_PATH);
-  }
-
-  if (draft.step === "contact") {
+  const currentStep =
+    draft.step === "concerns"
+      ? "concerns"
+      : draft.step === "introduction" || draft.step === "contact"
+        ? "introduction"
+        : "result";
+  if (draft.step !== "conditions") {
     return (
-      <div className={styles.contactStep}>
-        <div className={styles.contactHeading}>
-          <h1>우리 집 빈방의 예상 수익을 확인해 보세요</h1>
-          <p>휴대폰 번호와 필수 동의를 확인해 주세요.</p>
-        </div>
-        {incomePreview}
-        <form className={styles.contactForm} onSubmit={handleContactCheck} noValidate>
-          <h2>휴대폰 번호를 입력해 주세요</h2>
-          <ShinhanContactFields
-            errors={{
-              phone: contactErrorValues?.phone === draft.phone ? errors.phone : undefined,
-              requiredConsent:
-                contactErrorValues?.requiredConsent === draft.requiredConsent
-                  ? errors.requiredConsent
-                  : undefined,
+      <>
+        <ShinhanHostProgress
+          currentStep={draft.step === "contact" ? "notification" : currentStep}
+        />
+        {draft.step === "analysis" ? (
+          <ShinhanAnalysisProgress
+            mode="host"
+            onComplete={() => {
+              updateDraft((current) => ({ ...current, step: "result" }));
+              markResultReady();
             }}
           />
-          <BtnCta type="submit" variant="stroke" className={styles.cta} disabled={locked}>
-            입력 형식 확인
-          </BtnCta>
-          {verifiedContact === contactSnapshot && (
-            <p role="status" className={styles.notice}>
-              입력 형식을 확인했어요. 아직 접수되지는 않았습니다.
-            </p>
-          )}
-          <ShinhanLiveSubmit className={styles.cta}>예상 수익 확인하기</ShinhanLiveSubmit>
-          {process.env.NODE_ENV === "development" && (
-            <BtnCta
-              variant="stroke"
-              className={styles.cta}
-              onClick={handleFollowupPreview}
-              disabled={locked}
-            >
-              결과 화면 미리보기 (개발용)
-            </BtnCta>
-          )}
-        </form>
-        <button type="button" onClick={showConditions} className={styles.back} disabled={locked}>
-          ← 입력 정보 수정
-        </button>
-      </div>
+        ) : draft.step === "result" ? (
+          result
+        ) : draft.step === "concerns" ? (
+          concerns
+        ) : (
+          guide
+        )}
+      </>
     );
   }
 
   return (
     <>
+      <ShinhanHostProgress currentStep="result" />
       <div className={styles.columns}>
         {introduction}
         <form className={styles.form} onSubmit={handleConditionsSubmit} noValidate>
@@ -247,6 +193,12 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                       ...current,
                       buildingDong: value,
                     }));
+                    if (
+                      value.trim() &&
+                      shinhanHostEstimateSchema.shape.buildingDong.safeParse(value).success
+                    ) {
+                      trackValidInput();
+                    }
                   }}
                   className={styles.textField}
                 />
@@ -259,6 +211,12 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                   onChange={(event) => {
                     const value = event.target.value;
                     updateValues("unitHo", (current) => ({ ...current, unitHo: value }));
+                    if (
+                      value.trim() &&
+                      shinhanHostEstimateSchema.shape.unitHo.safeParse(value).success
+                    ) {
+                      trackValidInput();
+                    }
                   }}
                   className={styles.textField}
                 />
@@ -287,12 +245,19 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                           key={state.value}
                           selected={values.furniture[item.key] === state.value}
                           className={styles.segment}
-                          onClick={() =>
+                          onClick={() => {
                             updateValues(`furniture.${item.key}`, (current) => ({
                               ...current,
                               furniture: { ...current.furniture, [item.key]: state.value },
-                            }))
-                          }
+                            }));
+                            if (
+                              shinhanHostEstimateSchema.shape.furniture.shape[item.key].safeParse(
+                                state.value,
+                              ).success
+                            ) {
+                              trackValidInput();
+                            }
+                          }}
                         >
                           {state.label}
                         </SelectTile>
@@ -318,12 +283,15 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                     key={count}
                     selected={values.bathroomCount === count}
                     className={styles.segment}
-                    onClick={() =>
+                    onClick={() => {
                       updateValues("bathroomCount", (current) => ({
                         ...current,
                         bathroomCount: count,
-                      }))
-                    }
+                      }));
+                      if (shinhanHostEstimateSchema.shape.bathroomCount.safeParse(count).success) {
+                        trackValidInput();
+                      }
+                    }}
                   >
                     화장실 {count}개
                   </SelectTile>
@@ -340,7 +308,6 @@ export function ShinhanHostEstimateFlow({ introduction, incomePreview }: Estimat
                 빈방 예상 월세 확인하기 →
               </BtnCta>
               <p className={styles.hint}>실제 월세는 평면도와 방 상태 확인 후 달라질 수 있어요.</p>
-              <ShinhanPrivacyLink>개인정보 수집·이용 전문 보기</ShinhanPrivacyLink>
             </div>
           </fieldset>
         </form>

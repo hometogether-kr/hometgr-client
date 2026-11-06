@@ -1,0 +1,19 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.3",
+  "request": {
+    "contract_version": "0.1.0-draft.3",
+    "run_id": "synthetic-run-v1",
+    "dataset": "connection_test",
+    "definition_version": "shinhan_beta_metrics_draft_v2",
+    "period": {
+      "from": "2026-09-27T15:00:00.000Z",
+      "until": "2026-10-27T15:00:00.000Z",
+      "timezone": "Asia/Seoul"
+    },
+    "as_of": "2026-10-27T03:00:00.000Z"
+  },
+  "purpose": "calculation_only_not_operational_rpc",
+  "period_policy": "kst_calendar_30d_v1"
+}

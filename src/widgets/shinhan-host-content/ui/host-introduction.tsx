@@ -62,11 +62,10 @@ export function ShinhanHostHero() {
             </p>
             <div className={styles.registration}>
               <ShinhanHostFormButton
-                flow="registration"
+                flow="estimate"
                 size="pill"
                 shape="rect"
                 className={styles.registrationButton}
-                aria-describedby="shinhan-registration-status"
                 rightIcon={
                   <Image
                     src="/images/shinhan/host/chevron-right.svg"
@@ -76,13 +75,8 @@ export function ShinhanHostHero() {
                   />
                 }
               >
-                홈투게더로 방 등록하기
+                우리 집 빈 방 얼마나 받을 수 있을까?
               </ShinhanHostFormButton>
-              <p id="shinhan-registration-status" className={styles.preparing}>
-                {process.env.NODE_ENV === "development"
-                  ? "개발 확인용 · 실제 접수되지 않습니다."
-                  : "방 등록 신청은 준비 중이에요."}
-              </p>
             </div>
           </div>
           <Image
@@ -214,8 +208,7 @@ export function ShinhanHostEstimateBand() {
         <p>홈투게더에 방을 등록하면</p>
         <h2 id="shinhan-estimate-heading">
           <span>우리 집 빈방,</span>
-          <br />
-          얼마 받을 수 있을까요?
+          <span>얼마 받을 수 있을까요?</span>
         </h2>
         <ShinhanHostFormButton
           data-shinhan-estimate-cta
@@ -223,15 +216,9 @@ export function ShinhanHostEstimateBand() {
           variant="stroke"
           size="pill"
           className={styles.estimateButton}
-          aria-describedby="shinhan-estimate-status"
         >
           빈방 예상 월세 알아보기
         </ShinhanHostFormButton>
-        <p id="shinhan-estimate-status" className={styles.preparing}>
-          {process.env.NODE_ENV === "development"
-            ? "개발 확인용 · 실제 접수되지 않습니다."
-            : "예상 월세 진단은 준비 중이에요."}
-        </p>
       </div>
     </section>
   );

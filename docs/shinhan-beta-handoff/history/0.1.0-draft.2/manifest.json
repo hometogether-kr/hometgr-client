@@ -1,0 +1,125 @@
+{
+  "contract_version": "0.1.0-draft.2",
+  "synthetic_fixtures": true,
+  "customer_base_sha": "9f314521e444da9b0e63efeb2d80fcea1a89da8b",
+  "customer_branch": "codex/shinhan-beta-tracking",
+  "bundle_kind": "technical_review_bundle",
+  "agreement_record": "agreement.md",
+  "excludes": [
+    "history/",
+    "agreement.md",
+    "manifest.json"
+  ],
+  "files": [
+    {
+      "path": "contract.md",
+      "bytes": 35627,
+      "sha256": "d7ba70a9fd9203263e9804fbea25bcbd451f34ad9a75e5ba56ab8f03480cdd88"
+    },
+    {
+      "path": "fixtures/admin-aggregate-before-24h.expected.synthetic.json",
+      "bytes": 9956,
+      "sha256": "9ebd0a0d5f4b538ad4c395934197d5294b62dcbdf8f30bd783d2a0fce57a3b28"
+    },
+    {
+      "path": "fixtures/admin-aggregate-end-boundary.expected.synthetic.json",
+      "bytes": 9978,
+      "sha256": "492c2f4104825bd555e7bdc0a6efe84f38672a96473c6e9bddb24e94801dbff9"
+    },
+    {
+      "path": "fixtures/admin-aggregate-late.expected.synthetic.json",
+      "bytes": 9978,
+      "sha256": "5ec3fa01d17adcc23f3a96ec4bdc0b4b56ec8787a6764e6b9bcd9d73ce281f37"
+    },
+    {
+      "path": "fixtures/admin-aggregate.expected.synthetic.json",
+      "bytes": 9956,
+      "sha256": "a7f4cb3350c94ce563817b5d6aa6626f628f76357b5db9004eb2d5e6efe9c5df"
+    },
+    {
+      "path": "fixtures/admin-snapshot-cases.synthetic.json",
+      "bytes": 41160,
+      "sha256": "6a59348eebf3be0fabcef6d39c5b39321a3986142ded5015250ecfaa20467b38"
+    },
+    {
+      "path": "fixtures/aggregate-query.synthetic.json",
+      "bytes": 619,
+      "sha256": "a5c34f17bb020c61b00f188d1fe113e83736a2dae464a524c8eb39dcf3228438"
+    },
+    {
+      "path": "fixtures/aggregate-states.synthetic.json",
+      "bytes": 20138,
+      "sha256": "b38eb42ae6b92edf1858ab2f7ad8fbae22bd8570805d33e111be4e4006ba6966"
+    },
+    {
+      "path": "fixtures/concurrency-and-nonce.synthetic.json",
+      "bytes": 1575,
+      "sha256": "5fdaa39657f83a71efa60ac2247bcfb6c807bfc723e41996f29e482d7f87724e"
+    },
+    {
+      "path": "fixtures/events.synthetic.json",
+      "bytes": 14457,
+      "sha256": "d42abac50cf4dcd932a4ae31c017090fc767a675ddfca46f8ea49b2a6edb04c5"
+    },
+    {
+      "path": "fixtures/invalid-input-cases.synthetic.json",
+      "bytes": 6876,
+      "sha256": "65ee018cbb52c92e3d4287f3308fee3d15ebf959df7b337c0e61c31ea6486d87"
+    },
+    {
+      "path": "fixtures/observation-cases.synthetic.json",
+      "bytes": 3440,
+      "sha256": "03adb7ef33ae37ea7830c7cba9d317ea7b4559391072402aac0f8edaf0096b19"
+    },
+    {
+      "path": "fixtures/public-aggregate-cases.synthetic.json",
+      "bytes": 34437,
+      "sha256": "e1762c49890b70249f000e2d4d3688572eac4fd5eb3be1375d56ec99bc387329"
+    },
+    {
+      "path": "fixtures/public-aggregate.expected.synthetic.json",
+      "bytes": 735,
+      "sha256": "01d3d4227a066f81c125d0a55c0ae6a66381f81501b2606e5f895de51aa294ca"
+    },
+    {
+      "path": "fixtures/README.md",
+      "bytes": 2398,
+      "sha256": "9f7dd847a69188670547a4fed248300660a56caab5ad232744557032cca06619"
+    },
+    {
+      "path": "fixtures/record-cases.synthetic.json",
+      "bytes": 10133,
+      "sha256": "26780de746eaf514a4e9c6dfc3180e6e0ea6e480d7e7a1a78abac64db2b2d1f3"
+    },
+    {
+      "path": "fixtures/scenarios.synthetic.json",
+      "bytes": 3151,
+      "sha256": "aa65371fc96f2dfc1936006894b9dfda190400f7554e7169c01a87eb279c6774"
+    },
+    {
+      "path": "fixtures/signing-vector.synthetic.json",
+      "bytes": 7119,
+      "sha256": "a853e49e2fca58d65aad1b19223054b7e5fe97b758f6b48079465ddc05d53d51"
+    },
+    {
+      "path": "fixtures/source-mapping.synthetic.json",
+      "bytes": 1284,
+      "sha256": "eddf647bb8c7394bb9b64062f32d2d5f0bef3dcaf37370c480a8540e48ee7c8b"
+    },
+    {
+      "path": "fixtures/utm-cases.synthetic.json",
+      "bytes": 2012,
+      "sha256": "e7075b942a45098a3e32f20d6ac2b3d6b51bb9edbeeaa48104b61d037f1cc101"
+    },
+    {
+      "path": "implementation-plan.md",
+      "bytes": 14421,
+      "sha256": "f3efa62b8f850818e92695de3a74a82bcf5e4e0b7ec2d8de9a0b9c290a7163c1"
+    },
+    {
+      "path": "validation.md",
+      "bytes": 3910,
+      "sha256": "9c23e9e79d94296eb834d7b8e22b96e348e85011d1e1ade9be70a3158c1b63fc"
+    }
+  ]
+}

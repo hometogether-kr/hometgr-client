@@ -1,0 +1,53 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.2",
+  "cases": [
+    {
+      "name": "two_tabs_claim_different_flow",
+      "initial": "one unselected entry, neither flow has a prior attempt",
+      "lock_order": [
+        "HOST_ESTIMATE",
+        "GUEST_DEMAND"
+      ],
+      "expected": {
+        "first_flow": "claims_existing_entry",
+        "second_flow": "creates_its_own_entry_and_start",
+        "attempts": 2,
+        "entered": 2,
+        "started": 2,
+        "original_entry_stays_unselected": true
+      }
+    },
+    {
+      "name": "second_flow_already_exists",
+      "initial": "one unselected entry plus existing GUEST_DEMAND attempt",
+      "lock_order": [
+        "HOST_ESTIMATE",
+        "GUEST_DEMAND"
+      ],
+      "expected": {
+        "second_flow": "reuses_existing_attempt",
+        "new_entries": 0
+      }
+    },
+    {
+      "name": "nonce_latest_valid_second",
+      "first_received_seconds": 1000000000,
+      "signed_timestamp": 1000000300,
+      "checked_at_seconds": 1000000600,
+      "previously_accepted": true,
+      "expected_error": "REPLAYED_ENVELOPE",
+      "may_delete_nonce": false
+    },
+    {
+      "name": "nonce_after_signature_expiry",
+      "first_received_seconds": 1000000000,
+      "signed_timestamp": 1000000300,
+      "checked_at_seconds": 1000000601,
+      "previously_accepted": true,
+      "expected_error": "SIGNATURE_EXPIRED",
+      "may_delete_nonce": true
+    }
+  ]
+}

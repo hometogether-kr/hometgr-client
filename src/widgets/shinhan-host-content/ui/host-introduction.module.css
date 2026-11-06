@@ -267,7 +267,7 @@
 }
 .estimateBand {
   padding-block: 51px;
-  background: var(--color-grayscale-900);
+  background: #151d25;
   text-align: center;
 }
 .estimateBand > div > p:first-child {
@@ -279,18 +279,32 @@
 .estimateBand h2 {
   margin-block: 20px;
   font-size: 48px;
-  line-height: 1.7;
+  line-height: 62px;
   font-weight: 700;
   color: var(--color-grayscale-0);
   letter-spacing: -0.02em;
   word-break: keep-all;
 }
 .estimateBand h2 span {
-  color: var(--color-primary-400);
+  display: block;
+}
+.estimateBand h2 span:first-child {
+  margin-bottom: 20px;
+  color: #579cff;
 }
 .estimateButton {
   width: 300px;
   max-width: 100%;
+  min-height: 58px;
+  border: 1px solid white;
+  border-radius: 999px;
+  background: transparent;
+  color: white;
+  font-size: 17px;
+  line-height: 26px;
+}
+.estimateButton:not(:disabled):hover {
+  background: rgb(255 255 255 / 12%);
 }
 .estimateBand .preparing {
   color: var(--color-grayscale-400);

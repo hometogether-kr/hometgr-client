@@ -1,0 +1,85 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.1",
+  "fixture_key_utf8": "PUBLIC_SYNTHETIC_FIXTURE_KEY_DO_NOT_USE",
+  "signing_input_utf8": "0.1.0-draft.1\nrecord_event\n1792940400\n00000000-0000-4000-8000-000000009999\n{\"schema_version\":\"0.1.0-draft.1\",\"run_id\":\"synthetic-run-v1\",\"dataset\":\"connection_test\",\"mission_id\":\"shinhan_existing_flow_mission_v1\",\"event_id\":\"00000000-0000-4000-8000-000000001001\",\"attempt_id\":\"00000000-0000-4000-8000-000000000101\",\"anonymous_id\":\"00000000-0000-4000-8000-000000000001\",\"event_name\":\"landing_view\",\"role\":\"unselected\",\"occurred_at\":\"2026-10-25T15:00:00.000Z\",\"utm_source\":\"apartment\",\"utm_medium\":\"qr\",\"utm_campaign\":\"host_acq_2026q4\",\"utm_content\":\"ad_01\",\"flow_id\":\"\",\"completion_basis\":\"\"}",
+  "signing_input_bytes": 591,
+  "envelope": {
+    "contract_version": "0.1.0-draft.1",
+    "action": "record_event",
+    "timestamp": "1792940400",
+    "nonce": "00000000-0000-4000-8000-000000009999",
+    "payload_json": "{\"schema_version\":\"0.1.0-draft.1\",\"run_id\":\"synthetic-run-v1\",\"dataset\":\"connection_test\",\"mission_id\":\"shinhan_existing_flow_mission_v1\",\"event_id\":\"00000000-0000-4000-8000-000000001001\",\"attempt_id\":\"00000000-0000-4000-8000-000000000101\",\"anonymous_id\":\"00000000-0000-4000-8000-000000000001\",\"event_name\":\"landing_view\",\"role\":\"unselected\",\"occurred_at\":\"2026-10-25T15:00:00.000Z\",\"utm_source\":\"apartment\",\"utm_medium\":\"qr\",\"utm_campaign\":\"host_acq_2026q4\",\"utm_content\":\"ad_01\",\"flow_id\":\"\",\"completion_basis\":\"\"}",
+    "signature": "41948d86229e14dd70ba1cc051afc4777aa4c3488ac1bae85673528407401cf3"
+  },
+  "expected": {
+    "authentication": "valid_with_frozen_clock",
+    "server_clock": "2026-10-25T15:00:00.000Z"
+  },
+  "cases": [
+    {
+      "name": "changed_action_same_signature",
+      "envelope": {
+        "contract_version": "0.1.0-draft.1",
+        "action": "get_admin_aggregates",
+        "timestamp": "1792940400",
+        "nonce": "00000000-0000-4000-8000-000000009999",
+        "payload_json": "{\"schema_version\":\"0.1.0-draft.1\",\"run_id\":\"synthetic-run-v1\",\"dataset\":\"connection_test\",\"mission_id\":\"shinhan_existing_flow_mission_v1\",\"event_id\":\"00000000-0000-4000-8000-000000001001\",\"attempt_id\":\"00000000-0000-4000-8000-000000000101\",\"anonymous_id\":\"00000000-0000-4000-8000-000000000001\",\"event_name\":\"landing_view\",\"role\":\"unselected\",\"occurred_at\":\"2026-10-25T15:00:00.000Z\",\"utm_source\":\"apartment\",\"utm_medium\":\"qr\",\"utm_campaign\":\"host_acq_2026q4\",\"utm_content\":\"ad_01\",\"flow_id\":\"\",\"completion_basis\":\"\"}",
+        "signature": "41948d86229e14dd70ba1cc051afc4777aa4c3488ac1bae85673528407401cf3"
+      },
+      "expected_error": "SIGNATURE_REJECTED"
+    },
+    {
+      "name": "payload_tampered_same_signature",
+      "envelope": {
+        "contract_version": "0.1.0-draft.1",
+        "action": "record_event",
+        "timestamp": "1792940400",
+        "nonce": "00000000-0000-4000-8000-000000009999",
+        "payload_json": "{\"schema_version\":\"0.1.0-draft.1\",\"run_id\":\"synthetic-run-v1\",\"dataset\":\"connection_test\",\"mission_id\":\"shinhan_existing_flow_mission_v1\",\"event_id\":\"00000000-0000-4000-8000-000000001001\",\"attempt_id\":\"00000000-0000-4000-8000-000000000101\",\"anonymous_id\":\"00000000-0000-4000-8000-000000000001\",\"event_name\":\"beta_mission_start\",\"role\":\"unselected\",\"occurred_at\":\"2026-10-25T15:00:00.000Z\",\"utm_source\":\"apartment\",\"utm_medium\":\"qr\",\"utm_campaign\":\"host_acq_2026q4\",\"utm_content\":\"ad_01\",\"flow_id\":\"\",\"completion_basis\":\"\"}",
+        "signature": "41948d86229e14dd70ba1cc051afc4777aa4c3488ac1bae85673528407401cf3"
+      },
+      "expected_error": "SIGNATURE_REJECTED"
+    },
+    {
+      "name": "exact_envelope_replay",
+      "envelope": {
+        "contract_version": "0.1.0-draft.1",
+        "action": "record_event",
+        "timestamp": "1792940400",
+        "nonce": "00000000-0000-4000-8000-000000009999",
+        "payload_json": "{\"schema_version\":\"0.1.0-draft.1\",\"run_id\":\"synthetic-run-v1\",\"dataset\":\"connection_test\",\"mission_id\":\"shinhan_existing_flow_mission_v1\",\"event_id\":\"00000000-0000-4000-8000-000000001001\",\"attempt_id\":\"00000000-0000-4000-8000-000000000101\",\"anonymous_id\":\"00000000-0000-4000-8000-000000000001\",\"event_name\":\"landing_view\",\"role\":\"unselected\",\"occurred_at\":\"2026-10-25T15:00:00.000Z\",\"utm_source\":\"apartment\",\"utm_medium\":\"qr\",\"utm_campaign\":\"host_acq_2026q4\",\"utm_content\":\"ad_01\",\"flow_id\":\"\",\"completion_basis\":\"\"}",
+        "signature": "41948d86229e14dd70ba1cc051afc4777aa4c3488ac1bae85673528407401cf3"
+      },
+      "precondition": "nonce already accepted",
+      "expected_error": "REPLAYED_ENVELOPE"
+    },
+    {
+      "name": "expired_signature",
+      "envelope": {
+        "contract_version": "0.1.0-draft.1",
+        "action": "record_event",
+        "timestamp": "1792940400",
+        "nonce": "00000000-0000-4000-8000-000000009999",
+        "payload_json": "{\"schema_version\":\"0.1.0-draft.1\",\"run_id\":\"synthetic-run-v1\",\"dataset\":\"connection_test\",\"mission_id\":\"shinhan_existing_flow_mission_v1\",\"event_id\":\"00000000-0000-4000-8000-000000001001\",\"attempt_id\":\"00000000-0000-4000-8000-000000000101\",\"anonymous_id\":\"00000000-0000-4000-8000-000000000001\",\"event_name\":\"landing_view\",\"role\":\"unselected\",\"occurred_at\":\"2026-10-25T15:00:00.000Z\",\"utm_source\":\"apartment\",\"utm_medium\":\"qr\",\"utm_campaign\":\"host_acq_2026q4\",\"utm_content\":\"ad_01\",\"flow_id\":\"\",\"completion_basis\":\"\"}",
+        "signature": "41948d86229e14dd70ba1cc051afc4777aa4c3488ac1bae85673528407401cf3"
+      },
+      "server_clock": "2026-10-25T15:05:01.000Z",
+      "expected_error": "SIGNATURE_EXPIRED"
+    },
+    {
+      "name": "fresh_envelope_same_event",
+      "envelope": {
+        "contract_version": "0.1.0-draft.1",
+        "action": "record_event",
+        "timestamp": "1792940401",
+        "nonce": "00000000-0000-4000-8000-000000009998",
+        "payload_json": "{\"schema_version\":\"0.1.0-draft.1\",\"run_id\":\"synthetic-run-v1\",\"dataset\":\"connection_test\",\"mission_id\":\"shinhan_existing_flow_mission_v1\",\"event_id\":\"00000000-0000-4000-8000-000000001001\",\"attempt_id\":\"00000000-0000-4000-8000-000000000101\",\"anonymous_id\":\"00000000-0000-4000-8000-000000000001\",\"event_name\":\"landing_view\",\"role\":\"unselected\",\"occurred_at\":\"2026-10-25T15:00:00.000Z\",\"utm_source\":\"apartment\",\"utm_medium\":\"qr\",\"utm_campaign\":\"host_acq_2026q4\",\"utm_content\":\"ad_01\",\"flow_id\":\"\",\"completion_basis\":\"\"}",
+        "signature": "051d038016fbe310fe18fb972fd02e227bee56c589e1a6c4270c787d28001981"
+      },
+      "precondition": "first event already persisted",
+      "expected_status": "duplicate"
+    }
+  ]
+}

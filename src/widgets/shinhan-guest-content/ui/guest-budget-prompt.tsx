@@ -12,12 +12,11 @@ export function ShinhanGuestBudgetPrompt() {
   const [isInlineActionVisible, setIsInlineActionVisible] = useState(false);
   const [isPanelOpen, setIsPanelOpen] = useState(true);
   const panelId = useId();
-  const noticeId = useId();
-  const characterRef = useRef<HTMLButtonElement>(null);
+  const characterRef = useRef<HTMLDivElement>(null);
 
   function handlePanelClose() {
     setIsPanelOpen(false);
-    characterRef.current?.focus();
+    characterRef.current?.querySelector("button")?.focus();
   }
 
   useEffect(() => {
@@ -63,48 +62,73 @@ export function ShinhanGuestBudgetPrompt() {
       data-collapsed={!isPanelOpen}
     >
       <div className={styles.panel} id={panelId}>
-        <div className={styles.panelHeader}>
-          <p>내 예산에 맞는 방 찾기</p>
-          <button
-            type="button"
-            className={styles.close}
-            aria-label="예산 안내 접기"
-            onClick={handlePanelClose}
-          >
-            <Image src="/images/shinhan/guest/budget-close.svg" alt="" width={18} height={18} />
-          </button>
-        </div>
         <ShinhanGuestFormButton
-          flow="budget"
           type="button"
-          className={styles.action}
-          aria-describedby={noticeId}
+          className={styles.entry}
+          aria-label="내 예산에 맞는 방 찾기 페이지로 이동"
         >
-          내 조건에 맞는 방 찾기
+          <span className={styles.panelContent} aria-hidden="true">
+            <span className={styles.panelHeader}>내 예산에 맞는 방 찾기</span>
+            <span className={styles.budget}>
+              <span className={styles.budgetLabel}>한 달 월세 예산</span>
+              <span className={styles.amount}>
+                <strong>45</strong>만 원
+              </span>
+              <span className={styles.slider} />
+              <span className={styles.bound}>20만 원</span>
+              <span className={styles.bound}>100만 원 이상</span>
+            </span>
+            <span className={styles.region}>
+              <span>어느 지역에서 살고 싶으세요?</span>
+              <span className={styles.search}>
+                희망하는 시·구·동 검색
+                <Image
+                  src="/images/shinhan/host/calculator-search.svg"
+                  alt=""
+                  width={22}
+                  height={22}
+                />
+              </span>
+            </span>
+            <span className={styles.timing}>
+              <span>언제쯤 입주하고 싶으세요?</span>
+              <span className={styles.timingOptions}>
+                {["빠른 입주", "1개월 내", "직접 입력"].map((label, index) => (
+                  <span key={label} className={styles.timingOption} data-selected={index === 0}>
+                    <span className={styles.radio}>{index === 0 ? "✓" : ""}</span>
+                    {label}
+                  </span>
+                ))}
+              </span>
+            </span>
+            <span className={styles.action}>내 조건에 맞는 방 찾기</span>
+          </span>
         </ShinhanGuestFormButton>
-        <p className={styles.notice} id={noticeId}>
-          {process.env.NODE_ENV === "development"
-            ? "개발용 입력 화면입니다. 실제 접수는 준비 중이에요."
-            : "예산으로 찾기 신청을 준비하고 있어요."}
-        </p>
+        <button
+          type="button"
+          className={styles.close}
+          aria-label="예산 안내 접기"
+          aria-controls={panelId}
+          onClick={handlePanelClose}
+        >
+          <Image src="/images/shinhan/guest/budget-close.svg" alt="" width={18} height={18} />
+        </button>
       </div>
-      <button
-        type="button"
-        ref={characterRef}
-        className={styles.character}
-        aria-label={isPanelOpen ? "예산 안내 접기" : "예산 안내 펼치기"}
-        aria-expanded={isPanelOpen}
-        aria-controls={panelId}
-        onClick={() => setIsPanelOpen(!isPanelOpen)}
-      >
-        <Image
-          src="/images/shinhan/guest/budget-character.png"
-          alt=""
-          width={96}
-          height={96}
-          sizes="96px"
-        />
-      </button>
+      <div className={styles.character} ref={characterRef}>
+        <ShinhanGuestFormButton
+          type="button"
+          className={styles.characterEntry}
+          aria-label="캐릭터로 예산에 맞는 방 찾기 페이지로 이동"
+        >
+          <Image
+            src="/images/shinhan/guest/budget-character.png"
+            alt=""
+            width={96}
+            height={96}
+            sizes="(max-width:767px) 60px,96px"
+          />
+        </ShinhanGuestFormButton>
+      </div>
     </aside>
   );
 }

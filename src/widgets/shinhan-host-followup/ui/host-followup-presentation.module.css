@@ -367,3 +367,135 @@
     line-height: 26px;
   }
 }
+
+.introductionLayout {
+  grid-template-columns: minmax(0, 524fr) minmax(0, 532fr);
+  gap: 64px;
+  align-items: center;
+}
+.introductionHeading {
+  gap: 16px;
+}
+.introductionCard {
+  background: #fafbfc;
+  border-radius: 28px;
+  padding: 28px;
+  gap: 12px;
+}
+.characterBackground {
+  width: 56px;
+  height: 56px;
+  flex-basis: 56px;
+  border-radius: 18px;
+}
+.character {
+  width: 52px;
+  height: 52px;
+}
+.informationList {
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 0;
+}
+.informationList li {
+  grid-template-columns: 32px minmax(0, 1fr);
+  align-items: center;
+  padding: 18px;
+  border-radius: 16px;
+  background: white;
+}
+.itemNumber {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e2eeff;
+  font-size: 14px;
+}
+.customerStory {
+  display: grid;
+  grid-template-columns: minmax(0, 488fr) minmax(0, 520fr);
+  gap: 48px;
+  align-items: center;
+  padding: 32px;
+  border-radius: 24px;
+  background: #fafbfc;
+}
+.storyThumbnail img {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+.storyThumbnail span {
+  display: block;
+  margin-top: 8px;
+  color: #485361;
+  font-size: 12px;
+  line-height: 18px;
+}
+.storyCopy {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+}
+.storyCopy > p:first-child {
+  color: #227dff;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 600;
+}
+.storyCopy h2 {
+  font-size: 32px;
+  line-height: 42px;
+  font-weight: 700;
+}
+.storyCopy p {
+  color: #485361;
+  font-size: 18px;
+  line-height: 28px;
+}
+.storyCopy a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 48px;
+  width: min(280px, 100%);
+  border: 1px solid #227dff;
+  border-radius: 8px;
+  background: white;
+  color: #227dff;
+  font-size: 16px;
+  font-weight: 600;
+}
+@media (max-width: 1100px) {
+  .introductionLayout {
+    gap: 32px;
+  }
+  .introductionCard {
+    padding: 24px;
+  }
+  .customerStory {
+    gap: 28px;
+  }
+}
+@media (max-width: 767px) {
+  .introductionLayout,
+  .customerStory {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .introductionCard {
+    padding: 20px;
+  }
+  .customerStory {
+    padding: 24px 20px;
+  }
+  .storyCopy h2 {
+    font-size: 26px;
+    line-height: 36px;
+  }
+  .storyCopy p {
+    font-size: 16px;
+    line-height: 26px;
+  }
+}

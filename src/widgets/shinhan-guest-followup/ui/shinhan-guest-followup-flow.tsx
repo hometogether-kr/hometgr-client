@@ -185,11 +185,9 @@ export function ShinhanGuestFollowupFlow({
           <div className={styles.guideActions}>
             <p>방과 집주인 정보를 먼저 받아보고 결정하세요.</p>
             <GuestFollowupNavigationButton step="notice">
-              궁금한 점 전달하기
+              집주인 프로필 보고 결정하기
             </GuestFollowupNavigationButton>
-            <p className={styles.help}>
-              다음 안내 화면으로 이동합니다. 질문을 작성하거나 전송하지 않습니다.
-            </p>
+            <p className={styles.help}>방과 집주인 정보를 안내받는 방법을 확인하세요.</p>
             <button className={styles.textButton} type="button" onClick={() => moveTo("concerns")}>
               ← 걱정 다시 선택하기
             </button>
@@ -202,12 +200,9 @@ export function ShinhanGuestFollowupFlow({
           {receiptIntroduction}
           <div className={styles.receiptCard}>
             <GuestReceiptDetails example={example} />
-            <GuestFollowupNavigationButton step="spaces">
-              공간 사진 다시 보기
-            </GuestFollowupNavigationButton>
-            <button className={styles.textButton} type="button" onClick={() => moveTo("guide")}>
-              함께 확인할 내용 다시 보기
-            </button>
+            <Link href="/shinhan/guest" className={styles.homeLink}>
+              게스트 홈화면으로 돌아가기
+            </Link>
             {brand}
           </div>
         </section>

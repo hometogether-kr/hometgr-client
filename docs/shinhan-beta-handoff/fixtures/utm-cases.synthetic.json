@@ -1,0 +1,132 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.3",
+  "approved_tuples": [
+    [
+      "apartment",
+      "qr",
+      "host_acq_2026q4",
+      "ad_01"
+    ],
+    [
+      "kakao",
+      "social",
+      "host_acq_2026q4",
+      "host"
+    ],
+    [
+      "everytime",
+      "referral",
+      "guest_acq_2026q4",
+      "seoultech"
+    ],
+    [
+      "everytime",
+      "referral",
+      "guest_acq_2026q4",
+      "union"
+    ],
+    [
+      "instagram",
+      "social",
+      "guest_acq_2026q4",
+      "profile"
+    ],
+    [
+      "kakao",
+      "social",
+      "guest_acq_2026q4",
+      "guest"
+    ]
+  ],
+  "cases": [
+    {
+      "step": "external_A",
+      "tuple_index": 0,
+      "expected_first": 0,
+      "expected_latest": 0,
+      "existing_attempt_attribution": 0
+    },
+    {
+      "step": "internal_role_change",
+      "expected_first": 0,
+      "expected_latest": 0,
+      "existing_attempt_attribution": 0
+    },
+    {
+      "step": "direct_return",
+      "expected_first": 0,
+      "expected_latest": 0,
+      "existing_attempt_attribution": 0
+    },
+    {
+      "step": "external_B",
+      "tuple_index": 4,
+      "expected_first": 0,
+      "expected_latest": 4,
+      "existing_attempt_attribution": 0
+    },
+    {
+      "step": "new_different_flow",
+      "expected_first": 0,
+      "expected_latest": 4,
+      "new_attempt_attribution": 4
+    },
+    {
+      "step": "unapproved_tuple",
+      "tuple": [
+        "synthetic_invalid",
+        "synthetic_invalid",
+        "synthetic_invalid",
+        "synthetic_invalid"
+      ],
+      "expected_first": 0,
+      "expected_latest": 4,
+      "persist_raw": false
+    },
+    {
+      "step": "no_source_new_profile",
+      "expected_tuple": [
+        "",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "step": "hidden_search_referrer",
+      "expected_infer_google_or_naver": false
+    },
+    {
+      "step": "no_source_still_in_collection_scope",
+      "expected_tuple": [
+        "",
+        "",
+        "",
+        ""
+      ],
+      "expected_collection_eligible": true,
+      "dedicated_beta_link_required": false
+    },
+    {
+      "step": "completed_same_flow_new_valid_input_after_external_B",
+      "expected_first": 0,
+      "expected_latest": 4,
+      "old_attempt_attribution": 0,
+      "new_attempt_attribution": 4,
+      "new_attempt_has_fresh_snapshot": true
+    },
+    {
+      "step": "analysis_attribution_fixed_epoch_expires",
+      "created_at": "2026-07-29T00:00:00.000Z",
+      "last_external_update_at": "2026-10-26T00:00:00.000Z",
+      "at": "2026-10-27T00:00:00.000Z",
+      "expected_first": null,
+      "expected_latest": null,
+      "retry_or_update_extends_expiry": false,
+      "restore_old_expired_source": false,
+      "shared_existing_anonymous_id_deleted": false
+    }
+  ]
+}

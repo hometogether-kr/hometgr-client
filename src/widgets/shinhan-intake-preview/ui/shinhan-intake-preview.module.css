@@ -168,14 +168,6 @@
   outline: 2px solid var(--color-primary-600);
   outline-offset: 2px;
 }
-.privacyRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 16px;
-  font-size: 16px;
-  line-height: 1.6;
-}
 .actions {
   display: flex;
   gap: 12px;

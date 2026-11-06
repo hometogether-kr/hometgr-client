@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { BtnCta } from "@/shared/ui/btn-cta";
+import { ShinhanGuestFormButton } from "@/features/shinhan-intake";
 
 import styles from "./guest-reviews.module.css";
 
@@ -117,17 +117,9 @@ export function ShinhanGuestFinalCallToAction() {
           <br />
           마음에 드는 방이 있으면 상담을 신청할 수 있어요.
         </p>
-        <BtnCta
-          disabled
-          size="xl"
-          className={styles.finalButton}
-          aria-describedby="shinhan-guest-final-notice"
-        >
+        <ShinhanGuestFormButton size="xl" className={styles.finalButton}>
           우리 학교 근처 방 보기
-        </BtnCta>
-        <p id="shinhan-guest-final-notice" className={styles.notice}>
-          위치·예산 수요조사 신청은 준비 중이에요.
-        </p>
+        </ShinhanGuestFormButton>
       </div>
     </section>
   );

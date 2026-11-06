@@ -136,6 +136,32 @@ export function SavedGuestCompletionFrame({
   actions,
 }: SavedGuestCompletionFrameProps) {
   const isBudget = applicationType === "GUEST_BUDGET";
+  if (isBudget)
+    return (
+      <section className={styles.budgetCompletion} aria-labelledby="saved-guest-completion-heading">
+        <Image src="/images/shinhan/guest/budget-character.png" alt="" width={112} height={112} />
+        <h1 id="saved-guest-completion-heading">
+          상세조건 안내 신청이
+          <br />
+          <em>완료됐어요</em>
+        </h1>
+        <p>남겨주신 휴대폰 번호로 상세조건을 안내해 드릴게요.</p>
+        <a
+          className={styles.listingsLink}
+          href="https://app.notion.com/p/34b63a07b34a80dea556d7f82680d985"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          매물 보러가기<span className="sr-only"> (새 창)</span>
+        </a>
+        <Link
+          href="/shinhan/guest"
+          className="flex min-h-11 items-center text-base text-primary-600 focus-visible:outline-2 focus-visible:outline-offset-4"
+        >
+          게스트 홈화면 가기
+        </Link>
+      </section>
+    );
 
   return (
     <div className={styles.guestFrame} data-application-type={applicationType}>
@@ -174,30 +200,7 @@ export function SavedGuestCompletionFrame({
         </div>
       </section>
       {summary && <div className={styles.summarySlot}>{summary}</div>}
-      <section className={styles.guestConcerns} aria-labelledby="saved-guest-concerns-heading">
-        <p className={styles.guestConcernEyebrow}>
-          {isBudget ? "선택 사항 · 입주 전 생활 준비" : "다음 단계"}
-        </p>
-        <h2 id="saved-guest-concerns-heading">
-          {isBudget ? "더 편안한 홈쉐어링을 준비해 볼까요?" : "홈셰어링, 걱정되는 점이 있으신가요?"}
-        </h2>
-        <p className={styles.guestConcernDescription}>
-          {isBudget ? (
-            <>
-              <span>함께 살 때 걱정되는 점을 선택해 주세요.</span>
-              <span>선택한 항목별로 입주 전에 확인할 내용을 볼 수 있어요.</span>
-            </>
-          ) : (
-            "미리 알려주시면 연락드릴 때 함께 확인해 드리겠습니다."
-          )}
-        </p>
-        <div className={styles.guestActions}>{actions}</div>
-        {isBudget && (
-          <p className={styles.guestConcernCaption}>
-            선택하지 않아도 상세조건 안내를 받으실 수 있어요.
-          </p>
-        )}
-      </section>
+      <div className={styles.guestActions}>{actions}</div>
     </div>
   );
 }

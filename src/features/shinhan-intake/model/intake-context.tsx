@@ -11,6 +11,8 @@ import {
   SHINHAN_HOST_FOLLOWUP_PATH,
   SHINHAN_HOST_REGISTRATION_PATH,
   SHINHAN_INTAKE_PREVIEW_PATH,
+  SHINHAN_LEGACY_APPLICATION_ROUTES,
+  SHINHAN_LEGACY_SAVED_APPLICATION_PATH,
   SHINHAN_SAVED_APPLICATION_PATH,
   type ShinhanDraftPath,
 } from "../config/routes";
@@ -19,6 +21,7 @@ import { createHostFollowupExample, type HostFollowupExample } from "./host-foll
 import {
   createShinhanDraft,
   type ShinhanApplicationType,
+  type ShinhanGuestBudgetValues,
   type ShinhanIntakeDraft,
 } from "./intake-draft";
 
@@ -41,12 +44,14 @@ interface IntakeContextValue {
   startGuestDraft: (
     applicationType: "GUEST_BUDGET" | "GUEST_DEMAND",
     desiredRegionRaw?: string,
+    initialValues?: Partial<ShinhanGuestBudgetValues>,
   ) => void;
   updateDraft: (update: (draft: ShinhanIntakeDraft) => ShinhanIntakeDraft) => void;
   rememberPrivacyReturn: () => void;
 }
 
 const applicationRoutes = [
+  ...SHINHAN_LEGACY_APPLICATION_ROUTES,
   { pathname: SHINHAN_HOST_ESTIMATE_PATH, applicationType: "HOST_ESTIMATE" },
   { pathname: SHINHAN_HOST_REGISTRATION_PATH, applicationType: "HOST_REGISTRATION" },
   { pathname: SHINHAN_GUEST_BUDGET_PATH, applicationType: "GUEST_BUDGET" },
@@ -73,7 +78,7 @@ function createSession(
   if (
     applicationType === "HOST_ESTIMATE" &&
     draft.applicationType === "HOST_ESTIMATE" &&
-    pathname === SHINHAN_HOST_ESTIMATE_PATH
+    (pathname === SHINHAN_HOST_ESTIMATE_PATH || pathname === "/shinhan/dev/host/estimate")
   ) {
     draft.values.furniture = { bed: "NONE", desk: "NONE", chair: "NONE", wardrobe: "NONE" };
   }
@@ -143,6 +148,7 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
   function startGuestDraft(
     applicationType: "GUEST_BUDGET" | "GUEST_DEMAND",
     desiredRegionRaw = "",
+    initialValues?: Partial<ShinhanGuestBudgetValues>,
   ) {
     const nextSession = createSession(
       applicationType,
@@ -154,6 +160,9 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
       nextSession.draft?.applicationType === "GUEST_DEMAND"
     ) {
       nextSession.draft.values.desiredRegionRaw = desiredRegionRaw;
+    }
+    if (nextSession.draft?.applicationType === "GUEST_BUDGET" && initialValues) {
+      nextSession.draft.values = { ...nextSession.draft.values, ...initialValues };
     }
     setSession(nextSession);
   }
@@ -189,7 +198,11 @@ export function ShinhanIntakeProvider({ children }: { children: ReactNode }) {
       returnPath = SHINHAN_GUEST_FOLLOWUP_PATH;
     if (pathname === SHINHAN_HOST_FOLLOWUP_PATH && hostFollowup)
       returnPath = SHINHAN_HOST_FOLLOWUP_PATH;
-    if (pathname === SHINHAN_SAVED_APPLICATION_PATH) returnPath = SHINHAN_SAVED_APPLICATION_PATH;
+    if (
+      pathname === SHINHAN_SAVED_APPLICATION_PATH ||
+      pathname === SHINHAN_LEGACY_SAVED_APPLICATION_PATH
+    )
+      returnPath = pathname;
     setSession((current) => ({
       ...current,
       privacyReturnTarget: {
