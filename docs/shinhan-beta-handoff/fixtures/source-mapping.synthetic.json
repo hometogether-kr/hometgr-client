@@ -1,0 +1,52 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.3",
+  "purpose": "separate_mapper_case_not_added_to_20_row_ledger",
+  "input": [
+    {
+      "attribution": {
+        "utm_source": "kakao",
+        "utm_medium": "social",
+        "utm_campaign": "host_acq_2026q4",
+        "utm_content": "host"
+      },
+      "entered": 3,
+      "completed": 1,
+      "anonymous_browsers": 2
+    },
+    {
+      "attribution": {
+        "utm_source": "kakao",
+        "utm_medium": "social",
+        "utm_campaign": "guest_acq_2026q4",
+        "utm_content": "guest"
+      },
+      "entered": 1,
+      "completed": 1,
+      "anonymous_browsers": 1
+    }
+  ],
+  "expected": [
+    {
+      "utm_source": "kakao",
+      "entered": 4,
+      "completed": 2,
+      "completion_from_entry": {
+        "numerator": 2,
+        "denominator": 4,
+        "value": 0.5
+      }
+    }
+  ],
+  "must_not_output": [
+    "anonymous_browsers"
+  ],
+  "forbidden_calculation": "average_of_tuple_rates",
+  "public_order": [
+    "group_raw_rows_by_source",
+    "compute_counts_and_rates",
+    "apply_current_policy_and_complementary_suppression",
+    "serialize_public_DTO"
+  ]
+}

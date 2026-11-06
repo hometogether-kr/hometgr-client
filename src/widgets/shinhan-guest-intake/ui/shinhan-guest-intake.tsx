@@ -29,27 +29,6 @@ const introductions = {
   },
 };
 
-const exampleSpaces = [
-  {
-    image: "/images/shinhan/guest/example-private-room.png",
-    caption: "나만의 개인방",
-    description: "침대와 옷장이 있는 개인방 공간 예시",
-    sizes: "(max-width: 767px) calc(100vw - 40px), (max-width: 1159px) 65vw, 744px",
-  },
-  {
-    image: "/images/shinhan/guest/example-living-room.png",
-    caption: "함께 누리는 거실",
-    description: "큰 창과 소파, 테이블이 있는 공용 거실 공간 예시",
-    sizes: "(max-width: 767px) calc((100vw - 52px) / 2), (max-width: 1159px) 32vw, 360px",
-  },
-  {
-    image: "/images/shinhan/guest/example-kitchen.png",
-    caption: "함께 쓰는 주방",
-    description: "조리대와 수납장이 있는 공용 주방 공간 예시",
-    sizes: "(max-width: 767px) calc((100vw - 52px) / 2), (max-width: 1159px) 32vw, 360px",
-  },
-];
-
 function GuestIntroduction({ applicationType }: ShinhanGuestIntakeProps) {
   const introduction = introductions[applicationType];
 
@@ -84,25 +63,14 @@ function GuestIntroduction({ applicationType }: ShinhanGuestIntakeProps) {
 
 export function ShinhanGuestSpaceExamples() {
   return (
-    <div className={styles.examples}>
-      <div className={styles.gallery}>
-        {exampleSpaces.map((space) => (
-          <figure key={space.image} className={styles.space}>
-            <Image
-              src={space.image}
-              alt={space.description}
-              fill
-              sizes={space.sizes}
-              className={styles.spaceImage}
-            />
-            <figcaption>{space.caption}</figcaption>
-          </figure>
-        ))}
-      </div>
-      <p className={styles.exampleNotice}>
-        모든 신청자에게 같은 공간 예시 사진을 보여드려요. 실제 입주 가능한 방은 상담으로 안내해
-        드려요.
-      </p>
+    <div className={styles.collage}>
+      <Image
+        src="/images/shinhan/guest/preview-collage.png"
+        alt="개인방과 거실, 주방의 공간 예시 사진"
+        width={2240}
+        height={780}
+        sizes="(max-width:1159px) calc(100vw - 40px),1120px"
+      />
     </div>
   );
 }

@@ -1,0 +1,1993 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.3",
+  "purpose": "operational_latest_RPC",
+  "reference_rule": "snapshot_ref resolves snapshots below; apply overrides, then expected status/freshness. Snapshot period must equal calendar30(as_of). A prior calendar period in the same scope is allowed only with its original period/as_of preserved and period_behind. This fixture packaging is not part of RPC.",
+  "server_config": {
+    "scope": {
+      "run_id": "synthetic-run-v1",
+      "dataset": "connection_test",
+      "definition_version": "shinhan_beta_metrics_draft_v2"
+    },
+    "freshness_limit_ms": 900000,
+    "connected": true,
+    "period_policy": "kst_calendar_30d_v1",
+    "refresh_interval_ms": 300000
+  },
+  "snapshots": {
+    "canonical": {
+      "run_id": "synthetic-run-v1",
+      "dataset": "connection_test",
+      "definition_version": "shinhan_beta_metrics_draft_v2",
+      "period": {
+        "from": "2026-09-27T15:00:00.000Z",
+        "until": "2026-10-27T15:00:00.000Z",
+        "timezone": "Asia/Seoul"
+      },
+      "as_of": "2026-10-27T03:00:00.000Z",
+      "generated_at": "2026-10-27T03:00:01.000Z",
+      "unit": "flow_attempt",
+      "observation_basis": "first_received_at",
+      "abandonment_hours": 24,
+      "collection_state": "synthetic_fixture",
+      "snapshot_state": "current",
+      "totals": {
+        "entered": 7,
+        "started": 6,
+        "completed": 3,
+        "not_started": 1,
+        "incomplete": 3,
+        "in_progress": 1,
+        "abandoned_24h": 2,
+        "anonymous_browsers": 6,
+        "rates": {
+          "start": {
+            "numerator": 6,
+            "denominator": 7,
+            "value": 0.8571428571428571
+          },
+          "completion_from_entry": {
+            "numerator": 3,
+            "denominator": 7,
+            "value": 0.42857142857142855
+          },
+          "completion_from_start": {
+            "numerator": 3,
+            "denominator": 6,
+            "value": 0.5
+          }
+        }
+      },
+      "by_flow": [
+        {
+          "role": "host",
+          "flow_id": "HOST_ESTIMATE",
+          "metrics": {
+            "entered": 1,
+            "started": 1,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "role": "host",
+          "flow_id": "HOST_REGISTRATION",
+          "metrics": {
+            "entered": 1,
+            "started": 1,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "role": "guest",
+          "flow_id": "GUEST_BUDGET",
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 1,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "role": "guest",
+          "flow_id": "GUEST_DEMAND",
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 0,
+            "not_started": 0,
+            "incomplete": 2,
+            "in_progress": 0,
+            "abandoned_24h": 2,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              }
+            }
+          }
+        },
+        {
+          "role": "unselected",
+          "flow_id": "",
+          "metrics": {
+            "entered": 1,
+            "started": 0,
+            "completed": 0,
+            "not_started": 1,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 0,
+                "value": null
+              }
+            }
+          }
+        }
+      ],
+      "by_channel": [
+        {
+          "attribution": {
+            "utm_source": "apartment",
+            "utm_medium": "qr",
+            "utm_campaign": "host_acq_2026q4",
+            "utm_content": "ad_01"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 2,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "everytime",
+            "utm_medium": "referral",
+            "utm_campaign": "guest_acq_2026q4",
+            "utm_content": "seoultech"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 1,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "instagram",
+            "utm_medium": "social",
+            "utm_campaign": "guest_acq_2026q4",
+            "utm_content": "profile"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 0,
+            "not_started": 0,
+            "incomplete": 2,
+            "in_progress": 0,
+            "abandoned_24h": 2,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "",
+            "utm_medium": "",
+            "utm_campaign": "",
+            "utm_content": ""
+          },
+          "metrics": {
+            "entered": 1,
+            "started": 0,
+            "completed": 0,
+            "not_started": 1,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 0,
+                "value": null
+              }
+            }
+          }
+        }
+      ],
+      "completions_by_basis": {
+        "simulation": 3,
+        "saved_response": 0
+      },
+      "quality": {
+        "status": "valid",
+        "rejected_attempts": 0
+      }
+    },
+    "recent_generation": {
+      "run_id": "synthetic-run-v1",
+      "dataset": "connection_test",
+      "definition_version": "shinhan_beta_metrics_draft_v2",
+      "period": {
+        "from": "2026-09-27T15:00:00.000Z",
+        "until": "2026-10-27T15:00:00.000Z",
+        "timezone": "Asia/Seoul"
+      },
+      "as_of": "2026-10-27T03:00:00.000Z",
+      "generated_at": "2026-10-27T03:15:59.000Z",
+      "unit": "flow_attempt",
+      "observation_basis": "first_received_at",
+      "abandonment_hours": 24,
+      "collection_state": "synthetic_fixture",
+      "snapshot_state": "current",
+      "totals": {
+        "entered": 7,
+        "started": 6,
+        "completed": 3,
+        "not_started": 1,
+        "incomplete": 3,
+        "in_progress": 1,
+        "abandoned_24h": 2,
+        "anonymous_browsers": 6,
+        "rates": {
+          "start": {
+            "numerator": 6,
+            "denominator": 7,
+            "value": 0.8571428571428571
+          },
+          "completion_from_entry": {
+            "numerator": 3,
+            "denominator": 7,
+            "value": 0.42857142857142855
+          },
+          "completion_from_start": {
+            "numerator": 3,
+            "denominator": 6,
+            "value": 0.5
+          }
+        }
+      },
+      "by_flow": [
+        {
+          "role": "host",
+          "flow_id": "HOST_ESTIMATE",
+          "metrics": {
+            "entered": 1,
+            "started": 1,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "role": "host",
+          "flow_id": "HOST_REGISTRATION",
+          "metrics": {
+            "entered": 1,
+            "started": 1,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "role": "guest",
+          "flow_id": "GUEST_BUDGET",
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 1,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "role": "guest",
+          "flow_id": "GUEST_DEMAND",
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 0,
+            "not_started": 0,
+            "incomplete": 2,
+            "in_progress": 0,
+            "abandoned_24h": 2,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              }
+            }
+          }
+        },
+        {
+          "role": "unselected",
+          "flow_id": "",
+          "metrics": {
+            "entered": 1,
+            "started": 0,
+            "completed": 0,
+            "not_started": 1,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 0,
+                "value": null
+              }
+            }
+          }
+        }
+      ],
+      "by_channel": [
+        {
+          "attribution": {
+            "utm_source": "apartment",
+            "utm_medium": "qr",
+            "utm_campaign": "host_acq_2026q4",
+            "utm_content": "ad_01"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 2,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "everytime",
+            "utm_medium": "referral",
+            "utm_campaign": "guest_acq_2026q4",
+            "utm_content": "seoultech"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 1,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "instagram",
+            "utm_medium": "social",
+            "utm_campaign": "guest_acq_2026q4",
+            "utm_content": "profile"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 0,
+            "not_started": 0,
+            "incomplete": 2,
+            "in_progress": 0,
+            "abandoned_24h": 2,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "",
+            "utm_medium": "",
+            "utm_campaign": "",
+            "utm_content": ""
+          },
+          "metrics": {
+            "entered": 1,
+            "started": 0,
+            "completed": 0,
+            "not_started": 1,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 0,
+                "value": null
+              }
+            }
+          }
+        }
+      ],
+      "completions_by_basis": {
+        "simulation": 3,
+        "saved_response": 0
+      },
+      "quality": {
+        "status": "valid",
+        "rejected_attempts": 0
+      }
+    },
+    "dirty": {
+      "run_id": "synthetic-run-v1",
+      "dataset": "connection_test",
+      "definition_version": "shinhan_beta_metrics_draft_v2",
+      "period": {
+        "from": "2026-09-27T15:00:00.000Z",
+        "until": "2026-10-27T15:00:00.000Z",
+        "timezone": "Asia/Seoul"
+      },
+      "as_of": "2026-10-27T03:00:00.000Z",
+      "generated_at": "2026-10-27T03:00:01.000Z",
+      "unit": "flow_attempt",
+      "observation_basis": "first_received_at",
+      "abandonment_hours": 24,
+      "collection_state": "synthetic_fixture",
+      "snapshot_state": "dirty",
+      "totals": {
+        "entered": 7,
+        "started": 6,
+        "completed": 3,
+        "not_started": 1,
+        "incomplete": 3,
+        "in_progress": 1,
+        "abandoned_24h": 2,
+        "anonymous_browsers": 6,
+        "rates": {
+          "start": {
+            "numerator": 6,
+            "denominator": 7,
+            "value": 0.8571428571428571
+          },
+          "completion_from_entry": {
+            "numerator": 3,
+            "denominator": 7,
+            "value": 0.42857142857142855
+          },
+          "completion_from_start": {
+            "numerator": 3,
+            "denominator": 6,
+            "value": 0.5
+          }
+        }
+      },
+      "by_flow": [
+        {
+          "role": "host",
+          "flow_id": "HOST_ESTIMATE",
+          "metrics": {
+            "entered": 1,
+            "started": 1,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "role": "host",
+          "flow_id": "HOST_REGISTRATION",
+          "metrics": {
+            "entered": 1,
+            "started": 1,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "role": "guest",
+          "flow_id": "GUEST_BUDGET",
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 1,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "role": "guest",
+          "flow_id": "GUEST_DEMAND",
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 0,
+            "not_started": 0,
+            "incomplete": 2,
+            "in_progress": 0,
+            "abandoned_24h": 2,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              }
+            }
+          }
+        },
+        {
+          "role": "unselected",
+          "flow_id": "",
+          "metrics": {
+            "entered": 1,
+            "started": 0,
+            "completed": 0,
+            "not_started": 1,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 0,
+                "value": null
+              }
+            }
+          }
+        }
+      ],
+      "by_channel": [
+        {
+          "attribution": {
+            "utm_source": "apartment",
+            "utm_medium": "qr",
+            "utm_campaign": "host_acq_2026q4",
+            "utm_content": "ad_01"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 2,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "everytime",
+            "utm_medium": "referral",
+            "utm_campaign": "guest_acq_2026q4",
+            "utm_content": "seoultech"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 1,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "instagram",
+            "utm_medium": "social",
+            "utm_campaign": "guest_acq_2026q4",
+            "utm_content": "profile"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 0,
+            "not_started": 0,
+            "incomplete": 2,
+            "in_progress": 0,
+            "abandoned_24h": 2,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 2,
+                "value": 0
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "",
+            "utm_medium": "",
+            "utm_campaign": "",
+            "utm_content": ""
+          },
+          "metrics": {
+            "entered": 1,
+            "started": 0,
+            "completed": 0,
+            "not_started": 1,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 0,
+                "value": null
+              }
+            }
+          }
+        }
+      ],
+      "completions_by_basis": {
+        "simulation": 3,
+        "saved_response": 0
+      },
+      "quality": {
+        "status": "valid",
+        "rejected_attempts": 0
+      }
+    },
+    "before_midnight": {
+      "run_id": "synthetic-run-v1",
+      "dataset": "connection_test",
+      "definition_version": "shinhan_beta_metrics_draft_v2",
+      "period": {
+        "from": "2026-09-27T15:00:00.000Z",
+        "until": "2026-10-27T15:00:00.000Z",
+        "timezone": "Asia/Seoul"
+      },
+      "as_of": "2026-10-27T14:59:59.000Z",
+      "generated_at": "2026-10-27T15:00:00.000Z",
+      "unit": "flow_attempt",
+      "observation_basis": "first_received_at",
+      "abandonment_hours": 24,
+      "collection_state": "synthetic_fixture",
+      "snapshot_state": "current",
+      "totals": {
+        "entered": 7,
+        "started": 6,
+        "completed": 4,
+        "not_started": 1,
+        "incomplete": 2,
+        "in_progress": 1,
+        "abandoned_24h": 1,
+        "anonymous_browsers": 6,
+        "rates": {
+          "start": {
+            "numerator": 6,
+            "denominator": 7,
+            "value": 0.8571428571428571
+          },
+          "completion_from_entry": {
+            "numerator": 4,
+            "denominator": 7,
+            "value": 0.5714285714285714
+          },
+          "completion_from_start": {
+            "numerator": 4,
+            "denominator": 6,
+            "value": 0.6666666666666666
+          }
+        }
+      },
+      "by_flow": [
+        {
+          "role": "host",
+          "flow_id": "HOST_ESTIMATE",
+          "metrics": {
+            "entered": 1,
+            "started": 1,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "role": "host",
+          "flow_id": "HOST_REGISTRATION",
+          "metrics": {
+            "entered": 1,
+            "started": 1,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 1,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "role": "guest",
+          "flow_id": "GUEST_BUDGET",
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 1,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "role": "guest",
+          "flow_id": "GUEST_DEMAND",
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 0,
+            "abandoned_24h": 1,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "role": "unselected",
+          "flow_id": "",
+          "metrics": {
+            "entered": 1,
+            "started": 0,
+            "completed": 0,
+            "not_started": 1,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 0,
+                "value": null
+              }
+            }
+          }
+        }
+      ],
+      "by_channel": [
+        {
+          "attribution": {
+            "utm_source": "apartment",
+            "utm_medium": "qr",
+            "utm_campaign": "host_acq_2026q4",
+            "utm_content": "ad_01"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 2,
+            "not_started": 0,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "everytime",
+            "utm_medium": "referral",
+            "utm_campaign": "guest_acq_2026q4",
+            "utm_content": "seoultech"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 1,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "instagram",
+            "utm_medium": "social",
+            "utm_campaign": "guest_acq_2026q4",
+            "utm_content": "profile"
+          },
+          "metrics": {
+            "entered": 2,
+            "started": 2,
+            "completed": 1,
+            "not_started": 0,
+            "incomplete": 1,
+            "in_progress": 0,
+            "abandoned_24h": 1,
+            "anonymous_browsers": 2,
+            "rates": {
+              "start": {
+                "numerator": 2,
+                "denominator": 2,
+                "value": 1
+              },
+              "completion_from_entry": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              },
+              "completion_from_start": {
+                "numerator": 1,
+                "denominator": 2,
+                "value": 0.5
+              }
+            }
+          }
+        },
+        {
+          "attribution": {
+            "utm_source": "",
+            "utm_medium": "",
+            "utm_campaign": "",
+            "utm_content": ""
+          },
+          "metrics": {
+            "entered": 1,
+            "started": 0,
+            "completed": 0,
+            "not_started": 1,
+            "incomplete": 0,
+            "in_progress": 0,
+            "abandoned_24h": 0,
+            "anonymous_browsers": 1,
+            "rates": {
+              "start": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_entry": {
+                "numerator": 0,
+                "denominator": 1,
+                "value": 0
+              },
+              "completion_from_start": {
+                "numerator": 0,
+                "denominator": 0,
+                "value": null
+              }
+            }
+          }
+        }
+      ],
+      "completions_by_basis": {
+        "simulation": 4,
+        "saved_response": 0
+      },
+      "quality": {
+        "status": "valid",
+        "rejected_attempts": 0
+      }
+    }
+  },
+  "cases": [
+    {
+      "name": "fresh_at_limit",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:15:00.000Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical"
+        }
+      ],
+      "expected": {
+        "http_status": 200,
+        "kind": "snapshot",
+        "snapshot_ref": "canonical",
+        "status": "ready",
+        "freshness": {
+          "status": "fresh",
+          "evaluated_at": "2026-10-27T03:15:00.000Z",
+          "reasons": []
+        },
+        "preserve": [
+          "period",
+          "as_of",
+          "generated_at",
+          "totals",
+          "by_flow",
+          "by_channel"
+        ]
+      }
+    },
+    {
+      "name": "clean_old_without_events",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:15:00.001Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical"
+        }
+      ],
+      "expected": {
+        "http_status": 200,
+        "kind": "snapshot",
+        "snapshot_ref": "canonical",
+        "status": "stale",
+        "freshness": {
+          "status": "stale",
+          "evaluated_at": "2026-10-27T03:15:00.001Z",
+          "reasons": [
+            "age_exceeded"
+          ]
+        },
+        "preserve": [
+          "period",
+          "as_of",
+          "generated_at",
+          "totals",
+          "by_flow",
+          "by_channel"
+        ]
+      }
+    },
+    {
+      "name": "new_generation_old_observation",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:16:00.000Z",
+      "available_snapshots": [
+        {
+          "ref": "recent_generation"
+        }
+      ],
+      "expected": {
+        "http_status": 200,
+        "kind": "snapshot",
+        "snapshot_ref": "recent_generation",
+        "status": "stale",
+        "freshness": {
+          "status": "stale",
+          "evaluated_at": "2026-10-27T03:16:00.000Z",
+          "reasons": [
+            "age_exceeded"
+          ]
+        },
+        "preserve": [
+          "period",
+          "as_of",
+          "generated_at",
+          "totals",
+          "by_flow",
+          "by_channel"
+        ]
+      }
+    },
+    {
+      "name": "same_scope_refresh_failure_fallback",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:01:00.000Z",
+      "refresh_failed": true,
+      "available_snapshots": [
+        {
+          "ref": "canonical"
+        }
+      ],
+      "expected": {
+        "http_status": 200,
+        "kind": "snapshot",
+        "snapshot_ref": "canonical",
+        "status": "stale",
+        "freshness": {
+          "status": "stale",
+          "evaluated_at": "2026-10-27T03:01:00.000Z",
+          "reasons": [
+            "refresh_failed"
+          ]
+        },
+        "preserve": [
+          "period",
+          "as_of",
+          "generated_at",
+          "totals",
+          "by_flow",
+          "by_channel"
+        ]
+      }
+    },
+    {
+      "name": "dirty_snapshot",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:01:00.000Z",
+      "available_snapshots": [
+        {
+          "ref": "dirty"
+        }
+      ],
+      "expected": {
+        "http_status": 200,
+        "kind": "snapshot",
+        "snapshot_ref": "dirty",
+        "status": "stale",
+        "freshness": {
+          "status": "stale",
+          "evaluated_at": "2026-10-27T03:01:00.000Z",
+          "reasons": [
+            "dirty"
+          ]
+        },
+        "preserve": [
+          "period",
+          "as_of",
+          "generated_at",
+          "totals",
+          "by_flow",
+          "by_channel"
+        ]
+      }
+    },
+    {
+      "name": "unsupported_period",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest",
+        "period": {
+          "from": "2026-10-25T15:00:00.000Z",
+          "until": "2026-10-27T15:00:00.000Z",
+          "timezone": "Asia/Seoul"
+        }
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical"
+        }
+      ],
+      "expected": {
+        "http_status": 422,
+        "response": {
+          "ok": false,
+          "contract_version": "0.1.0-draft.3",
+          "error": {
+            "code": "UNSUPPORTED_AGGREGATE_QUERY",
+            "retryable": false,
+            "retry_after_ms": null
+          }
+        }
+      }
+    },
+    {
+      "name": "unsupported_as_of",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest",
+        "as_of": "2026-10-27T03:00:00.000Z"
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical"
+        }
+      ],
+      "expected": {
+        "http_status": 422,
+        "response": {
+          "ok": false,
+          "contract_version": "0.1.0-draft.3",
+          "error": {
+            "code": "UNSUPPORTED_AGGREGATE_QUERY",
+            "retryable": false,
+            "retry_after_ms": null
+          }
+        }
+      }
+    },
+    {
+      "name": "missing_snapshot",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "available_snapshots": [],
+      "expected": {
+        "http_status": 503,
+        "response": {
+          "ok": false,
+          "contract_version": "0.1.0-draft.3",
+          "error": {
+            "code": "AGGREGATE_UNAVAILABLE",
+            "retryable": true,
+            "retry_after_ms": 1000
+          }
+        }
+      }
+    },
+    {
+      "name": "not_connected",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "connected": false,
+      "available_snapshots": [],
+      "expected": {
+        "http_status": 200,
+        "response": {
+          "ok": true,
+          "contract_version": "0.1.0-draft.3",
+          "data": {
+            "status": "not_connected",
+            "totals": null
+          }
+        }
+      }
+    },
+    {
+      "name": "reject_fallback_run_id",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical",
+          "overrides": {
+            "run_id": "synthetic-other-run"
+          }
+        }
+      ],
+      "expected": {
+        "http_status": 503,
+        "response": {
+          "ok": false,
+          "contract_version": "0.1.0-draft.3",
+          "error": {
+            "code": "AGGREGATE_UNAVAILABLE",
+            "retryable": true,
+            "retry_after_ms": 1000
+          }
+        }
+      }
+    },
+    {
+      "name": "reject_fallback_dataset",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical",
+          "overrides": {
+            "dataset": "beta"
+          }
+        }
+      ],
+      "expected": {
+        "http_status": 503,
+        "response": {
+          "ok": false,
+          "contract_version": "0.1.0-draft.3",
+          "error": {
+            "code": "AGGREGATE_UNAVAILABLE",
+            "retryable": true,
+            "retry_after_ms": 1000
+          }
+        }
+      }
+    },
+    {
+      "name": "reject_fallback_definition_version",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical",
+          "overrides": {
+            "definition_version": "synthetic-other-definition"
+          }
+        }
+      ],
+      "expected": {
+        "http_status": 503,
+        "response": {
+          "ok": false,
+          "contract_version": "0.1.0-draft.3",
+          "error": {
+            "code": "AGGREGATE_UNAVAILABLE",
+            "retryable": true,
+            "retry_after_ms": 1000
+          }
+        }
+      }
+    },
+    {
+      "name": "reject_period_not_calendar_30d_of_as_of",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical",
+          "overrides": {
+            "period": {
+              "from": "2026-10-26T15:00:00.000Z",
+              "until": "2026-10-27T15:00:00.000Z",
+              "timezone": "Asia/Seoul"
+            }
+          }
+        }
+      ],
+      "expected": {
+        "http_status": 503,
+        "response": {
+          "ok": false,
+          "contract_version": "0.1.0-draft.3",
+          "error": {
+            "code": "AGGREGATE_UNAVAILABLE",
+            "retryable": true,
+            "retry_after_ms": 1000
+          }
+        }
+      }
+    },
+    {
+      "name": "reject_invalid_time_order",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical",
+          "overrides": {
+            "generated_at": "2026-10-27T04:00:00.000Z"
+          }
+        }
+      ],
+      "expected": {
+        "http_status": 503,
+        "response": {
+          "ok": false,
+          "contract_version": "0.1.0-draft.3",
+          "error": {
+            "code": "AGGREGATE_UNAVAILABLE",
+            "retryable": true,
+            "retry_after_ms": 1000
+          }
+        }
+      }
+    },
+    {
+      "name": "previous_calendar_day_fallback_preserves_period",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T15:00:01.000Z",
+      "available_snapshots": [
+        {
+          "ref": "before_midnight"
+        }
+      ],
+      "expected": {
+        "http_status": 200,
+        "kind": "snapshot",
+        "snapshot_ref": "before_midnight",
+        "status": "stale",
+        "freshness": {
+          "status": "stale",
+          "evaluated_at": "2026-10-27T15:00:01.000Z",
+          "reasons": [
+            "period_behind"
+          ]
+        },
+        "preserve": [
+          "period",
+          "as_of",
+          "generated_at",
+          "totals",
+          "by_flow",
+          "by_channel"
+        ]
+      }
+    },
+    {
+      "name": "previous_day_old_and_refresh_failed",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-28T00:00:00.000Z",
+      "available_snapshots": [
+        {
+          "ref": "before_midnight"
+        }
+      ],
+      "expected": {
+        "http_status": 200,
+        "kind": "snapshot",
+        "snapshot_ref": "before_midnight",
+        "status": "stale",
+        "freshness": {
+          "status": "stale",
+          "evaluated_at": "2026-10-28T00:00:00.000Z",
+          "reasons": [
+            "age_exceeded",
+            "period_behind",
+            "refresh_failed"
+          ]
+        },
+        "preserve": [
+          "period",
+          "as_of",
+          "generated_at",
+          "totals",
+          "by_flow",
+          "by_channel"
+        ]
+      },
+      "refresh_failed": true
+    },
+    {
+      "name": "reject_future_as_of_and_period",
+      "request": {
+        "contract_version": "0.1.0-draft.3",
+        "run_id": "synthetic-run-v1",
+        "dataset": "connection_test",
+        "definition_version": "shinhan_beta_metrics_draft_v2",
+        "view": "latest"
+      },
+      "evaluated_at": "2026-10-27T03:00:01.000Z",
+      "available_snapshots": [
+        {
+          "ref": "canonical",
+          "overrides": {
+            "as_of": "2026-10-28T03:00:00.000Z",
+            "generated_at": "2026-10-28T03:00:01.000Z",
+            "period": {
+              "from": "2026-09-28T15:00:00.000Z",
+              "until": "2026-10-28T15:00:00.000Z",
+              "timezone": "Asia/Seoul"
+            }
+          }
+        }
+      ],
+      "expected": {
+        "http_status": 503,
+        "response": {
+          "ok": false,
+          "contract_version": "0.1.0-draft.3",
+          "error": {
+            "code": "AGGREGATE_UNAVAILABLE",
+            "retryable": true,
+            "retry_after_ms": 1000
+          }
+        }
+      }
+    }
+  ]
+}

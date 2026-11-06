@@ -67,6 +67,7 @@ export function HostIntroductionFrame({ children }: HostIntroductionFrameProps) 
               <span>만나볼지 생각하셔도 괜찮아요.</span>
             </p>
           </div>
+          {children}
         </header>
         <section
           className={styles.introductionCard}
@@ -118,13 +119,43 @@ export function HostIntroductionFrame({ children }: HostIntroductionFrameProps) 
           </ol>
         </section>
       </div>
-      <aside className={styles.reassurance}>
-        <span className={styles.reassuranceCheck} aria-hidden="true">
-          ✓
-        </span>
-        <p>소개서만 받아보고, 더 진행하지 않으셔도 괜찮아요.</p>
+      <aside className={styles.customerStory}>
+        <a
+          href="https://www.youtube.com/watch?v=DdCxyz9kNs4"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.storyThumbnail}
+          aria-label="홈투게더 고객 후기 보기 (새 창)"
+        >
+          <Image
+            src="/images/shinhan/host/introduction-mbc.png"
+            alt="우리 손녀 왔네, 빈방 내주니 식구 생겼다. MBC 뉴스데스크 고객 후기"
+            width={488}
+            height={269}
+          />
+          <span>MBC 뉴스데스크 · 2026.09.12 | 홈투게더 고객 후기</span>
+        </a>
+        <div className={styles.storyCopy}>
+          <p>실제 홈투게더 고객 후기</p>
+          <h2>
+            함께 사는 일상을
+            <br />
+            먼저 만나보세요.
+          </h2>
+          <p>
+            홈투게더 고객 어르신과 청년의 일상,
+            <br />
+            MBC 뉴스에서 만나보세요.
+          </p>
+          <a
+            href="https://www.youtube.com/watch?v=DdCxyz9kNs4"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            홈투게더 고객 후기 보기 ↗
+          </a>
+        </div>
       </aside>
-      {children}
     </div>
   );
 }

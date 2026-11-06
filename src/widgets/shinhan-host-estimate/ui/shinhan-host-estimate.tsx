@@ -1,15 +1,19 @@
 import Image from "next/image";
-
-import { ShinhanHostProgress } from "@/features/shinhan-intake";
+import type { ReactNode } from "react";
 
 import { ShinhanHostEstimateFlow } from "./shinhan-host-estimate-flow";
 
 import styles from "./shinhan-host-estimate.module.css";
 
-export function ShinhanHostEstimate() {
+interface HostEstimateProps {
+  result: ReactNode;
+  concerns: ReactNode;
+  guide: ReactNode;
+}
+
+export function ShinhanHostEstimate({ result, concerns, guide }: HostEstimateProps) {
   return (
     <section className={styles.container} aria-label="빈방 예상 월세 진단">
-      <ShinhanHostProgress currentStep="result" />
       <ShinhanHostEstimateFlow
         introduction={
           <div className={styles.introduction}>
@@ -45,29 +49,9 @@ export function ShinhanHostEstimate() {
             </div>
           </div>
         }
-        incomePreview={
-          <div className={styles.incomePreview}>
-            <div>
-              <p className={styles.incomeLabel}>1년 예상 수익</p>
-              <p className={styles.maskedIncome} aria-label="접수 저장 후 공개">
-                ???~???만원
-              </p>
-              <p className={styles.incomeDetail}>월 예상 수익도 함께 확인할 수 있어요</p>
-              <p className={styles.hint}>
-                예상 금액은 입력하신 방 정보를 바탕으로 산정해요.
-                <br />
-                실제 수익은 계약 기간과 방 상태에 따라 달라질 수 있어요.
-              </p>
-            </div>
-            <Image
-              src="/images/shinhan/host/room-income.png"
-              width={280}
-              height={280}
-              alt="빈방과 월세 수익을 표현한 그림"
-              className={styles.roomImage}
-            />
-          </div>
-        }
+        result={result}
+        concerns={concerns}
+        guide={guide}
       />
     </section>
   );

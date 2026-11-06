@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import { ShinhanGuestDemandSearch, ShinhanGuestFormButton } from "@/features/shinhan-intake";
-
 import styles from "./guest-introduction.module.css";
 
 const conversations = [
@@ -51,17 +49,6 @@ export function ShinhanGuestHero() {
             <br />
             월세는 <em>가볍게</em>
           </h1>
-          <div className={styles.location}>
-            <ShinhanGuestDemandSearch
-              fieldClassName={styles.locationField}
-              buttonClassName={styles.searchButton}
-            />
-            <p id="shinhan-guest-demand-status" className={styles.notice}>
-              {process.env.NODE_ENV === "development"
-                ? "개발용 조건 입력으로 이동하며, 아직 접수되지는 않습니다."
-                : "위치·예산 수요조사 신청을 준비하고 있어요."}
-            </p>
-          </div>
         </div>
         <div className={styles.heroArt}>
           <Image
@@ -70,50 +57,6 @@ export function ShinhanGuestHero() {
             width={633}
             height={532}
             preload
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function ShinhanGuestBudgetBanner() {
-  return (
-    <section className={styles.bannerSection} aria-labelledby="shinhan-guest-budget-heading">
-      <div className={`${styles.container} ${styles.banner}`}>
-        <div className={styles.bannerCopy}>
-          <h2 id="shinhan-guest-budget-heading">
-            내 예산이면,
-            <br />
-            어떤 아파트에서 살 수 있을까?
-          </h2>
-          <p>
-            원룸 예산으로 아파트 생활을 시작해볼까요?
-            <br />내 예산에 맞는 방을 확인해보세요.
-          </p>
-          <ShinhanGuestFormButton
-            flow="budget"
-            type="button"
-            size="l"
-            className={styles.budgetButton}
-            aria-describedby="shinhan-guest-budget-status"
-            data-shinhan-guest-budget-cta
-          >
-            내 예산에 맞는 방 보기&nbsp; →
-          </ShinhanGuestFormButton>
-          <p id="shinhan-guest-budget-status" className={styles.notice}>
-            {process.env.NODE_ENV === "development"
-              ? "개발용 예산 입력을 확인할 수 있어요. 실제 접수는 준비 중입니다."
-              : "예산으로 찾기 신청을 준비하고 있어요."}
-          </p>
-        </div>
-        <div className={styles.bannerArt}>
-          <Image
-            src="/images/shinhan/guest/budget-banner.png"
-            alt="홈투게더 집 캐릭터가 아파트 모형을 소개하는 모습"
-            width={1983}
-            height={793}
-            sizes="(max-width: 767px) calc(100vw - 40px), 800px"
           />
         </div>
       </div>

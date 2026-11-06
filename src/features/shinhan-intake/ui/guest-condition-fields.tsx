@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 
+import { AddressSearchDialog } from "@/shared/ui/address-search-dialog";
 import { Calendar } from "@/shared/ui/calendar";
 import { Icon } from "@/shared/ui/icons";
-import { TextField } from "@/shared/ui/text-field";
 
 import {
   formatShinhanCalendarDate,
@@ -30,17 +30,41 @@ export function ShinhanGuestRegionField({
   error,
   label = "희망 위치",
 }: GuestRegionFieldProps) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  const close = useCallback(() => setOpen(false), []);
   return (
-    <TextField
-      label={label}
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-      placeholder="지역, 역, 학교 주변 등 자유롭게 입력해 주세요."
-      maxLength={200}
-      autoComplete="off"
-      error={error}
-      className={styles.region}
-    />
+    <div className={styles.region}>
+      <label id={`${id}-label`} htmlFor={id} className={styles.label}>
+        {label}
+      </label>
+      <button
+        id={id}
+        type="button"
+        className={styles.dateButton}
+        aria-labelledby={`${id}-label ${id}-value`}
+        aria-describedby={error ? `${id}-error` : undefined}
+        data-error={Boolean(error) || undefined}
+        onClick={() => setOpen(true)}
+      >
+        <span id={`${id}-value`} className={value ? undefined : styles.placeholder}>
+          {value || "희망하는 시·구·동 검색"}
+        </span>
+        <span className={styles.calendarIcon} aria-hidden="true">
+          <Icon name="search" size={22} />
+        </span>
+      </button>
+      {error && (
+        <p id={`${id}-error`} className={styles.error} role="alert">
+          {error}
+        </p>
+      )}
+      <AddressSearchDialog
+        open={open}
+        onClose={close}
+        onSelect={(address) => onChange(address.address)}
+      />
+    </div>
   );
 }
 
@@ -136,5 +160,61 @@ export function ShinhanMoveInDateField({ value, onChange, error }: GuestConditio
         </div>
       )}
     </div>
+  );
+}
+
+interface MoveInTimingProps extends GuestConditionFieldProps {
+  timing?: "ASAP" | "WITHIN_MONTH" | "DATE";
+  onTimingChange: (timing: "ASAP" | "WITHIN_MONTH" | "DATE", date: string) => void;
+  compact?: boolean;
+}
+export function ShinhanMoveInTimingField({
+  value,
+  timing = "ASAP",
+  onChange,
+  onTimingChange,
+  error,
+  compact = false,
+}: MoveInTimingProps) {
+  const id = useId();
+  return (
+    <fieldset className={styles.timing} data-compact={compact}>
+      <legend>언제쯤 입주하고 싶으세요?</legend>
+      <div className={styles.timingChoices}>
+        {(["ASAP", "WITHIN_MONTH", "DATE"] as const).map((option) => (
+          <label key={option} className={styles.timingChoice}>
+            <input
+              type="radio"
+              name={`${id}-timing`}
+              checked={timing === option}
+              onChange={() => {
+                onTimingChange(option, "");
+              }}
+            />
+            <span>
+              {option === "ASAP"
+                ? compact
+                  ? "빠른 입주"
+                  : "가능한 한 빨리"
+                : option === "WITHIN_MONTH"
+                  ? compact
+                    ? "1개월 내"
+                    : "1개월 이내"
+                  : compact
+                    ? "직접 입력"
+                    : "직접 입력하기"}
+            </span>
+          </label>
+        ))}
+      </div>
+      {timing === "DATE" && (
+        <ShinhanMoveInDateField value={value} onChange={onChange} error={error} />
+      )}
+      {timing !== "DATE" && error && (
+        <p className={styles.error} role="alert">
+          {error}
+        </p>
+      )}
+    </fieldset>
   );
 }

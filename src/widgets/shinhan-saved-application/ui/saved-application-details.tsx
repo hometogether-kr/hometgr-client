@@ -22,11 +22,7 @@ export function formatShinhanMoney(value: number) {
   return (value / 10000).toLocaleString("ko-KR");
 }
 
-export function SavedApplicationSummary({
-  concernLabels,
-}: {
-  concernLabels?: Readonly<Record<string, string>>;
-}) {
+export function SavedApplicationSummary() {
   const { application } = useShinhanStorage();
   if (!application) return null;
   return (
@@ -149,22 +145,6 @@ export function SavedApplicationSummary({
         <div>
           <dt>필수 동의 버전</dt>
           <dd>{application.requiredConsent.version}</dd>
-        </div>
-        <div>
-          <dt>걱정 응답</dt>
-          <dd>
-            {application.concerns.state === "SUBMITTED"
-              ? application.concerns.codes.length
-                ? concernLabels
-                  ? application.concerns.codes
-                      .map((code) => concernLabels[code] ?? "저장된 걱정 항목")
-                      .join(" · ")
-                  : `${application.concerns.codes.length}개 항목 저장됨`
-                : "선택한 걱정 없음"
-              : application.concerns.state === "SKIPPED"
-                ? "응답하지 않음"
-                : "아직 저장하지 않음"}
-          </dd>
         </div>
       </dl>
       <p className={styles.help}>

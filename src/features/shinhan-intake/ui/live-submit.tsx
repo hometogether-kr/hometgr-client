@@ -6,49 +6,19 @@ import type { ReactNode } from "react";
 
 import { BtnCta } from "@/shared/ui/btn-cta";
 
+import { SHINHAN_SAVED_APPLICATION_PATH } from "../config/routes";
 import { useShinhanStorage } from "../model/storage-context";
-
-export function ShinhanLivePreparation() {
-  const storage = useShinhanStorage();
-  if (!storage.submissionAvailable) return null;
-  return (
-    <div className="mb-4 space-y-3 rounded-xl border border-primary-200 bg-primary-50 p-4 text-sm leading-6 text-grayscale-700">
-      <p>
-        {storage.application
-          ? "기존 신청은 유지됩니다. 신청 세션을 다시 준비한 뒤 계속해 주세요."
-          : "신한 API 저장 검증용입니다. 서버 동의 전문을 준비한 뒤 필수 동의를 다시 선택해 주세요."}
-      </p>
-      {storage.consents ? (
-        <p role="status">서버 동의 전문과 신청 세션을 준비했습니다.</p>
-      ) : (
-        <BtnCta
-          type="button"
-          variant="stroke"
-          className="w-full whitespace-normal"
-          disabled={
-            storage.preparing ||
-            storage.pending ||
-            storage.attempt !== null ||
-            storage.sessionExpired ||
-            storage.retryInSeconds > 0
-          }
-          onClick={() => {
-            void storage.prepare();
-          }}
-        >
-          {storage.preparing ? "신청 준비 중…" : "실제 저장 준비 (개발용)"}
-        </BtnCta>
-      )}
-    </div>
-  );
-}
 
 export function ShinhanLiveSubmit({
   children,
   className,
+  notice = "신청이 완료되면 접수 내역을 확인할 수 있어요.",
+  onSaved,
 }: {
   children: ReactNode;
   className?: string;
+  notice?: string;
+  onSaved?: () => void;
 }) {
   const storage = useShinhanStorage();
   const router = useRouter();
@@ -59,12 +29,21 @@ export function ShinhanLiveSubmit({
       storage.error.code === "CONSENT_VERSION_MISMATCH" ||
       storage.error.code === "CSRF_INVALID");
 
+  function showSavedApplication() {
+    try {
+      onSaved?.();
+    } catch {
+      // Optional observers must never interrupt an already successful application.
+    }
+    router.push(SHINHAN_SAVED_APPLICATION_PATH);
+  }
+
   async function submit() {
-    if (await storage.submitApplication()) router.push("/shinhan/dev/application");
+    if (await storage.submitApplication()) showSavedApplication();
   }
 
   async function retry() {
-    if (await storage.retry()) router.push("/shinhan/dev/application");
+    if (await storage.retry()) showSavedApplication();
   }
 
   return (
@@ -84,13 +63,15 @@ export function ShinhanLiveSubmit({
           void submit();
         }}
       >
-        {storage.pending ? "저장 결과 확인 중…" : children}
+        {storage.pending ? "신청 중…" : children}
       </BtnCta>
-      <p className="text-sm leading-6 text-grayscale-600">
-        {storage.submissionAvailable
-          ? "서버 저장 성공 응답을 받은 뒤에만 결과·완료 화면으로 이동합니다. 접수 완료와 알림 전달 완료는 다릅니다."
-          : "실제 접수는 연결 준비가 완료된 뒤 이용할 수 있습니다."}
-      </p>
+      {(notice || !storage.submissionAvailable) && (
+        <p className="text-sm leading-6 text-grayscale-600">
+          {storage.submissionAvailable
+            ? notice
+            : "지금은 신청을 이용할 수 없어요. 잠시 후 다시 시도해 주세요."}
+        </p>
+      )}
       {storage.error && (
         <div
           role="alert"
@@ -127,19 +108,6 @@ export function ShinhanLiveSubmit({
               onClick={storage.clearRejectedAttempt}
             >
               입력 내용 다시 확인
-            </BtnCta>
-          )}
-          {!storage.attempt && !storage.consents && !storage.sessionExpired && (
-            <BtnCta
-              type="button"
-              variant="stroke"
-              className="w-full whitespace-normal"
-              disabled={storage.preparing || storage.retryInSeconds > 0}
-              onClick={() => {
-                void storage.prepare();
-              }}
-            >
-              신청 준비 다시 시도
             </BtnCta>
           )}
           <ShinhanSessionRestart />
@@ -189,7 +157,7 @@ export function ShinhanSavedApplicationNotice() {
       </p>
       <Link
         className="inline-flex min-h-12 items-center rounded-xl bg-primary-500 px-5 py-3 font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-600"
-        href="/shinhan/dev/application"
+        href={SHINHAN_SAVED_APPLICATION_PATH}
       >
         저장한 신청 내역 보기
       </Link>

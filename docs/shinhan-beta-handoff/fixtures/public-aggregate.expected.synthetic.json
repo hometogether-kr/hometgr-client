@@ -1,0 +1,23 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과가 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.3",
+  "purpose": "public_is_not_activated_by_policy_agreement",
+  "response": {
+    "ok": true,
+    "contract_version": "0.1.0-draft.3",
+    "data": {
+      "status": "disabled",
+      "reason": "NOT_ENABLED",
+      "unit": "flow_attempt",
+      "period": null,
+      "as_of": null,
+      "generated_at": null,
+      "privacy_policy_version": null,
+      "freshness": null,
+      "counts": null,
+      "rates": null,
+      "by_source": []
+    }
+  }
+}

@@ -1,0 +1,1217 @@
+{
+  "synthetic": true,
+  "warning": "합성 데이터입니다. 실제 고객·사용량·성과·운영 설정이 아닙니다. 네트워크 전송 금지.",
+  "contract_version": "0.1.0-draft.2",
+  "purpose": "shape_only_synthetic_policy_not_approved_for_production",
+  "synthetic_config": {
+    "snapshot_key": "synthetic-public-v1",
+    "freshness_limit_ms": 300000,
+    "policy": "Synthetic allow/suppress decisions below are DTO examples, not an approved minimum-count policy."
+  },
+  "cases": [
+    {
+      "name": "policy_unconfirmed",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.2",
+        "data": {
+          "status": "disabled",
+          "reason": "POLICY_UNCONFIRMED",
+          "unit": "flow_attempt",
+          "period": null,
+          "as_of": null,
+          "generated_at": null,
+          "privacy_policy_version": null,
+          "freshness": null,
+          "counts": null,
+          "rates": null,
+          "by_source": []
+        }
+      }
+    },
+    {
+      "name": "not_connected",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.2",
+        "data": {
+          "status": "not_connected",
+          "reason": "NOT_CONNECTED",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-10-25T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": null,
+          "generated_at": null,
+          "privacy_policy_version": "synthetic-shape-policy-v1-not-production",
+          "freshness": null,
+          "counts": null,
+          "rates": null,
+          "by_source": []
+        }
+      }
+    },
+    {
+      "name": "ready_zero",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.2",
+        "data": {
+          "status": "ready",
+          "reason": null,
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-10-25T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T03:00:00.000Z",
+          "generated_at": "2026-10-27T03:00:01.000Z",
+          "privacy_policy_version": "synthetic-shape-policy-v1-not-production",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T03:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "visible",
+              "value": 0
+            },
+            "started": {
+              "status": "visible",
+              "value": 0
+            },
+            "completed": {
+              "status": "visible",
+              "value": 0
+            },
+            "incomplete": {
+              "status": "visible",
+              "value": 0
+            },
+            "abandoned_24h": {
+              "status": "visible",
+              "value": 0
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "not_applicable",
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "not_applicable",
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "not_applicable",
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "ready_positive_synthetic_only",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.2",
+        "data": {
+          "status": "ready",
+          "reason": null,
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-10-25T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T03:00:00.000Z",
+          "generated_at": "2026-10-27T03:00:01.000Z",
+          "privacy_policy_version": "synthetic-shape-policy-v1-not-production",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T03:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "visible",
+              "value": 7
+            },
+            "started": {
+              "status": "visible",
+              "value": 6
+            },
+            "completed": {
+              "status": "visible",
+              "value": 3
+            },
+            "incomplete": {
+              "status": "visible",
+              "value": 3
+            },
+            "abandoned_24h": {
+              "status": "visible",
+              "value": 2
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "visible",
+              "numerator": 6,
+              "denominator": 7,
+              "value": 0.8571428571428571
+            },
+            "completion_from_entry": {
+              "status": "visible",
+              "numerator": 3,
+              "denominator": 7,
+              "value": 0.42857142857142855
+            },
+            "completion_from_start": {
+              "status": "visible",
+              "numerator": 3,
+              "denominator": 6,
+              "value": 0.5
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 2
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 2
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 2,
+                  "denominator": 2,
+                  "value": 1
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 2
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 1
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 1,
+                  "denominator": 2,
+                  "value": 0.5
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 2
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 0,
+                  "denominator": 2,
+                  "value": 0
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 1
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 0,
+                  "denominator": 1,
+                  "value": 0
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "clean_but_old",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.2",
+        "data": {
+          "status": "stale",
+          "reason": null,
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-10-25T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T03:00:00.000Z",
+          "generated_at": "2026-10-27T03:00:01.000Z",
+          "privacy_policy_version": "synthetic-shape-policy-v1-not-production",
+          "freshness": {
+            "status": "stale",
+            "evaluated_at": "2026-10-27T03:10:00.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "visible",
+              "value": 7
+            },
+            "started": {
+              "status": "visible",
+              "value": 6
+            },
+            "completed": {
+              "status": "visible",
+              "value": 3
+            },
+            "incomplete": {
+              "status": "visible",
+              "value": 3
+            },
+            "abandoned_24h": {
+              "status": "visible",
+              "value": 2
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "visible",
+              "numerator": 6,
+              "denominator": 7,
+              "value": 0.8571428571428571
+            },
+            "completion_from_entry": {
+              "status": "visible",
+              "numerator": 3,
+              "denominator": 7,
+              "value": 0.42857142857142855
+            },
+            "completion_from_start": {
+              "status": "visible",
+              "numerator": 3,
+              "denominator": 6,
+              "value": 0.5
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 2
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 2
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 2,
+                  "denominator": 2,
+                  "value": 1
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 2
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 1
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 1,
+                  "denominator": 2,
+                  "value": 0.5
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 2
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 0,
+                  "denominator": 2,
+                  "value": 0
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 0
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "not_applicable",
+                  "numerator": 0,
+                  "denominator": 0,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "visible",
+                  "value": 1
+                },
+                "completed": {
+                  "status": "visible",
+                  "value": 0
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "visible",
+                  "numerator": 0,
+                  "denominator": 1,
+                  "value": 0
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "suppressed_fresh",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.2",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-10-25T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T03:00:00.000Z",
+          "generated_at": "2026-10-27T03:00:01.000Z",
+          "privacy_policy_version": "synthetic-shape-policy-v1-not-production",
+          "freshness": {
+            "status": "fresh",
+            "evaluated_at": "2026-10-27T03:00:01.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "suppressed_and_stale",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.2",
+        "data": {
+          "status": "suppressed",
+          "reason": "PRIVACY_POLICY",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-10-25T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": "2026-10-27T03:00:00.000Z",
+          "generated_at": "2026-10-27T03:00:01.000Z",
+          "privacy_policy_version": "synthetic-shape-policy-v1-not-production",
+          "freshness": {
+            "status": "stale",
+            "evaluated_at": "2026-10-27T03:10:00.000Z"
+          },
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": [
+            {
+              "utm_source": "apartment",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "kakao",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "everytime",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "instagram",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "google",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "naver",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            },
+            {
+              "utm_source": "",
+              "counts": {
+                "entered": {
+                  "status": "suppressed",
+                  "value": null
+                },
+                "completed": {
+                  "status": "suppressed",
+                  "value": null
+                }
+              },
+              "rates": {
+                "completion_from_entry": {
+                  "status": "suppressed",
+                  "numerator": null,
+                  "denominator": null,
+                  "value": null
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "policy_changed",
+      "http_status": 200,
+      "response": {
+        "ok": true,
+        "contract_version": "0.1.0-draft.2",
+        "data": {
+          "status": "suppressed",
+          "reason": "POLICY_CHANGED",
+          "unit": "flow_attempt",
+          "period": {
+            "from": "2026-10-25T15:00:00.000Z",
+            "until": "2026-10-27T15:00:00.000Z",
+            "timezone": "Asia/Seoul"
+          },
+          "as_of": null,
+          "generated_at": null,
+          "privacy_policy_version": "synthetic-shape-policy-v2-not-production",
+          "freshness": null,
+          "counts": {
+            "entered": {
+              "status": "suppressed",
+              "value": null
+            },
+            "started": {
+              "status": "suppressed",
+              "value": null
+            },
+            "completed": {
+              "status": "suppressed",
+              "value": null
+            },
+            "incomplete": {
+              "status": "suppressed",
+              "value": null
+            },
+            "abandoned_24h": {
+              "status": "suppressed",
+              "value": null
+            }
+          },
+          "rates": {
+            "start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_entry": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            },
+            "completion_from_start": {
+              "status": "suppressed",
+              "numerator": null,
+              "denominator": null,
+              "value": null
+            }
+          },
+          "by_source": []
+        }
+      }
+    },
+    {
+      "name": "unavailable",
+      "http_status": 503,
+      "response": {
+        "ok": false,
+        "contract_version": "0.1.0-draft.2",
+        "error": {
+          "code": "AGGREGATE_UNAVAILABLE",
+          "retryable": true,
+          "retry_after_ms": 1000
+        }
+      }
+    }
+  ]
+}

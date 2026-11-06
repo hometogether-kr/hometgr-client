@@ -1,5 +1,5 @@
 .container {
-  width: min(1200px, calc(100% - 40px));
+  width: min(1120px, calc(100% - clamp(40px, 12vw, 160px)));
   margin-inline: auto;
 }
 .section {
@@ -255,4 +255,16 @@
     min-height: 52px;
     font-size: 16px;
   }
+}
+
+@media (max-width: 767px) {
+  .container {
+    width: calc(100% - 40px);
+  }
+}
+
+.reviews {
+  box-shadow: none;
+  border: 0;
+  border-radius: 0;
 }

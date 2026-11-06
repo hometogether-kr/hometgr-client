@@ -80,3 +80,126 @@
   font-weight: 500;
   line-height: 20px;
 }
+
+.region {
+  display: grid;
+  gap: 12px;
+}
+.label {
+  color: #151d25;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+}
+.dateButton {
+  min-height: 60px;
+  padding: 16px 20px;
+  border-color: #e6ebf3;
+  font-size: 17px;
+  font-weight: 400;
+}
+.placeholder {
+  color: #626c7c;
+}
+.timing {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.timing legend {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 26px;
+  margin-bottom: 12px;
+}
+.timingChoices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.timingChoice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  padding: 16px;
+  border: 1px solid #e6ebf3;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+.timingChoice:last-child {
+  grid-column: 1 / -1;
+}
+.timingChoice:has(input:checked) {
+  border-color: #227dff;
+  background: #e2eeff;
+  color: #1c6be3;
+}
+.timingChoice:has(input:focus-visible) {
+  outline: 3px solid #227dff;
+  outline-offset: 3px;
+}
+.timingChoice input {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  accent-color: #1c6be3;
+}
+.timing > .dateField {
+  margin-top: 12px;
+}
+.timing[data-compact="true"] legend {
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 8px;
+}
+.timing[data-compact="true"] .timingChoices {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.timing[data-compact="true"] .timingChoice {
+  min-height: 44px;
+  padding: 8px 6px;
+  gap: 5px;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 18px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.timing[data-compact="true"] .timingChoice:last-child {
+  grid-column: auto;
+}
+@media (max-width: 400px) {
+  .timingChoice {
+    font-size: 14px;
+    padding: 12px;
+    gap: 8px;
+  }
+}
+
+.timingChoice input {
+  appearance: none;
+  display: grid;
+  place-content: center;
+  border: 1.5px solid #e6ebf3;
+  border-radius: 50%;
+  background: white;
+}
+.timingChoice input:checked {
+  border-color: #1c6be3;
+  background: #1c6be3;
+}
+.timingChoice input:checked::before {
+  content: "";
+  width: 8px;
+  height: 5px;
+  border-left: 1.5px solid white;
+  border-bottom: 1.5px solid white;
+  transform: translateY(-1px) rotate(-45deg);
+}

@@ -2,6 +2,7 @@
 
 import { type FormEvent, useId, useState } from "react";
 
+import { useBetaFlowInput } from "@/features/beta-tracking";
 import {
   shinhanContactSchema,
   shinhanHostRegistrationSchema,
@@ -21,6 +22,11 @@ import styles from "./shinhan-host-registration.module.css";
 export function HostRegistrationForm() {
   const { draft, updateDraft } = useShinhanIntake();
   const storage = useShinhanStorage();
+  const { trackValidInput, markResultReady } = useBetaFlowInput("HOST_REGISTRATION", {
+    enabled:
+      draft?.applicationType === "HOST_REGISTRATION" &&
+      storage.application?.applicationType !== "HOST_REGISTRATION",
+  });
   const [validationAttempted, setValidationAttempted] = useState(false);
   const [validatedSnapshot, setValidatedSnapshot] = useState<string | null>(null);
   const fieldId = useId();
@@ -61,6 +67,9 @@ export function HostRegistrationForm() {
         ? { ...current, values: { ...current.values, ownership } }
         : current,
     );
+    if (shinhanHostRegistrationSchema.shape.ownership.safeParse(ownership).success) {
+      trackValidInput();
+    }
   }
 
   return (
@@ -74,7 +83,11 @@ export function HostRegistrationForm() {
         <h2 id={`${fieldId}-title`}>기본 정보</h2>
         <p>아래 세 가지만 알려주세요.</p>
       </div>
-      <ShinhanPhoneField label="1. 전화번호" error={contactErrors.phone?.[0]} />
+      <ShinhanPhoneField
+        label="1. 전화번호"
+        error={contactErrors.phone?.[0]}
+        onValidInput={trackValidInput}
+      />
       <fieldset
         className={styles.ownership}
         aria-invalid={Boolean(ownershipError) || undefined}
@@ -122,6 +135,9 @@ export function HostRegistrationForm() {
                 ? { ...current, values: { ...current.values, areaRaw } }
                 : current,
             );
+            if (shinhanHostRegistrationSchema.shape.areaRaw.safeParse(areaRaw).success) {
+              trackValidInput();
+            }
           }}
         />
         <p className={styles.hint} id={`${fieldId}-location-help`}>
@@ -130,26 +146,36 @@ export function HostRegistrationForm() {
       </div>
       <ShinhanRequiredConsentFields error={contactErrors.requiredConsent?.[0]} />
       <div className={styles.actions}>
-        <ShinhanLiveSubmit className={styles.nextButton}>
-          방 등록 신청 저장 (개발용)
+        <ShinhanLiveSubmit
+          onSaved={markResultReady}
+          className={styles.nextButton}
+          notice="신청 후 접수 내역을 확인할 수 있어요. 입력하신 정보를 검토한 뒤 심사 결과를 안내해 드릴게요."
+        >
+          방 등록 신청하기
         </ShinhanLiveSubmit>
-        <p className={styles.hint}>입력하신 정보를 검토한 뒤, 심사 결과를 연락드려요.</p>
       </div>
-      <div className={styles.validation}>
-        <p id={`${fieldId}-submission-status`}>
-          아래 버튼은 입력 형식만 확인하며 서버에 저장하지 않습니다.
-        </p>
-        <BtnCta variant="stroke" type="submit" className={styles.validateButton} disabled={locked}>
-          입력 내용 확인 (개발용)
-        </BtnCta>
-        <p className={styles.validationMessage} role="status">
-          {validatedSnapshot === currentSnapshot
-            ? "입력 형식 확인 완료. 접수되지는 않았습니다."
-            : validationAttempted && (!contactResult.success || !conditionsResult.success)
-              ? "입력 내용을 확인해 주세요. 접수되지는 않았습니다."
-              : "입력 형식만 확인하며 신청을 저장하지 않습니다."}
-        </p>
-      </div>
+      {process.env.NODE_ENV === "development" && (
+        <div className={styles.validation}>
+          <p id={`${fieldId}-submission-status`}>
+            아래 버튼은 입력 형식만 확인하며 서버에 저장하지 않습니다.
+          </p>
+          <BtnCta
+            variant="stroke"
+            type="submit"
+            className={styles.validateButton}
+            disabled={locked}
+          >
+            입력 내용 확인 (개발용)
+          </BtnCta>
+          <p className={styles.validationMessage} role="status">
+            {validatedSnapshot === currentSnapshot
+              ? "입력 형식 확인 완료. 접수되지는 않았습니다."
+              : validationAttempted && (!contactResult.success || !conditionsResult.success)
+                ? "입력 내용을 확인해 주세요. 접수되지는 않았습니다."
+                : "입력 형식만 확인하며 신청을 저장하지 않습니다."}
+          </p>
+        </div>
+      )}
     </form>
   );
 }

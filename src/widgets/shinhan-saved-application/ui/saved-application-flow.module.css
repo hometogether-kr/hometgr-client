@@ -42,6 +42,11 @@
   font-style: normal;
 }
 
+.concernForm .concerns {
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
 .concerns,
 .guideGrid {
   display: grid;
@@ -170,8 +175,7 @@
 }
 
 .centerActions,
-.receiptActions,
-.readActions {
+.receiptActions {
   display: grid;
   justify-items: center;
   gap: 16px;
@@ -333,10 +337,32 @@
   color: #b42318;
 }
 
-.readActions {
-  padding: 24px 0 0;
-  border-top: 1px solid var(--color-grayscale-200);
+.homeLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 64px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: var(--color-primary-500);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
   text-align: center;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.homeLink:hover {
+  opacity: 0.8;
+}
+
+.homeLink[aria-disabled="true"] {
+  background: var(--color-grayscale-200);
+  color: var(--color-grayscale-400);
+  cursor: not-allowed;
 }
 
 .privacy {
@@ -409,7 +435,8 @@
   }
 
   .primaryButton,
-  .secondaryButton {
+  .secondaryButton,
+  .homeLink {
     min-height: 52px;
     font-size: 16px;
     line-height: 24px;
@@ -443,6 +470,90 @@
   }
 
   .registrationProgress li {
+    font-size: 14px;
+  }
+}
+
+.introductionActions {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+.introductionReassurance {
+  color: #485361;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+.introductionReassurance span {
+  color: #227dff;
+  margin-right: 8px;
+}
+.introductionActionRow {
+  display: grid;
+  grid-template-columns: minmax(0, 312fr) minmax(0, 200fr);
+  gap: 12px;
+}
+.introductionActions .introductionPrimary,
+.registrationLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  height: auto;
+  min-height: 64px;
+  padding: 12px 8px;
+  border-radius: 14px;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+}
+.registrationLink {
+  background: #e2eeff;
+  border: 1.5px solid #227dff;
+  color: #227dff;
+}
+.introductionHome {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+  padding: 12px;
+  border: 1.5px solid #ccd5e3;
+  border-radius: 12px;
+  background: #f6f9fc;
+  color: #151d25;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 700;
+}
+.registrationLink:hover,
+.introductionHome:hover {
+  filter: brightness(0.97);
+}
+.registrationLink:focus-visible,
+.introductionHome:focus-visible {
+  outline: 3px solid #227dff;
+  outline-offset: 4px;
+}
+@media (max-width: 1100px) {
+  .introductionActions .introductionPrimary,
+  .registrationLink {
+    font-size: 16px;
+  }
+}
+@media (max-width: 767px) {
+  .introductionActionRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .introductionActions .introductionPrimary,
+  .registrationLink,
+  .introductionHome {
+    min-height: 54px;
+    font-size: 17px;
+  }
+  .introductionReassurance {
     font-size: 14px;
   }
 }

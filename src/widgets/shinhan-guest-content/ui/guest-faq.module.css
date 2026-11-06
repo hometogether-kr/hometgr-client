@@ -8,7 +8,7 @@
 
 .container {
   display: flex;
-  width: min(1200px, calc(100% - 40px));
+  width: min(1120px, calc(100% - clamp(40px, 12vw, 160px)));
   flex-direction: column;
   gap: 32px;
   margin-inline: auto;
@@ -220,5 +220,11 @@
     min-height: 48px;
     font-size: 16px;
     line-height: 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    width: calc(100% - 40px);
   }
 }

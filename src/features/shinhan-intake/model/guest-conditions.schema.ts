@@ -31,11 +31,20 @@ const guestMoveInDateSchema = z.string().superRefine((value, context) => {
   }
 });
 
-export const shinhanGuestBudgetSchema = z.object({
-  budgetMonthlyKrw: guestBudgetAmountSchema,
-  desiredRegionRaw: shinhanGuestRegionSchema,
-  moveInDate: guestMoveInDateSchema,
-});
+export const shinhanGuestBudgetSchema = z
+  .object({
+    budgetMonthlyKrw: guestBudgetAmountSchema,
+    desiredRegionRaw: shinhanGuestRegionSchema,
+    moveInTiming: z.enum(["ASAP", "WITHIN_MONTH", "DATE"]).optional(),
+    moveInDate: z.string(),
+  })
+  .superRefine((values, context) => {
+    if (values.moveInTiming === "ASAP" || values.moveInTiming === "WITHIN_MONTH") return;
+    const parsed = guestMoveInDateSchema.safeParse(values.moveInDate);
+    if (!parsed.success)
+      for (const issue of parsed.error.issues)
+        context.addIssue({ code: "custom", path: ["moveInDate"], message: issue.message });
+  });
 
 export const shinhanGuestDemandSchema = z
   .object({

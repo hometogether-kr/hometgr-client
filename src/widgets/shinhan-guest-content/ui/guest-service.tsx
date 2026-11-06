@@ -1,6 +1,5 @@
 import Image from "next/image";
-
-import { BtnCta } from "@/shared/ui/btn-cta";
+import Link from "next/link";
 
 import styles from "./guest-service.module.css";
 
@@ -210,27 +209,16 @@ export function ShinhanGuestHostBand() {
           <h2 id="shinhan-guest-host-band-heading">홈쉐어를 시작해 보세요</h2>
         </div>
         <div className={styles.hostAction}>
-          <BtnCta
-            disabled
-            variant="stroke"
-            size="pill"
-            className={styles.hostButton}
-            aria-describedby="shinhan-guest-host-registration-notice"
-            rightIcon={
-              <Image
-                className={styles.hostPlus}
-                src={`${asset}service-host-plus.svg`}
-                width={28.0039}
-                height={28.0039}
-                alt=""
-              />
-            }
-          >
+          <Link href="/shinhan/host" className={styles.hostButton}>
             홈투게더에 방 등록하기
-          </BtnCta>
-          <p id="shinhan-guest-host-registration-notice" className={styles.notice}>
-            방 등록 신청은 준비 중이에요.
-          </p>
+            <Image
+              className={styles.hostPlus}
+              src={`${asset}service-host-plus.svg`}
+              width={28.0039}
+              height={28.0039}
+              alt=""
+            />
+          </Link>
         </div>
       </div>
     </section>

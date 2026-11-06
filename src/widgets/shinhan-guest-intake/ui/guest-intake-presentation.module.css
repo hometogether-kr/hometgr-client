@@ -173,3 +173,24 @@
     line-height: 18px;
   }
 }
+
+.collage {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 432px;
+  overflow: hidden;
+}
+.collage img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1120 / 390;
+  object-fit: cover;
+}
+@media (max-width: 767px) {
+  .collage {
+    height: auto;
+    min-height: 140px;
+    padding: 12px 0;
+  }
+}
