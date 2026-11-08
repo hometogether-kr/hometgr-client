@@ -24,10 +24,10 @@ function toOptions<TValue extends string>(
 
 export const ROOM_TYPES = [
   "apartment",
-  "detachedHouse",
   "officetel",
-  "twoRoom",
-  "oneRoom",
+  "shareHouse",
+  "detachedHouse",
+  "other",
 ] as const;
 export type RoomType = (typeof ROOM_TYPES)[number];
 
@@ -35,14 +35,11 @@ export const ROOM_TYPE_LABEL: Record<RoomType, string> = {
   apartment: "아파트",
   detachedHouse: "단독 주택",
   officetel: "오피스텔",
-  twoRoom: "투룸",
-  oneRoom: "원룸",
+  shareHouse: "셰어하우스",
+  other: "기타",
 };
 
 export const ROOM_TYPE_OPTIONS = toOptions(ROOM_TYPES, ROOM_TYPE_LABEL);
-
-// TODO(backend): 등록 플로우 BUILDING_TYPES(villa·apartment·detachedHouse·other)와
-// 조회용 ROOM_TYPES의 매핑을 API 확정 시점에 맞춥니다 (설계 §11).
 
 /* 최소 계약 기간 (단일 선택) */
 

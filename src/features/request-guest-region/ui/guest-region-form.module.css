@@ -1,0 +1,40 @@
+.form {
+  width: 100%;
+}
+.row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.input {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+.input > div > div {
+  height: 56px;
+  border-color: var(--color-grayscale-200);
+  border-radius: 12px;
+  padding-inline: 20px;
+}
+.input input {
+  font-size: 18px;
+}
+.input > p {
+  position: absolute;
+  top: 58px;
+}
+.notice {
+  min-height: 24px;
+  margin-top: 0;
+  color: var(--color-grayscale-600);
+  font-size: 14px;
+}
+@media (max-width: 600px) {
+  .input input {
+    font-size: 16px;
+  }
+  .row > button {
+    width: 76px;
+  }
+}

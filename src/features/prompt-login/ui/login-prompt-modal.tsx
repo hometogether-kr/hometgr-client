@@ -1,6 +1,7 @@
 "use client";
 
 import { ROUTES } from "@/shared/config";
+import { parseAuthReturnPath } from "@/shared/lib/auth-return";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { Modal } from "@/shared/ui/modal";
 
@@ -32,12 +33,15 @@ function LogoMark() {
 /**
  * 로그인 유도 모달 (Figma: 3.1.1 매물 상세 - 비회원 - 로그인 팝업, node 1222:39736)
  *
- * 비회원이 잠긴 정보(계약 조건·위치·예약)에 접근하려 할 때 뜹니다. 카카오로
+ * 비회원이 잠긴 정보(계약 조건·건물 위치)에 접근하려 할 때 뜹니다. 카카오로
  * 로그인하거나 "계속 둘러보기"로 닫고 매물 상세를 계속 볼 수 있습니다.
  */
 export function LoginPromptModal({ open, onClose }: LoginPromptModalProps) {
   const handleKakaoLogin = () => {
-    window.location.assign(ROUTES.auth.kakaoStart);
+    const returnTo = parseAuthReturnPath(window.location.pathname + window.location.search);
+    const params = new URLSearchParams({ mode: "guest" });
+    if (returnTo) params.set("returnTo", returnTo);
+    window.location.assign(`${ROUTES.auth.kakaoStart}?${params}`);
   };
 
   return (
@@ -65,7 +69,7 @@ export function LoginPromptModal({ open, onClose }: LoginPromptModalProps) {
         <div className="flex flex-col gap-3">
           <h2 className="text-title-2 font-semibold text-grayscale-900">로그인 후 이용하세요</h2>
           <p className="text-headline-1 font-medium text-grayscale-500">
-            로그인하면 더 많은 집 정보 확인 후 방문 예약할 수 있어요.
+            로그인하면 상세 매물 정보와 건물 위치를 확인할 수 있어요.
           </p>
         </div>
       </div>

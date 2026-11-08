@@ -1,8 +1,11 @@
 export type { RoomListQuery } from "./api/room.api";
 export { fetchRooms } from "./api/room.api";
+export { fetchRoomDistricts } from "./api/room-districts.api";
 export { roomQueryKeys } from "./api/room-query-keys";
 export { formatRoomPrice } from "./model/format-room-price";
 export type { Room, RoomAvailability, RoomListResult, RoomSort } from "./model/room";
 export { DEFAULT_ROOM_SORT, ROOM_AVAILABILITIES, ROOM_SORT_LABEL, ROOM_SORTS } from "./model/room";
+export type { RoomDistrict } from "./model/room-district";
 export * from "./model/room-options";
+export { useRoomDistricts } from "./model/use-room-districts";
 export { RoomAvailabilityChip, RoomCard } from "./ui";

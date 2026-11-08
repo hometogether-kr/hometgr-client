@@ -14,11 +14,9 @@ interface RadioOptionGroupProps<T extends string> {
 }
 
 /**
- * 단일 선택 라디오 그룹 (계약 기간·인원·성별 공용)
+ * 단일 선택 라디오 그룹 (계약 기간·성별 공용)
  *
- * `Radio`가 라벨 prop이 없어 코드베이스 관례대로 `<label>`로 감싸 텍스트를 클릭 가능하게
- * 합니다(`optional-amount-field.tsx`와 동일). 네이티브 name 그룹에 더해 컨테이너에
- * `role="radiogroup"` + `aria-labelledby`로 그룹 이름을 붙입니다.
+ * Radio 자체가 label을 렌더링하므로 텍스트 label은 형제로 연결합니다.
  */
 export function RadioOptionGroup<T extends string>({
   name,
@@ -30,16 +28,23 @@ export function RadioOptionGroup<T extends string>({
   return (
     <div role="radiogroup" aria-labelledby={ariaLabelledby} className="flex flex-col gap-4">
       {options.map((option) => (
-        <label key={option.value} className="flex cursor-pointer items-center gap-3">
+        <div key={option.value} className="flex items-center gap-3">
           <Radio
+            id={`${name}-${option.value}`}
+            className="rounded-full has-focus-visible:outline-2 has-focus-visible:outline-primary-500"
             size="24"
             name={name}
             value={option.value}
             checked={value === option.value}
             onChange={() => onChange(option.value)}
           />
-          <span className="text-body-2 font-medium text-grayscale-800">{option.label}</span>
-        </label>
+          <label
+            htmlFor={`${name}-${option.value}`}
+            className="cursor-pointer text-body-2 font-medium text-grayscale-800"
+          >
+            {option.label}
+          </label>
+        </div>
       ))}
     </div>
   );

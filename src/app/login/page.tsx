@@ -3,8 +3,10 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 
+import { useAccountMode } from "@/domains/user";
 import { LoginPage } from "@/pages-layer/login";
 import { ROUTES } from "@/shared/config";
+import { parseAuthReturnPath } from "@/shared/lib/auth-return";
 import { useToast } from "@/shared/ui/toast";
 
 /** 카카오 인증에서 돌아왔을 때 실패 사유별 안내 문구 */
@@ -45,15 +47,20 @@ function KakaoResultToast() {
   return null;
 }
 
-export default function Page() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = parseAuthReturnPath(searchParams.get("returnTo"));
+  const { mode, homeHref } = useAccountMode();
 
   /*
    * 카카오 인증은 외부 origin으로 나갔다 돌아오는 흐름이라 클라이언트 라우터 이동이
    * 아니라 브라우저 전체 이동이 필요합니다.
    */
   const handleKakaoLogin = () => {
-    window.location.assign(ROUTES.auth.kakaoStart);
+    const params = new URLSearchParams({ mode });
+    if (returnTo) params.set("returnTo", returnTo);
+    window.location.assign(`${ROUTES.auth.kakaoStart}?${params}`);
   };
 
   return (
@@ -61,7 +68,18 @@ export default function Page() {
       <Suspense fallback={null}>
         <KakaoResultToast />
       </Suspense>
-      <LoginPage onKakaoLogin={handleKakaoLogin} onExplore={() => router.push(ROUTES.home)} />
+      <LoginPage
+        onKakaoLogin={handleKakaoLogin}
+        onExplore={() => router.push(returnTo ?? homeHref)}
+      />
     </>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <LoginContent />
+    </Suspense>
   );
 }

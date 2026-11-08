@@ -3,11 +3,18 @@
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
-import { logout, MEMBER_ROLE_LABELS, userQueryKeys, useSession } from "@/domains/user";
+import {
+  ACCOUNT_MODE_LABELS,
+  logout,
+  useAccountMode,
+  userQueryKeys,
+  useSession,
+} from "@/domains/user";
 import { ROUTES } from "@/shared/config";
 import { cn } from "@/shared/lib/cn";
+import { useDialogBehavior } from "@/shared/lib/hooks";
 import { Divider } from "@/shared/ui/divider";
 
 /* eslint-disable @next/next/no-img-element -- next/image는 dangerouslyAllowSVG 없이 SVG를 막습니다 */
@@ -74,9 +81,23 @@ export interface SidebarMobileProps {
  */
 export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
   const router = useRouter();
+  const { mode, homeHref, isModeReady } = useAccountMode();
   const queryClient = useQueryClient();
   const { isAuthenticated, session } = useSession();
   const [expandedKey, setExpandedKey] = useState<string | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  useDialogBehavior(open, onClose, panelRef);
+
+  useEffect(() => {
+    if (!open) return;
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) onClose();
+    };
+    closeOnDesktop();
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, [open, onClose]);
 
   if (!open) return null;
 
@@ -87,10 +108,15 @@ export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
     router.push(ROUTES.home);
   };
 
-  const memberRole = session.user?.memberRole;
+  const visibleMenu = MENU.filter((group) => {
+    if (group.key === "listing") return isModeReady && mode === "host";
+    if (group.key === "finding") return isModeReady && mode === "guest";
+    return true;
+  });
 
   return (
     <div
+      ref={panelRef}
       className="fixed inset-0 z-50 flex flex-col bg-white pt-11 md:hidden"
       role="dialog"
       aria-modal="true"
@@ -126,9 +152,9 @@ export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
                   />
                 </span>
               </Link>
-              {memberRole && (
+              {isModeReady && (
                 <p className="py-1.5 text-label-1 font-medium text-grayscale-500">
-                  {MEMBER_ROLE_LABELS[memberRole]}
+                  {ACCOUNT_MODE_LABELS[mode]}
                 </p>
               )}
             </>
@@ -153,13 +179,17 @@ export function SidebarMobile({ open, onClose }: SidebarMobileProps) {
         </div>
 
         <nav className="flex w-full flex-col gap-2 pb-6">
-          {MENU.map((group) => {
+          {visibleMenu.map((group) => {
             const expanded = expandedKey === group.key;
 
             return (
               <Fragment key={group.key}>
                 {group.href ? (
-                  <Link href={group.href} onClick={onClose} className={ROW}>
+                  <Link
+                    href={group.key === "intro" ? homeHref : group.href}
+                    onClick={onClose}
+                    className={ROW}
+                  >
                     {group.label}
                   </Link>
                 ) : (

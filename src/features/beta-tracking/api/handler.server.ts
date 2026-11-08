@@ -2,9 +2,8 @@ import "server-only";
 
 import { z } from "zod";
 
-import { authenticateCloudflareIp } from "@/shared/api/cloudflare-ingress";
-
 import { BETA_SCHEMA_VERSION, betaEventRequestSchema } from "@/domains/beta-tracking";
+import { authenticateCloudflareIp } from "@/shared/api/cloudflare-ingress";
 
 import {
   type BetaTrackingEnvironment,

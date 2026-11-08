@@ -4,6 +4,7 @@ import { Suspense } from "react";
 
 import { useDraftStepFlow } from "@/features/save-listing-draft";
 import { ListingStep1Page } from "@/pages-layer/listing-step-1-registrant";
+import { ListingDraftState } from "@/widgets/listing-step-layout";
 
 function Step1() {
   const { draft, isSaving, saveAndGoNext, goPrev } = useDraftStepFlow(2);
@@ -22,7 +23,7 @@ function Step1() {
 export default function Page() {
   /* useSearchParams로 초안 ID를 읽으므로 Suspense 경계가 필요합니다. */
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<ListingDraftState status="loading" />}>
       <Step1 />
     </Suspense>
   );

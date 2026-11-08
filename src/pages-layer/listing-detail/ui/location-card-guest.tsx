@@ -10,10 +10,11 @@ export function LocationCardGuest({ onRequireLogin }: LocationCardGuestProps) {
   return (
     <DetailSection title="위치안내">
       <LockedPanel
-        message="로그인 후 정확한 위치를 확인하세요."
-        ctaLabel="정확한 위치보기"
+        message={GUEST_LOCATION_DISCLOSURE}
+        ctaLabel="건물 위치 보기"
         onRequireLogin={onRequireLogin}
       />
     </DetailSection>
   );
 }
+import { GUEST_LOCATION_DISCLOSURE } from "@/domains/listing";

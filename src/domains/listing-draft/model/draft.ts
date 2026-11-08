@@ -1,4 +1,4 @@
-import type { DraftDataDto, DraftMediaDto } from "../api/draft.dto";
+import type { DraftAutosaveEntryDto, DraftDataDto, DraftMediaDto } from "../api/draft.dto";
 import type { ScreenStep } from "./listing-step";
 
 /** 초안 사진 — 서버가 만료 시간이 있는 조회 URL을 함께 내려줍니다. */
@@ -26,6 +26,7 @@ export interface ListingDraftSummary {
 
 export interface ListingDraft extends Omit<ListingDraftSummary, "mediaCount"> {
   data: DraftDataDto;
+  autosaves: readonly DraftAutosaveEntryDto[];
   photos: readonly DraftPhoto[];
 }
 

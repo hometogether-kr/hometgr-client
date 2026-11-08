@@ -1,1 +1,0 @@
-export { RoomSearchHero } from "./room-search-hero";

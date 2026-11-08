@@ -50,8 +50,13 @@ export function AddressSearchDialog({ open, onClose, onSelect }: AddressSearchDi
           width: "100%",
           height: "100%",
           oncomplete: (result) => {
-            onSelect(toSelectedAddress(result));
-            onClose();
+            if (cancelled) return;
+            try {
+              onSelect(toSelectedAddress(result));
+              onClose();
+            } catch (cause) {
+              setError(cause instanceof Error ? cause.message : "주소 검색 결과를 확인해주세요.");
+            }
           },
         }).embed(container);
       })

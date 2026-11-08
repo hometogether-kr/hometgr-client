@@ -1,0 +1,3741 @@
+{
+  "date": "2026-11-05",
+  "repository": "hometogether-kr/hometgr-client",
+  "branch": "chore/sync-main-dev-20261105",
+  "dev": "3958c08478788f4e981efa1a0b3164ab78791903",
+  "main": "0565123317c6a1fe364d0eeebc786b6b2b533689",
+  "conflicts": [
+    {
+      "file": "docs/shinhan-dev-api-handoff.md",
+      "source": "main"
+    },
+    {
+      "file": "docs/shinhan-frontend-stage-11.md",
+      "source": "main"
+    },
+    {
+      "file": "src/app/listing/new/steps/4/page.tsx",
+      "source": "dev"
+    },
+    {
+      "file": "src/app/onboarding/role/page.tsx",
+      "source": "dev"
+    },
+    {
+      "file": "src/app/shinhan/(intake)/dev/guest/demand/page.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/app/shinhan/(intake)/layout.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/app/shinhan/(intake)/privacy/page.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/app/shinhan/host/page.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/domains/listing/api/room.mapper.ts",
+      "source": "dev"
+    },
+    {
+      "file": "src/domains/user/api/me.api.ts",
+      "source": "dev"
+    },
+    {
+      "file": "src/features/edit-profile/api/update-introduction.api.ts",
+      "source": "dev"
+    },
+    {
+      "file": "src/features/shinhan-bridge/api/client-ip.server.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-bridge/api/handler.server.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-bridge/config/environment.server.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-bridge/config/intake-access.server.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/api/application-input.mapper.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/config/routes.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/index.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/model/guest-conditions.schema.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/model/intake-context.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/model/intake-draft.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/model/storage-context.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/contact-fields.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/guest-budget-fields.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/guest-budget-fields.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/guest-condition-fields.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/guest-condition-fields.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/guest-entry.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/host-form-button.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/live-submit.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/server-consent.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/features/shinhan-intake/ui/shinhan-intake.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/pages-layer/listing-detail/listing-detail-page.tsx",
+      "source": "dev"
+    },
+    {
+      "file": "src/pages-layer/listing-detail/ui/price-sidebar-member.tsx",
+      "source": "dev"
+    },
+    {
+      "file": "src/pages-layer/listing-step-4-guest-space/listing-step-4-page.tsx",
+      "source": "dev"
+    },
+    {
+      "file": "src/pages-layer/listing-step-8-photos/listing-step-8-page.tsx",
+      "source": "dev"
+    },
+    {
+      "file": "src/pages-layer/my-page/my-page.tsx",
+      "source": "dev"
+    },
+    {
+      "file": "src/pages-layer/shinhan-guest-intake/ui/shinhan-guest-intake-page.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/pages-layer/shinhan-guest/ui/shinhan-guest-page.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/pages-layer/shinhan-host-intake/ui/shinhan-host-intake-page.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/pages-layer/shinhan-host/ui/shinhan-host-page.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/pages-layer/shinhan-saved-application/ui/shinhan-saved-application-page.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/pages-layer/visit-request/ui/room-reservation-summary.tsx",
+      "source": "dev"
+    },
+    {
+      "file": "src/shared/lib/kakao-postcode/kakao-postcode.ts",
+      "source": "dev"
+    },
+    {
+      "file": "src/shared/ui/modal/modal.tsx",
+      "source": "dev"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/index.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-budget-prompt.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-budget-prompt.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-faq.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-introduction.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-introduction.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-reviews.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-reviews.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-service.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-service.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-spaces.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-content/ui/guest-spaces.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-followup/ui/shinhan-guest-followup-flow.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-followup/ui/shinhan-guest-followup-flow.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-intake/ui/guest-intake-presentation.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-intake/ui/shinhan-guest-intake-flow.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-intake/ui/shinhan-guest-intake-flow.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-guest-intake/ui/shinhan-guest-intake.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-content/ui/host-estimate-prompt.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-content/ui/host-estimate-prompt.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-content/ui/host-introduction.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-content/ui/host-introduction.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-estimate/ui/shinhan-host-estimate-flow.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-estimate/ui/shinhan-host-estimate.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-followup/ui/host-followup-presentation.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-followup/ui/host-followup-presentation.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-followup/ui/shinhan-host-followup-flow.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-registration/ui/host-registration-form.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-registration/ui/shinhan-host-registration.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-host-registration/ui/shinhan-host-registration.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-intake-preview/ui/shinhan-intake-preview.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-intake-preview/ui/shinhan-intake-preview.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-saved-application/index.ts",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-saved-application/ui/completion-frames.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-saved-application/ui/completion-frames.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-saved-application/ui/saved-application-actions.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-saved-application/ui/saved-application-details.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-saved-application/ui/saved-application-flow.module.css",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-saved-application/ui/saved-application-flow.tsx",
+      "source": "main"
+    },
+    {
+      "file": "src/widgets/shinhan-shell/ui/shinhan-role-shell.tsx",
+      "source": "main"
+    }
+  ],
+  "preservation": {
+    "main": [
+      {
+        "file": "public/images/shinhan/guest/budget-banner.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/budget-character.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/budget-close.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/empathy-dot.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/empathy-man.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/empathy-student.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/empathy-tail-blue.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/empathy-tail.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/empathy-woman.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/example-kitchen.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/example-living-room.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/example-private-room.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/hero.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/preview-collage.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/review-dot.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/review-external.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/review-play.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/review-video.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-adjustments.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-agreement.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-check.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-common-space.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-contract.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-cs.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-host-art.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-host-plus.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-private-space.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-room-art.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-support-art.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/service-work.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/space-kitchen.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/space-living-room.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/guest/space-private-room.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/home-together-brand.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/home-together-footer.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/benefit-care.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/benefit-income.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/benefit-life.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/benefit-match.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/calculator-apartment.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/calculator-close.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/calculator-house.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/calculator-room.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/calculator-search.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/calculator-two-rooms.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/calculator-unchecked.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/chevron-right.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/community-mbc.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/estimate-location.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/goal.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/guide-faq-down.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/guide-faq-up.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/house.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/introduction-mbc.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-after.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-avatar-base.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-avatar-body.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-avatar-eye.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-avatar-face.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-avatar-mouth.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-before-after-arrow.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-before.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-room-glow.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/process-student-glow.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/registration-ai.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/registration-arrow.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/registration-chat.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/room-income.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/speech-tail.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/story-activities.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/story-agreement.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/story-award.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/story-badge.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/story-stage.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/host/story-visit.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/role-arrow.svg",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/role-guest.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/role-host.png",
+        "matches": true
+      },
+      {
+        "file": "public/images/shinhan/super-sol.png",
+        "matches": true
+      },
+      {
+        "file": "scripts/shinhan-beta-local-mock.mjs",
+        "matches": true
+      },
+      {
+        "file": "scripts/verify-beta-bff.mjs",
+        "matches": true
+      },
+      {
+        "file": "scripts/verify-beta-browser.mjs",
+        "matches": true
+      },
+      {
+        "file": "src/app/api/beta/events/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/api/shinhan/[...path]/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/application/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/dev/application/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/dev/guest/budget/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/dev/guest/demand/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/dev/guest/followup/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/dev/host/estimate/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/dev/host/followup/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/dev/host/register/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/dev/intake/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/guest/budget/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/guest/demand/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/guest/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/host/estimate/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/host/register/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/layout.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/(intake)/privacy/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/host/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/layout.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/shinhan/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/beta-tracking/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/beta-tracking/model/events.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/api/google-sheets.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/browser.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/model/attribution.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/model/attribution.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/model/browser-attribution.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/model/source-snapshot.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/shinhan-application/api/application.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/shinhan-application/api/application.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/shinhan-application/api/consents.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/shinhan-application/api/error.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/shinhan-application/api/request.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/shinhan-application/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/shinhan-application/model/application.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/shinhan-application/model/query-keys.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/api/collector.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/api/errors.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/api/events.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/api/handler.server.ts",
+        "matches": false
+      },
+      {
+        "file": "src/features/beta-tracking/api/read-json.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/config/environment.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/model/browser-state.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/model/browser-tracker.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/model/use-beta-flow-input.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/ui/beta-flow-observer.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/beta-tracking/ui/beta-tracking-provider.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/capture-marketing-attribution/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/capture-marketing-attribution/ui/marketing-attribution-observer.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-bridge/api/client-ip.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-bridge/api/cookies.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-bridge/api/errors.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-bridge/api/handler.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-bridge/api/session.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-bridge/api/upstream.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-bridge/config/environment.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-bridge/config/intake-access.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-bridge/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/api/application-input.mapper.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/api/application-input.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/api/application.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/config/routes.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/contact.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/entry-context.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/guest-concerns.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/guest-conditions.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/guest-date.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/guest-followup.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/host-concerns.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/host-estimate.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/host-followup.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/host-registration.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/intake-context.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/intake-draft.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/phone.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/rent-preview.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/model/storage-context.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/analysis-progress.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/analysis-progress.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/contact-fields.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/entry-notice.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/guest-budget-fields.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/guest-budget-fields.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/guest-condition-fields.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/guest-condition-fields.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/guest-entry.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/host-form-button.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/host-introduction-dialog.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/host-introduction-dialog.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/host-journey.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/host-journey.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/live-submit.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/privacy-navigation.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/server-consent.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/shinhan-guest-progress.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/shinhan-guest-progress.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/shinhan-host-progress.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/shinhan-host-progress.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/shinhan-intake/ui/shinhan-intake.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-guest-followup/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-guest-followup/ui/shinhan-guest-followup-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-guest-intake/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-guest-intake/ui/shinhan-guest-intake-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-guest/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-guest/ui/shinhan-guest-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-host-followup/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-host-followup/ui/shinhan-host-followup-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-host-intake/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-host-intake/ui/shinhan-host-intake-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-host/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-host/ui/shinhan-host-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-intake-preview/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-intake-preview/ui/shinhan-intake-preview-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-privacy/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-privacy/ui/shinhan-privacy-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-role-selection/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-role-selection/ui/shinhan-role-selection-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-saved-application/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/shinhan-saved-application/ui/shinhan-saved-application-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/api/cloudflare-ingress/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/api/cloudflare-ingress/server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/config/marketing-attribution-env.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/model/guest-questions.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-budget-prompt.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-budget-prompt.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-faq.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-faq.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-introduction.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-introduction.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-reviews.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-reviews.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-service.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-service.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-spaces.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-content/ui/guest-spaces.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-followup/config/content.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-followup/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-followup/ui/followup-presentation.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-followup/ui/followup-presentation.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-followup/ui/guest-receipt-details.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-followup/ui/shinhan-guest-followup-flow.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-followup/ui/shinhan-guest-followup-flow.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-followup/ui/shinhan-guest-followup.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-intake/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-intake/ui/guest-intake-presentation.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-intake/ui/shinhan-guest-intake-flow.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-intake/ui/shinhan-guest-intake-flow.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-guest-intake/ui/shinhan-guest-intake.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/model/host-questions.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-community.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-community.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-estimate-prompt.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-estimate-prompt.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-faq.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-introduction.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-introduction.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-process.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-process.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-questions.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-questions.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-story.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-content/ui/host-story.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-estimate/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-estimate/ui/shinhan-host-estimate-flow.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-estimate/ui/shinhan-host-estimate.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-estimate/ui/shinhan-host-estimate.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-followup/config/content.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-followup/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-followup/ui/host-followup-presentation.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-followup/ui/host-followup-presentation.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-followup/ui/shinhan-host-followup-flow.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-followup/ui/shinhan-host-followup-flow.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-followup/ui/shinhan-host-followup.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-registration/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-registration/ui/host-registration-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-registration/ui/shinhan-host-registration.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-host-registration/ui/shinhan-host-registration.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-intake-preview/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-intake-preview/ui/preview-conditions.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-intake-preview/ui/shinhan-intake-preview.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-intake-preview/ui/shinhan-intake-preview.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-privacy/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-privacy/ui/shinhan-privacy-document.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-privacy/ui/shinhan-privacy-document.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-role-options/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-role-options/ui/shinhan-role-options.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-role-options/ui/shinhan-role-options.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-saved-application/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-saved-application/ui/completion-frames.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-saved-application/ui/completion-frames.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-saved-application/ui/saved-application-actions.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-saved-application/ui/saved-application-details.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-saved-application/ui/saved-application-flow.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-saved-application/ui/saved-application-flow.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-shell/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-shell/ui/shinhan-contact-menu.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-shell/ui/shinhan-role-shell.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-shell/ui/shinhan-role-shell.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-shell/ui/shinhan-service-header.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-shell/ui/shinhan-service-header.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/shinhan-shell/ui/shinhan-service-menu.tsx",
+        "matches": true
+      }
+    ],
+    "dev": [
+      {
+        "file": "src/app/api/auth/account/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/api/auth/logout/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/api/auth/onboarding/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/api/bff/[...path]/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/api/kakao/lead-intake/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/api/marketing/attribution/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/auth/kakao/callback/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/auth/kakao/route.ts",
+        "matches": true
+      },
+      {
+        "file": "src/app/dev/listing-management/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/faq/guest/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/favicon.ico",
+        "matches": true
+      },
+      {
+        "file": "src/app/globals.css",
+        "matches": true
+      },
+      {
+        "file": "src/app/host/reservations/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/intro/guest/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/intro/host/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/kakao/[source]/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/layout.tsx",
+        "matches": false
+      },
+      {
+        "file": "src/app/listing/layout.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/manage/[id]/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/manage/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/checklist/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/complete/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/1/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/10/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/2/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/3/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/4/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/5/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/6/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/7/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/8/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/listing/new/steps/9/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/login/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/mypage/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/mypage/settlement-account/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/onboarding/profile/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/onboarding/role/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/onboarding/terms/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/query-provider.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/reservations/[id]/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/reservations/[id]/review/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/reservations/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/rooms/[id]/host/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/rooms/[id]/not-found.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/rooms/[id]/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/rooms/[id]/reservations/new/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/app/rooms/page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/consultation-region/api/consultation-regions.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/consultation-region/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/consultation-region/model/consultation-region.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/consultation-region/model/use-consultation-regions.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/api/draft-query-keys.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/api/draft.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/api/draft.dto.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/api/draft.mapper.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/api/host-room.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/model/draft.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/model/listing-options.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/model/listing-step.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing-draft/model/use-listing-draft.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing/api/room.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing/api/room.dto.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing/api/room.mapper.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing/lib/format-price.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing/model/location-disclosure.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing/model/room.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/listing/server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/api/google-sheets.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/model/attribution.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/marketing-attribution/model/attribution.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/region/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/region/model/region.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/region/model/regions.data.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/region/model/search-region.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/api/reservation-query-keys.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/api/reservation.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/api/reservation.dto.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/api/reservation.mapper.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/lib/format-reservation-date.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/lib/get-reservation-tab.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/model/host-reservation.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/model/reservation-detail-presentation.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/model/reservation-detail.types.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/model/reservation-status.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/model/reservation.types.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/model/use-reservations.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/ui/reservation-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/ui/reservation-host-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/ui/reservation-location-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/ui/reservation-room-summary.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/ui/reservation-status-chip.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/ui/reservation-status-summary.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/reservation/ui/reservation-thumbnail.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/api/room-districts.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/api/room-districts.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/api/room-query-keys.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/api/room.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/api/room.dto.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/api/room.mapper.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/model/format-room-price.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/model/room-district.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/model/room-options.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/model/room.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/model/use-room-districts.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/ui/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/ui/room-availability-chip.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/room/ui/room-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/settlement/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/settlement/model/bank.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/settlement/model/settlement-account.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/api/me.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/api/user-query-keys.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/api/user.dto.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/api/user.mapper.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/model/account-mode.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/model/consent.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/model/current-user.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/model/guardian-relation.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/model/member-role.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/model/role-mapping.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/model/session-hint.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/model/use-account-mode.ts",
+        "matches": true
+      },
+      {
+        "file": "src/domains/user/model/use-session.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/agree-terms/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/agree-terms/model/onboarding-terms-storage.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/agree-terms/model/terms-document.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/agree-terms/model/terms.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/agree-terms/model/use-terms-agreement.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/agree-terms/ui/terms-agreement-list.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/agree-terms/ui/terms-document-modal.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/complete-onboarding/api/complete-onboarding.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/complete-onboarding/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/complete-onboarding/model/onboarding-profile.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/complete-onboarding/ui/onboarding-profile-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/edit-profile/api/update-introduction.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/edit-profile/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/edit-profile/model/use-update-introduction.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/edit-settlement-account/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/edit-settlement-account/model/use-settlement-account-form.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/edit-settlement-account/ui/bank-select-field.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/edit-settlement-account/ui/bank-select-modal.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/edit-settlement-account/ui/settlement-account-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/model/chip-summary.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/model/room-filter.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/model/room-filter.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/model/room-list-navigation.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/model/use-filter-draft.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/model/use-room-filter-regions.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/model/use-room-filter.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/model/use-room-list-scroll-restoration.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/ui/room-filter-modal.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/ui/section-header.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/ui/sections/gender-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/ui/sections/move-in-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/ui/sections/radio-option-group.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/ui/sections/region-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/ui/sections/room-type-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/filter-rooms/ui/sections/term-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/kakao-attribution/api/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/kakao-attribution/api/lead-intake.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/kakao-attribution/api/lead-intake.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/kakao-attribution/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/kakao-attribution/model/kakao-channel.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/kakao-attribution/model/lead-intake.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/kakao-attribution/model/tracking.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/kakao-attribution/ui/kakao-attribution-landing.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-account-session/api/account-session.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-account-session/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-account-session/model/use-delete-account.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-host-reservation/api/host-reservation-command.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-host-reservation/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-host-reservation/model/use-host-reservation-commands.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-host-reservation/model/use-host-reservations.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-host-reservation/ui/host-reservation-flow.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-host-reservation/ui/host-reservation-list.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-host-reservation/ui/host-reservation-parts.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-host-reservation/ui/host-reservation-summary.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-listing/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-listing/model/listing-management.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-listing/model/use-listing-edit-receipt.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-listing/ui/listing-revision-complete.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-listing/ui/listing-visibility-toggle.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-reservation/api/cancel-reservation.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-reservation/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-reservation/model/use-cancel-reservation.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/manage-reservation/ui/cancel-reservation-button.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/preview-rooms/README.md",
+        "matches": true
+      },
+      {
+        "file": "src/features/preview-rooms/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/preview-rooms/model/mock-room-fixtures.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/preview-rooms/model/mock-room-source.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/preview-rooms/model/preview-detail-navigation.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/preview-rooms/model/preview-mode.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/preview-rooms/model/preview-room-query-keys.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/preview-rooms/model/use-preview-regions.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/prompt-login/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/prompt-login/ui/login-prompt-modal.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/record-contract-intent/api/record-contract-intent.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/record-contract-intent/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/record-contract-intent/model/use-record-contract-intent.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-guest-region/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-guest-region/model/guest-region.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-guest-region/ui/guest-region-form.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-guest-region/ui/guest-region-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-host-consultation/api/request-consultation.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-host-consultation/config/privacy-policy.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-host-consultation/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-host-consultation/model/host-consultation.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-host-consultation/ui/host-consultation-button.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-host-consultation/ui/host-consultation-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-host-consultation/ui/host-consultation.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/api/create-reservation.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/model/create-visit-date-options.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/model/use-create-reservation.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/model/use-visit-selection.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/model/visit-request.types.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/ui/date-strip.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/ui/selected-visit-slots.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/ui/time-slot-grid.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/ui/visit-request-modal.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/request-visit/ui/visit-slot-picker.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/api/draft-autosave.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/api/draft-command.api.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/lib/parse-input.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/.fuse_hidden0000000e00000001",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/.fuse_hidden0000001000000002",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/.fuse_hidden0000001200000003",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/.fuse_hidden0000001400000004",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/draft-form.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/step-command.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/use-create-draft.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/use-draft-form-session.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/use-draft-form-values.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/use-draft-photos.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/use-draft-step-flow.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/use-save-draft-step.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/model/use-submit-draft.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/save-listing-draft/ui/draft-form-notice.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/start-host-listing/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/start-host-listing/ui/start-host-listing-link.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/switch-account-mode/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/switch-account-mode/model/account-mode-navigation.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/switch-account-mode/ui/account-mode-switch.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/write-visit-review/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/write-visit-review/model/use-visit-review-form.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/write-visit-review/model/visit-review.schema.ts",
+        "matches": true
+      },
+      {
+        "file": "src/features/write-visit-review/ui/star-rating-field.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/features/write-visit-review/ui/visit-review-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/guest-faq-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/guest-home-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/model/faq-content.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/ui/guest-benefits.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/ui/guest-hero.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/ui/guest-home.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/ui/guest-properties.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/ui/guest-questions.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/ui/guest-reviews.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/guest-home/ui/guest-room-search.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/host-home-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/model/faq-content.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-benefits.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-community.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-guide.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-hero.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-history.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-history.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-layout.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-partners.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-partners.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-process.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-process.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-questions.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/host-questions.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-home/ui/section-heading.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-reservations/host-reservations-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/host-reservations/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/intro/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/intro/intro-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/intro/intro-slides.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/kakao-attribution/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/kakao-attribution/kakao-attribution-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-checklist/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-checklist/listing-checklist-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-complete/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-complete/listing-complete-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/listing-detail-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/listing-not-found-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/preview-listing-detail-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/contract-card-guest.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/contract-card-member.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/description-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/detail-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/host-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/kakao-inquiry-link.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/listing-header.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/location-card-guest.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/location-card-member.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/locked-panel.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/options-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/photo-gallery-guest.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/photo-gallery-lightbox.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/photo-gallery-member.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/preview-detail-content.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/price-sidebar-guest.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-detail/ui/price-sidebar-member.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-host/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-host/listing-host-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-host/ui/host-profile-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-host/ui/household-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-host/ui/room-summary-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-host/ui/verification-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-management/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-management/model/editor-values.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-management/model/preview-fixtures.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-management/ui/listing-editor.module.css",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-management/ui/listing-editor.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-management/ui/listing-management-list.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-management/ui/listing-management-preview.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-management/ui/listing-management-shell.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-start/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-start/listing-start-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-start/resume-draft-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-start/start-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-1-registrant/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-1-registrant/listing-step-1-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-10-confirm/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-10-confirm/listing-step-10-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-2-place/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-2-place/listing-step-2-connected.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-2-place/listing-step-2-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-3-detail/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-3-detail/listing-step-3-connected.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-3-detail/listing-step-3-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-4-guest-space/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-4-guest-space/listing-step-4-connected.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-4-guest-space/listing-step-4-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-5-shared-space/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-5-shared-space/listing-step-5-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-6-house-rules/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-6-house-rules/listing-step-6-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-7-contract/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-7-contract/listing-step-7-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-8-photos/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-8-photos/listing-step-8-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-9-description/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/listing-step-9-description/listing-step-9-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/login/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/login/login-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/my-page/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/my-page/my-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/my-page/ui/account-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/my-page/ui/guardian-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/my-page/ui/profile-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/my-page/ui/save-button.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/my-page/ui/settlement-section.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/onboarding-profile/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/onboarding-profile/onboarding-profile-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/onboarding-terms/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/onboarding-terms/onboarding-terms-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/reservation-detail/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/reservation-detail/ui/reservation-detail-back-link.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/reservation-detail/ui/reservation-detail-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/reservation-detail/ui/visit-review-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/reservations/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/reservations/lib/normalize-reservation-query.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/reservations/ui/reservations-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/rooms/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/rooms/rooms-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/rooms/ui/room-search-hero.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/settlement-account/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/settlement-account/settlement-account-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/visit-request/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/visit-request/ui/room-reservation-summary.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/pages-layer/visit-request/ui/visit-request-page.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/api/api-error.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/api/http-client.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/api/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/api/server/backend-client.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/api/server/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/api/server/session.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/config/env.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/config/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/config/kakao-map.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/config/marketing-attribution-env.server.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/config/routes.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/auth-return.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/cn.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/format-amount.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/hooks/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/hooks/use-dialog-behavior.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/hooks/use-outside-click.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/kakao-map/geocode.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/kakao-map/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/kakao-map/sdk.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/kakao-postcode/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/kakao-postcode/kakao-postcode.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/lib/korean-phone.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/address-search-dialog/address-search-dialog.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/address-search-dialog/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/amount-field/amount-field.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/amount-field/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/back-link/back-link.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/back-link/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-card/btn-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-card/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-cta/btn-cta.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-cta/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-ic/btn-ic.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-ic/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-text/btn-text.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-text/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-underline/btn-underline.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/btn-underline/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/calendar/calendar.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/calendar/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/checkbox/checkbox.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/checkbox/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/chip-field/chip-field.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/chip-field/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/chip-normal/chip-normal.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/chip-normal/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/choice-card/choice-card.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/choice-card/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/counter/counter.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/counter/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/date-field/date-field.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/date-field/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/divider/divider.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/divider/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/dropdown-s/dropdown-s.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/dropdown-s/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/dropdown/dropdown.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/dropdown/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/error-boundary/error-boundary.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/error-boundary/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/icons/icon.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/icons/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/info-box/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/info-box/info-box.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/kakao-map/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/kakao-map/kakao-map.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/modal/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/modal/modal.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/optional-amount-field/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/optional-amount-field/optional-amount-field.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/progress-bar/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/progress-bar/progress-bar.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/radio/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/radio/radio.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/select-tile/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/select-tile/select-tile.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/text-area/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/text-area/text-area.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/text-field/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/text-field/text-field.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/toast/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/toast/toast-provider.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/toast/toast-viewport.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/toast/toast.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/toggle/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/shared/ui/toggle/toggle.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/footer/footer-policy-links.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/footer/footer.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/footer/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/gnb-mobile/gnb-mobile.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/gnb-mobile/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/listing-draft-state.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/listing-step-layout.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/listing-stepper.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/listing-steps.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/ui/listing-step-1-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/ui/listing-step-2-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/ui/listing-step-3-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/ui/listing-step-4-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/ui/listing-step-5-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/ui/listing-step-6-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/ui/listing-step-7-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/ui/listing-step-8-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/listing-step-layout/ui/listing-step-9-form.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/navigation/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/navigation/navigation.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/onboarding-layout/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/onboarding-layout/onboarding-layout.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/reservation-detail/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/reservation-detail/ui/reservation-detail-aside.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/reservation-detail/ui/reservation-detail.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/reservation-list/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/reservation-list/ui/reservation-list-state.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/reservation-list/ui/reservation-list.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/reservation-list/ui/reservation-pagination.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/reservation-list/ui/reservation-tabs.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/responsive-header/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/responsive-header/responsive-header.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-filter-bar/filter-chip.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-filter-bar/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-filter-bar/room-filter-bar.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-list/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-list/room-list-content.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-list/room-list-empty.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-list/room-list-error.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-list/room-list-grid.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-list/room-list-skeleton.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-list/room-list-toolbar.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-list/room-list.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-region-search/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/room-region-search/room-region-search.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/sidebar-mobile/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/sidebar-mobile/sidebar-mobile.tsx",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/site-layout/index.ts",
+        "matches": true
+      },
+      {
+        "file": "src/widgets/site-layout/site-layout.tsx",
+        "matches": true
+      }
+    ]
+  },
+  "intentionalIntegration": [
+    "src/app/layout.tsx: retain dev session/query/toast providers and add main MarketingAttributionObserver"
+  ],
+  "completedDate": "2026-11-06",
+  "remoteHeadsVerified": {
+    "dev": "3958c08478788f4e981efa1a0b3164ab78791903",
+    "main": "0565123317c6a1fe364d0eeebc786b6b2b533689"
+  },
+  "intentionalFormatting": [
+    {
+      "file": "src/features/beta-tracking/api/handler.server.ts",
+      "reason": "simple-import-sort/imports",
+      "implementationBodyUnchanged": true
+    }
+  ],
+  "verification": {
+    "typecheck": {
+      "exitCode": 0,
+      "command": "node node_modules/typescript/bin/tsc --noEmit --incremental false"
+    },
+    "offlineBffAssertions": 700,
+    "offlineBrowserLogicAssertions": 307,
+    "httpRender": [
+      {
+        "route": "/",
+        "status": 200,
+        "bytes": 65632,
+        "title": "홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/intro/host",
+        "status": 200,
+        "bytes": 145186,
+        "title": "집주인 서비스 소개 | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/rooms",
+        "status": 200,
+        "bytes": 61751,
+        "title": "매물 보기 | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/dev/listing-management",
+        "status": 200,
+        "bytes": 16990,
+        "title": "홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/shinhan",
+        "status": 200,
+        "bytes": 32115,
+        "title": "신한 슈퍼SOL × 홈투게더 | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/shinhan/host",
+        "status": 200,
+        "bytes": 161931,
+        "title": "신한 슈퍼SOL × 홈투게더 | 호스트 | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/shinhan/guest",
+        "status": 200,
+        "bytes": 112705,
+        "title": "신한 슈퍼SOL × 홈투게더 | 게스트 | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/shinhan/host/estimate",
+        "status": 200,
+        "bytes": 46864,
+        "title": "빈방 예상 월세 진단 | 신한 슈퍼SOL | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/shinhan/host/register",
+        "status": 200,
+        "bytes": 32541,
+        "title": "홈투게더 방 등록 | 신한 슈퍼SOL | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/shinhan/guest/budget",
+        "status": 200,
+        "bytes": 34339,
+        "title": "게스트 예산 매칭 | 신한 슈퍼SOL | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/shinhan/guest/demand",
+        "status": 200,
+        "bytes": 34339,
+        "title": "게스트 예산 매칭 | 신한 슈퍼SOL | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/shinhan/application",
+        "status": 200,
+        "bytes": 50186,
+        "title": "신한 신청 접수 확인 | 홈투게더 | 홈투게더",
+        "serverError": false
+      },
+      {
+        "route": "/shinhan/privacy",
+        "status": 200,
+        "bytes": 41502,
+        "serverError": false,
+        "firstAttempt": "cold compilation exceeded 180-second timeout; retry after compilation passed"
+      }
+    ],
+    "mockCounters": {
+      "applications": 0,
+      "concerns": 0,
+      "introductions": 0,
+      "collectorRequests": 0
+    },
+    "visualBrowser": "Not completed: localhost connection timed out and PC UI helper was unavailable",
+    "eslint": {
+      "integrationFiles": 88,
+      "reportedErrors": 1,
+      "resolution": "Only import sorting in beta-tracking/api/handler.server.ts; focused recheck of the same import rule passed",
+      "focusedImportRuleExitCode": 0,
+      "fullSourceAttempt": "Default Node heap exhausted; no lint configuration or dependencies changed"
+    }
+  }
+}

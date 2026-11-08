@@ -1,13 +1,6 @@
 import type { Room, RoomAvailability, RoomListResult } from "../model/room";
 import type { RoomDto, RoomListResponseDto } from "./room.dto";
 
-const KRW_PER_MANWON = 10_000;
-
-/** 원 → 만원. null이면 null(카드가 "가격 문의"로 표시). 예) 10,000,000원 → 1,000만원 */
-function toManwon(krw: number | null): number | null {
-  return krw === null ? null : Math.round(krw / KRW_PER_MANWON);
-}
-
 /**
  * 대표 사진 URL을 고릅니다.
  *
@@ -40,11 +33,11 @@ function toAvailability(status: string | null | undefined): RoomAvailability {
 export function toRoom(dto: RoomDto): Room {
   return {
     id: dto.id,
-    // title이 실데이터에서 비어 옴 → 지역 문자열로 폴백해 카드 제목이 완전히 비지 않게 합니다.
-    // ⚠️ 가정한 값: 폴백 문구는 디자이너 확인 대기(설계 §11).
-    buildingName: dto.title ?? dto.addressRegion ?? "등록된 매물",
-    deposit: toManwon(dto.depositKrw),
-    monthlyRent: toManwon(dto.monthlyRentKrw),
+    buildingName: dto.title?.trim() || dto.addressRegion || "등록된 매물",
+    subtitle: dto.subtitle?.trim() || null,
+    deposit: dto.depositKrw,
+    // API와 화면 모델 모두 원 단위를 유지합니다.
+    monthlyRent: dto.monthlyRentKrw,
     neighborhood: dto.addressRegion ?? "",
     // 교통 요약에 대응하는 API 필드가 없습니다. approximateLocation이 있으면 쓰되 대개 null입니다.
     transitSummary: dto.approximateLocation ?? null,

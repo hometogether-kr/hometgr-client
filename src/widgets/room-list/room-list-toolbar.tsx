@@ -19,7 +19,7 @@ interface RoomListToolbarProps {
  */
 export function RoomListToolbar({ totalCount, sort, onSortChange }: RoomListToolbarProps) {
   return (
-    <div className="mb-6 flex items-center justify-between">
+    <div className="mb-4 flex items-center justify-between">
       <p aria-live="polite" className="text-body-2 font-semibold text-grayscale-900">
         총 {totalCount}개
       </p>

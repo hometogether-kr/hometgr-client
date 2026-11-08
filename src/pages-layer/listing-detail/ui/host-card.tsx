@@ -12,6 +12,7 @@ const IC_PERSON = "/figma/ic-person-e166a1d5.svg";
 export interface HostCardProps {
   roomId: string;
   host: RoomHost;
+  href?: string | null;
 }
 
 /**
@@ -23,25 +24,34 @@ export interface HostCardProps {
  * 신원인증 배지·응답률은 공개 상세 API가 아직 내려주지 않아 뺐습니다
  * (백엔드 보완 요청 대상).
  */
-export function HostCard({ roomId, host }: HostCardProps) {
+export function HostCard({ roomId, host, href = ROUTES.roomHost(roomId) }: HostCardProps) {
+  const content = (
+    <>
+      <span className="block size-16 shrink-0 overflow-clip rounded-full bg-grayscale-70 md:size-[84px]">
+        <img alt="" src={IC_PERSON} className="block size-full max-w-none object-cover" />
+      </span>
+      <div className="flex min-w-0 flex-1 flex-col gap-3 md:gap-4">
+        <p className="text-heading-1 font-medium text-grayscale-800">{host.name ?? "집주인"}</p>
+        {host.joinedLabel && (
+          <p className="text-body-1 font-medium text-grayscale-600">
+            가입일 <span className="text-grayscale-800">{host.joinedLabel}</span>
+          </p>
+        )}
+      </div>
+    </>
+  );
   return (
     <DetailSection title="집주인 정보">
-      <Link
-        href={ROUTES.roomHost(roomId)}
-        className="flex items-center gap-6 rounded-xl p-2 transition-opacity hover:opacity-80 md:gap-8"
-      >
-        <span className="block size-16 shrink-0 overflow-clip rounded-full bg-grayscale-70 md:size-[84px]">
-          <img alt="" src={IC_PERSON} className="block size-full max-w-none object-cover" />
-        </span>
-        <div className="flex min-w-0 flex-1 flex-col gap-3 md:gap-4">
-          <p className="text-heading-1 font-medium text-grayscale-800">{host.name ?? "집주인"}</p>
-          {host.joinedLabel && (
-            <p className="text-body-1 font-medium text-grayscale-600">
-              가입일 <span className="text-grayscale-800">{host.joinedLabel}</span>
-            </p>
-          )}
-        </div>
-      </Link>
+      {href ? (
+        <Link
+          href={href}
+          className="flex items-center gap-6 rounded-xl p-2 transition-opacity hover:opacity-80 md:gap-8"
+        >
+          {content}
+        </Link>
+      ) : (
+        <div className="flex items-center gap-6 rounded-xl p-2 md:gap-8">{content}</div>
+      )}
     </DetailSection>
   );
 }

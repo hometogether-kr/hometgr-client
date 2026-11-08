@@ -7,6 +7,7 @@ import {
   ListingStep9Page,
   type ListingStep9Values,
 } from "@/pages-layer/listing-step-9-description";
+import { ListingDraftState } from "@/widgets/listing-step-layout";
 
 function Step9() {
   const { draft, isSaving, saveAndGoNext, goPrev } = useDraftStepFlow(10);
@@ -39,7 +40,7 @@ function Step9() {
 
 export default function Page() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<ListingDraftState status="loading" />}>
       <Step9 />
     </Suspense>
   );

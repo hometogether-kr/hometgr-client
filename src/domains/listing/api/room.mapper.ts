@@ -1,12 +1,17 @@
 import {
+  AREA_RANGE_LABEL,
   BUILDING_TYPE_LABEL,
   PARKING_TYPE_OPTIONS,
   PRIVATE_ROOM_OPTION_LABEL,
-  PRIVATE_ROOM_SIZE_LABEL,
   RESIDENT_GENDER_COMPOSITION_LABEL,
   RESIDENT_TYPE_LABEL,
+  ROOM_CAPACITY_LABEL,
 } from "@/domains/listing-draft";
 
+import {
+  GUEST_LOCATION_DISCLOSURE,
+  MEMBER_LOCATION_DISCLOSURE,
+} from "../model/location-disclosure";
 import type { RoomDetail, RoomHost, RoomPhoto } from "../model/room";
 import type {
   LegacyFullDetailDto,
@@ -18,9 +23,6 @@ import type {
   RegistrationPreviewDetailDto,
 } from "./room.dto";
 
-/** 회원 여부와 무관하게 항상 노출하는 고정 안내 문구 — 서버가 값을 내려주지 않는다 */
-const ADDRESS_DISCLOSURE_NOTE = "상세 주소는 방문 예약 확정 후 공개됩니다";
-const LOCATION_NOTE = "상세 위치는 방문 예약 후 확인할 수 있습니다.";
 const SQUARE_METERS_PER_PYEONG = 3.3058;
 
 function pad2(value: number): string {
@@ -74,7 +76,7 @@ function toLegacyMoveInLabel(
   return "입주 가능일 확인 필요";
 }
 
-/* 비회원 미리보기 — room 식별자·지역·가격·대표사진만 있고 그 외는 화면에서 쓰지 않는다 */
+/* 비회원 미리보기 — 서버의 제목·부제목을 보존하고 지역·가격·대표사진을 매핑한다. */
 
 function toLegacyPreviewDetail(dto: LegacyPreviewDetailDto): RoomDetail {
   const { preview } = dto;
@@ -82,39 +84,12 @@ function toLegacyPreviewDetail(dto: LegacyPreviewDetailDto): RoomDetail {
 
   return {
     id: preview.roomId,
-    title: locationSummary || "매물 정보",
+    viewerAccess: "guest",
+    title: preview.title?.trim() || locationSummary || "매물 정보",
+    subtitle: preview.subtitle?.trim() || null,
     addressRegion: preview.addressRegion,
-    addressDisclosureNote: ADDRESS_DISCLOSURE_NOTE,
-    locationSummary,
-    price: {
-      depositKrw: preview.pricing.depositKrw ?? 0,
-      monthlyRentKrw: preview.pricing.monthlyRentKrw ?? 0,
-      maintenanceFeeKrw: preview.pricing.maintenanceFeeKrw ?? 0,
-    },
-    buildingTypeLabel: "",
-    roomSizeLabel: "",
-    moveInLabel: "",
-    parkingLabel: "",
-    petPolicyLabel: "",
-    description: "",
-    amenities: [],
-    photos: preview.representativeMedia ? toPhotos([preview.representativeMedia], "매물 사진") : [],
-    locationNote: LOCATION_NOTE,
-    host: toHost(dto.host),
-    latestReservation: dto.latestReservation,
-    canRequestVisit: dto.canRequestVisit,
-  };
-}
-
-function toRegistrationPreviewDetail(dto: RegistrationPreviewDetailDto): RoomDetail {
-  const { preview } = dto;
-  const locationSummary = preview.approximateLocation ?? preview.addressRegion ?? "";
-
-  return {
-    id: preview.roomId,
-    title: locationSummary || "매물 정보",
-    addressRegion: preview.addressRegion,
-    addressDisclosureNote: ADDRESS_DISCLOSURE_NOTE,
+    buildingAddress: null,
+    addressDisclosureNote: GUEST_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
       depositKrw: preview.pricing.depositKrw,
@@ -129,7 +104,40 @@ function toRegistrationPreviewDetail(dto: RegistrationPreviewDetailDto): RoomDet
     description: "",
     amenities: [],
     photos: preview.representativeMedia ? toPhotos([preview.representativeMedia], "매물 사진") : [],
-    locationNote: LOCATION_NOTE,
+    locationNote: GUEST_LOCATION_DISCLOSURE,
+    host: toHost(dto.host),
+    latestReservation: dto.latestReservation,
+    canRequestVisit: dto.canRequestVisit,
+  };
+}
+
+function toRegistrationPreviewDetail(dto: RegistrationPreviewDetailDto): RoomDetail {
+  const { preview } = dto;
+  const locationSummary = preview.approximateLocation ?? preview.addressRegion ?? "";
+
+  return {
+    id: preview.roomId,
+    viewerAccess: "guest",
+    title: preview.title?.trim() || locationSummary || "매물 정보",
+    subtitle: preview.subtitle?.trim() || null,
+    addressRegion: preview.addressRegion,
+    buildingAddress: null,
+    addressDisclosureNote: GUEST_LOCATION_DISCLOSURE,
+    locationSummary,
+    price: {
+      depositKrw: preview.pricing.depositKrw,
+      monthlyRentKrw: preview.pricing.monthlyRentKrw,
+      maintenanceFeeKrw: preview.pricing.maintenanceFeeKrw,
+    },
+    buildingTypeLabel: "",
+    roomSizeLabel: "",
+    moveInLabel: "",
+    parkingLabel: "",
+    petPolicyLabel: "",
+    description: "",
+    amenities: [],
+    photos: preview.representativeMedia ? toPhotos([preview.representativeMedia], "매물 사진") : [],
+    locationNote: GUEST_LOCATION_DISCLOSURE,
     host: toHost(dto.host),
     latestReservation: dto.latestReservation,
     canRequestVisit: dto.canRequestVisit,
@@ -140,7 +148,7 @@ function toRegistrationPreviewDetail(dto: RegistrationPreviewDetailDto): RoomDet
 
 function toLegacyFullDetail(dto: LegacyFullDetailDto): RoomDetail {
   const locationSummary = dto.addressRegion ?? "";
-  const title = dto.title ?? locationSummary ?? "매물 정보";
+  const title = dto.title?.trim() || locationSummary || "매물 정보";
   const areaPyeong =
     dto.areaSquareMeters != null
       ? Math.round(dto.areaSquareMeters / SQUARE_METERS_PER_PYEONG)
@@ -148,14 +156,17 @@ function toLegacyFullDetail(dto: LegacyFullDetailDto): RoomDetail {
 
   return {
     id: dto.id,
+    viewerAccess: "member",
     title,
+    subtitle: dto.subtitle?.trim() || null,
     addressRegion: dto.addressRegion ?? null,
-    addressDisclosureNote: ADDRESS_DISCLOSURE_NOTE,
+    buildingAddress: dto.buildingAddress || null,
+    addressDisclosureNote: MEMBER_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
-      depositKrw: dto.depositKrw ?? 0,
-      monthlyRentKrw: dto.monthlyRentKrw ?? 0,
-      maintenanceFeeKrw: dto.maintenanceFeeKrw ?? 0,
+      depositKrw: dto.depositKrw,
+      monthlyRentKrw: dto.monthlyRentKrw,
+      maintenanceFeeKrw: dto.maintenanceFeeKrw ?? null,
     },
     // 레거시 매물의 건물 유형(PropertyType)은 아직 화면 라벨로 매핑하지 않았다.
     buildingTypeLabel: "확인 필요",
@@ -167,7 +178,7 @@ function toLegacyFullDetail(dto: LegacyFullDetailDto): RoomDetail {
     description: dto.description ?? "",
     amenities: dto.amenities,
     photos: toPhotos(dto.media, title),
-    locationNote: LOCATION_NOTE,
+    locationNote: MEMBER_LOCATION_DISCLOSURE,
     host: toHost(dto.host),
     latestReservation: dto.latestReservation,
     canRequestVisit: dto.canRequestVisit,
@@ -182,7 +193,7 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
       ? (location.buildingTypeOther ?? "기타")
       : BUILDING_TYPE_LABEL[location.buildingType];
   const locationSummary = location.approximateLocation ?? location.addressRegion ?? "";
-  const title = [locationSummary, buildingTypeLabel].filter(Boolean).join(" ") || "매물 정보";
+  const title = dto.title?.trim() || locationSummary || "매물 정보";
 
   const amenities = privateSpace.privateRoomOptions
     .filter((option) => option !== "none")
@@ -201,9 +212,12 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
 
   return {
     id: dto.roomId,
+    viewerAccess: "member",
     title,
-    addressRegion: location.addressRegion,
-    addressDisclosureNote: ADDRESS_DISCLOSURE_NOTE,
+    subtitle: dto.subtitle?.trim() || null,
+    addressRegion: location.addressRegion ?? null,
+    buildingAddress: location.buildingAddress || null,
+    addressDisclosureNote: MEMBER_LOCATION_DISCLOSURE,
     locationSummary,
     price: {
       depositKrw: pricing.depositKrw,
@@ -211,21 +225,35 @@ function toRegistrationFullDetail(dto: RegistrationFullDetailDto): RoomDetail {
       maintenanceFeeKrw: pricing.maintenanceFeeKrw,
     },
     buildingTypeLabel,
-    roomSizeLabel: PRIVATE_ROOM_SIZE_LABEL[privateSpace.privateRoomSize],
+    roomSizeLabel:
+      household.areaRange === "unknown" ? "면적 확인 필요" : AREA_RANGE_LABEL[household.areaRange],
+    capacityLabel: ROOM_CAPACITY_LABEL[preferences.roomCapacity],
+    minStayMonths: pricing.minStayMonths,
     // v2 등록 플로우는 층수를 입력받지 않는다 — floor는 항상 비어 있다.
     floor: undefined,
     moveInLabel: toMoveInLabel(pricing.moveInAvailableAt),
     parkingLabel,
     petPolicyLabel: preferences.petAllowed ? "가능" : "불가",
     description: descriptions.roomDescription ?? "",
+    currentResidentsDescription: descriptions.currentResidentsDescription ?? "",
+    precautions: descriptions.precautions ?? "",
     amenities,
     photos: toPhotos(dto.media, title),
-    locationNote: LOCATION_NOTE,
+    locationNote: MEMBER_LOCATION_DISCLOSURE,
     household: {
       residentCount: household.residentCount,
-      residentTypeLabel: RESIDENT_TYPE_LABEL[household.residentType],
+      residentTypeLabel:
+        household.residentCount === 0
+          ? "현재 거주자 없음"
+          : household.residentType
+            ? RESIDENT_TYPE_LABEL[household.residentType]
+            : "확인 필요",
       genderCompositionLabel:
-        RESIDENT_GENDER_COMPOSITION_LABEL[household.residentGenderComposition],
+        household.residentCount === 0
+          ? "해당 없음"
+          : household.residentGenderComposition
+            ? RESIDENT_GENDER_COMPOSITION_LABEL[household.residentGenderComposition]
+            : "확인 필요",
     },
     host: toHost(dto.host),
     latestReservation: dto.latestReservation,

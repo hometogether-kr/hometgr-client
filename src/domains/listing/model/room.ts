@@ -1,7 +1,8 @@
 export interface RoomPrice {
-  depositKrw: number;
-  monthlyRentKrw: number;
-  maintenanceFeeKrw: number;
+  depositKrw: number | null;
+  /** API와 동일한 원 단위 정수입니다. */
+  monthlyRentKrw: number | null;
+  maintenanceFeeKrw: number | null;
 }
 
 export interface RoomPhoto {
@@ -29,20 +30,23 @@ export interface RoomHousehold {
 }
 
 export interface RoomDetail {
+  /** 서버가 실제로 반환한 공개 범위. 로그인 쿠키 힌트와 별개입니다. */
+  viewerAccess: "guest" | "member";
   id: string;
-  /**
-   * v2 등록 플로우엔 제목 입력 단계 자체가 없고, 비회원 미리보기 응답에도
-   * 제목이 내려오지 않는다. 그런 경우 건물 유형·위치로 표시용 제목을 만든다.
-   */
+  /** 서버에서 생성한 제목. 누락된 레거시 응답만 지역으로 대체합니다. */
   title: string;
+  /** 관리자가 입력한 선택 부제목. */
+  subtitle: string | null;
   addressRegion: string | null;
-  /** "상세 주소는 방문 예약 확정 후 공개됩니다" — 회원 여부와 무관하게 항상 노출 */
+  /** 회원 공개용 건물 주소만 사용하며, 비회원 응답에는 항상 null입니다. */
+  buildingAddress: string | null;
+  /** 비회원은 로그인 후 건물 위치 확인, 회원은 동·호수 비공개 안내. */
   addressDisclosureNote: string;
   /** 집주인 정보 페이지의 매물 요약 카드용 짧은 위치 표기 */
   locationSummary: string;
   price: RoomPrice;
   buildingTypeLabel: string;
-  /** 정확한 평수 대신 서버가 주는 방 크기 구간("작은 방" 등)을 그대로 노출한다 */
+  /** 집 전체 전용면적. v2는 등록된 평수 범위를 표시한다. */
   roomSizeLabel: string;
   /** 신규 등록(v2) 매물은 층수를 수집하지 않아 값이 없을 수 있다 */
   floor?: number;
@@ -50,6 +54,10 @@ export interface RoomDetail {
   parkingLabel: string;
   petPolicyLabel: string;
   description: string;
+  currentResidentsDescription?: string;
+  precautions?: string;
+  capacityLabel?: string;
+  minStayMonths?: number;
   amenities: string[];
   photos: RoomPhoto[];
   locationNote: string;

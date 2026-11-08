@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
+import { AUTH_MODE_COOKIE, resolveAccountMode } from "@/domains/user";
 import {
   backendFetch,
   toCookieHeaderValue,
@@ -7,6 +8,7 @@ import {
 } from "@/shared/api/server";
 import { ROUTES } from "@/shared/config";
 import { getServerEnv } from "@/shared/config/env.server";
+import { AUTH_RETURN_TO_COOKIE, parseAuthReturnPath } from "@/shared/lib/auth-return";
 
 /**
  * 카카오 로그인 시작 (BFF)
@@ -17,9 +19,11 @@ import { getServerEnv } from "@/shared/config/env.server";
  *
  * 이렇게 해야 콜백을 우리 origin에서 받아 토큰을 브라우저에 노출하지 않을 수 있습니다.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   const { APP_BASE_URL } = getServerEnv();
   const loginUrl = new URL(ROUTES.auth.login, APP_BASE_URL);
+  const returnTo = parseAuthReturnPath(request.nextUrl.searchParams.get("returnTo"));
+  if (returnTo) loginUrl.searchParams.set("returnTo", returnTo);
 
   let response: Response;
   try {
@@ -37,6 +41,28 @@ export async function GET() {
   }
 
   const redirectResponse = NextResponse.redirect(authorizeUrl);
+  if (returnTo) {
+    redirectResponse.cookies.set(AUTH_RETURN_TO_COOKIE, returnTo, {
+      httpOnly: true,
+      secure: new URL(APP_BASE_URL).protocol === "https:",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 1800,
+    });
+  } else {
+    redirectResponse.cookies.delete(AUTH_RETURN_TO_COOKIE);
+  }
+  const mode = resolveAccountMode({
+    pageMode: null,
+    savedMode: request.nextUrl.searchParams.get("mode"),
+  });
+  redirectResponse.cookies.set(AUTH_MODE_COOKIE, mode, {
+    httpOnly: true,
+    secure: new URL(APP_BASE_URL).protocol === "https:",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 1800,
+  });
   const stateCookie = toCookieHeaderValue(response.headers.getSetCookie());
   if (stateCookie) writeOAuthStateCookieToResponse(redirectResponse, stateCookie);
 

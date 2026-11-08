@@ -1,6 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-import { authOwnerResponseDtoSchema } from "@/domains/user";
+import {
+  ACCOUNT_MODE_HOME,
+  AUTH_MODE_COOKIE,
+  authOwnerResponseDtoSchema,
+  resolveAccountMode,
+} from "@/domains/user";
 import {
   backendFetch,
   clearOAuthStateCookieFromResponse,
@@ -9,6 +14,7 @@ import {
 } from "@/shared/api/server";
 import { ROUTES } from "@/shared/config";
 import { getServerEnv } from "@/shared/config/env.server";
+import { AUTH_RETURN_TO_COOKIE, parseAuthReturnPath } from "@/shared/lib/auth-return";
 
 /**
  * 카카오 로그인 콜백 (BFF)
@@ -23,11 +29,14 @@ export async function GET(request: NextRequest) {
   const { APP_BASE_URL } = getServerEnv();
   const loginUrl = new URL(ROUTES.auth.login, APP_BASE_URL);
   const searchParams = request.nextUrl.searchParams;
+  const returnTo = parseAuthReturnPath(request.cookies.get(AUTH_RETURN_TO_COOKIE)?.value);
+  if (returnTo) loginUrl.searchParams.set("returnTo", returnTo);
 
   const failWith = (reason: string) => {
     loginUrl.searchParams.set("error", reason);
     const response = NextResponse.redirect(loginUrl);
     clearOAuthStateCookieFromResponse(response);
+    response.cookies.delete(AUTH_RETURN_TO_COOKIE);
     return response;
   };
 
@@ -58,8 +67,18 @@ export async function GET(request: NextRequest) {
 
   const { accessToken, refreshToken, onboardingRequired } = parsed.data;
 
-  const nextPath = onboardingRequired ? ROUTES.auth.terms : ROUTES.home;
-  const redirectResponse = NextResponse.redirect(new URL(nextPath, APP_BASE_URL));
+  const mode = resolveAccountMode({
+    pageMode: null,
+    savedMode: request.cookies.get(AUTH_MODE_COOKIE)?.value,
+  });
+  const nextPath = onboardingRequired ? ROUTES.auth.terms : (returnTo ?? ACCOUNT_MODE_HOME[mode]);
+  const destination = new URL(nextPath, APP_BASE_URL);
+  if (onboardingRequired && returnTo) destination.searchParams.set("returnTo", returnTo);
+  const redirectResponse = NextResponse.redirect(destination);
+  if (!onboardingRequired) {
+    redirectResponse.cookies.delete(AUTH_MODE_COOKIE);
+    redirectResponse.cookies.delete(AUTH_RETURN_TO_COOKIE);
+  }
   writeSessionTokensToResponse(redirectResponse, { accessToken, refreshToken });
   clearOAuthStateCookieFromResponse(redirectResponse);
 

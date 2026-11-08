@@ -63,7 +63,6 @@ export async function updateIntroduction(input: UpdateIntroductionInput) {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      role: input.user.role,
       name: input.user.name,
       email: input.user.email,
       phone: input.user.phone,

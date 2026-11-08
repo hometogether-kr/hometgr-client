@@ -12,7 +12,6 @@ import {
   PREFERRED_CONTACT_TIMES,
   PREFERRED_GENDERS,
   PRIVATE_ROOM_OPTIONS_VALUES,
-  PRIVATE_ROOM_SIZES,
   REGISTRANT_RELATIONSHIPS,
   RENTAL_SPACE_TYPES,
   RESIDENT_GENDER_COMPOSITIONS,
@@ -28,44 +27,39 @@ const MAX_INT32 = 2_147_483_647;
 /** 낙관적 잠금 version — 모든 저장 요청에 함께 보냅니다. */
 export const expectedVersionSchema = z.number().int().min(1).max(MAX_INT32);
 
-/*
- * 조건부 필드는 "해당 조건일 때만 키 자체를 보낸다"가 API 규칙입니다.
- * null을 보내면 검증에 걸리므로 `.optional()`로 두고 superRefine으로 존재 여부를 확인합니다.
- */
+// 기타 설명·주차 필드는 해당 조건일 때만 보냅니다. 거주 0명의 구성값은 null입니다.
 
 export const step2DataSchema = z.object({
   registrantRelationship: z.enum(REGISTRANT_RELATIONSHIPS),
 });
 
-/*
- * 주소는 "정확 주소 3종" 또는 "대략적 위치" 중 하나로 보냅니다 (API의 oneOf).
- * 정확 주소를 보낼 때는 도로명·상세·지역이 한 묶음이라 셋 다 있어야 합니다.
- */
+const optionalAddress = (max: number) => z.string().trim().min(1).max(max).optional();
+
 export const step3DataSchema = z
   .object({
-    addressRoad: z.string().min(1).max(255).optional(),
-    addressDetail: z.string().min(1).max(255).optional(),
-    addressRegion: z.string().min(1).max(255).optional(),
+    addressRoad: optionalAddress(255),
+    addressJibun: optionalAddress(255),
+    addressDetail: optionalAddress(255),
+    addressRegion: optionalAddress(255),
+    legalDongCode: z
+      .string()
+      .regex(/^\d{10}$/)
+      .optional(),
+    legalDongName: optionalAddress(100),
+    sido: optionalAddress(100),
+    sigungu: optionalAddress(100),
+    buildingDong: optionalAddress(100),
+    unitNumber: optionalAddress(100),
     buildingType: z.enum(BUILDING_TYPES),
-    buildingTypeOther: z.string().min(1).max(100).optional(),
-    approximateLocation: z.string().min(1).max(255).optional(),
+    buildingTypeOther: optionalAddress(100),
+    approximateLocation: optionalAddress(255),
   })
   .superRefine((value, ctx) => {
-    const exactAddressFields = [value.addressRoad, value.addressDetail, value.addressRegion];
-    const filledCount = exactAddressFields.filter(Boolean).length;
-
-    if (filledCount === 0 && !value.approximateLocation) {
+    if (!value.addressRoad && !value.addressJibun && !value.approximateLocation) {
       ctx.addIssue({
         code: "custom",
         path: ["approximateLocation"],
-        message: "주소 검색과 상세 주소를 입력하거나, 대략적인 위치를 입력해주세요.",
-      });
-    }
-    if (filledCount > 0 && filledCount < exactAddressFields.length) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["addressDetail"],
-        message: "정확한 주소를 보낼 때는 도로명·상세·지역 주소를 모두 입력해주세요.",
+        message: "도로명·지번 주소 또는 대략적인 위치를 입력해주세요.",
       });
     }
 
@@ -91,15 +85,31 @@ export const step4DataSchema = z
   .object({
     areaRange: z.enum(AREA_RANGES),
     totalRoomCount: z.number().int().min(1).max(100),
-    residentCount: z.number().int().min(1).max(100),
-    residentType: z.enum(RESIDENT_TYPES),
-    residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS),
+    residentCount: z.number().int().min(0).max(100),
+    residentType: z.enum(RESIDENT_TYPES).nullable(),
+    residentGenderComposition: z.enum(RESIDENT_GENDER_COMPOSITIONS).nullable(),
     elevatorAvailable: z.boolean(),
     parkingAvailable: z.boolean(),
     parkingType: z.enum(PARKING_TYPES).optional(),
     parkingDescription: z.string().min(1).max(500).optional(),
   })
   .superRefine((value, ctx) => {
+    for (const field of ["residentType", "residentGenderComposition"] as const) {
+      if (value.residentCount > 0 && value[field] === null) {
+        ctx.addIssue({
+          code: "custom",
+          path: [field],
+          message: "거주자가 있으면 구성을 선택해주세요.",
+        });
+      }
+      if (value.residentCount === 0 && value[field] !== null) {
+        ctx.addIssue({
+          code: "custom",
+          path: [field],
+          message: "거주자가 없으면 구성값은 null이어야 합니다.",
+        });
+      }
+    }
     if (value.parkingAvailable && !value.parkingType) {
       ctx.addIssue({
         code: "custom",
@@ -129,7 +139,6 @@ export const step5DataSchema = z
   .object({
     rentalSpaceType: z.enum(RENTAL_SPACE_TYPES),
     rentalSpaceTypeOther: z.string().min(1).max(100).optional(),
-    privateRoomSize: z.enum(PRIVATE_ROOM_SIZES),
     privateRoomOptions: z.array(z.enum(PRIVATE_ROOM_OPTIONS_VALUES)).min(1).max(10),
   })
   .superRefine((value, ctx) => {

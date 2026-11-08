@@ -27,6 +27,7 @@ export const roomDtoSchema = z.object({
   id: z.string(),
   /** 매물 제목 — 실데이터에서 자주 비어 옴 */
   title: z.string().nullish(),
+  subtitle: z.string().nullish(),
   /* 유형 4종(v1: propertyType·roomType / v2: buildingType·rentalSpaceType).
      지금은 필터·표시에 쓰지 않아 문자열로만 받아둡니다 — 백엔드 확답 후 사용(설계 §11). */
   propertyType: z.string().nullish(),
@@ -37,8 +38,9 @@ export const roomDtoSchema = z.object({
   addressRegion: z.string().nullish(),
   /** stage-0 approximate-only 위치 안내 — 대개 null */
   approximateLocation: z.string().nullish(),
-  /** 금액은 원 단위(nullable) — 만원 변환·null 처리는 매퍼 */
+  /** 보증금은 원 단위. */
   depositKrw: z.number().int().nullable(),
+  /** API 이름과 달리 월세는 만원 단위입니다. 예) 30 → 30만원. */
   monthlyRentKrw: z.number().int().nullable(),
   maintenanceFeeKrw: z.number().int().nullish(),
   /** 입주 가능 날짜 — "YYYY-MM-DD" */

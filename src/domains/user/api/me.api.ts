@@ -1,48 +1,8 @@
-import { ApiError, apiRequest, toApiError } from "@/shared/api";
+import { ApiError, apiRequest } from "@/shared/api";
 
 import { ANONYMOUS_SESSION, type Session } from "../model/current-user";
-import type { MemberRole } from "../model/member-role";
-import { toUserRole } from "../model/role-mapping";
 import { meResponseDtoSchema } from "./user.dto";
 import { toSession } from "./user.mapper";
-
-const ONBOARDING_CONSENT_POLICY_VERSION = "1.0.0";
-
-const CURRENT_CONSENT_ITEMS = [
-  { key: "termsOfService", agreed: true },
-  { key: "privacyCollection", agreed: true },
-  { key: "locationBasedServiceTerms", agreed: true },
-  { key: "marketingOptIn", agreed: false },
-] as const;
-
-export interface CompleteOnboardingInput {
-  role: MemberRole;
-  name: string;
-  email: string;
-  phone: string;
-  marketingOptIn: boolean;
-}
-
-async function readBody(response: Response): Promise<unknown> {
-  const text = await response.text();
-  if (!text) return undefined;
-
-  try {
-    return JSON.parse(text) as unknown;
-  } catch {
-    return text;
-  }
-}
-
-function createRequiredConsents(marketingOptIn: boolean) {
-  return {
-    items: CURRENT_CONSENT_ITEMS.map(({ key, agreed }) => ({
-      key,
-      agreed: key === "marketingOptIn" ? marketingOptIn : agreed,
-      policyVersion: ONBOARDING_CONSENT_POLICY_VERSION,
-    })),
-  };
-}
 
 /**
  * 현재 세션 조회
@@ -63,42 +23,6 @@ export async function fetchSession(signal?: AbortSignal): Promise<Session> {
     if (error instanceof ApiError && error.isUnauthorized) return ANONYMOUS_SESSION;
     throw error;
   }
-}
-
-/**
- * 온보딩을 완료합니다.
- *
- * `/me` 응답에는 새 토큰이 포함되므로 클라이언트가 API 서버를 직접 호출하지 않고
- * BFF 라우트에서 토큰을 httpOnly 쿠키로 갱신합니다.
- */
-export async function completeOnboarding(input: CompleteOnboardingInput): Promise<Session> {
-  const role = toUserRole(input.role);
-  const response = await fetch("/api/auth/onboarding", {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      role,
-      name: input.name,
-      email: input.email,
-      phone: input.phone,
-      consents: createRequiredConsents(input.marketingOptIn),
-    }),
-  });
-
-  if (!response.ok) {
-    throw toApiError(response.status, await readBody(response));
-  }
-
-  const parsed = meResponseDtoSchema.safeParse(await readBody(response));
-  if (!parsed.success) {
-    throw new ApiError("서버 응답 형식이 올바르지 않습니다.", {
-      status: response.status,
-      kind: "contract",
-      cause: parsed.error,
-    });
-  }
-
-  return toSession(parsed.data);
 }
 
 /** 세션 쿠키를 지웁니다. BFF 경로라 API 프록시를 거치지 않습니다. */

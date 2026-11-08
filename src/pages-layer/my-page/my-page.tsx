@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
-import { logout, userQueryKeys, useSession } from "@/domains/user";
+import { logout, useAccountMode, userQueryKeys, useSession } from "@/domains/user";
 import { useUpdateIntroduction } from "@/features/edit-profile";
 import { useDeleteAccount } from "@/features/manage-account-session";
 import { ApiError } from "@/shared/api";
@@ -18,7 +18,6 @@ import { Modal } from "@/shared/ui/modal";
 import { useToast } from "@/shared/ui/toast";
 import { SiteLayout } from "@/widgets/site-layout";
 
-import { GuardianSection } from "./ui/guardian-section";
 import { ProfileSection } from "./ui/profile-section";
 import { SettlementSection } from "./ui/settlement-section";
 
@@ -36,14 +35,9 @@ function MyPageShell({ children }: { children: ReactNode }) {
   );
 }
 
-/**
- * 계정 정보 (Figma: 집주인 646:26524·643:20242 · 입주자 646:27147·646:26187)
- *
- * 상단 기본 정보 카드는 두 회원 유형이 공통이고, 아래 카드만 집주인은 정산 정보,
- * 입주자는 보호자 정보로 갈립니다.
- */
 export function MyPage() {
   const router = useRouter();
+  const { mode } = useAccountMode();
   const { session, isLoading, isAuthenticated } = useSession();
   const queryClient = useQueryClient();
   const { deleteAccount, isDeletingAccount } = useDeleteAccount();
@@ -119,8 +113,6 @@ export function MyPage() {
   }
 
   const { user } = session;
-  /* 관리자 계정은 memberRole이 없어 입주자 화면을 기본으로 보여줍니다. */
-  const memberRole = user.memberRole ?? "guest";
 
   const handleIntroductionSave = async (introduction: string) => {
     if (!session.consents) {
@@ -151,18 +143,17 @@ export function MyPage() {
       <div className="flex flex-col gap-6 md:gap-7">
         <ProfileSection
           user={user}
-          memberRole={memberRole}
+          memberRole={mode}
           isSavingIntroduction={isUpdating}
           onSaveIntroduction={(introduction) => void handleIntroductionSave(introduction)}
         />
 
         {/* 모바일은 카드 대신 구분선으로 섹션을 나눕니다 (Figma 714:4470). */}
-        <Divider className="md:hidden" />
-
-        {memberRole === "host" ? (
-          <SettlementSection onEdit={() => router.push(ROUTES.settlementAccount)} />
-        ) : (
-          <GuardianSection />
+        {mode === "host" && (
+          <>
+            <Divider className="md:hidden" />
+            <SettlementSection onEdit={() => router.push(ROUTES.settlementAccount)} />
+          </>
         )}
       </div>
 

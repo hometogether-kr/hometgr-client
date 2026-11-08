@@ -21,6 +21,7 @@ export function TermSection({ draft, patch }: SectionProps) {
       <SectionHeader
         title="최소 계약 기간"
         titleId={titleId}
+        className="mb-4 min-h-[60px] py-3"
         canReset={draft.minTerm !== null}
         onReset={() => patch({ minTerm: null })}
       />

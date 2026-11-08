@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useId } from "react";
 
 import { Calendar } from "@/shared/ui/calendar";
@@ -10,6 +11,25 @@ import { SectionHeader } from "../section-header";
 interface SectionProps {
   draft: RoomFilter;
   patch: (partial: Partial<RoomFilter>) => void;
+}
+
+function FilterCalendarChevron({
+  orientation,
+}: {
+  orientation?: "left" | "right" | "up" | "down";
+}) {
+  return (
+    <Image
+      src={
+        orientation === "left"
+          ? "/figma/filter-calendar-previous.svg"
+          : "/figma/filter-calendar-next.svg"
+      }
+      width={40}
+      height={40}
+      alt=""
+    />
+  );
 }
 
 /** "YYYY-MM-DD" → Date. 로컬 타임존 기준으로 조립합니다. */
@@ -41,6 +61,16 @@ export function MoveInSection({ draft, patch }: SectionProps) {
       />
       <div aria-labelledby={titleId}>
         <Calendar
+          className="relative max-w-[486px]"
+          components={{ Chevron: FilterCalendarChevron }}
+          classNames={{
+            nav: "absolute inset-x-4 top-4 flex h-[57px] items-center justify-between",
+            button_previous:
+              "flex size-14 items-center justify-center rounded-lg hover:bg-grayscale-100 focus-visible:outline-2 focus-visible:outline-primary-500",
+            button_next:
+              "flex size-14 items-center justify-center rounded-lg hover:bg-grayscale-100 focus-visible:outline-2 focus-visible:outline-primary-500",
+            month_caption: "flex h-[57px] items-center justify-center px-14",
+          }}
           mode="single"
           selected={toDate(draft.moveInDate)}
           onSelect={(date) => patch({ moveInDate: date ? toIsoDate(date) : null })}

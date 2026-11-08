@@ -18,6 +18,8 @@ import { Icon } from "@/shared/ui/icons";
 export type ModalCloseButton = "header" | "outside" | "none";
 
 export interface ModalClassNames {
+  overlay?: string;
+  header?: string;
   closeButton?: string;
   /** 카드를 감싸는 다이얼로그 영역 — 폭을 지정합니다. */
   dialog?: string;
@@ -36,6 +38,7 @@ export interface ModalProps {
   /** 본문 아래 액션 영역 */
   footer?: ReactNode;
   closeButton?: ModalCloseButton;
+  /** 기본 닫기 아이콘을 대체합니다. */
   closeIcon?: ReactNode;
   classNames?: ModalClassNames;
 }
@@ -77,7 +80,10 @@ export function Modal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/35 px-5 py-10"
+      className={cn(
+        "fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/35 px-5 py-10",
+        classNames?.overlay,
+      )}
       onClick={onClose}
     >
       {/*
@@ -113,7 +119,7 @@ export function Modal({
           )}
         >
           {title && (
-            <div className="flex shrink-0 items-center justify-between">
+            <div className={cn("flex shrink-0 items-center justify-between", classNames?.header)}>
               <h2
                 id={titleId}
                 className={cn("text-heading-1 font-medium text-grayscale-900", classNames?.title)}

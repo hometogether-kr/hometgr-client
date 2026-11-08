@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 
 import {
-  daysUntilExpiry,
   findResumableDraft,
   type ListingDraftSummary,
   useListingDrafts,
@@ -17,11 +16,17 @@ import { StartButtonCard } from "./start-card";
 function toProgressDescription(draft: ListingDraftSummary | null): string {
   if (!draft) return "이전에 작성한 내용을 이어서 작성";
 
-  const remainingDays = daysUntilExpiry(draft);
   const savedSteps = draft.completedSteps.length;
-  const expiryNotice = remainingDays <= 1 ? "오늘 만료" : `${remainingDays}일 뒤 만료`;
+  const expiryNotice = new Intl.DateTimeFormat("ko-KR", {
+    timeZone: "Asia/Seoul",
+    month: "numeric",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(draft.expiresAt);
 
-  return `${savedSteps}단계까지 작성했어요 · ${expiryNotice}`;
+  return `${savedSteps}단계 완료 · ${expiryNotice} 만료 (생성 후 24시간)`;
 }
 
 export interface ResumeDraftCardProps {
