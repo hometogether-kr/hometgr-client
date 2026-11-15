@@ -15,6 +15,7 @@ export function HostConsultationButton() {
     <>
       <BtnCta
         size="xl"
+        data-host-flyer-cta="consult_hero"
         onClick={() => setOpen(true)}
         className="h-[58px] w-full max-w-[490px] gap-[14px] rounded-2xl px-4 py-0 text-base leading-[26px] font-bold tracking-[-0.01em] md:px-9 md:text-xl"
       >

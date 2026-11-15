@@ -1,6 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import {
+  HOST_FLYER_RETURN_COOKIE,
+  HOST_FLYER_RETURN_PARAM,
+  parseHostFlyerEntryId,
+} from "@/domains/marketing-attribution/host-flyer";
+
+import {
   ACCOUNT_MODE_HOME,
   AUTH_MODE_COOKIE,
   authOwnerResponseDtoSchema,
@@ -31,12 +37,15 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const returnTo = parseAuthReturnPath(request.cookies.get(AUTH_RETURN_TO_COOKIE)?.value);
   if (returnTo) loginUrl.searchParams.set("returnTo", returnTo);
+  const flyerEntry = parseHostFlyerEntryId(request.cookies.get(HOST_FLYER_RETURN_COOKIE)?.value);
+  if (flyerEntry) loginUrl.searchParams.set(HOST_FLYER_RETURN_PARAM, flyerEntry);
 
   const failWith = (reason: string) => {
     loginUrl.searchParams.set("error", reason);
     const response = NextResponse.redirect(loginUrl);
     clearOAuthStateCookieFromResponse(response);
     response.cookies.delete(AUTH_RETURN_TO_COOKIE);
+    response.cookies.delete(HOST_FLYER_RETURN_COOKIE);
     return response;
   };
 
@@ -74,7 +83,10 @@ export async function GET(request: NextRequest) {
   const nextPath = onboardingRequired ? ROUTES.auth.terms : (returnTo ?? ACCOUNT_MODE_HOME[mode]);
   const destination = new URL(nextPath, APP_BASE_URL);
   if (onboardingRequired && returnTo) destination.searchParams.set("returnTo", returnTo);
+  if (flyerEntry) destination.searchParams.set(HOST_FLYER_RETURN_PARAM, flyerEntry);
   const redirectResponse = NextResponse.redirect(destination);
+  redirectResponse.cookies.delete(HOST_FLYER_RETURN_COOKIE);
+  if (flyerEntry) redirectResponse.headers.set("Referrer-Policy", "no-referrer");
   if (!onboardingRequired) {
     redirectResponse.cookies.delete(AUTH_MODE_COOKIE);
     redirectResponse.cookies.delete(AUTH_RETURN_TO_COOKIE);

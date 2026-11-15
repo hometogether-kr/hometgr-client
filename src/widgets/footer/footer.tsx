@@ -24,13 +24,17 @@ const SOCIAL_LINKS = [
 
 function FooterCustomerService() {
   return (
-    <section className="text-sm leading-[1.7] text-grayscale-600">
+    <section
+      className="text-sm leading-[1.7] text-grayscale-600"
+      data-analytics-section="customer_service"
+    >
       <h2 className="mb-3 text-base font-semibold text-grayscale-900">고객센터</h2>
       <p>운영시간: 평일 10:00~18:00</p>
       <p>
         전화:{" "}
         <a
           href="tel:01045879428"
+          data-host-flyer-cta="telephone_footer"
           className="rounded-sm hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"
         >
           010-4587-9428
@@ -50,6 +54,7 @@ function FooterCustomerService() {
       </p>
       <a
         href="https://pf.kakao.com/_BKlhX/chat"
+        data-host-flyer-cta="kakao_footer"
         target="_blank"
         rel="noopener noreferrer"
         className="mt-4 inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-grayscale-300 bg-white px-4 py-2 text-sm font-medium text-grayscale-800 transition-colors hover:bg-grayscale-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500"

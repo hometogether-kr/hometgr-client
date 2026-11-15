@@ -1,5 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
 
+import {
+  HOST_FLYER_AUTH_TTL_SECONDS,
+  HOST_FLYER_RETURN_COOKIE,
+  HOST_FLYER_RETURN_PARAM,
+  parseHostFlyerEntryId,
+} from "@/domains/marketing-attribution/host-flyer";
 import { AUTH_MODE_COOKIE, resolveAccountMode } from "@/domains/user";
 import {
   backendFetch,
@@ -41,6 +47,20 @@ export async function GET(request: NextRequest) {
   }
 
   const redirectResponse = NextResponse.redirect(authorizeUrl);
+  const flyerEntry = parseHostFlyerEntryId(
+    request.nextUrl.searchParams.get(HOST_FLYER_RETURN_PARAM),
+  );
+  if (flyerEntry) {
+    redirectResponse.cookies.set(HOST_FLYER_RETURN_COOKIE, flyerEntry, {
+      httpOnly: true,
+      secure: new URL(APP_BASE_URL).protocol === "https:",
+      sameSite: "lax",
+      path: "/",
+      maxAge: HOST_FLYER_AUTH_TTL_SECONDS,
+    });
+  } else {
+    redirectResponse.cookies.delete(HOST_FLYER_RETURN_COOKIE);
+  }
   if (returnTo) {
     redirectResponse.cookies.set(AUTH_RETURN_TO_COOKIE, returnTo, {
       httpOnly: true,

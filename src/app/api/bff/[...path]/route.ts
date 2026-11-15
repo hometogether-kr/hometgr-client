@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
+import { HOST_FLYER_HEADER, readHostFlyerHeader } from "@/domains/marketing-attribution/host-flyer";
 import {
   backendFetch,
   clearSessionTokensFromResponse,
@@ -15,6 +16,7 @@ interface ProxyContext {
 
 /** 브라우저 요청에서 API 서버로 넘길 헤더만 골라냅니다. 세션 쿠키는 넘기지 않습니다. */
 const FORWARDED_REQUEST_HEADERS = ["content-type", "accept", "accept-language"];
+const LISTING_SUBMISSION = /^\/host\/rooms\/drafts\/[0-9a-f-]{36}\/submit$/i;
 
 /**
  * 응답에서 제외할 헤더
@@ -30,7 +32,7 @@ const STRIPPED_RESPONSE_HEADERS = new Set([
   "set-cookie",
 ]);
 
-function pickRequestHeaders(request: NextRequest): Record<string, string> {
+function pickRequestHeaders(request: NextRequest, path: string): Record<string, string> {
   const headers: Record<string, string> = {};
 
   for (const name of FORWARDED_REQUEST_HEADERS) {
@@ -38,6 +40,14 @@ function pickRequestHeaders(request: NextRequest): Record<string, string> {
     if (value) headers[name] = value;
   }
 
+  if (
+    process.env.HOST_FLYER_CRM_FORWARDING_ENABLED === "true" &&
+    request.method === "POST" &&
+    (path === "/host-consultation-requests" || LISTING_SUBMISSION.test(path))
+  ) {
+    const attribution = readHostFlyerHeader(request.headers.get(HOST_FLYER_HEADER));
+    if (attribution) headers[HOST_FLYER_HEADER] = JSON.stringify(attribution);
+  }
   return headers;
 }
 
@@ -69,7 +79,8 @@ function errorResponse(status: number, message: string, path: string): NextRespo
 
 async function proxy(request: NextRequest, context: ProxyContext): Promise<NextResponse> {
   const { path } = await context.params;
-  const targetPath = `/${path.join("/")}${request.nextUrl.search}`;
+  const resourcePath = `/${path.join("/")}`;
+  const targetPath = `${resourcePath}${request.nextUrl.search}`;
 
   /*
    * 환경 변수 오류와 네트워크 오류를 구분합니다. 둘 다 502로 뭉뚱그리면
@@ -86,7 +97,7 @@ async function proxy(request: NextRequest, context: ProxyContext): Promise<NextR
   }
 
   const { accessToken, refreshToken } = await readSessionTokens();
-  const headers = pickRequestHeaders(request);
+  const headers = pickRequestHeaders(request, resourcePath);
 
   /*
    * 401 재시도에 같은 본문을 다시 써야 하므로 스트림 대신 버퍼로 읽습니다.

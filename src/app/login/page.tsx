@@ -3,6 +3,8 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 
+import { HOST_FLYER_RETURN_PARAM } from "@/domains/marketing-attribution/host-flyer";
+import { getHostFlyerSession } from "@/domains/marketing-attribution/host-flyer-browser";
 import { useAccountMode } from "@/domains/user";
 import { LoginPage } from "@/pages-layer/login";
 import { ROUTES } from "@/shared/config";
@@ -59,6 +61,8 @@ function LoginContent() {
    */
   const handleKakaoLogin = () => {
     const params = new URLSearchParams({ mode });
+    const flyerEntry = getHostFlyerSession()?.entryId;
+    if (flyerEntry) params.set(HOST_FLYER_RETURN_PARAM, flyerEntry);
     if (returnTo) params.set("returnTo", returnTo);
     window.location.assign(`${ROUTES.auth.kakaoStart}?${params}`);
   };

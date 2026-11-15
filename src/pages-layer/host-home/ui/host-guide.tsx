@@ -21,7 +21,11 @@ const guides = [
 
 export function HostGuide() {
   return (
-    <section className={styles.guide} aria-label="처음 시작하는 집주인 가이드">
+    <section
+      data-analytics-section="guide"
+      className={styles.guide}
+      aria-label="처음 시작하는 집주인 가이드"
+    >
       <div className={hostContainer}>
         <SectionHeading description="시작하는 분들을 위한 홈투게더 안내서">
           처음 시작하는 집주인 가이드

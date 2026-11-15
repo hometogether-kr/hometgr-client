@@ -9,7 +9,11 @@ const partnerNames =
 
 export function HostPartners() {
   return (
-    <section className="overflow-hidden bg-white py-10" aria-labelledby="host-partners-heading">
+    <section
+      data-analytics-section="partners"
+      className="overflow-hidden bg-white py-10"
+      aria-labelledby="host-partners-heading"
+    >
       <div className={hostContainer}>
         <h2
           id="host-partners-heading"

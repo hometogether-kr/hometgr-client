@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 
 import { SessionHintProvider } from "@/domains/user";
 import { MarketingAttributionObserver } from "@/features/capture-marketing-attribution";
+import { HostFlyerObserver } from "@/features/track-host-flyer";
 import { hasSessionCookie } from "@/shared/api/server";
 import { ToastProvider } from "@/shared/ui/toast";
 
@@ -50,6 +52,11 @@ export default async function RootLayout({
           <QueryProvider>
             <ToastProvider>
               <MarketingAttributionObserver />
+              {process.env.NEXT_PUBLIC_HOST_FLYER_GA4_ID && (
+                <Suspense>
+                  <HostFlyerObserver />
+                </Suspense>
+              )}
               {children}
             </ToastProvider>
           </QueryProvider>
