@@ -7,11 +7,6 @@ import {
   roomSubmissionSchema,
   toListingDraft,
 } from "@/domains/listing-draft";
-import {
-  captureHostFlyerSubmission,
-  hostFlyerSubmissionHeaders,
-  trackHostFlyerLead,
-} from "@/domains/marketing-attribution/host-flyer-browser";
 import { ApiError, apiRequest } from "@/shared/api";
 
 import { type SaveStepCommand, STEP_DATA_SCHEMA } from "../model/step-command.schema";
@@ -65,16 +60,12 @@ export async function submitListingDraft(
   draftId: string,
   expectedVersion: number,
 ): Promise<RoomSubmissionDto> {
-  const attribution = captureHostFlyerSubmission();
-  const submission = await apiRequest({
+  return apiRequest({
     method: "POST",
     path: `${DRAFTS_PATH}/${draftId}/submit`,
     body: { expectedVersion },
     schema: roomSubmissionSchema,
-    headers: hostFlyerSubmissionHeaders(attribution),
   });
-  trackHostFlyerLead(attribution, "room_listing", submission.roomId);
-  return submission;
 }
 
 export interface UploadDraftPhotosInput {

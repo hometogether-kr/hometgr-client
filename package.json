@@ -11,9 +11,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "assets:sync": "node scripts/sync-figma-assets.mjs",
-    "assets:check": "node scripts/sync-figma-assets.mjs --check",
-    "qr:host-flyer": "node scripts/generate-host-flyer-qr.mjs",
-    "verify:host-flyer": "node scripts/verify-host-flyer.mjs"
+    "assets:check": "node scripts/sync-figma-assets.mjs --check"
   },
   "dependencies": {
     "@daypicker/react": "^10.0.1",
@@ -40,10 +38,8 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-boundaries": "^7.1.0",
     "eslint-plugin-simple-import-sort": "^14.0.0",
-    "playwright": "1.62.1",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "qrcode": "1.5.4",
     "tailwindcss": "^4",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.64.0"

@@ -31,11 +31,7 @@ function ProcessDetail({ icon, title, children }: ProcessDetailProps) {
 
 export function HostProcess() {
   return (
-    <section
-      data-analytics-section="process"
-      className={styles.section}
-      aria-labelledby="host-process-heading"
-    >
+    <section className={styles.section} aria-labelledby="host-process-heading">
       <div className={hostContainer}>
         <h2 id="host-process-heading" className={styles.heading}>
           진행 방법

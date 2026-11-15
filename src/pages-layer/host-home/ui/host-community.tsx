@@ -23,7 +23,7 @@ const reviews = [
 ];
 export function HostCommunity() {
   return (
-    <section data-analytics-section="community" className={styles.community}>
+    <section className={styles.community}>
       <div className={`${hostContainer} relative`}>
         <div className={styles.communityIntro}>
           <div className={styles.communityTitle}>

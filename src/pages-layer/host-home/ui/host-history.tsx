@@ -73,7 +73,7 @@ function AchievementCard({ title, items, className }: AchievementCardProps) {
 }
 export function HostHistory() {
   return (
-    <section data-analytics-section="history" className={styles.section}>
+    <section className={styles.section}>
       <div className={hostContainer}>
         <SectionHeading label="연혁">
           지역 현장에서 시작해,

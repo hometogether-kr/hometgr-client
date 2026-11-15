@@ -8,7 +8,7 @@ import styles from "./host-layout.module.css";
 
 export function HostHero() {
   return (
-    <section data-analytics-section="hero" className={styles.hero}>
+    <section className={styles.hero}>
       <div className={`${hostContainer} ${styles.heroContent}`}>
         <div className={styles.heroCopy}>
           <h1>

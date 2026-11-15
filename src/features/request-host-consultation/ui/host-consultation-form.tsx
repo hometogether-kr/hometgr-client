@@ -101,13 +101,7 @@ export function HostConsultationForm() {
         ? "접수 결과를 확인하지 못했습니다. 입력 내용은 유지됩니다. 잠시 후 다시 시도해주세요."
         : undefined;
   return (
-    <form
-      data-host-flyer-form="host_consultation"
-      className={styles.form}
-      onSubmit={handleSubmit}
-      noValidate
-      aria-busy={mutation.isPending}
-    >
+    <form className={styles.form} onSubmit={handleSubmit} noValidate aria-busy={mutation.isPending}>
       <fieldset disabled={mutation.isPending} className={styles.form}>
         <p className={styles.description}>방 정보를 남겨주시면 확인 후 연락드립니다.</p>
         <fieldset>

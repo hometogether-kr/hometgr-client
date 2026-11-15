@@ -1,10 +1,5 @@
 import { z } from "zod";
 
-import {
-  captureHostFlyerSubmission,
-  hostFlyerSubmissionHeaders,
-  trackHostFlyerLead,
-} from "@/domains/marketing-attribution/host-flyer-browser";
 import { apiRequest } from "@/shared/api";
 import { formatKoreanPhone } from "@/shared/lib/korean-phone";
 
@@ -22,12 +17,10 @@ const consultationReceiptSchema = z.object({
 
 export async function requestConsultation(input: HostConsultationFormValues) {
   const values = hostConsultationFormSchema.parse(input);
-  const attribution = captureHostFlyerSubmission();
-  const receipt = await apiRequest({
+  return apiRequest({
     method: "POST",
     path: "/host-consultation-requests",
     schema: consultationReceiptSchema,
-    headers: hostFlyerSubmissionHeaders(attribution),
     body: {
       regionType: values.regionId === "other" ? "custom_university" : values.regionType,
       ...(values.regionId === "other"
@@ -41,6 +34,4 @@ export async function requestConsultation(input: HostConsultationFormValues) {
       privacyConsentVersion: consultationPrivacyPolicy.version,
     },
   });
-  trackHostFlyerLead(attribution, "host_consultation", receipt.id);
-  return receipt;
 }

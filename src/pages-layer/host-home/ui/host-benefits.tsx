@@ -28,7 +28,7 @@ const benefits = [
 ];
 export function HostBenefits() {
   return (
-    <section data-analytics-section="benefits" className={styles.benefits}>
+    <section className={styles.benefits}>
       <div className={hostContainer}>
         <p className={styles.goalLabel}>홈투게더의 목표</p>
         <div className={styles.goal}>

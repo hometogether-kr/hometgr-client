@@ -18,7 +18,6 @@ export interface ApiRequestOptions<TResponse> {
   /** JSON 본문. `FormData`는 `formData`로 전달하세요. */
   body?: unknown;
   formData?: FormData;
-  headers?: HeadersInit;
   /** 응답 본문 스키마. 생략하면 본문을 읽지 않습니다(204 등). */
   schema?: z.ZodType<TResponse>;
   signal?: AbortSignal;
@@ -67,21 +66,21 @@ export async function apiRequest<TResponse = void>({
   searchParams,
   body,
   formData,
-  headers,
   schema,
   signal,
 }: ApiRequestOptions<TResponse>): Promise<TResponse> {
   let response: Response;
 
   try {
-    const requestHeaders = new Headers(headers);
-    // multipart는 boundary를 브라우저가 붙이도록 Content-Type을 지정하지 않습니다.
-    if (formData) requestHeaders.delete("Content-Type");
-    else if (body !== undefined) requestHeaders.set("Content-Type", "application/json");
     response = await fetch(buildUrl(path, searchParams), {
       method,
       signal,
-      headers: requestHeaders,
+      // multipart는 boundary를 브라우저가 붙이도록 Content-Type을 지정하지 않습니다.
+      headers: formData
+        ? undefined
+        : body === undefined
+          ? undefined
+          : { "Content-Type": "application/json" },
       body: formData ?? (body === undefined ? undefined : JSON.stringify(body)),
     });
   } catch (cause) {

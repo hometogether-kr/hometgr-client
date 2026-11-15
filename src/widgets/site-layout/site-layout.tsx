@@ -32,7 +32,7 @@ export function SiteLayout({ children, showFooter = true, background = "gray" }:
         background === "gray" ? "bg-grayscale-50" : "bg-white",
       )}
     >
-      <div className="sticky top-0 z-30" data-sticky-site-header>
+      <div className="sticky top-0 z-30">
         <ResponsiveHeader mobile={{ variant: "logo" }} />
       </div>
       <main className="flex min-h-[calc(100dvh-52px)] flex-col">{children}</main>

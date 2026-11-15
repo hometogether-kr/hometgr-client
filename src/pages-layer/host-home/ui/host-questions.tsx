@@ -71,7 +71,7 @@ export function HostQuestions() {
   }
   return (
     <>
-      <section className={styles.topSection} data-analytics-section="top_questions">
+      <section className={styles.topSection}>
         <div className={hostContainer}>
           <SectionHeading label="시작 전 확인 TOP 3">
             가장 궁금한 세 가지, 먼저 확인하세요
@@ -104,7 +104,6 @@ export function HostQuestions() {
       <section
         ref={faqRef}
         id="host-faq"
-        data-analytics-section="faq"
         tabIndex={-1}
         aria-label="자주 묻는 질문"
         className={styles.faqSection}
@@ -133,7 +132,6 @@ export function HostQuestions() {
                   <button
                     type="button"
                     aria-expanded={expandedId === item.id}
-                    data-host-flyer-faq={item.id}
                     aria-controls={`faq-answer-${item.id}`}
                     id={`faq-question-${item.id}`}
                     onClick={() => setExpandedId(expandedId === item.id ? null : item.id)}

@@ -15,8 +15,7 @@ import { ROUTES } from "@/shared/config";
  */
 export default async function ListingLayout({ children }: { children: ReactNode }) {
   if (!(await hasSessionCookie())) {
-    const params = new URLSearchParams({ error: "login_required", returnTo: ROUTES.listing.start });
-    redirect(`${ROUTES.auth.login}?${params.toString()}`);
+    redirect(`${ROUTES.auth.login}?error=login_required`);
   }
 
   return children;

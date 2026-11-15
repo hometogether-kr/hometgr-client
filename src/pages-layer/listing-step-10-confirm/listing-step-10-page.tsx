@@ -185,7 +185,6 @@ export function ListingStep10Page({
             <label key={key} className="flex cursor-pointer items-center gap-2">
               <Checkbox
                 size="24"
-                data-analytics-ignore
                 checked={agreements[key]}
                 onChange={(e) => setAgreements((prev) => ({ ...prev, [key]: e.target.checked }))}
               />
