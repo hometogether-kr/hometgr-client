@@ -292,7 +292,14 @@ async function testEnabled(browser, app) {
 
     await page.getByRole("button", { name: "통계 수집 허용" }).click();
     await waitCount(page, "host_landing_view", 1);
-    await waitCount(page, "page_view", 1);
+    assert.deepEqual(await events(page, "page_view"), []);
+    const config = await page.evaluate(
+      () =>
+        (window.dataLayer ?? [])
+          .map((entry) => Array.from(entry))
+          .find(([type]) => type === "config")?.[2],
+    );
+    assert.equal(config.send_page_view, true);
     await page.waitForFunction(() => window.__fakeTagLoaded === true);
     assert.deepEqual(
       (await events(page, "host_section_view")).map((e) => e.parameters.section_id),

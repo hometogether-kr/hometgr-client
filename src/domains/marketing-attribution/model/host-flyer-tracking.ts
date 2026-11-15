@@ -34,7 +34,6 @@ type SectionId = (typeof sectionIds)[number];
 type LeadType = "consultation" | "room_listing";
 
 interface EventParameters {
-  page_view: Record<string, never>;
   host_landing_view: { campaign_code: "host_a4_202611" };
   host_scroll_depth: { percent: number };
   host_section_view: { section_id: SectionId; section_order: number };
@@ -90,7 +89,7 @@ function getTag(session: HostFlyerSession): Tag | undefined {
   tag("consent", "default", { ...consentDefaults, analytics_storage: "granted" });
   tag("js", new Date());
   tag("config", hostFlyerMeasurementId, {
-    send_page_view: false,
+    send_page_view: location.pathname === HOST_FLYER_PATH,
     allow_google_signals: false,
     allow_ad_personalization_signals: false,
     cookie_prefix: "ht_flyer",
@@ -259,7 +258,6 @@ const depths = [25, 50, 75, 90, 100] as const;
 
 interface LandingEvents {
   visitorEntry: string | undefined;
-  sentPageView: boolean;
   sentLandingView: boolean;
   depthsSeen: Set<number>;
   sectionsSeen: Set<SectionId>;
@@ -278,7 +276,6 @@ export function watchHostFlyerLanding() {
   if (!landing || landing.visitorEntry !== session.entryId) {
     landing = {
       visitorEntry: session.entryId,
-      sentPageView: false,
       sentLandingView: false,
       depthsSeen: new Set(),
       sectionsSeen: new Set(),
@@ -296,12 +293,6 @@ export function watchHostFlyerLanding() {
     const current = getHostFlyerSession();
     if (!current || current.entryId !== measurements.visitorEntry) return;
 
-    // Only a newly initialized tag needs a manual landing page_view.
-    if (!measurements.sentPageView) {
-      const browser: TagWindow = window;
-      measurements.sentPageView =
-        (Boolean(browser.gtag) && browser.gtag !== ownedTag) || emit("page_view", {}, current);
-    }
     if (!measurements.sentLandingView) {
       measurements.sentLandingView = emit(
         "host_landing_view",
