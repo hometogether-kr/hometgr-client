@@ -1,14 +1,12 @@
 # 홈투게더 아파트 A4 광고지 QR 성과 측정
 
-기준 소스는 `hometogether-kr/hometgr-client`의 `5333a15d46600aa6f1a1c5f0478293d13d6911df`입니다. Vercel `welcome-web` 운영 배포가 가리키는 커밋과 일치합니다. 아래 인쇄 주소로 운영 페이지를 조회해 HTTP 200, 리다이렉트 0회, 호스트 소개 화면과 UTM 유지 여부를 확인했습니다. 코드는 별도 작업 사본에 적용했습니다. [인쇄된 QR 주소](https://hometogether.kr/intro/host?utm_source=apartment_flyer&utm_medium=print&utm_campaign=host_a4_202611&utm_content=general) · [기준 커밋](https://github.com/hometogether-kr/hometgr-client/commit/5333a15d46600aa6f1a1c5f0478293d13d6911df)
+아파트 A4 광고지의 공통 QR은 홈투게더 운영 호스트 소개 페이지로 연결됩니다. 이 주소는 인쇄물과 일치해야 합니다. [인쇄된 QR 주소](https://hometogether.kr/intro/host?utm_source=apartment_flyer&utm_medium=print&utm_campaign=host_a4_202611&utm_content=general)
 
 ## 실행
 
-패치 파일을 받은 경우 기준 커밋의 깨끗한 작업 사본에서 먼저 적용 여부를 확인합니다. Node.js 22.18 이상과 pnpm을 사용합니다.
+Node.js 22.18 이상과 pnpm을 사용합니다.
 
 ```sh
-git apply --check /path/to/host-flyer-qr.patch
-git apply /path/to/host-flyer-qr.patch
 pnpm install --frozen-lockfile --ignore-scripts
 pnpm exec playwright install chromium
 pnpm verify:host-flyer
@@ -78,7 +76,7 @@ pnpm exec tsc --noEmit
 | `POST /host-consultation-requests`         | 성공 응답 `id`의 상담 요청     |
 | `POST /host/rooms/drafts/{draftId}/submit` | 성공 응답 `roomId`의 등록 요청 |
 
-백엔드에서 JSON 헤더의 여섯 키를 동일하게 검증하고, 기존 상담 행 생성 또는 등록 상태 변경과 같은 트랜잭션에서 출처를 저장합니다. 신규 컬럼이 필요한 경우 기존 행을 유지하는 nullable 저장 구조를 추가하고, 기존 중복 처리와 초안 버전 확인을 이어갑니다. 같은 접수를 재시도했을 때 먼저 기록한 출처가 덮어쓰이지 않도록 하고, 기존 레코드 ID로 조회해 값을 확인합니다. 헤더는 사용자가 바꿔 보낼 수 있는 마케팅 힌트로만 허용하며 인증이나 권한에는 사용하지 않습니다. CRM 저장과 관리자 도구 노출은 백엔드 소스·DB 권한이 필요한 후속 작업입니다.
+API는 JSON 헤더의 여섯 키를 검증하고 상담 접수 또는 방 등록과 같은 트랜잭션에서 출처를 저장합니다. 기존 접수의 유입 출처는 재시도해도 보존됩니다. 관리자는 운영 CRM의 상담 요청 또는 방 상세에서 광고지 유형, 최초 방문 시각, UTM을 볼 수 있습니다. 헤더는 마케팅 조회에만 쓰입니다. [상담 요청](https://admin.hometogether.kr/host-consultations) · [매물 관리](https://admin.hometogether.kr/rooms)
 
 ## 다음 인쇄분의 QR 생성
 
@@ -102,7 +100,7 @@ pnpm qr:host-flyer ./distribution.json ./host-flyer-qr-output
 
 아직 없는 출력 폴더를 지정합니다. 허용 코드는 `general`, `apt`에 숫자 3~~6자리, `flyer_v`에 1~~999입니다. 같은 코드의 중복 입력을 거절합니다. 각 코드의 PNG와 벡터 SVG는 검정·흰색과 사방 4모듈 여백으로 출력하며, UTF-8 CSV에는 코드·설명·수량·배포일·파일명·목적지가 들어갑니다. 예시 산출물은 `general`의 인쇄 주소를 재현합니다. 인쇄업체 편집 파일에서는 여백을 유지합니다.
 
-## 검수 결과와 남은 작업
+## 검수 항목
 
 | 검사               | 결과                                                                                                                                                                                                                   |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -115,7 +113,7 @@ pnpm qr:host-flyer ./distribution.json ./host-flyer-qr-output
 | QR                 | PNG와 렌더링한 SVG를 각각 읽어 공통 인쇄 주소와 일치함을 확인했습니다. `apt001`과 `flyer_v2`도 읽었으며 PNG의 흰 여백 4모듈과 중복 코드·허용 범위 밖 코드·잘못된 날짜 거절을 확인했습니다.                             |
 | 빌드와 검사        | Next.js 프로덕션 빌드와 TypeScript, 변경 파일 ESLint 및 패치 공백 검사를 통과했습니다. 상담 버튼 파일에 기존 외부 폰트 로드 관련 ESLint 경고 1건이 있습니다.                                                           |
 
-브라우저의 이벤트 전달은 가상 GA 태그로 확인했습니다. 실제 카카오 계정으로 OAuth 전체 흐름을 완료하는 검수는 남아 있습니다. 실제 GA4 속성에 로그가 도착하는지 확인하려면 웹 스트림의 측정 ID와 GA4 접근 권한이 필요합니다. 운영 활성화는 Vercel의 환경변수와 배포 권한, 분석 안내 검토가 필요합니다. CRM에서 실제 접수 출처를 조회하려면 백엔드 구현과 승인된 테스트 레코드가 필요합니다. 이번 작업으로 운영 코드, 데이터, 설정을 변경한 내역은 없습니다.
+브라우저 자동 검수는 가상 GA 태그와 API를 사용합니다. 운영 전환을 검수할 때는 운영 도메인에서 카카오 로그인 후 접수를 완료하고, 같은 접수를 CRM에서 다시 열어 최초 방문 시각과 UTM을 조회합니다. GA4에서는 해당 이벤트 수신을 확인합니다. 운영 접수 검수는 지정된 테스트 경로와 테스트 레코드를 사용합니다.
 
 ## 수정 파일
 
