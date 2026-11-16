@@ -16,6 +16,8 @@ export interface SiteLayoutProps {
   showFooter?: boolean;
   /** 본문 배경. 기본은 회색(grayscale-50) */
   background?: "gray" | "white";
+  /** 본문과 푸터에 함께 적용할 클래스 */
+  contentClassName?: string;
 }
 
 /**
@@ -24,7 +26,12 @@ export interface SiteLayoutProps {
  * 로고형 헤더(데스크톱 Navigation · 모바일 gnb_mobile logo)와 본문, 푸터로
  * 구성됩니다. 온보딩처럼 뒤로가기 헤더가 필요한 화면은 OnboardingLayout을 쓰세요.
  */
-export function SiteLayout({ children, showFooter = true, background = "gray" }: SiteLayoutProps) {
+export function SiteLayout({
+  children,
+  showFooter = true,
+  background = "gray",
+  contentClassName,
+}: SiteLayoutProps) {
   return (
     <div
       className={cn(
@@ -35,8 +42,10 @@ export function SiteLayout({ children, showFooter = true, background = "gray" }:
       <div className="sticky top-0 z-30">
         <ResponsiveHeader mobile={{ variant: "logo" }} />
       </div>
-      <main className="flex min-h-[calc(100dvh-52px)] flex-col">{children}</main>
-      {showFooter && <Footer />}
+      <main className={cn("flex min-h-[calc(100dvh-52px)] flex-col", contentClassName)}>
+        {children}
+      </main>
+      {showFooter && <Footer className={contentClassName} />}
     </div>
   );
 }

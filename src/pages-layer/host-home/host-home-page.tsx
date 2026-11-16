@@ -18,7 +18,7 @@ import styles from "./ui/host-layout.module.css";
 export function HostHomePage() {
   return (
     <div className="pb-24 md:pb-0">
-      <SiteLayout background="white">
+      <SiteLayout background="white" contentClassName="[zoom:80%]">
         <HostHero />
         <HostBenefits />
         <HostProcess />

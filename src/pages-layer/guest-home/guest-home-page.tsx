@@ -15,7 +15,7 @@ import styles from "./ui/guest-home.module.css";
 
 export function GuestHomePage({ previewOptions }: { previewOptions?: MockRoomSourceOptions }) {
   return (
-    <SiteLayout background="white">
+    <SiteLayout background="white" contentClassName="[zoom:67%]">
       {/* eslint-disable-next-line @next/next/no-page-custom-font -- Figma의 Noto Sans KR는 입주자 페이지에만 적용합니다. */}
       <link
         rel="stylesheet"
