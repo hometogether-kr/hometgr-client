@@ -10,6 +10,8 @@ import { ROUTES } from "@/shared/config";
 import { getServerEnv } from "@/shared/config/env.server";
 import { AUTH_RETURN_TO_COOKIE, parseAuthReturnPath } from "@/shared/lib/auth-return";
 
+import { getKakaoAuthEnvironmentHeaders } from "./environment-headers.server";
+
 /**
  * 카카오 로그인 시작 (BFF)
  *
@@ -28,7 +30,10 @@ export async function GET(request: NextRequest) {
   let response: Response;
   try {
     // redirect를 따라가면 카카오 화면 HTML을 서버가 받아버리므로 302에서 멈춥니다.
-    response = await backendFetch("/auth/kakao", { redirect: "manual" });
+    response = await backendFetch("/auth/kakao", {
+      redirect: "manual",
+      headers: getKakaoAuthEnvironmentHeaders(APP_BASE_URL),
+    });
   } catch {
     loginUrl.searchParams.set("error", "kakao_unavailable");
     return NextResponse.redirect(loginUrl);

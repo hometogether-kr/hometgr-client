@@ -16,6 +16,8 @@ import { ROUTES } from "@/shared/config";
 import { getServerEnv } from "@/shared/config/env.server";
 import { AUTH_RETURN_TO_COOKIE, parseAuthReturnPath } from "@/shared/lib/auth-return";
 
+import { getKakaoAuthEnvironmentHeaders } from "../environment-headers.server";
+
 /**
  * 카카오 로그인 콜백 (BFF)
  *
@@ -54,7 +56,7 @@ export async function GET(request: NextRequest) {
   try {
     response = await backendFetch(
       `/auth/kakao/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`,
-      { headers: { cookie: stateCookie } },
+      { headers: { cookie: stateCookie, ...getKakaoAuthEnvironmentHeaders(APP_BASE_URL) } },
     );
   } catch {
     return failWith("kakao_unavailable");
