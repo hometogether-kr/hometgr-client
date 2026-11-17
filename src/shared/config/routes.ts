@@ -14,6 +14,7 @@ export const ROUTES = {
     guest: "/",
   },
   support: "/support",
+  privacyPolicy: "/privacy-policy",
   auth: {
     /** 로그인 / 회원가입 */
     login: "/login",
