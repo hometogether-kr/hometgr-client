@@ -11,7 +11,6 @@ import {
   useTransition,
 } from "react";
 
-import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
 import { DropdownS } from "@/shared/ui/dropdown-s";
 import { Radio } from "@/shared/ui/radio";
@@ -44,7 +43,12 @@ function keepActiveYearVisible(event: KeyboardEvent<HTMLDivElement>) {
   });
 }
 
-export function SignupForm({ currentYear }: { currentYear: number }) {
+interface SignupFormProps {
+  currentYear: number;
+  successHref: string;
+}
+
+export function SignupForm({ currentYear, successHref }: SignupFormProps) {
   const router = useRouter();
   const id = useId();
   const [name, setName] = useState("");
@@ -104,7 +108,7 @@ export function SignupForm({ currentYear }: { currentYear: number }) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!parsed.success || isSubmitting) return;
-    startTransition(() => router.replace(ROUTES.home));
+    startTransition(() => router.replace(successHref));
   }
 
   return (

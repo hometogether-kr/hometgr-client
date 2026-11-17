@@ -3,9 +3,19 @@
 // - src/app/signup
 // - src/pages-layer/signup
 // - src/features/signup-form
-// 삭제 전 `/signup` 링크나 리다이렉트가 추가됐는지 검색하고, 삭제 후 빌드로 라우트 제거를 확인합니다.
+// 삭제할 때 src/app/onboarding/terms/page.tsx의 약관 동의 후 이동 경로를
+// ROUTES.auth.profile로 되돌리고, 빌드에서 `/signup` 라우트가 빠졌는지 확인합니다.
+import { z } from "zod";
+
 import { SignupPage } from "@/pages-layer/signup";
 
-export default function Page() {
-  return <SignupPage />;
+interface SignupRouteProps {
+  searchParams: Promise<{ from?: string | string[] }>;
+}
+
+const onboardingSourceSchema = z.literal("onboarding");
+
+export default async function Page({ searchParams }: SignupRouteProps) {
+  const { from } = await searchParams;
+  return <SignupPage continueOnboarding={onboardingSourceSchema.safeParse(from).success} />;
 }

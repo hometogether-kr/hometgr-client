@@ -1,7 +1,12 @@
 import { SignupForm } from "@/features/signup-form";
+import { ROUTES } from "@/shared/config";
 import { SiteLayout } from "@/widgets/site-layout";
 
-export function SignupPage() {
+interface SignupPageProps {
+  continueOnboarding: boolean;
+}
+
+export function SignupPage({ continueOnboarding }: SignupPageProps) {
   const currentYear = Number(
     new Intl.DateTimeFormat("en", { year: "numeric", timeZone: "Asia/Seoul" }).format(new Date()),
   );
@@ -18,7 +23,10 @@ export function SignupPage() {
               홈투게더 이용을 위해 정보를 입력해 주세요
             </p>
           </header>
-          <SignupForm currentYear={currentYear} />
+          <SignupForm
+            currentYear={currentYear}
+            successHref={continueOnboarding ? ROUTES.auth.profile : ROUTES.home}
+          />
         </div>
       </div>
     </SiteLayout>
