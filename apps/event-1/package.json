@@ -1,0 +1,37 @@
+{
+  "name": "hometogether-event-1",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "next dev --webpack -H 127.0.0.1 -p 3211",
+    "dev:supabase": "node scripts/with-supabase-env.mjs dev --webpack -H 127.0.0.1 -p 3211",
+    "build": "next build --webpack",
+    "start": "next start -H 127.0.0.1 -p 3211",
+    "typecheck": "tsc --noEmit",
+    "db:local": "node --env-file=.env.local scripts/local-postgres.mjs",
+    "db:prepare": "node --env-file=.env.local scripts/prepare-database.mjs",
+    "verify:intake": "node --env-file=.env.local scripts/verify-intake.mjs",
+    "ops:configure": "node scripts/configure-ops-access.mjs",
+    "verify:ops": "node --env-file=.env.local scripts/verify-ops.mjs",
+    "verify:ops-password": "node --env-file=.env.local scripts/verify-ops-password.mjs"
+  },
+  "dependencies": {
+    "next": "16.2.10",
+    "pg": "8.16.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "server-only": "0.0.1",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "@types/pg": "8.15.6",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "typescript": "5.9.3"
+  }
+}
