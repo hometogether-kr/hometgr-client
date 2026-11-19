@@ -6,12 +6,13 @@ import { z } from "zod";
 import {
   createOperatorSession,
   getOperatorConfig,
-  matchesOperatorKey,
+  matchesOperatorPassword,
   operatorCookieName,
   operatorCookieOptions,
+  operatorPasswordSchema,
 } from "@/domains/event-operator";
 
-const accessInputSchema = z.object({ accessKey: z.string().trim().min(1).max(128) });
+const accessInputSchema = z.object({ accessKey: operatorPasswordSchema });
 const privateHeaders = { "Cache-Control": "private, no-store" };
 
 function redirectToOps(error?: string) {
@@ -39,7 +40,7 @@ async function readAccessInput(request: Request) {
       const { done, value } = await reader.read();
       if (done) break;
       length += value.byteLength;
-      if (length > 512) {
+      if (length > 2048) {
         await reader.cancel();
         return null;
       }
@@ -64,7 +65,7 @@ export async function handleOperatorSignIn(request: Request) {
     return redirectToOps("invalid");
   }
   const parsed = accessInputSchema.safeParse(input);
-  if (!parsed.success || !matchesOperatorKey(parsed.data.accessKey))
+  if (!parsed.success || !matchesOperatorPassword(parsed.data.accessKey))
     return redirectToOps("invalid");
   const response = redirectToOps();
   response.cookies.set(operatorCookieName, createOperatorSession(), operatorCookieOptions());

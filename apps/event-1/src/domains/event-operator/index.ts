@@ -1,9 +1,10 @@
+export { operatorPasswordSchema } from "./model/operator-password.schema";
 export {
   createOperatorSession,
   getOperatorConfig,
   hasOperatorRequestSession,
   hasOperatorSession,
-  matchesOperatorKey,
+  matchesOperatorPassword,
   operatorCookieName,
   operatorCookieOptions,
 } from "./model/operator-session.server";

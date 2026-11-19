@@ -82,8 +82,8 @@ export async function EventOpsPage({ searchParams }: EventOpsPageProps) {
             <h1 id="ops-title">이벤트 신청 관리</h1>
             <p className={styles.description}>
               {configured
-                ? "운영자 접근 코드를 입력해 신청 내역을 확인하세요."
-                : "운영자 조회가 아직 준비되지 않았습니다. 담당자에게 접근 코드 설정을 요청해 주세요."}
+                ? "운영자 비밀번호를 입력해 신청 내역을 확인하세요."
+                : "운영자 조회가 아직 준비되지 않았습니다. 담당자에게 비밀번호 설정을 요청해 주세요."}
             </p>
             {configured && <OperatorAccessForm hasError={hasError} />}
             <p className={styles.accessNote}>

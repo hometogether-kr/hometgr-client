@@ -18,21 +18,22 @@ export function OperatorAccessForm({ hasError }: OperatorAccessFormProps) {
       onSubmit={() => setPending(true)}
       aria-busy={pending}
     >
-      <label htmlFor="operator-access-key">운영자 접근 코드</label>
+      <label htmlFor="operator-access-key">운영자 비밀번호</label>
       <input
         id="operator-access-key"
         name="accessKey"
         type="password"
-        placeholder="운영자 접근 코드를 입력해 주세요"
+        placeholder="운영자 비밀번호를 입력해 주세요"
         autoComplete="current-password"
         required
+        minLength={4}
         maxLength={128}
         aria-invalid={hasError}
         aria-describedby={hasError ? "access-error" : undefined}
       />
       {hasError && (
         <p className={styles.error} id="access-error" role="alert">
-          접근 코드를 확인해 주세요.
+          비밀번호를 확인해 주세요.
         </p>
       )}
       <button className={styles.primary} type="submit" disabled={pending}>

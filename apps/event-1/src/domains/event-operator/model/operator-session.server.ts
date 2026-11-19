@@ -5,13 +5,16 @@ import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
+import { operatorPasswordSchema } from "./operator-password.schema";
+
 const operatorEnvSchema = z.object({
-  EVENT_OPS_ACCESS_KEY: z.string().regex(/^[A-Za-z0-9_-]{32,128}$/),
+  EVENT_OPS_ACCESS_KEY: operatorPasswordSchema,
+  EVENT_OPS_SESSION_SECRET: z.string().regex(/^[A-Za-z0-9_-]{32,128}$/),
   EVENT_PUBLIC_URL: z.url(),
   EVENT_APP_ENV: z.enum(["local", "development", "production"]),
 });
 const sessionSchema = z.object({
-  version: z.literal(1),
+  version: z.literal(2),
   issuedAt: z.number().int(),
   expiresAt: z.number().int(),
   nonce: z.string().regex(/^[A-Za-z0-9_-]{24}$/),
@@ -20,27 +23,40 @@ const sessionSchema = z.object({
 export const operatorCookieName = "ht-event1-ops";
 const sessionDuration = 8 * 60 * 60;
 
-export function getOperatorConfig() {
+interface OperatorConfig {
+  password: string;
+  sessionSecret: string;
+  origin: string;
+  secure: boolean;
+}
+
+export function getOperatorConfig(): OperatorConfig | null {
   const parsed = operatorEnvSchema.safeParse(process.env);
   if (!parsed.success) return null;
   const url = new URL(parsed.data.EVENT_PUBLIC_URL);
   if (!["http:", "https:"].includes(url.protocol)) return null;
   if (parsed.data.EVENT_APP_ENV === "production" && url.protocol !== "https:") return null;
   return {
-    accessKey: parsed.data.EVENT_OPS_ACCESS_KEY,
+    password: parsed.data.EVENT_OPS_ACCESS_KEY,
+    sessionSecret: parsed.data.EVENT_OPS_SESSION_SECRET,
     origin: url.origin,
     secure: url.protocol === "https:",
   };
 }
 
-function sessionSignature(payload: string, accessKey: string) {
-  return createHmac("sha256", accessKey).update(`event1-operator-session:${payload}`).digest();
+function sessionSignature(payload: string, config: OperatorConfig) {
+  // The long secret prevents cookie forgery; binding the password revokes old sessions when it changes.
+  const signingKey = createHmac("sha256", config.sessionSecret)
+    .update("event1-operator-key:")
+    .update(config.password)
+    .digest();
+  return createHmac("sha256", signingKey).update(`event1-operator-session:v2:${payload}`).digest();
 }
 
-export function matchesOperatorKey(value: string) {
+export function matchesOperatorPassword(value: string) {
   const config = getOperatorConfig();
   if (!config) return false;
-  const expected = createHash("sha256").update(config.accessKey).digest();
+  const expected = createHash("sha256").update(config.password).digest();
   const actual = createHash("sha256").update(value).digest();
   return timingSafeEqual(actual, expected);
 }
@@ -51,13 +67,13 @@ export function createOperatorSession() {
   const now = Math.floor(Date.now() / 1000);
   const payload = Buffer.from(
     JSON.stringify({
-      version: 1,
+      version: 2,
       issuedAt: now,
       expiresAt: now + sessionDuration,
       nonce: randomBytes(18).toString("base64url"),
     }),
   ).toString("base64url");
-  return `${payload}.${sessionSignature(payload, config.accessKey).toString("base64url")}`;
+  return `${payload}.${sessionSignature(payload, config).toString("base64url")}`;
 }
 
 export function isValidOperatorSession(value: string | undefined) {
@@ -68,7 +84,7 @@ export function isValidOperatorSession(value: string | undefined) {
     if (parts.length !== 2) return false;
     const [payload, signature] = parts;
     if (!/^[A-Za-z0-9_-]+$/.test(payload) || !/^[A-Za-z0-9_-]{43}$/.test(signature)) return false;
-    const expected = sessionSignature(payload, config.accessKey);
+    const expected = sessionSignature(payload, config);
     const actual = Buffer.from(signature, "base64url");
     if (actual.length !== expected.length || !timingSafeEqual(actual, expected)) return false;
     const session = sessionSchema.safeParse(

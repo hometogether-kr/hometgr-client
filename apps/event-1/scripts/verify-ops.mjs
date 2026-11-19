@@ -16,8 +16,11 @@ if (
   throw new Error(
     "Operator verification requires the dedicated local event database and local HTTP server",
   );
-if (!/^[A-Za-z0-9_-]{32,128}$/.test(process.env.EVENT_OPS_ACCESS_KEY ?? ""))
-  throw new Error("Configure an operator access key before verification");
+if (
+  (process.env.EVENT_OPS_ACCESS_KEY?.trim().length ?? 0) < 4 ||
+  !/^[A-Za-z0-9_-]{32,128}$/.test(process.env.EVENT_OPS_SESSION_SECRET ?? "")
+)
+  throw new Error("Configure an operator password and session secret before verification");
 adminUrl.pathname = databaseUrl.pathname;
 const db = new pg.Client({ connectionString: adminUrl.href });
 const marker = `ops-verification-${randomUUID()}`;
@@ -52,7 +55,7 @@ async function getList(page = 1) {
 await db.connect();
 try {
   assert.equal((await request(endpoint)).status, 401);
-  assert.ok((await (await request("/event_1/ops")).text()).includes("운영자 접근 코드"));
+  assert.ok((await (await request("/event_1/ops")).text()).includes("운영자 비밀번호"));
   const wrong = await signIn("incorrect-code");
   assert.equal(wrong.status, 303);
   assert.ok(wrong.headers.get("location").includes("error=invalid"));
@@ -141,10 +144,14 @@ try {
   assert.equal((await request(endpoint)).status, 401);
   assert.equal((await request(endpoint, { headers: { Cookie: `${cookie}tampered` } })).status, 401);
   const payload = Buffer.from(
-    JSON.stringify({ version: 1, issuedAt: 1, expiresAt: 28801, nonce: "x".repeat(24) }),
+    JSON.stringify({ version: 2, issuedAt: 1, expiresAt: 28801, nonce: "x".repeat(24) }),
   ).toString("base64url");
-  const signature = createHmac("sha256", process.env.EVENT_OPS_ACCESS_KEY)
-    .update(`event1-operator-session:${payload}`)
+  const signingKey = createHmac("sha256", process.env.EVENT_OPS_SESSION_SECRET)
+    .update("event1-operator-key:")
+    .update(process.env.EVENT_OPS_ACCESS_KEY)
+    .digest();
+  const signature = createHmac("sha256", signingKey)
+    .update(`event1-operator-session:v2:${payload}`)
     .digest("base64url");
   assert.equal(
     (await request(endpoint, { headers: { Cookie: `ht-event1-ops=${payload}.${signature}` } }))
