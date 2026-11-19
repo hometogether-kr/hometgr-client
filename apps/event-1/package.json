@@ -14,7 +14,9 @@
     "typecheck": "tsc --noEmit",
     "db:local": "node --env-file=.env.local scripts/local-postgres.mjs",
     "db:prepare": "node --env-file=.env.local scripts/prepare-database.mjs",
-    "verify:intake": "node --env-file=.env.local scripts/verify-intake.mjs"
+    "verify:intake": "node --env-file=.env.local scripts/verify-intake.mjs",
+    "ops:configure": "node scripts/configure-ops-access.mjs",
+    "verify:ops": "node --env-file=.env.local scripts/verify-ops.mjs"
   },
   "dependencies": {
     "next": "16.2.10",

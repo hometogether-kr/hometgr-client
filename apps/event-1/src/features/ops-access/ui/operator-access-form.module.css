@@ -1,0 +1,48 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.form label {
+  font-size: 14px;
+  font-weight: 600;
+}
+.form input {
+  width: 100%;
+  border: 1px solid #dce2eb;
+  border-radius: 8px;
+  padding: 14px;
+  font-size: 16px;
+  background: #fff;
+  color: var(--grayscale-900);
+}
+.form input[aria-invalid="true"] {
+  border-color: #b42318;
+}
+.primary {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 20px;
+  background: var(--primary-500);
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+}
+.primary:disabled {
+  opacity: 0.6;
+}
+.error {
+  color: #b42318;
+  font-size: 13px;
+  line-height: 20px;
+}
+.signOut {
+  padding: 10px 14px;
+  border: 1px solid #dce2eb;
+  background: #fff;
+  color: var(--grayscale-600);
+  border-radius: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+}
