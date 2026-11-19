@@ -1,0 +1,254 @@
+.card {
+  width: 100%;
+  min-width: 0;
+  padding: 36px;
+  border-radius: 28px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  letter-spacing: -0.015em;
+}
+.steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 8px;
+  line-height: 18px;
+}
+.steps span {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary-500);
+}
+.steps p {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--grayscale-500);
+  text-align: right;
+}
+.question {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 36px;
+}
+.question:focus,
+.completeTitle:focus {
+  outline: none;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+}
+.field input {
+  width: 100%;
+  min-width: 0;
+  height: 60px;
+  border: 1px solid #e3e6eb;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fff;
+  color: var(--grayscale-900);
+  font-size: 15px;
+  line-height: 24px;
+}
+.field input::placeholder {
+  color: var(--grayscale-500);
+  opacity: 1;
+}
+.field input[aria-invalid="true"] {
+  border-color: #cf3030;
+}
+.field input[readonly] {
+  background: #f5f6f8;
+}
+.helper {
+  font-size: 12px;
+  line-height: 19px;
+  color: var(--grayscale-600);
+}
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 100%;
+  min-height: 60px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--primary-500);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+}
+.cta:hover:not(:disabled) {
+  background: #156ae7;
+}
+.cta:disabled {
+  background: #b2cfff;
+}
+.note {
+  color: var(--grayscale-500);
+  font-size: 11px;
+  line-height: 18px;
+  text-align: center;
+}
+.mobileNote {
+  display: none;
+}
+.university {
+  border: 0;
+  border-radius: 8px;
+  padding: 16px;
+  background: #f5f6f8;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  text-align: left;
+  overflow-wrap: anywhere;
+  color: var(--grayscale-900);
+}
+.university span {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--grayscale-600);
+}
+.university strong {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 22px;
+}
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.consent {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  color: var(--grayscale-600);
+  font-size: 11px;
+  line-height: 18px;
+}
+.consent input {
+  appearance: none;
+  flex-shrink: 0;
+  position: relative;
+  margin: 0;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #dee6f0;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+.consent input:checked {
+  background: var(--primary-500);
+  border-color: var(--primary-500);
+}
+.consent input:checked::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  top: 2px;
+  left: 6px;
+}
+.consent input:disabled {
+  cursor: not-allowed;
+}
+.error {
+  color: #b42318;
+  font-size: 12px;
+  line-height: 19px;
+  overflow-wrap: anywhere;
+}
+.completeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary-500);
+}
+.completeTitle {
+  font-size: 30px;
+  line-height: 42px;
+  font-weight: 700;
+}
+.completeDescription {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--grayscale-600);
+  line-height: 23px;
+}
+.receipt {
+  border-radius: 8px;
+  padding: 16px;
+  background: #f5f6f8;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.receipt div {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 20px;
+}
+.receipt dt {
+  flex: 0 0 52px;
+  font-size: 11px;
+  color: var(--grayscale-600);
+}
+.receipt dd {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  font-size: 12px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.mobileBreak {
+  display: none;
+}
+@media (max-width: 767px) {
+  .card {
+    padding: 24px;
+    border-radius: 20px;
+    gap: 20px;
+  }
+  .question {
+    font-size: 23px;
+    line-height: 32px;
+  }
+  .mobileNote,
+  .mobileBreak {
+    display: block;
+  }
+  .desktopSpace {
+    display: none;
+  }
+  .completeTitle {
+    font-size: 28px;
+    line-height: 38px;
+  }
+}

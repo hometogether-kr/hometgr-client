@@ -37,6 +37,16 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Cloudflare local state
+.wrangler/
+
+# Standalone event app
+/apps/event-1/node_modules/
+/apps/event-1/.next/
+/apps/event-1/.local/
+/apps/event-1/supabase/.temp/
+/apps/event-1/next-env.d.ts
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

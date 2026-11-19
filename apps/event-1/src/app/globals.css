@@ -1,0 +1,51 @@
+:root {
+  --primary-500: #227dff;
+  --grayscale-900: #151d25;
+  --grayscale-600: #626c7c;
+  --grayscale-500: #8b95a5;
+  color-scheme: light;
+  font-family:
+    "Pretendard Variable",
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    system-ui,
+    sans-serif;
+  color: var(--grayscale-900);
+  background: #02050b;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+* {
+  box-sizing: border-box;
+}
+body,
+h1,
+h2,
+p,
+figure,
+dl,
+dd {
+  margin: 0;
+}
+body {
+  min-width: 320px;
+}
+button,
+input {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #82b5ff;
+  outline-offset: 3px;
+}
+img {
+  display: block;
+}
