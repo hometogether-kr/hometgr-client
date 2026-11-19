@@ -1,4 +1,5 @@
 const PUBLIC_HOST = "hometogether.kr";
+const WWW_HOST = "www.hometogether.kr";
 const EVENT_PATH = "/event_1";
 const HEALTH_PATH = `${EVENT_PATH}/_router/health`;
 
@@ -32,8 +33,14 @@ export default {
       publicUrl.pathname === EVENT_PATH || publicUrl.pathname.startsWith(`${EVENT_PATH}/`);
 
     // The route wildcard also matches sibling names and query strings.
-    if (publicUrl.hostname !== PUBLIC_HOST || !isEventPath) {
+    if (![PUBLIC_HOST, WWW_HOST].includes(publicUrl.hostname) || !isEventPath) {
       return fetch(request);
+    }
+
+    if (publicUrl.hostname === WWW_HOST) {
+      publicUrl.hostname = PUBLIC_HOST;
+      publicUrl.protocol = "https:";
+      return Response.redirect(publicUrl.href, 308);
     }
 
     if (publicUrl.pathname === HEALTH_PATH && ["GET", "HEAD"].includes(request.method)) {

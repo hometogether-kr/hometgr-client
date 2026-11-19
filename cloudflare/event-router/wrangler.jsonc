@@ -10,6 +10,10 @@
       "pattern": "https://hometogether.kr/event_1*",
       "zone_id": "24d6d095236b1151902ef1d0d6fde7b0",
     },
+    {
+      "pattern": "https://www.hometogether.kr/event_1*",
+      "zone_id": "24d6d095236b1151902ef1d0d6fde7b0",
+    },
   ],
   "vars": {
     "EVENT_ORIGIN": "https://hometogether-event-1.vercel.app",

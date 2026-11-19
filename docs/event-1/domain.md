@@ -2,6 +2,8 @@
 
 학생 주소는 `https://hometogether.kr/event_1`, 운영 주소는 `https://hometogether.kr/event_1/ops`다.
 
+`https://www.hometogether.kr/event_1`과 그 하위 경로는 같은 경로의 `hometogether.kr` 주소로 308 이동한다. 배포처 쿼리도 유지한다. `www` 접속 시 404가 발생하던 누락 경로를 2026-11-19에 추가했다. `www`의 다른 페이지는 이 연결 대상에 포함하지 않는다.
+
 Cloudflare Worker `hometogether-event-1-router`로 행사 경로를 별도 배포에 연결한다. 설정과 소스는 `cloudflare/event-router/`에 둔다.
 
 2026-11-19에 행사 앱을 별도 배포하고 Worker의 `EVENT_ORIGIN`을 `https://hometogether-event-1.vercel.app`로 지정했다. 공개 신청 주소와 운영 주소 모두 HTTP 200이다.
@@ -15,6 +17,7 @@ Cloudflare Worker `hometogether-event-1-router`로 행사 경로를 별도 배�
 - 비밀번호는 배포 시 사용자가 설정한 값을 사용한다. 이후 로컬 환경 파일만 수정해도 공개 사이트에는 반영되지 않는다. 공개 비밀번호 변경은 이 행사 프로젝트의 환경 변수를 갱신한 뒤 새로 배포한다.
 
 - 경로 패턴은 `https://hometogether.kr/event_1*`다. QR의 쿼리 문자열도 매칭하기 위해 끝에 와일드카드를 쓰고, Worker 내부에서 `/event_1`과 `/event_1/` 하위 경로만 처리한다.
+- `https://www.hometogether.kr/event_1*`도 같은 Worker에 연결하되 정식 주소로 이동만 처리한다. 추가한 경로 ID는 `a9c4c12522914af2ab61b0e75cdddd1e`다.
 - `/event_10` 등 유사 경로는 본 사이트로 전달한다. 루트와 기존 로그인은 해당 Worker 경로에 매칭되지 않는다.
 - `EVENT_ORIGIN`에 행사 배포의 HTTPS 원본 주소를 지정한다. 값이 비어 있으면 현재 본 사이트로 요청을 전달한다.
 - `/event_1/_router/health`는 배포 주소 연결 전에도 라우터 설치 상태를 확인할 수 있는 예약 경로다.
