@@ -4,7 +4,7 @@
 
 ## 학생 화면 구현과 확인
 
-2026-11-19, `feat/event_1`에서 학생 신청 화면을 구현했다. 로컬 확인 주소는 `http://127.0.0.1:3211/event_1`이다. 개발은 앱 폴더에서 `npm run dev:supabase`, 빌드 결과 확인은 `npm run build` 후 `node scripts/with-supabase-env.mjs start -H 127.0.0.1 -p 3211`로 실행한다. 외부 배포와 Cloudflare의 행사 앱 원본 주소 지정은 아직 하지 않았다.
+2026-11-19, `feat/event_1`에서 학생 신청 화면을 구현하고 독립 Vercel 프로젝트에 공개 배포했다. 공개 주소는 `https://hometogether.kr/event_1`, 운영 주소는 `https://hometogether.kr/event_1/ops`다. 로컬 확인 주소는 `http://127.0.0.1:3211/event_1`이다. 개발은 앱 폴더에서 `npm run dev:supabase`, 빌드 결과 확인은 `npm run build` 후 `node scripts/with-supabase-env.mjs start -H 127.0.0.1 -p 3211`로 실행한다. [배포와 도메인 기록](domain.md)
 
 - 대상 프레임: 대학 입력 Desktop `832:519` / Mobile `832:670`, 연락처 Desktop `832:563` / Mobile `832:714`, 완료 Desktop `832:620` / Mobile `832:771`.
 - 디자인 확인값: 데스크톱 1440×969, 헤더 72px, 콘텐츠 600px + 간격 120px + 폼 480px, 폼 패딩 36px·모서리 28px. 모바일 너비 390px, 헤더 64px, 좌우 여백 24px, 폼 패딩 24px·모서리 20px. 입력과 CTA 높이 60px, Pretendard와 기존 primary500 색상 `#227dff`를 사용한다.
@@ -88,7 +88,7 @@
 - 앱 폴더에서 `npm run dev:supabase`로 실행한다. 서버가 DB에 연결하고, 신청자 브라우저는 Next.js 접수 API를 사용한다.
 - `EVENT_DATABASE_CA`에 Supabase 공개 CA 인증서 내용을 등록했다. 인증서 SHA-256 지문은 `80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA`다. [TLS 설정 안내](https://supabase.com/docs/guides/platform/ssl-enforcement)
 - 마이그레이션 소스는 `supabase/migrations/20261119045411_event_intake.sql`이고 적용된 Supabase 이력 버전은 `20261119045917`이다. 이 공유 프로젝트에는 기존 랜딩의 마이그레이션 이력도 있다. 행사 변경은 이 파일을 대상으로 적용하고, 전체 프로젝트 이력은 함께 확인한다.
-- RLS를 켜고 행사 계정에 신청·발송 작업의 `SELECT`, `INSERT`를 부여했다. `anon`과 `authenticated`는 행사 스키마 접근 권한이 없고, 행사 계정은 기존 랜딩 데이터 조회 권한이 없다.
+- RLS를 켜고 행사 계정에 신청·발송 작업의 `SELECT`, `INSERT`를 부여했다. 알림톡 연동 마이그레이션은 발송 상태 관련 열의 UPDATE만 추가한다. `anon`과 `authenticated`는 행사 스키마 접근 권한이 없고, 행사 계정은 기존 랜딩 데이터 조회 권한이 없다.
 - 프로젝트 처리 용량은 기존 랜딩과 공유한다. 앱 연결 풀은 최대 3개, 행사 앱 계정은 최대 5개 연결로 제한한다.
 
 프로젝트 보안 진단에는 기존 랜딩 함수 2개의 익명 호출 권한 경고와 기존 `private` 테이블의 RLS 정책 관련 정보 2건이 있다. 행사 스키마 추가 전후 같은 항목이며 기존 랜딩 함수의 정의 해시도 같았다. [기존 함수 권한 진단 안내](https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable)
@@ -104,6 +104,6 @@
 - TypeScript 검사, ESLint와 운영용 빌드를 통과했다.
 - 운영용 빌드의 마감 상태에서 새 신청은 410, 저장된 신청의 재시도는 200이었으며 새 신청 기록이 생기지 않았다.
 
-검증에는 합성 정보만 사용했다. 알림톡 작업은 `PENDING`으로 저장하며 발송 워커 연결은 다음 단계다. 실제 저장소는 위 Supabase 프로젝트의 행사 스키마를 사용한다.
+검증에는 합성 정보만 사용했다. 실제 저장소는 위 Supabase 프로젝트의 행사 스키마를 사용한다. 알림톡 워커는 연결했으며 템플릿 검수 중에는 발송을 비활성으로 두고 `PENDING` 작업만 보관한다. [알림톡 연결과 승인 후 활성화](alimtalk.md)
 
 같은 날 실제 Supabase 계정으로 로컬 Next.js API를 실행해 동시 제출 3회의 결과가 201 1회와 200 2회임을 확인했다. 실제 Supabase DB에는 신청과 `PENDING` 작업이 각각 1건 저장됐다. 행사 계정으로 기존 랜딩 테이블을 조회하면 권한 오류로 차단됐다. 이 합성 신청과 발송 작업만 ID와 검증용 source를 지정해 정리했다.

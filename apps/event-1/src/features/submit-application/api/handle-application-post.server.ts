@@ -1,5 +1,8 @@
 import "server-only";
 
+import { after } from "next/server";
+
+import { dispatchApplicationAlimtalk } from "@/domains/event-alimtalk";
 import { getEventConfig } from "@/shared/config/event-env.server";
 
 import { applicationInputSchema, submissionKeySchema } from "../model/application-input.schema";
@@ -56,6 +59,9 @@ export async function handleApplicationPost(request: Request) {
     if (!input.success) return failure("INVALID_INPUT", 400);
 
     const result = await saveApplication(input.data, key.data);
+    after(async () => {
+      await dispatchApplicationAlimtalk(result.applicationId);
+    });
     return Response.json(
       {
         applicationId: result.applicationId,

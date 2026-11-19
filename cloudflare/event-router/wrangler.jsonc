@@ -12,6 +12,6 @@
     },
   ],
   "vars": {
-    "EVENT_ORIGIN": "",
+    "EVENT_ORIGIN": "https://hometogether-event-1.vercel.app",
   },
 }

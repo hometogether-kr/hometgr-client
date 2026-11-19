@@ -1,0 +1,10 @@
+{
+  "name": "hometogether-event-1-alimtalk",
+  "account_id": "91733f44730bc918322a7ce22c753133",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-19",
+  "workers_dev": false,
+  "preview_urls": false,
+  "triggers": { "crons": ["*/5 * * * *"] },
+  "vars": { "EVENT_ALIMTALK_ENABLED": "false" },
+}
