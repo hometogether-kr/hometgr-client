@@ -27,6 +27,8 @@ import { PhotoGalleryMember } from "./ui/photo-gallery-member";
 import { PriceSidebarGuest } from "./ui/price-sidebar-guest";
 import { PriceSidebarMember } from "./ui/price-sidebar-member";
 
+const visitReservationsEnabled = process.env.NEXT_PUBLIC_VISIT_RESERVATIONS_ENABLED === "true";
+
 export interface ListingDetailPageProps {
   room: RoomDetail;
   returnHref: string;
@@ -44,6 +46,9 @@ export function ListingDetailPage({ room, returnHref }: ListingDetailPageProps) 
   const { isAuthenticated, isLoading } = useSession();
   const canViewMemberDetail = isAuthenticated && room.viewerAccess === "member";
   const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const visitRequestHref = visitReservationsEnabled
+    ? ROUTES.newRoomReservation(room.id)
+    : undefined;
 
   const requireLogin = () => setLoginModalOpen(true);
 
@@ -105,9 +110,13 @@ export function ListingDetailPage({ room, returnHref }: ListingDetailPageProps) 
           </div>
 
           {canViewMemberDetail ? (
-            <PriceSidebarMember price={room.price} canRequestVisit={room.canRequestVisit} />
+            <PriceSidebarMember
+              price={room.price}
+              canRequestVisit={room.canRequestVisit}
+              visitRequestHref={visitRequestHref}
+            />
           ) : (
-            <PriceSidebarGuest price={room.price} />
+            <PriceSidebarGuest price={room.price} visitRequestHref={visitRequestHref} />
           )}
         </div>
       </div>

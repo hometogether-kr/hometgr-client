@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { formatMonthlyRent, formatPriceKrw, type RoomPrice } from "@/domains/listing";
 import { BtnCta } from "@/shared/ui/btn-cta";
 
@@ -5,12 +7,13 @@ import { KakaoInquiryLink } from "./kakao-inquiry-link";
 
 export interface PriceSidebarGuestProps {
   price: RoomPrice;
+  visitRequestHref?: string;
 }
 
 /**
  * 가격/문의 사이드바 — 비회원. 로그인 없이 카카오 문의가 가능합니다.
  */
-export function PriceSidebarGuest({ price }: PriceSidebarGuestProps) {
+export function PriceSidebarGuest({ price, visitRequestHref }: PriceSidebarGuestProps) {
   return (
     <aside className="flex w-full flex-col gap-10 rounded-2xl border border-grayscale-200 bg-white p-7 md:w-[380px] md:shrink-0 md:p-9">
       <div className="flex flex-col gap-3">
@@ -21,9 +24,18 @@ export function PriceSidebarGuest({ price }: PriceSidebarGuestProps) {
       </div>
       <div className="flex flex-col gap-3">
         <KakaoInquiryLink />
-        <BtnCta size="l" className="w-full" disabled title="현재 카카오 채널로 문의해 주세요.">
-          방문 예약 신청
-        </BtnCta>
+        {visitRequestHref ? (
+          <Link
+            href={visitRequestHref}
+            className="inline-flex h-[52px] w-full items-center justify-center rounded-xl bg-primary-500 px-6 text-body-1 font-semibold text-white hover:opacity-80"
+          >
+            방문 예약 신청
+          </Link>
+        ) : (
+          <BtnCta size="l" className="w-full" disabled title="현재 카카오 채널로 문의해 주세요.">
+            방문 예약 신청
+          </BtnCta>
+        )}
         <p className="text-center text-body-2 font-medium text-grayscale-500">
           로그인 없이 카카오 채널로 문의할 수 있어요.
         </p>
