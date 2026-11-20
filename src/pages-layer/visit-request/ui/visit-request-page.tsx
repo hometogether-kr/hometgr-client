@@ -1,5 +1,5 @@
 import type { RoomDetail } from "@/domains/listing";
-import { createVisitDateOptions, VisitSlotPicker } from "@/features/request-visit";
+import { VisitSlotPicker } from "@/features/request-visit";
 import { SiteLayout } from "@/widgets/site-layout";
 
 import { RoomReservationSummary } from "./room-reservation-summary";
@@ -9,8 +9,6 @@ export interface VisitRequestPageProps {
 }
 
 export function VisitRequestPage({ room }: VisitRequestPageProps) {
-  const dateOptions = createVisitDateOptions();
-
   return (
     <SiteLayout showFooter={false}>
       <div className="mx-auto flex w-full max-w-[1176px] flex-1 flex-col px-4 py-10 md:px-6 md:py-20">
@@ -24,7 +22,7 @@ export function VisitRequestPage({ room }: VisitRequestPageProps) {
         </header>
         <div className="space-y-5 md:space-y-6">
           <RoomReservationSummary room={room} />
-          <VisitSlotPicker roomId={room.id} dateOptions={dateOptions} />
+          <VisitSlotPicker key={room.id} roomId={room.id} />
         </div>
       </div>
     </SiteLayout>

@@ -5,6 +5,7 @@ export const httpErrorResponseDtoSchema = z.object({
   statusCode: z.number().int(),
   message: z.union([z.string(), z.array(z.string())]),
   error: z.string().optional(),
+  code: z.string().optional(),
   path: z.string(),
   timestamp: z.string(),
 });
@@ -113,7 +114,7 @@ export function toApiError(status: number, rawBody: unknown): ApiError {
   return new ApiError(primaryMessage || (DEFAULT_MESSAGE[kind] ?? "요청을 처리하지 못했습니다."), {
     status,
     kind,
-    code: parsed.data.error,
+    code: parsed.data.code ?? parsed.data.error,
     details,
   });
 }

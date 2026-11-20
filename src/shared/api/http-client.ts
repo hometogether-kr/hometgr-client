@@ -14,6 +14,7 @@ export interface ApiRequestOptions<TResponse> {
   method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   /** API 경로 — 예) `/host/rooms/drafts` */
   path: string;
+  headers?: HeadersInit;
   searchParams?: Record<string, QueryParamValue>;
   /** JSON 본문. `FormData`는 `formData`로 전달하세요. */
   body?: unknown;
@@ -63,24 +64,24 @@ async function readBody(response: Response): Promise<unknown> {
 export async function apiRequest<TResponse = void>({
   method = "GET",
   path,
+  headers,
   searchParams,
   body,
   formData,
   schema,
   signal,
 }: ApiRequestOptions<TResponse>): Promise<TResponse> {
+  const requestHeaders = new Headers(headers);
+  // multipart는 boundary를 브라우저가 붙이도록 Content-Type을 지정하지 않습니다.
+  if (!formData && body !== undefined) requestHeaders.set("Content-Type", "application/json");
+
   let response: Response;
 
   try {
     response = await fetch(buildUrl(path, searchParams), {
       method,
       signal,
-      // multipart는 boundary를 브라우저가 붙이도록 Content-Type을 지정하지 않습니다.
-      headers: formData
-        ? undefined
-        : body === undefined
-          ? undefined
-          : { "Content-Type": "application/json" },
+      headers: requestHeaders,
       body: formData ?? (body === undefined ? undefined : JSON.stringify(body)),
     });
   } catch (cause) {

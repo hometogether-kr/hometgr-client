@@ -25,7 +25,7 @@ function toDate(date: string): Date {
 
 export function DateStrip({ dates, selectedDate, onDateSelect }: DateStripProps) {
   return (
-    <div className="-mx-5 [scrollbar-width:none] overflow-x-auto px-5 pb-1 md:mx-0 md:px-0">
+    <div className="-mx-5 overflow-x-auto px-5 pb-1 md:mx-0 md:px-0">
       <div className="flex min-w-max gap-2" role="group" aria-label="방문 날짜 선택">
         {dates.map((option) => {
           const active = selectedDate === option.date;

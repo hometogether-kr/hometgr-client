@@ -14,7 +14,7 @@ interface ProxyContext {
 }
 
 /** 브라우저 요청에서 API 서버로 넘길 헤더만 골라냅니다. 세션 쿠키는 넘기지 않습니다. */
-const FORWARDED_REQUEST_HEADERS = ["content-type", "accept", "accept-language"];
+const FORWARDED_REQUEST_HEADERS = ["content-type", "accept", "accept-language", "idempotency-key"];
 
 /**
  * 응답에서 제외할 헤더

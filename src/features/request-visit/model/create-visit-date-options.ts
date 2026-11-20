@@ -1,29 +1,41 @@
+import type { VisitRequestContext } from "@/domains/reservation";
+
 import type { VisitDateOption } from "./visit-request.types";
 
-const SEOUL_OFFSET_MS = 9 * 60 * 60 * 1000;
-const DAYS_TO_SHOW = 7;
-const VISIT_HOURS = [9, 10, 11, 12, 13, 14, 15, 16, 17];
+const DAY_MS = 24 * 60 * 60 * 1_000;
+const SEOUL_OFFSET = "+09:00";
 
-function toSeoulDateString(date: Date): string {
-  const seoul = new Date(date.getTime() + SEOUL_OFFSET_MS);
-  const year = seoul.getUTCFullYear();
-  const month = String(seoul.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(seoul.getUTCDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
+export function createVisitDateOptions({
+  policy,
+  blockedSlots,
+  serverNow,
+}: VisitRequestContext): VisitDateOption[] {
+  const firstDay = Date.parse(policy.firstDate);
+  const lastDay = Date.parse(policy.lastDate);
+  const slotDuration = policy.slotDurationMinutes * 60_000;
+  const now = Date.parse(serverNow);
+  const blockedIntervals = blockedSlots.map(({ startsAt, endsAt }) => ({
+    start: Date.parse(startsAt),
+    end: Date.parse(endsAt),
+  }));
 
-/** 별도 가용 시간 API가 없어 내일부터 7일간 기본 방문 시간을 제시합니다. */
-export function createVisitDateOptions(now = new Date()): VisitDateOption[] {
-  return Array.from({ length: DAYS_TO_SHOW }, (_, index) => {
-    const date = new Date(now.getTime() + (index + 1) * 24 * 60 * 60 * 1000);
-    const dateText = toSeoulDateString(date);
+  return Array.from({ length: (lastDay - firstDay) / DAY_MS + 1 }, (_, index) => {
+    const date = new Date(firstDay + index * DAY_MS).toISOString().slice(0, 10);
 
     return {
-      date: dateText,
-      slots: VISIT_HOURS.map((hour) => ({
-        startsAt: `${dateText}T${String(hour).padStart(2, "0")}:00:00+09:00`,
-        available: true,
-      })),
+      date,
+      slots: policy.allowedLocalTimes.map((time) => {
+        const startsAt = `${date}T${time}:00${SEOUL_OFFSET}`;
+        const start = Date.parse(startsAt);
+        const end = start + slotDuration;
+
+        return {
+          startsAt,
+          available:
+            start > now &&
+            !blockedIntervals.some((blocked) => start < blocked.end && blocked.start < end),
+        };
+      }),
     };
   });
 }

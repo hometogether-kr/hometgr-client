@@ -11,6 +11,8 @@ export {
   reservationStatusDtoSchema,
 } from "./api/reservation.dto";
 export { reservationQueryKeys } from "./api/reservation-query-keys";
+export type { VisitRequestContext } from "./api/visit-request-context.api";
+export { fetchVisitRequestContext } from "./api/visit-request-context.api";
 export { formatReservationDateTime, getVisitDayDifference } from "./lib/format-reservation-date";
 export { getReservationTab } from "./lib/get-reservation-tab";
 export type { HostReservation } from "./model/host-reservation";

@@ -4,6 +4,8 @@ export const reservationQueryKeys = {
   mine: () => [...reservationQueryKeys.lists(), "mine"] as const,
   details: () => [...reservationQueryKeys.all, "detail"] as const,
   detail: (reservationId: string) => [...reservationQueryKeys.details(), reservationId] as const,
+  visitRequestContext: (roomId: string) =>
+    [...reservationQueryKeys.all, "visit-request-context", roomId] as const,
   hostDetails: () => [...reservationQueryKeys.all, "host-detail"] as const,
   hostDetail: (reservationId: string) =>
     [...reservationQueryKeys.hostDetails(), reservationId] as const,
