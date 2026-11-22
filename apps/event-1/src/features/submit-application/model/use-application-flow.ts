@@ -4,6 +4,8 @@ import type { FormEvent } from "react";
 import { useRef, useState } from "react";
 import { z } from "zod";
 
+import { formatMoveInTiming, moveInTimingSchema } from "@/domains/event-application";
+
 import type { ApplicationSubmission } from "../api/submit-application";
 import { submitApplication } from "../api/submit-application";
 import type { ApplicationInput } from "./application-input.schema";
@@ -11,6 +13,9 @@ import { applicationInputSchema } from "./application-input.schema";
 
 interface ApplicationDraft {
   universityCampus: string;
+  moveInYear: string;
+  moveInMonth: string;
+  moveInPeriod: string;
   phone: string;
   email: string;
   consentAccepted: boolean;
@@ -18,6 +23,7 @@ interface ApplicationDraft {
 
 interface FieldErrors {
   universityCampus?: string;
+  moveInTiming?: string;
   phone?: string;
   email?: string;
   consentAccepted?: string;
@@ -25,12 +31,36 @@ interface FieldErrors {
 
 const emptyDraft: ApplicationDraft = {
   universityCampus: "",
+  moveInYear: "",
+  moveInMonth: "",
+  moveInPeriod: "",
   phone: "",
   email: "",
   consentAccepted: false,
 };
 const sourceSchema = z.string().trim().min(1).max(80);
-const universitySchema = applicationInputSchema.pick({ universityCampus: true });
+const universitySchema = applicationInputSchema.pick({
+  universityCampus: true,
+  moveInTiming: true,
+});
+
+function moveInTimingFromDraft(draft: ApplicationDraft) {
+  return {
+    year: Number(draft.moveInYear),
+    month: Number(draft.moveInMonth),
+    period: draft.moveInPeriod,
+  };
+}
+
+function moveInFocusTarget(draft: ApplicationDraft) {
+  if (
+    !/^\d{4}$/.test(draft.moveInYear) ||
+    Number(draft.moveInYear) < 2000 ||
+    Number(draft.moveInYear) > 2100
+  )
+    return "move-in-year";
+  return draft.moveInMonth ? "move-in-period" : "move-in-month";
+}
 
 export function useApplicationFlow() {
   const [stage, setStage] = useState<"university" | "contact" | "complete">("university");
@@ -44,13 +74,29 @@ export function useApplicationFlow() {
   const submission = useRef<ApplicationSubmission | null>(null);
   const submitting = useRef(false);
   const locked = pending || uncertain;
+  const selectedTiming = moveInTimingSchema.safeParse(moveInTimingFromDraft(draft));
+  const moveInSummary = selectedTiming.success ? formatMoveInTiming(selectedTiming.data) : "";
 
   function handleUniversitySubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const parsed = universitySchema.safeParse(draft);
+    const parsed = universitySchema.safeParse({
+      universityCampus: draft.universityCampus,
+      moveInTiming: moveInTimingFromDraft(draft),
+    });
     if (!parsed.success) {
-      setErrors({ universityCampus: "대학교와 캠퍼스를 입력해 주세요." });
-      document.getElementById("university-campus")?.focus();
+      const nextErrors: FieldErrors = {};
+      for (const issue of parsed.error.issues) {
+        if (issue.path[0] === "universityCampus")
+          nextErrors.universityCampus = "대학교와 캠퍼스를 입력해 주세요.";
+        if (issue.path[0] === "moveInTiming")
+          nextErrors.moveInTiming = "희망 입주 연도 4자리와 월, 시기를 모두 입력해 주세요.";
+      }
+      setErrors(nextErrors);
+      document
+        .getElementById(
+          nextErrors.universityCampus ? "university-campus" : moveInFocusTarget(draft),
+        )
+        ?.focus();
       return;
     }
     setDraft({ ...draft, universityCampus: parsed.data.universityCampus });
@@ -68,17 +114,24 @@ export function useApplicationFlow() {
       );
       const parsed = applicationInputSchema.safeParse({
         ...draft,
+        moveInTiming: moveInTimingFromDraft(draft),
         source: source.success ? source.data : undefined,
       });
       if (!parsed.success) {
         const nextErrors: FieldErrors = {};
         for (const issue of parsed.error.issues) {
+          if (issue.path[0] === "moveInTiming")
+            nextErrors.moveInTiming = "희망 입주 시점을 확인해 주세요.";
           if (issue.path[0] === "phone") nextErrors.phone = "전화번호를 입력해 주세요. (10~11자리)";
           if (issue.path[0] === "email") nextErrors.email = "이메일 주소를 입력해 주세요.";
           if (issue.path[0] === "consentAccepted")
             nextErrors.consentAccepted = "개인정보 수집·이용에 동의해 주세요.";
         }
         setErrors(nextErrors);
+        if (nextErrors.moveInTiming) {
+          setStage("university");
+          return;
+        }
         const firstField = nextErrors.phone ? "phone" : nextErrors.email ? "email" : "consent";
         document.getElementById(firstField)?.focus();
         return;
@@ -138,6 +191,7 @@ export function useApplicationFlow() {
     closed,
     accepted,
     locked,
+    moveInSummary,
     setDraft,
     setErrors,
     setStage,

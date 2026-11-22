@@ -2,8 +2,11 @@
 
 import Image from "next/image";
 
+import { formatMoveInTiming } from "@/domains/event-application";
+
 import { formatPhone, maskEmail, maskPhone } from "../model/application-display";
 import { useApplicationFlow } from "../model/use-application-flow";
+import { MoveInTimingFields } from "./move-in-timing-fields";
 
 import styles from "./application-flow.module.css";
 
@@ -21,6 +24,7 @@ export function ApplicationFlow() {
     closed,
     accepted,
     locked,
+    moveInSummary,
     setDraft,
     setErrors,
     setStage,
@@ -52,6 +56,10 @@ export function ApplicationFlow() {
           <div>
             <dt>대학교</dt>
             <dd>{accepted.universityCampus}</dd>
+          </div>
+          <div>
+            <dt>희망 입주</dt>
+            <dd>{formatMoveInTiming(accepted.moveInTiming)}</dd>
           </div>
           <div>
             <dt>전화번호</dt>
@@ -113,6 +121,16 @@ export function ApplicationFlow() {
               {errors.universityCampus || "재학 중인 학교와 달라도 괜찮아요."}
             </p>
           </div>
+          <MoveInTimingFields
+            year={draft.moveInYear}
+            month={draft.moveInMonth}
+            period={draft.moveInPeriod}
+            error={errors.moveInTiming}
+            onChange={(field, value) => {
+              setDraft({ ...draft, [field]: value });
+              setErrors({ ...errors, moveInTiming: undefined });
+            }}
+          />
           <button className={styles.cta} type="submit">
             다음&nbsp; →
           </button>
@@ -146,6 +164,7 @@ export function ApplicationFlow() {
           >
             <span>거주를 원하는 대학교</span>
             <strong>{draft.universityCampus}</strong>
+            <span>희망 입주: {moveInSummary}</span>
           </button>
           <div className={styles.contacts}>
             <div className={styles.field}>

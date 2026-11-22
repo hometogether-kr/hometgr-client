@@ -17,7 +17,9 @@
     "verify:intake": "node --env-file=.env.local scripts/verify-intake.mjs",
     "ops:configure": "node scripts/configure-ops-access.mjs",
     "verify:ops": "node --env-file=.env.local scripts/verify-ops.mjs",
-    "verify:ops-password": "node --env-file=.env.local scripts/verify-ops-password.mjs"
+    "verify:ops-password": "node --env-file=.env.local scripts/verify-ops-password.mjs",
+    "verify:alimtalk": "node --env-file=.env.local scripts/verify-alimtalk.mjs",
+    "verify:move-in": "node --env-file=.env.local scripts/verify-move-in.mjs"
   },
   "dependencies": {
     "next": "16.2.10",

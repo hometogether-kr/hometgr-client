@@ -88,6 +88,7 @@ try {
   const submissionKey = randomUUID();
   const studentBody = {
     universityCampus: "운영검증대학교 학생 신청",
+    moveInTiming: { year: 2027, month: 3, period: "mid" },
     phone: fullPhone,
     email: fullEmail,
     consentAccepted: true,
@@ -123,7 +124,13 @@ try {
   assert.equal(list.pageSize, 50);
   assert.equal(list.page, 1);
   for (const item of list.items)
-    assert.deepEqual(Object.keys(item).sort(), ["email", "id", "phone", "universityCampus"]);
+    assert.deepEqual(Object.keys(item).sort(), [
+      "email",
+      "id",
+      "moveInTiming",
+      "phone",
+      "universityCampus",
+    ]);
   const second = await getList(2);
   const observed = [...list.items, ...second.items];
   assert.equal(new Set(observed.map((item) => item.id)).size, Math.min(100, baseline + 52));

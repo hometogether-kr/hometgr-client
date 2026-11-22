@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { z } from "zod";
 
-import { applicationPageQuerySchema, listEventApplications } from "@/domains/event-application";
+import { applicationPageQuerySchema } from "@/domains/event-application";
+import { listEventApplications } from "@/domains/event-application/server";
 import { getOperatorConfig, hasOperatorSession } from "@/domains/event-operator";
 import { OperatorAccessForm, OperatorSignOutForm } from "@/features/ops-access";
 import { OpsApplicationsPanel } from "@/widgets/event-ops-list";

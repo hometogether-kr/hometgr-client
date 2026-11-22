@@ -2,7 +2,8 @@ import "server-only";
 
 import type { NextRequest } from "next/server";
 
-import { applicationPageQuerySchema, listEventApplications } from "@/domains/event-application";
+import { applicationPageQuerySchema } from "@/domains/event-application";
+import { listEventApplications } from "@/domains/event-application/server";
 import { getOperatorConfig, hasOperatorRequestSession } from "@/domains/event-operator";
 const headers = { "Cache-Control": "private, no-store", Vary: "Cookie" };
 

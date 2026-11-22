@@ -4,7 +4,7 @@
 
 ## 학생 화면 구현과 확인
 
-2026-11-19, `feat/event_1`에서 학생 신청 화면을 구현했다. 로컬 확인 주소는 `http://127.0.0.1:3211/event_1`이다. 개발은 앱 폴더에서 `npm run dev:supabase`, 빌드 결과 확인은 `npm run build` 후 `node scripts/with-supabase-env.mjs start -H 127.0.0.1 -p 3211`로 실행한다. 외부 배포와 Cloudflare의 행사 앱 원본 주소 지정은 아직 하지 않았다.
+2026-11-19, `feat/event_1`에서 학생 신청 화면을 구현하고 독립 Vercel 프로젝트에 공개 배포했다. 공개 주소는 `https://hometogether.kr/event_1`, 운영 주소는 `https://hometogether.kr/event_1/ops`다. 로컬 확인 주소는 `http://127.0.0.1:3211/event_1`이다. 개발은 앱 폴더에서 `npm run dev:supabase`, 빌드 결과 확인은 `npm run build` 후 `node scripts/with-supabase-env.mjs start -H 127.0.0.1 -p 3211`로 실행한다. [배포와 도메인 기록](domain.md)
 
 - 대상 프레임: 대학 입력 Desktop `832:519` / Mobile `832:670`, 연락처 Desktop `832:563` / Mobile `832:714`, 완료 Desktop `832:620` / Mobile `832:771`.
 - 디자인 확인값: 데스크톱 1440×969, 헤더 72px, 콘텐츠 600px + 간격 120px + 폼 480px, 폼 패딩 36px·모서리 28px. 모바일 너비 390px, 헤더 64px, 좌우 여백 24px, 폼 패딩 24px·모서리 20px. 입력과 CTA 높이 60px, Pretendard와 기존 primary500 색상 `#227dff`를 사용한다.
@@ -19,7 +19,7 @@
 
 ## 운영자 조회
 
-`/event_1/ops`에서는 최신 접수순으로 **학교·전화번호·이메일 세 항목만** 표시한다. 운영자 목록에서는 연락처를 가리지 않는다. 검색·상세 보기·알림톡 상태 표시는 생략하고, 새로고침과 50건 단위 페이지 이동만 지원한다. 모바일에서는 같은 정보를 카드로 표시한다.
+`/event_1/ops`에서는 최신 접수순으로 **학교·희망 입주 시점·전화번호·이메일**을 표시한다. 운영자 목록에서는 연락처를 가리지 않는다. 검색·상세 보기·알림톡 상태 표시는 생략하고, 새로고침과 50건 단위 페이지 이동만 지원한다. 모바일에서는 같은 정보를 카드로 표시한다. 희망 입주 시점이 없는 기존 신청은 `미입력`으로 표시한다. 입주 시점 추가는 새 브랜치에서 구현했으며 공개 배포 전이다. [추가 작업 기록](move-in-timing.md)
 
 - 인증은 행사 전용 비밀번호로 처리하며 기존 회원·관리자 로그인과 연결하지 않는다. 환경 파일의 `EVENT_OPS_ACCESS_KEY`에 **4~128자**의 원하는 비밀번호를 설정한다. 한글·특수문자·공백을 허용하고 앞뒤 공백도 비밀번호의 일부다. 공백이나 `#`가 들어가면 `.env` 값 전체를 따옴표로 감싼다. 앱 폴더에서 `npm run ops:configure`를 실행하면 현재 비밀번호를 유지하고, 누락된 설정만 생성한다. 실제 비밀번호는 로그·Git에 남기지 않는다.
 - 쿠키 서명에는 별도의 긴 `EVENT_OPS_SESSION_SECRET`을 사용한다. 설정 스크립트가 자동으로 생성하므로 이 값은 짧게 바꾸지 않는다. 비밀번호는 서버에서만 비교하고, 성공하면 유효기간 8시간의 `ht-event1-ops` 서명 쿠키를 발급한다. HttpOnly·SameSite Strict·`/event_1` 범위를 적용하고 HTTPS에서는 Secure를 사용한다. 비밀번호 또는 서명 키 변경 후 앱을 재시작하면 이전 쿠키가 무효화된다. 조회 종료는 현재 브라우저의 쿠키를 지운다.
@@ -39,6 +39,7 @@
 ```json
 {
   "universityCampus": "검증대학교 테스트캠퍼스",
+  "moveInTiming": { "year": 2027, "month": 3, "period": "mid" },
   "phone": "010-0000-0000",
   "email": "event-test@example.invalid",
   "consentAccepted": true,
@@ -88,7 +89,7 @@
 - 앱 폴더에서 `npm run dev:supabase`로 실행한다. 서버가 DB에 연결하고, 신청자 브라우저는 Next.js 접수 API를 사용한다.
 - `EVENT_DATABASE_CA`에 Supabase 공개 CA 인증서 내용을 등록했다. 인증서 SHA-256 지문은 `80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA`다. [TLS 설정 안내](https://supabase.com/docs/guides/platform/ssl-enforcement)
 - 마이그레이션 소스는 `supabase/migrations/20261119045411_event_intake.sql`이고 적용된 Supabase 이력 버전은 `20261119045917`이다. 이 공유 프로젝트에는 기존 랜딩의 마이그레이션 이력도 있다. 행사 변경은 이 파일을 대상으로 적용하고, 전체 프로젝트 이력은 함께 확인한다.
-- RLS를 켜고 행사 계정에 신청·발송 작업의 `SELECT`, `INSERT`를 부여했다. `anon`과 `authenticated`는 행사 스키마 접근 권한이 없고, 행사 계정은 기존 랜딩 데이터 조회 권한이 없다.
+- RLS를 켜고 행사 계정에 신청·발송 작업의 `SELECT`, `INSERT`를 부여했다. 알림톡 연동 마이그레이션은 발송 상태 관련 열의 UPDATE만 추가한다. `anon`과 `authenticated`는 행사 스키마 접근 권한이 없고, 행사 계정은 기존 랜딩 데이터 조회 권한이 없다.
 - 프로젝트 처리 용량은 기존 랜딩과 공유한다. 앱 연결 풀은 최대 3개, 행사 앱 계정은 최대 5개 연결로 제한한다.
 
 프로젝트 보안 진단에는 기존 랜딩 함수 2개의 익명 호출 권한 경고와 기존 `private` 테이블의 RLS 정책 관련 정보 2건이 있다. 행사 스키마 추가 전후 같은 항목이며 기존 랜딩 함수의 정의 해시도 같았다. [기존 함수 권한 진단 안내](https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable)
@@ -104,6 +105,6 @@
 - TypeScript 검사, ESLint와 운영용 빌드를 통과했다.
 - 운영용 빌드의 마감 상태에서 새 신청은 410, 저장된 신청의 재시도는 200이었으며 새 신청 기록이 생기지 않았다.
 
-검증에는 합성 정보만 사용했다. 알림톡 작업은 `PENDING`으로 저장하며 발송 워커 연결은 다음 단계다. 실제 저장소는 위 Supabase 프로젝트의 행사 스키마를 사용한다.
+검증에는 합성 정보만 사용했다. 실제 저장소는 위 Supabase 프로젝트의 행사 스키마를 사용한다. 알림톡 워커는 연결했으며 템플릿 검수 중에는 발송을 비활성으로 두고 `PENDING` 작업만 보관한다. [알림톡 연결과 승인 후 활성화](alimtalk.md)
 
 같은 날 실제 Supabase 계정으로 로컬 Next.js API를 실행해 동시 제출 3회의 결과가 201 1회와 200 2회임을 확인했다. 실제 Supabase DB에는 신청과 `PENDING` 작업이 각각 1건 저장됐다. 행사 계정으로 기존 랜딩 테이블을 조회하면 권한 오류로 차단됐다. 이 합성 신청과 발송 작업만 ID와 검증용 source를 지정해 정리했다.

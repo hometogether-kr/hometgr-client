@@ -74,6 +74,77 @@
   line-height: 19px;
   color: var(--grayscale-600);
 }
+.moveInTiming {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.moveInTiming legend {
+  margin-bottom: 8px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 20px;
+}
+.moveInTiming legend span {
+  color: var(--grayscale-600);
+  font-weight: 400;
+}
+.moveInControls {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.moveInControls input,
+.moveInControls select,
+.yearControl {
+  width: 100%;
+  min-width: 0;
+  height: 60px;
+  border: 1px solid #e3e6eb;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--grayscale-900);
+  font: inherit;
+  font-size: 15px;
+}
+.moveInControls select {
+  padding: 8px;
+}
+.moveInControls select:has(option:checked[value=""]) {
+  color: var(--grayscale-500);
+}
+.yearControl {
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+}
+.yearControl input {
+  height: 100%;
+  padding: 8px;
+  border: 0;
+  background: transparent;
+}
+.yearControl input::placeholder {
+  color: var(--grayscale-500);
+}
+.yearControl span {
+  flex-shrink: 0;
+}
+.yearControl:has(input[aria-invalid="true"]),
+.moveInControls select[aria-invalid="true"] {
+  border-color: #cf3030;
+}
+.yearControl:focus-within,
+.moveInControls select:focus-visible {
+  outline: 3px solid #82b5ff;
+  outline-offset: 2px;
+}
+.yearControl input:focus {
+  outline: none;
+}
 .cta {
   display: flex;
   align-items: center;
