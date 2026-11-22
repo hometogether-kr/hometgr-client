@@ -58,10 +58,13 @@
   overflow-wrap: anywhere;
 }
 .table th:first-child {
-  width: 40%;
+  width: 30%;
 }
 .table th:nth-child(2) {
-  width: 24%;
+  width: 22%;
+}
+.table th:nth-child(3) {
+  width: 20%;
 }
 .empty {
   padding: 64px 24px;

@@ -18,12 +18,24 @@ export async function listEventApplications(requestedPage: number) {
     );
     const total = countRowsSchema.parse(count.rows)[0].total;
     const page = Math.min(requestedPage, Math.max(1, Math.ceil(total / pageSize)));
-    const result = await client.query(
-      `SELECT id, university_campus AS "universityCampus", phone, email
+    const result = await client.query<Record<string, unknown>>(
+      `SELECT id, university_campus AS "universityCampus", phone, email,
+        move_in_year, move_in_month, move_in_period
       FROM event_1.event_applications ORDER BY created_at DESC, id ASC LIMIT $1 OFFSET $2`,
       [pageSize, (page - 1) * pageSize],
     );
-    const applications = applicationListSchema.parse({ items: result.rows, total, page, pageSize });
+    const items = result.rows.map((row) => ({
+      ...row,
+      moveInTiming:
+        row.move_in_year === null
+          ? null
+          : {
+              year: row.move_in_year,
+              month: row.move_in_month,
+              period: row.move_in_period,
+            },
+    }));
+    const applications = applicationListSchema.parse({ items, total, page, pageSize });
     await client.query("COMMIT");
     return applications;
   } catch (error) {

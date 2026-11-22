@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { moveInTimingSchema } from "./move-in-timing";
+
 export const applicationPageQuerySchema = z.object({
   page: z.coerce.number().int().min(1).max(10000).default(1),
 });
@@ -8,6 +10,7 @@ export const applicationListItemSchema = z.object({
   universityCampus: z.string(),
   phone: z.string(),
   email: z.string(),
+  moveInTiming: moveInTimingSchema.nullable(),
 });
 export const applicationListSchema = z.object({
   items: z.array(applicationListItemSchema),

@@ -33,6 +33,7 @@ export async function saveApplication(input: ApplicationInput, submissionKey: st
         phone: input.phone,
         email: input.email,
         source: input.source ?? null,
+        moveInTiming: input.moveInTiming,
       }),
     )
     .digest("hex");
@@ -50,8 +51,9 @@ export async function saveApplication(input: ApplicationInput, submissionKey: st
       }
       const inserted = await client.query<Record<string, unknown>>(
         `INSERT INTO event_1.event_applications
-          (id, submission_key, request_fingerprint, university_campus, phone, email, consent_version, source)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          (id, submission_key, request_fingerprint, university_campus, phone, email, consent_version, source,
+           move_in_year, move_in_month, move_in_period)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
          ON CONFLICT (submission_key) DO NOTHING
          RETURNING id, request_fingerprint, created_at`,
         [
@@ -63,6 +65,9 @@ export async function saveApplication(input: ApplicationInput, submissionKey: st
           input.email,
           config.consentVersion,
           input.source ?? null,
+          input.moveInTiming.year,
+          input.moveInTiming.month,
+          input.moveInTiming.period,
         ],
       );
       if (inserted.rows[0]) {

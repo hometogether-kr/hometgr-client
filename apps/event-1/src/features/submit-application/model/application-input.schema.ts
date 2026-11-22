@@ -1,7 +1,10 @@
 import { z } from "zod";
 
+import { moveInTimingSchema } from "@/domains/event-application";
+
 export const applicationInputSchema = z.object({
   universityCampus: z.string().trim().min(1).max(120),
+  moveInTiming: moveInTimingSchema,
   phone: z
     .string()
     .max(30)

@@ -1,4 +1,5 @@
 import type { ApplicationList } from "@/domains/event-application";
+import { formatMoveInTiming } from "@/domains/event-application";
 
 import styles from "./ops-applications.module.css";
 
@@ -26,10 +27,13 @@ export function OpsApplicationsPanel({ applications }: OpsApplicationsPanelProps
       ) : (
         <>
           <table className={styles.table}>
-            <caption className={styles.srOnly}>이벤트 신청자의 학교, 전화번호, 이메일</caption>
+            <caption className={styles.srOnly}>
+              이벤트 신청자의 학교, 희망 입주 시점, 전화번호, 이메일
+            </caption>
             <thead>
               <tr>
                 <th scope="col">학교</th>
+                <th scope="col">희망 입주 시점</th>
                 <th scope="col">전화번호</th>
                 <th scope="col">이메일</th>
               </tr>
@@ -38,6 +42,7 @@ export function OpsApplicationsPanel({ applications }: OpsApplicationsPanelProps
               {applications.items.map((application) => (
                 <tr key={application.id}>
                   <td>{application.universityCampus}</td>
+                  <td>{formatMoveInTiming(application.moveInTiming)}</td>
                   <td>{application.phone}</td>
                   <td>{application.email}</td>
                 </tr>
@@ -49,6 +54,10 @@ export function OpsApplicationsPanel({ applications }: OpsApplicationsPanelProps
               <li key={application.id}>
                 <h3>{application.universityCampus}</h3>
                 <dl>
+                  <div>
+                    <dt>희망 입주</dt>
+                    <dd>{formatMoveInTiming(application.moveInTiming)}</dd>
+                  </div>
                   <div>
                     <dt>전화번호</dt>
                     <dd>{application.phone}</dd>

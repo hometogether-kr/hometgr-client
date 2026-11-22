@@ -17,6 +17,7 @@ await db.connect();
 const endpoint = new URL("/event_1/api/applications", publicUrl);
 const body = {
   universityCampus: "검증대학교 테스트캠퍼스",
+  moveInTiming: { year: 2027, month: 3, period: "early" },
   phone: "010-0000-0000",
   email: "event-test@example.invalid",
   consentAccepted: true,
