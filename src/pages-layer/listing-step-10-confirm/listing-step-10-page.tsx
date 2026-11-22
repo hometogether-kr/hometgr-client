@@ -8,6 +8,7 @@ import {
   type PreferredContactMethod,
   type PreferredContactTime,
 } from "@/domains/listing-draft";
+import { HostContractAgreement } from "@/features/review-host-contract";
 import { formatKoreanPhoneInput } from "@/shared/lib/korean-phone";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { ChipField } from "@/shared/ui/chip-field";
@@ -93,6 +94,7 @@ export function ListingStep10Page({
   });
   const [submitted, setSubmitted] = useState(false);
   const [visitAcknowledged, setVisitAcknowledged] = useState(false);
+  const [contractAgreed, setContractAgreed] = useState(false);
   const { showToast } = useToast();
 
   const allAgreed = REQUIRED_AGREEMENTS.every(({ key }) => agreements[key]);
@@ -220,6 +222,12 @@ export function ListingStep10Page({
             </p>
           )}
         </section>
+        <hr className="w-full border-grayscale-200" />
+        <HostContractAgreement
+          checked={contractAgreed}
+          onCheckedChange={setContractAgreed}
+          disabled={isSubmitting}
+        />
         <hr className="w-full border-grayscale-200" />
         <div className="flex w-full flex-col gap-3">
           <h2 className="w-full text-2xl leading-[1.4] font-semibold tracking-[-0.24px] text-grayscale-900">
