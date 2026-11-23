@@ -63,7 +63,11 @@ export function ListingDetailPage({ room, returnHref }: ListingDetailPageProps) 
         {canViewMemberDetail ? (
           <PhotoGalleryMember photos={room.photos} />
         ) : (
-          <PhotoGalleryGuest photos={room.photos} onRequireLogin={requireLogin} />
+          <PhotoGalleryGuest
+            photos={room.photos}
+            photoCount={room.photoCount}
+            onRequireLogin={requireLogin}
+          />
         )}
 
         <ListingHeader

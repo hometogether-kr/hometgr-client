@@ -51,7 +51,11 @@ export function PreviewDetailContent({
       {viewer === "member" ? (
         <PhotoGalleryMember photos={room.photos} />
       ) : (
-        <PhotoGalleryGuest photos={room.photos} onRequireLogin={explainLoginPreview} />
+        <PhotoGalleryGuest
+          photos={room.photos}
+          photoCount={room.photoCount}
+          onRequireLogin={explainLoginPreview}
+        />
       )}
       <ListingHeader
         room={{

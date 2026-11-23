@@ -12,7 +12,6 @@ import { useDeleteAccount } from "@/features/manage-account-session";
 import { ApiError } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { BtnCta } from "@/shared/ui/btn-cta";
-import { BtnUnderline } from "@/shared/ui/btn-underline";
 import { Divider } from "@/shared/ui/divider";
 import { Modal } from "@/shared/ui/modal";
 import { useToast } from "@/shared/ui/toast";
@@ -157,23 +156,32 @@ export function MyPage() {
         )}
       </div>
 
-      <div className="flex flex-col justify-center gap-4 pt-4">
-        <BtnUnderline
-          tone="muted"
+      <div
+        role="group"
+        aria-label="계정 관리"
+        className="flex w-full flex-col items-center gap-2 border-t border-grayscale-200 pt-6 md:pt-8"
+      >
+        <BtnCta
+          variant="stroke"
+          size="m"
+          loading={isLoggingOut}
           disabled={isLoggingOut}
+          className="w-full bg-white hover:bg-grayscale-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-500 md:w-[240px]"
           onClick={() => {
             void handleLogout();
           }}
         >
           {isLoggingOut ? "로그아웃 중..." : "로그아웃"}
-        </BtnUnderline>
-        <BtnUnderline
-          tone="muted"
+        </BtnCta>
+        <button
+          type="button"
           disabled={isLoggingOut || isDeletingAccount}
+          aria-busy={isDeletingAccount || undefined}
           onClick={() => setDeleteConfirmOpen(true)}
+          className="inline-flex min-h-11 items-center justify-center rounded-lg px-4 text-label-2 font-medium text-grayscale-600 underline-offset-4 transition-colors hover:text-grayscale-800 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-grayscale-600 disabled:hover:no-underline"
         >
           {isDeletingAccount ? "탈퇴 처리 중..." : "회원 탈퇴"}
-        </BtnUnderline>
+        </button>
       </div>
 
       <Modal
