@@ -74,6 +74,7 @@ export function createMockListings(): MockListing[] {
           minStayMonths,
           amenities: ["냉장고", "세탁기"],
           photos: [],
+          photoCount: 0,
           locationNote: "모의 위치이며 실제 매물 주소가 아닙니다.",
           host: { id: null, name: "모의 호스트", joinedLabel: "2026년 10월" },
           latestReservation: null,

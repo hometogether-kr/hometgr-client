@@ -14,7 +14,7 @@ export default function Page() {
     <OnboardingTermsPage
       onSubmit={(agreedIds) => {
         saveOnboardingTermsAgreement(agreedIds);
-        router.push("/signup?from=onboarding");
+        router.push(ROUTES.auth.profile);
       }}
       onBack={() => {
         const returnTo = parseAuthReturnPath(
