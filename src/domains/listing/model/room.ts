@@ -60,6 +60,8 @@ export interface RoomDetail {
   minStayMonths?: number;
   amenities: string[];
   photos: RoomPhoto[];
+  /** 전체 사진 수. 비회원에게 반환되는 대표 사진 수와 구분합니다. */
+  photoCount: number;
   locationNote: string;
   /** 레거시 매물은 household 정보 자체가 없다 */
   household?: RoomHousehold;

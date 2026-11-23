@@ -29,6 +29,8 @@ export const ROUTES = {
     logout: "/api/auth/logout",
     /** 회원 탈퇴 (DELETE, BFF Route Handler) */
     account: "/api/auth/account",
+    /** 학생·집주인 역할 전환 (PUT, 새 인증 토큰을 쿠키에 반영) */
+    role: "/api/auth/role",
     /** 약관 동의 (카카오 인증 직후) */
     terms: "/onboarding/terms",
     /** 가입 기본 정보 */

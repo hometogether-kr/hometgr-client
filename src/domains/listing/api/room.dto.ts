@@ -65,7 +65,7 @@ const latestReservationDtoSchema = z
 
 const commonDtoSchema = z.object({
   host: publicHostDtoSchema,
-  mediaCount: z.number().int(),
+  mediaCount: z.number().int().nonnegative(),
   latestReservation: latestReservationDtoSchema,
   canRequestVisit: z.boolean(),
 });

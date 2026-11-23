@@ -8,6 +8,7 @@ import {
   type PreferredContactMethod,
   type PreferredContactTime,
 } from "@/domains/listing-draft";
+import { HostContractAgreement } from "@/features/review-host-contract";
 import { formatKoreanPhoneInput } from "@/shared/lib/korean-phone";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { ChipField } from "@/shared/ui/chip-field";
@@ -92,6 +93,8 @@ export function ListingStep10Page({
     noFraudPledge: false,
   });
   const [submitted, setSubmitted] = useState(false);
+  const [visitAcknowledged, setVisitAcknowledged] = useState(false);
+  const [contractAgreed, setContractAgreed] = useState(false);
   const { showToast } = useToast();
 
   const allAgreed = REQUIRED_AGREEMENTS.every(({ key }) => agreements[key]);
@@ -103,11 +106,13 @@ export function ListingStep10Page({
     contactTime: !contactTime ? REQUIRED_MESSAGE : undefined,
     contactMethod: !contactMethod ? REQUIRED_MESSAGE : undefined,
     agreed: !allAgreed ? AGREEMENT_MESSAGE : undefined,
+    visit: !visitAcknowledged ? "방문 확인 안내를 확인해주세요." : undefined,
   };
   const hasError = Object.values(errors).some(Boolean);
   const show = (key: keyof typeof errors) => (submitted ? errors[key] : undefined);
 
   const handleSubmit = () => {
+    if (isSubmitting) return;
     setSubmitted(true);
     if (hasError || !contactTime || !contactMethod) {
       showToast("필수항목을 모두 입력해주세요.", { variant: "error" });
@@ -177,21 +182,74 @@ export function ListingStep10Page({
           />
         </div>
         <hr className="w-full border-grayscale-200" />
+        <section aria-labelledby="listing-visit-heading" className="flex w-full flex-col gap-3">
+          <h2
+            id="listing-visit-heading"
+            className="text-xl leading-[1.4] font-semibold tracking-[-0.2px] text-grayscale-900"
+          >
+            방문 확인 안내
+          </h2>
+          <InfoBox title="매물 확인을 위해 방문드릴 수 있어요">
+            등록하신 정보와 실제 주거 환경을 확인하기 위해 담당자가 방문을 요청할 수 있습니다.
+            방문이 필요한 경우 미리 연락드려 일정을 협의하며, 사전 협의 없이 방문하지 않습니다.
+          </InfoBox>
+          <div className="flex items-start gap-2">
+            <Checkbox
+              id="listing-visit-acknowledgement"
+              size="24"
+              checked={visitAcknowledged}
+              disabled={isSubmitting}
+              required
+              aria-invalid={Boolean(show("visit"))}
+              aria-describedby={show("visit") ? "listing-visit-error" : undefined}
+              className="mt-2.5 shrink-0 rounded focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary-500"
+              onChange={(event) => setVisitAcknowledged(event.target.checked)}
+            />
+            <label
+              htmlFor="listing-visit-acknowledgement"
+              className="flex min-h-11 cursor-pointer items-center py-2 text-base leading-[1.5] font-medium text-grayscale-700"
+            >
+              [필수] 매물 확인을 위한 사전 협의 방문이 진행될 수 있음을 확인했습니다.
+            </label>
+          </div>
+          {show("visit") && (
+            <p
+              id="listing-visit-error"
+              role="alert"
+              className="text-[13px] leading-[1.4] font-medium text-system-error"
+            >
+              {show("visit")}
+            </p>
+          )}
+        </section>
+        <hr className="w-full border-grayscale-200" />
+        <HostContractAgreement
+          checked={contractAgreed}
+          onCheckedChange={setContractAgreed}
+          disabled={isSubmitting}
+        />
+        <hr className="w-full border-grayscale-200" />
         <div className="flex w-full flex-col gap-3">
           <h2 className="w-full text-2xl leading-[1.4] font-semibold tracking-[-0.24px] text-grayscale-900">
             약관 동의
           </h2>
           {REQUIRED_AGREEMENTS.map(({ key, label }) => (
-            <label key={key} className="flex cursor-pointer items-center gap-2">
+            <div key={key} className="flex items-start gap-2">
               <Checkbox
+                id={`listing-agreement-${key}`}
                 size="24"
                 checked={agreements[key]}
+                disabled={isSubmitting}
+                className="mt-2.5 shrink-0 rounded focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-primary-500"
                 onChange={(e) => setAgreements((prev) => ({ ...prev, [key]: e.target.checked }))}
               />
-              <span className="text-base leading-[1.5] font-medium text-grayscale-700">
+              <label
+                htmlFor={`listing-agreement-${key}`}
+                className="flex min-h-11 cursor-pointer items-center py-2 text-base leading-[1.5] font-medium text-grayscale-700"
+              >
                 {label}
-              </span>
-            </label>
+              </label>
+            </div>
           ))}
           {show("agreed") && (
             <p className="w-full text-[13px] leading-[1.4] font-medium text-system-error">

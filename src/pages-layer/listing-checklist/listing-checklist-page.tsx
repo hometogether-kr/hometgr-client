@@ -46,6 +46,16 @@ const CHECKLIST = [
     ),
     description: "운영자 확인 전에는 게스트 목록에 노출되지 않습니다.",
   },
+  {
+    icon: FIGMA_TEMP_IC_REVIEW,
+    title: (
+      <>
+        사전 협의 후 <span className="text-primary-500">방문 확인</span>
+      </>
+    ),
+    description:
+      "매물 정보와 실제 주거 환경을 확인하기 위해 방문을 요청드릴 수 있어요. 방문이 필요한 경우 미리 연락드려 일정을 협의합니다.",
+  },
 ] satisfies { icon: string; title: ReactNode; description: string }[];
 
 export interface ListingChecklistPageProps {
