@@ -95,8 +95,8 @@ export function EducationGallery({ photos }: { photos: EducationPhoto[] }) {
                 alt={activePhoto.alt}
                 width={activePhoto.width}
                 height={activePhoto.height}
-                sizes="(max-width: 1080px) 100vw, 1032px"
                 loading="eager"
+                unoptimized
               />
             )}
           </div>
