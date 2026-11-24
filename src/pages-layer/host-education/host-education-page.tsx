@@ -4,8 +4,8 @@ import Link from "next/link";
 import { ROUTES } from "@/shared/config";
 import { SiteLayout } from "@/widgets/site-layout";
 
-import { educationPhotos } from "./photos";
 import { EducationGallery } from "./ui/education-gallery";
+import { educationPhotos } from "./photos";
 
 import styles from "./host-education.module.css";
 
