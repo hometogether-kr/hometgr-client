@@ -93,39 +93,6 @@
   outline: 3px solid var(--color-primary-600);
   outline-offset: 4px;
 }
-.album {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1.52;
-}
-.classroom,
-.portrait {
-  position: absolute;
-  overflow: hidden;
-  background: var(--color-grayscale-100);
-}
-.classroom {
-  inset: 0 0 8% 8%;
-  border-radius: 18px;
-}
-.portrait {
-  bottom: 0;
-  left: 0;
-  width: 31%;
-  aspect-ratio: 0.82;
-  border: 5px solid white;
-  border-radius: 10px;
-  transform: rotate(-4deg);
-  box-shadow: 0 6px 18px #15233c24;
-}
-.album img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.portrait img {
-  object-position: center 43%;
-}
 .programs {
   padding-block: 48px;
   background: var(--color-primary-50);
@@ -186,6 +153,14 @@
   align-items: center;
   gap: clamp(30px, 4vw, 56px);
 }
+.dispatch {
+  grid-template-columns: minmax(0, 1.22fr) minmax(0, 0.88fr);
+  align-items: start;
+}
+.dispatchNote {
+  display: grid;
+  gap: 20px;
+}
 .storyImage {
   margin: 0;
 }
@@ -216,21 +191,28 @@
   padding-block: 52px;
 }
 .practiceLayout {
-  grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.85fr);
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr);
+  grid-template-areas: "photo copy";
+}
+.practiceCopy {
+  grid-area: copy;
 }
 .practiceCopy .prose {
   margin-top: 20px;
 }
-.practiceImage img {
-  aspect-ratio: 1.35;
-  object-fit: cover;
-  object-position: center 42%;
+.practiceImage {
+  grid-area: photo;
+  width: min(100%, 350px);
+  justify-self: center;
 }
 .topics {
   display: grid;
   grid-template-columns: minmax(0, 0.64fr) minmax(0, 1.36fr);
   gap: clamp(30px, 4vw, 56px);
   padding-block: 64px 12px;
+}
+.topicsIntro figure {
+  margin-top: 22px;
 }
 .topicList > div {
   padding-block: 20px;
@@ -296,12 +278,6 @@
   .heroLinks {
     margin-top: 16px;
   }
-  .classroom {
-    border-radius: 13px;
-  }
-  .portrait {
-    border-width: 4px;
-  }
   .programs {
     padding-block: 34px;
   }
@@ -323,6 +299,12 @@
   }
   .practice {
     padding-block: 36px;
+  }
+  .practiceLayout {
+    grid-template-areas: "copy" "photo";
+  }
+  .practiceImage {
+    width: min(100%, 350px);
   }
   .prose,
   .topicList dd {

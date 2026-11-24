@@ -60,19 +60,8 @@ export function EducationGallery({ photos }: { photos: EducationPhoto[] }) {
                   alt={photo.alt}
                   width={photo.width}
                   height={photo.height}
-                  sizes="(max-width: 519px) 100vw, (max-width: 799px) 50vw, (max-width: 1080px) 33vw, 336px"
+                  sizes="(max-width: 519px) 94vw, (max-width: 799px) 50vw, (max-width: 1080px) 33vw, 332px"
                 />
-                <span className={styles.expand} aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M14 4h6v6m0-6-7 7M10 20H4v-6m0 6 7-7"
-                      stroke="currentColor"
-                      strokeWidth="1.7"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
               </button>
               <figcaption className={styles.caption}>{photo.caption}</figcaption>
             </figure>
@@ -87,9 +76,18 @@ export function EducationGallery({ photos }: { photos: EducationPhoto[] }) {
         onClose={handleClose}
       >
         <div className={styles.viewer}>
-          <button type="button" className={styles.close} onClick={() => dialogRef.current?.close()}>
-            닫기
-          </button>
+          <div className={styles.viewerHeader}>
+            <span className={styles.counter} aria-live="polite">
+              {activeIndex !== null && `${activeIndex + 1} / ${photos.length}`}
+            </span>
+            <button
+              type="button"
+              className={styles.close}
+              onClick={() => dialogRef.current?.close()}
+            >
+              닫기
+            </button>
+          </div>
           <div className={styles.stage}>
             {activePhoto && (
               <Image
