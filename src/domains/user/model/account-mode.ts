@@ -13,7 +13,7 @@ export const ACCOUNT_MODE_HOME = {
 export function getPageAccountMode(pathname: string): AccountMode | null {
   const path = pathname.replace(/\/+$/, "") || "/";
   if (path === ACCOUNT_MODE_HOME.guest) return "guest";
-  if (path === ACCOUNT_MODE_HOME.host) return "host";
+  if (path === ACCOUNT_MODE_HOME.host || path === ROUTES.intro.hostEducation) return "host";
   const matches = (prefix: string) => path === prefix || path.startsWith(`${prefix}/`);
   if (matches("/listing") || matches(ROUTES.hostReservations)) return "host";
   if ([ROUTES.rooms, ROUTES.reservations, ROUTES.favorites, "/faq/guest"].some(matches)) {

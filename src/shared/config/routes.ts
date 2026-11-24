@@ -10,6 +10,7 @@ export const ROUTES = {
     root: "/",
     /** 집주인용 서비스 소개 */
     host: "/intro/host",
+    hostEducation: "/intro/host/edu",
     /** 세입자용 서비스 소개 */
     guest: "/",
   },
